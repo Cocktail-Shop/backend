@@ -1,9 +1,9 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/nhn?serverTimezone=Asia/Seoul
+    url: jdbc:mysql://localhost:3306/C-Shop?serverTimezone=Asia/Seoul
     username: root
-    password: *
+    password: ltyxodus7
 
 
   jpa:
@@ -12,6 +12,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+    generate-ddl: true
 
 logging:
   level:
