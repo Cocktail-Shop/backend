@@ -19,4 +19,5 @@ class Cocktail (
 
     private var cocktailName: String,
     private var cocktailImgUrl: String,
+    private var cocktailStatus: Boolean,
 )

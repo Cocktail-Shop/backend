@@ -30,6 +30,10 @@ class Item(
     private var degree: Int,
     private var itemDescription: String,
     private var itemImgUrl: String,
+
+    @Enumerated(EnumType.STRING)
+    private var category: Category,
+    private var itemStatus: Boolean,
 ) {
 
 }

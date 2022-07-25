@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.shop.models
 
+import com.lionTF.CShop.domain.admin.models.OrderStatus
 import com.lionTF.CShop.domain.member.models.Member
 import lombok.*
 import java.time.LocalDateTime
@@ -22,8 +23,10 @@ class Orders(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private var member: Member,
-
     private var orderDate: LocalDateTime,
+
+    @Enumerated(EnumType.STRING)
+    private var orderStatus: OrderStatus,
     private var orderAddress: String,
 ){
 
