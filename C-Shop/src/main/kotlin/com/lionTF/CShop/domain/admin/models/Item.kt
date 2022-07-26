@@ -26,9 +26,9 @@ class Item(
     @OneToMany(mappedBy = "item")
     private var cartItem: List<CartItem>,
 
-    private val price: Int,
-    private val amount: Int,
-    private val degree: Int,
+    private var price: Int,
+    private var amount: Int,
+    private var degree: Int,
     private var itemDescription: String,
     private var itemImgUrl: String,
 
