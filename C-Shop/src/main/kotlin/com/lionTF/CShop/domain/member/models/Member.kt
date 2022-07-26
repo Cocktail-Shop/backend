@@ -27,4 +27,5 @@ class Member(
     private var phoneNumber: String,
     private var memberName: String,
     private var address: String,
+    private var memberStatus: Boolean,
 )

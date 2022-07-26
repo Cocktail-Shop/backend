@@ -22,8 +22,10 @@ class Orders(
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private var member: Member,
-
     private var orderDate: LocalDateTime,
+
+    @Enumerated(EnumType.STRING)
+    private var orderStatus: OrderStatus,
     private var orderAddress: String,
 ){
 

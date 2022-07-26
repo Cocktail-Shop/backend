@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.admin.models
 
+import com.lionTF.CShop.domain.shop.controller.dto.ReadItemDTO
 import com.lionTF.CShop.domain.shop.models.CartItem
 import com.lionTF.CShop.domain.shop.models.OrderItem
 import lombok.*
@@ -30,6 +31,21 @@ class Item(
     private var degree: Int,
     private var itemDescription: String,
     private var itemImgUrl: String,
-) {
 
+    @Enumerated(EnumType.STRING)
+    private var category: Category,
+    private var itemStatus: Boolean,
+) {
+    fun toReadItemDTO(): ReadItemDTO {
+            return ReadItemDTO(
+                itemId = itemId,
+                price = price,
+                amount = amount,
+                degree = degree,
+                itemDescription = itemDescription,
+                itemImgUrl = itemImgUrl,
+                category = category,
+                itemStatus = itemStatus,
+            )
+    }
 }
