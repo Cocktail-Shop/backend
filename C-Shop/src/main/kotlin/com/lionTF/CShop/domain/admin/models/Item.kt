@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.admin.models
 
+import com.lionTF.CShop.domain.shop.controller.dto.ReadItemDTO
 import com.lionTF.CShop.domain.shop.models.CartItem
 import com.lionTF.CShop.domain.shop.models.OrderItem
 import lombok.*
@@ -25,9 +26,9 @@ class Item(
     @OneToMany(mappedBy = "item")
     private var cartItem: List<CartItem>,
 
-    private var price: Int,
-    private var amount: Int,
-    private var degree: Int,
+    private val price: Int,
+    private val amount: Int,
+    private val degree: Int,
     private var itemDescription: String,
     private var itemImgUrl: String,
 
@@ -35,5 +36,16 @@ class Item(
     private var category: Category,
     private var itemStatus: Boolean,
 ) {
-
+    fun toReadItemDTO(): ReadItemDTO {
+            return ReadItemDTO(
+                itemId = itemId,
+                price = price,
+                amount = amount,
+                degree = degree,
+                itemDescription = itemDescription,
+                itemImgUrl = itemImgUrl,
+                category = category,
+                itemStatus = itemStatus,
+            )
+    }
 }
