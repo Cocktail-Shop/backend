@@ -1,6 +1,5 @@
 package com.lionTF.CShop.domain.shop.models
 
-import com.lionTF.CShop.domain.admin.models.OrderStatus
 import com.lionTF.CShop.domain.member.models.Member
 import lombok.*
 import java.time.LocalDateTime
