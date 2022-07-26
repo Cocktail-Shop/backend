@@ -10,13 +10,11 @@ import java.util.*
 class ItemService (
     private val itemRepository: ItemRepository,
 ){
-    @Transactional
     fun findAllItem(): List<ReadItemDTO> {
         val items = itemRepository.findAll()
         return items.map {it.toReadItemDTO()}
     }
-
-    @Transactional
+    
     fun findByItemId(itemId: Long): Optional<ReadItemDTO>? {
         val product = itemRepository.findById(itemId)
         return product.map { it.toReadItemDTO() }
