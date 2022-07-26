@@ -2,7 +2,6 @@ package com.lionTF.CShop.domain.shop.service
 
 import com.lionTF.CShop.domain.shop.controller.dto.ReadItemDTO
 import com.lionTF.CShop.domain.shop.repository.ItemRepository
-import com.lionTF.CShop.domain.shop.repository.CocktailRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.util.*
