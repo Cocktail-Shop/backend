@@ -19,7 +19,7 @@ class CocktailController(
 ) {
     //칵테일 단건 조회 메소드
     @GetMapping(path=["/items/cocktail/{cocktailId}"])
-    fun getCocktailById(model: Model, @PathVariable("cocktailId") cocktailId: Long): ReadCocktailResultDTO {
+    fun getCocktailById(@PathVariable("cocktailId") cocktailId: Long): ReadCocktailResultDTO {
         return cocktailService.findByCocktailId(cocktailId)
     }
 }
