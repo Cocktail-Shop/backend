@@ -1,21 +1,48 @@
 package com.lionTF.CShop.domain.shop.controller.dto
 
+import com.lionTF.CShop.domain.admin.models.Cocktail
 import com.lionTF.CShop.domain.admin.models.CocktailItem
 import com.lionTF.CShop.global.HttpStatus
 
 // 칵테일 단건 조회시 칵테일 정보를 담는 dto
-data class ReadCocktailDTO(
+data class CocktailDTO(
     val cocktailId : Long,
     val cocktailName: String,
     var cocktailDescription: String,
     var cocktailImgUrl: String,
     var cocktailStatus: Boolean,
-    var cocktailItems: List<ReadCocktailItemDTO>
+    var cocktailItems: List<CocktailItemDTO>
 )
 
 //칵테일 단건 조회시 최종 응답 형태를 맞춰주기 위한 dto
-data class ReadCocktailResultDTO(
-    val status: HttpStatus,
+data class CocktailResultDTO(
+    val status: Int,
     val message: String,
-    val result: ReadCocktailDTO
+    val result: CocktailDTO
 )
+
+//칵테일 단건 조회 result부분에 들어갈 정보들을 dto로 변환
+fun CocktailToCocktailDTO(cocktail: Cocktail): CocktailDTO {
+    val itemList = cocktail.cocktailItem
+    val dtoList: MutableList<CocktailItemDTO> = mutableListOf()
+    for(item in itemList){
+        dtoList.add(CocktailItemToCocktailItemDTO(item))
+    }
+    return CocktailDTO(
+        cocktailId = cocktail.cocktailId,
+        cocktailName = cocktail.cocktailName,
+        cocktailDescription = cocktail.cocktailDescription,
+        cocktailImgUrl = cocktail.cocktailImgUrl,
+        cocktailStatus = cocktail.cocktailStatus,
+        cocktailItems = dtoList
+    )
+}
+
+//칵테일 단건 조회 응답 최종 형태 dto를 만들어주는 메소드
+fun setCocktailResultDTO(result: CocktailDTO): CocktailResultDTO {
+    return CocktailResultDTO(
+        status = HttpStatus.OK.code,
+        message = "칵테일 단건 조회 성공",
+        result = result
+    )
+}
