@@ -18,7 +18,7 @@ data class createItemResultDTO(
     val status: Int,
     val message: String,
 )
-
+// requestBody로 받아온 form을 entity로 변환하는 함수
 fun itemToItem(createItemDTO: createItemDTO): Item {
 
     return Item(
@@ -32,6 +32,7 @@ fun itemToItem(createItemDTO: createItemDTO): Item {
     )
 }
 
+// 등록 성공시 reposneBody에 저장되는 함수
 fun setCreateSuccessItemResultDTO(): createItemResultDTO {
     return createItemResultDTO(
         status = HttpStatus.Created.code,
@@ -39,6 +40,7 @@ fun setCreateSuccessItemResultDTO(): createItemResultDTO {
     )
 }
 
+// 등록 실패시 reposneBody에 저장되는 함수
 fun setCreateFailItemResultDTO(): createItemResultDTO {
     return createItemResultDTO(
         status = HttpStatus.InternalServerError.code,

@@ -14,6 +14,7 @@ class AdminItemController(
     private final val adminItemService: AdminItemService,
 ) {
 
+    // 상품 등록
     @PostMapping("/admins/items")
     fun createItem(@RequestBody createItemDTO: createItemDTO): createItemResultDTO {
         return adminItemService.createItem(createItemDTO)

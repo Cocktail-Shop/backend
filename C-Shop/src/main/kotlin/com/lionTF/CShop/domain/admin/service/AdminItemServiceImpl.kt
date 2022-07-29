@@ -15,20 +15,16 @@ class AdminItemServiceImpl(
 ): AdminItemService {
 
     override fun createItem(createItemDTO: createItemDTO): createItemResultDTO {
-        val item = itemToItem(createItemDTO)
-        adminItemRepository.save(item)
 
-        item.itemId?.let {
-            return when (adminItemRepository.existsById(it)) {
-                true -> {
-                    setCreateSuccessItemResultDTO()
-                }
-                else -> {
-                    setCreateFailItemResultDTO()
-                }
-            }
+        // 상품 존재 여부
+        val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName)
+
+        if (existsItemName == null) {
+            adminItemRepository.save(itemToItem(createItemDTO))
+
+            return setCreateSuccessItemResultDTO()
+        } else {
+            return setCreateFailItemResultDTO()
         }
-
-        return setCreateSuccessItemResultDTO()
     }
 }
