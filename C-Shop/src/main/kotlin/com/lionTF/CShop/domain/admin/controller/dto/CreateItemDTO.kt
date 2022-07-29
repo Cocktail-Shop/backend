@@ -14,6 +14,7 @@ data class CreateItemDTO(
     var itemDescription: String,
 )
 
+// 상태코드와 message를 반환하기 위한 DTO
 data class createItemResultDTO(
     val status: Int,
     val message: String,
@@ -45,5 +46,21 @@ fun setCreateFailItemResultDTO(): createItemResultDTO {
     return createItemResultDTO(
         status = HttpStatus.InternalServerError.code,
         message = "이미 존재하는 상품입니다."
+    )
+}
+
+// 수정 성공시 reposneBody에 저장되는 함수
+fun setUpdateSuccessItemResultDTO(): createItemResultDTO {
+    return createItemResultDTO(
+        status = HttpStatus.Created.code,
+        message = "상품이 수정되었습니다."
+    )
+}
+
+// 수정 실패시 reposneBody에 저장되는 함수
+fun setUpdateFailItemResultDTO(): createItemResultDTO {
+    return createItemResultDTO(
+        status = HttpStatus.InternalServerError.code,
+        message = "존재하지 않는 상품입니다."
     )
 }

@@ -4,5 +4,8 @@ import com.lionTF.CShop.domain.admin.controller.dto.CreateItemDTO
 import com.lionTF.CShop.domain.admin.controller.dto.createItemResultDTO
 
 interface AdminItemService {
+
     fun createItem(createItemDTO: CreateItemDTO): createItemResultDTO
+
+    fun updateItem(itemId: Long, createItemDTO: CreateItemDTO): createItemResultDTO
 }
