@@ -1,13 +1,12 @@
 package com.lionTF.CShop.domain.shop.controller.dto
 
-
+import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.models.Category
 import com.lionTF.CShop.global.HttpStatus
-import java.time.temporal.TemporalAmount
 
 
 //상품 단건 조회시 상품 정보를 담기위한 dto
-data class ReadItemDTO (
+data class ItemDTO (
     val itemId: Long,
     val category: Category,
     var itemName: String,
@@ -20,16 +19,33 @@ data class ReadItemDTO (
 )
 
 //상품 단건 조회시 최종 응답 형태를 맞춰주기 위한 dto
-data class ReadItemResultDTO(
-    val status: HttpStatus,
+data class ItemResultDTO(
+    val status: Int,
     val message: String,
-    val result: ReadItemDTO
+    val result: ItemDTO
 )
 
-//칵테일 단건 조회시 칵테일에 포함되어 있는 상품들의 정보를 담는 dto
-data class ReadCocktailItemInfoDTO(
-    val itemId: Long,
-    val itemName: String,
-    val price: Int,
-    val amount: Int,
-)
+//아이템에 관한 정보를 dto로 변환하는 메소드
+fun ItemToItemDTO(item: Item): ItemDTO {
+    return ItemDTO(
+        itemId = item.itemId,
+        category = item.category,
+        itemName = item.itemName,
+        price = item.price,
+        totalAmount = item.amount,
+        degree = item.degree,
+        itemDescription = item.itemDescription,
+        itemImgUrl = item.itemImgUrl,
+        itemStatus = item.itemStatus,
+    )
+}
+
+//상품 단건 조회시, 응답 형태를 맞춰주기 위한 메소드
+fun setItemResultDTO(result: ItemDTO): ItemResultDTO {
+    return ItemResultDTO(
+        status = HttpStatus.OK.code,
+        message = "상품 조회 성공",
+        result = result
+    )
+}
+
