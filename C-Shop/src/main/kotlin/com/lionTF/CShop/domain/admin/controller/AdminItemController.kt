@@ -1,6 +1,6 @@
 package com.lionTF.CShop.domain.admin.controller
 
-import com.lionTF.CShop.domain.admin.controller.dto.createItemDTO
+import com.lionTF.CShop.domain.admin.controller.dto.CreateItemDTO
 import com.lionTF.CShop.domain.admin.controller.dto.createItemResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import lombok.RequiredArgsConstructor
@@ -16,7 +16,7 @@ class AdminItemController(
 
     // 상품 등록
     @PostMapping("/admins/items")
-    fun createItem(@RequestBody createItemDTO: createItemDTO): createItemResultDTO {
+    fun createItem(@RequestBody createItemDTO: CreateItemDTO): createItemResultDTO {
         return adminItemService.createItem(createItemDTO)
     }
 }

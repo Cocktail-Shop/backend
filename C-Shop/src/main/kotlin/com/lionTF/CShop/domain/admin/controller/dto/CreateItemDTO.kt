@@ -5,7 +5,7 @@ import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.global.HttpStatus
 
 // 상품 등록을 위한 정보가 실려오는 JSON 형태를 DB에 저장하기 위한 dto
-data class createItemDTO(
+data class CreateItemDTO(
     var itemName: String,
     var category: Category,
     var price: Int,
@@ -19,7 +19,7 @@ data class createItemResultDTO(
     val message: String,
 )
 // requestBody로 받아온 form을 entity로 변환하는 함수
-fun itemToItem(createItemDTO: createItemDTO): Item {
+fun itemToItem(createItemDTO: CreateItemDTO): Item {
 
     return Item(
         itemName = createItemDTO.itemName,

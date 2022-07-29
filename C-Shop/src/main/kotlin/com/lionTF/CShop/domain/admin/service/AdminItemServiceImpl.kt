@@ -14,7 +14,7 @@ class AdminItemServiceImpl(
 
 ): AdminItemService {
 
-    override fun createItem(createItemDTO: createItemDTO): createItemResultDTO {
+    override fun createItem(createItemDTO: CreateItemDTO): createItemResultDTO {
 
         // 상품 존재 여부
         val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName)
