@@ -1,7 +1,6 @@
 package com.lionTF.CShop.domain.admin.service
 
 import com.lionTF.CShop.domain.admin.controller.dto.*
-import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import lombok.RequiredArgsConstructor
@@ -21,7 +20,7 @@ class AdminItemServiceImpl(
     override fun createItem(createItemDTO: CreateItemDTO): createItemResultDTO {
 
         // 상품 존재 여부
-        val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName)
+        val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName, true)
 
         if (existsItemName == null) {
             adminItemRepository.save(itemToItem(createItemDTO))

@@ -239,12 +239,10 @@ internal class AdminItemServiceImplTest(
 
         adminItemRepository.save(item2)
 
-
-
         var deleteItemIdList = mutableListOf<Long>()
 
         deleteItemIdList.add(item1.itemId)
-        deleteItemIdList.add(10L)
+        deleteItemIdList.add(10L)  // 등록되지 않은 상품
 
         var deleteItemDTO = DeleteItemDTO(
             deleteItemIdList
@@ -258,5 +256,49 @@ internal class AdminItemServiceImplTest(
 
         assertThat(item1.itemStatus).isEqualTo(false)
         assertThat(item2.itemStatus).isEqualTo(true)
+    }
+
+
+    @Test
+    @DisplayName("상품 삭제 후 같은 이름의 상품이 등록되는지 test")
+    fun deleteAndCreateItemTest() {
+        //given
+        var item1 = Item(
+            itemName = "test1",
+            category = Category.ALCOHOL,
+            price = 10000,
+            amount = 10,
+            degree = 20,
+            itemDescription = "상품 설명입니다.",
+            itemStatus = true,
+        )
+
+        adminItemRepository.save(item1)
+
+        var deleteItemIdList = mutableListOf<Long>()
+
+        deleteItemIdList.add(item1.itemId)
+
+        var deleteItemDTO = DeleteItemDTO(
+            deleteItemIdList
+        )
+
+        adminItemService.deleteItems(deleteItemDTO)
+
+        //when
+        var createItemDTO = CreateItemDTO(
+            itemName = "test1",
+            category = Category.ALCOHOL,
+            price = 10000,
+            amount = 10,
+            degree = 20,
+            itemDescription = "상품 설명입니다."
+        )
+
+        val createItem = adminItemService.createItem(createItemDTO)
+
+        //then
+        assertThat(createItem.status).isEqualTo(setCreateSuccessItemResultDTO().status)
+        assertThat(createItem.message).isEqualTo(setCreateSuccessItemResultDTO().message)
     }
 }
