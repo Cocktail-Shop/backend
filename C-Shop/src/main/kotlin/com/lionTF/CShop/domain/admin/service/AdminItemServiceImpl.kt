@@ -48,4 +48,22 @@ class AdminItemServiceImpl(
             return setUpdateFailItemResultDTO()
         }
     }
+
+    // 상품 삭제
+    @Transactional
+    override fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
+        deleteItemDTO.itemIds.forEach{
+            val findItemStatusById = adminItemRepository.findItemStatusById(it)
+
+            if (findItemStatusById) {
+                val item = adminItemRepository.findById(it).orElseThrow()
+                item.delete()
+
+            } else {
+                return setDeleteFailItemResultDTO()
+            }
+        }
+
+        return setDeleteSuccessItemResultDTO()
+    }
 }

@@ -1,6 +1,8 @@
 package com.lionTF.CShop.domain.admin.controller
 
 import com.lionTF.CShop.domain.admin.controller.dto.CreateItemDTO
+import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemDTO
+import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemResultDTO
 import com.lionTF.CShop.domain.admin.controller.dto.createItemResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import lombok.RequiredArgsConstructor
@@ -20,7 +22,14 @@ class AdminItemController(
 
     // 상품 수정
     @PutMapping("/admins/items/{itemId}")
-    fun updateItem(@PathVariable("itemId") itemId: Long, @RequestBody createItemDTO: CreateItemDTO): createItemResultDTO {
+    fun updateItem(@PathVariable("itemId") itemId: Long,
+                   @RequestBody createItemDTO: CreateItemDTO): createItemResultDTO {
         return adminItemService.updateItem(itemId, createItemDTO)
     }
+
+    @DeleteMapping("/admins/items")
+    fun deleteItem(@RequestBody deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
+        return adminItemService.deleteItems(deleteItemDTO)
+    }
+
 }

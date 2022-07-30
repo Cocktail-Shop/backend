@@ -46,4 +46,8 @@ class Item(
         degree = createItemDTO.degree
         itemDescription = createItemDTO.itemDescription
     }
+
+    fun delete() {
+        itemStatus = false
+    }
 }
