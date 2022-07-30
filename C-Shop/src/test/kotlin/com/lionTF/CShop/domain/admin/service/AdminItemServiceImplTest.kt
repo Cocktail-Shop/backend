@@ -5,11 +5,9 @@ import com.lionTF.CShop.domain.admin.models.Category
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import javax.transaction.Transactional
@@ -134,7 +132,7 @@ internal class AdminItemServiceImplTest(
             itemStatus = true,
         )
 
-        val createItem = adminItemRepository.save(item)
+        adminItemRepository.save(item)
 
         var updateItemDTO = CreateItemDTO(
             itemName = "test-update",
@@ -151,5 +149,114 @@ internal class AdminItemServiceImplTest(
         //then
         assertThat(updateItem.status).isEqualTo(setUpdateFailItemResultDTO().status)
         assertThat(updateItem.message).isEqualTo(setUpdateFailItemResultDTO().message)
+    }
+
+    @Test
+    @DisplayName("상품 삭제 test")
+    fun deleteItemTest() {
+        //given
+        var item1 = Item(
+            itemName = "test1",
+            category = Category.ALCOHOL,
+            price = 10000,
+            amount = 10,
+            degree = 20,
+            itemDescription = "상품 설명입니다.",
+            itemStatus = true,
+        )
+
+        adminItemRepository.save(item1)
+
+        var item2 = Item(
+            itemName = "test2",
+            category = Category.ALCOHOL,
+            price = 10000,
+            amount = 10,
+            degree = 20,
+            itemDescription = "상품 설명입니다.",
+            itemStatus = true,
+        )
+
+        adminItemRepository.save(item2)
+
+        var item3 = Item(
+            itemName = "test3",
+            category = Category.ALCOHOL,
+            price = 10000,
+            amount = 10,
+            degree = 20,
+            itemDescription = "상품 설명입니다.",
+            itemStatus = true,
+        )
+
+        adminItemRepository.save(item3)
+
+        var deleteItemIdList = mutableListOf<Long>()
+
+        deleteItemIdList.add(item1.itemId)
+        deleteItemIdList.add(item2.itemId)
+
+        var deleteItemDTO = DeleteItemDTO(
+            deleteItemIdList
+        )
+        //when
+        val deleteItems = adminItemService.deleteItems(deleteItemDTO)
+
+        //then
+        assertThat(deleteItems.status).isEqualTo(setDeleteSuccessItemResultDTO().status)
+        assertThat(deleteItems.message).isEqualTo(setDeleteSuccessItemResultDTO().message)
+
+        assertThat(item1.itemStatus).isEqualTo(false)
+        assertThat(item2.itemStatus).isEqualTo(false)
+        assertThat(item3.itemStatus).isEqualTo(true)
+    }
+
+    @Test
+    @DisplayName("상품 삭제 예외 test")
+    fun deleteItemExceptionTest() {
+        //given
+        var item1 = Item(
+            itemName = "test1",
+            category = Category.ALCOHOL,
+            price = 10000,
+            amount = 10,
+            degree = 20,
+            itemDescription = "상품 설명입니다.",
+            itemStatus = true,
+        )
+
+        adminItemRepository.save(item1)
+
+        var item2 = Item(
+            itemName = "test2",
+            category = Category.ALCOHOL,
+            price = 10000,
+            amount = 10,
+            degree = 20,
+            itemDescription = "상품 설명입니다.",
+            itemStatus = true,
+        )
+
+        adminItemRepository.save(item2)
+
+
+
+        var deleteItemIdList = mutableListOf<Long>()
+
+        deleteItemIdList.add(item1.itemId)
+        deleteItemIdList.add(10L)
+
+        var deleteItemDTO = DeleteItemDTO(
+            deleteItemIdList
+        )
+        //when
+        val deleteItems = adminItemService.deleteItems(deleteItemDTO)
+
+        //then
+        assertThat(deleteItems.status).isEqualTo(setDeleteFailItemResultDTO().status)
+        assertThat(deleteItems.message).isEqualTo(setDeleteFailItemResultDTO().message)
+
+        assertThat(item1.itemStatus).isEqualTo(false)
+        assertThat(item2.itemStatus).isEqualTo(true)
     }
 }

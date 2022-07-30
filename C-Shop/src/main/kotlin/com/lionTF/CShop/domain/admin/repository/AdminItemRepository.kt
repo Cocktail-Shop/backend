@@ -12,5 +12,5 @@ interface AdminItemRepository: JpaRepository<Item, Long> {
     fun existsByItemName(@Param("itemName") itemName: String): String?
 
     @Query("select i.itemStatus from Item i where i.itemId = :itemId")
-    fun findItemStatusById(@Param("itemId")itemId: Long): Boolean
+    fun findItemStatusById(@Param("itemId")itemId: Long): Boolean?
 }

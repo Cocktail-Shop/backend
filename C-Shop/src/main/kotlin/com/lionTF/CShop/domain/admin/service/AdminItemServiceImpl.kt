@@ -55,7 +55,10 @@ class AdminItemServiceImpl(
         deleteItemDTO.itemIds.forEach{
             val findItemStatusById = adminItemRepository.findItemStatusById(it)
 
-            if (findItemStatusById) {
+            if (findItemStatusById == null) {
+                return setDeleteFailItemResultDTO()
+
+            } else if (findItemStatusById!!) {
                 val item = adminItemRepository.findById(it).orElseThrow()
                 item.delete()
 
