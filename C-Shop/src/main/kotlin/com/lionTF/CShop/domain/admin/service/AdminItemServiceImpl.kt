@@ -17,13 +17,13 @@ class AdminItemServiceImpl(
 
     // 상품 등록
     @Transactional
-    override fun createItem(createItemDTO: CreateItemDTO): createItemResultDTO {
+    override fun createItem(createItemDTO: CreateItemDTO): CreateItemResultDTO {
 
         // 상품 존재 여부
         val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName, true)
 
         if (existsItemName == null) {
-            adminItemRepository.save(itemToItem(createItemDTO))
+            adminItemRepository.save(itemToItemDTO(createItemDTO))
 
             return setCreateSuccessItemResultDTO()
         } else {
@@ -34,7 +34,7 @@ class AdminItemServiceImpl(
 
     // 상품 수정
     @Transactional
-    override fun updateItem(itemId: Long, createItemDTO: CreateItemDTO): createItemResultDTO {
+    override fun updateItem(itemId: Long, createItemDTO: CreateItemDTO): CreateItemResultDTO {
 
         val existsItem = adminItemRepository.existsById(itemId)
 

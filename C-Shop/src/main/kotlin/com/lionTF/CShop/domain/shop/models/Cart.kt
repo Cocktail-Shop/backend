@@ -19,7 +19,7 @@ class Cart(
     private var cartItem: List<CartItem>,
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cart_id")
+    @JoinColumn(name = "member_id")
     private var member: Member,
 ) {
 
