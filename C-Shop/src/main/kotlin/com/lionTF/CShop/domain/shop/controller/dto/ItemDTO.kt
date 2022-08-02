@@ -2,7 +2,7 @@ package com.lionTF.CShop.domain.shop.controller.dto
 
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.models.Category
-import com.lionTF.CShop.global.HttpStatus
+import org.springframework.http.HttpStatus
 
 
 //상품 단건 조회시 상품 정보를 담기위한 dto
@@ -43,7 +43,7 @@ fun ItemToItemDTO(item: Item): ItemDTO {
 //상품 단건 조회시, 응답 형태를 맞춰주기 위한 메소드
 fun setItemResultDTO(result: ItemDTO): ItemResultDTO {
     return ItemResultDTO(
-        status = HttpStatus.OK.code,
+        status = HttpStatus.OK.value(),
         message = "상품 조회 성공",
         result = result
     )

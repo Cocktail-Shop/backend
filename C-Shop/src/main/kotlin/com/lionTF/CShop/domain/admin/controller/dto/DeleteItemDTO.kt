@@ -1,6 +1,6 @@
 package com.lionTF.CShop.domain.admin.controller.dto
 
-import com.lionTF.CShop.global.HttpStatus
+import org.springframework.http.HttpStatus
 
 // 삭제할 상품의 ID 정보
 data class DeleteItemDTO(
@@ -16,7 +16,7 @@ data class DeleteItemResultDTO(
 // 삭제 성공시 reposneBody에 저장되는 함수
 fun setDeleteSuccessItemResultDTO(): DeleteItemResultDTO {
     return DeleteItemResultDTO(
-        status = HttpStatus.NoContent.code,
+        status = HttpStatus.NO_CONTENT.value(),
         message = "상품이 삭제되었습니다."
     )
 }
@@ -24,7 +24,7 @@ fun setDeleteSuccessItemResultDTO(): DeleteItemResultDTO {
 // 삭제 실패시 reposneBody에 저장되는 함수
 fun setDeleteFailItemResultDTO(): DeleteItemResultDTO {
     return DeleteItemResultDTO(
-        status = HttpStatus.InternalServerError.code,
+        status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
         message = "존재하지 않는 상품입니다."
     )
 }
