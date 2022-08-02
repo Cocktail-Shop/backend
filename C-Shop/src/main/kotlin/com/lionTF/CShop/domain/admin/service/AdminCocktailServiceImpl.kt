@@ -49,17 +49,17 @@ class AdminCocktailServiceImpl(
     }
 
     // 이미 등록된 칵테일인지 검사하는 함수
-    fun existedCocktail(createCocktailDTO: CreateCocktailDTO): String? {
+    override fun existedCocktail(createCocktailDTO: CreateCocktailDTO): String? {
         return adminCocktailRepository.existsByCocktailName(createCocktailDTO.cocktailName, true)
     }
 
     // 존재하는 단일 상품인지 검사하는 함수
-    fun existedItem(itemId: Long): Optional<Item> {
+    override fun existedItem(itemId: Long): Optional<Item> {
         return adminItemRepository.findById(itemId)
     }
 
     // Form으로부터 받아온 itemId들이 존재하는 상품인지 검사
-    fun formToExistedItems(createCocktailDTO: CreateCocktailDTO): Boolean {
+    override fun formToExistedItems(createCocktailDTO: CreateCocktailDTO): Boolean {
         for (itemId in createCocktailDTO.itemIds) {
             when (existedItem(itemId).isEmpty) {
                 true -> {return false}
