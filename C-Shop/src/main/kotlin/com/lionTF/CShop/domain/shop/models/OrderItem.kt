@@ -1,6 +1,8 @@
 package com.lionTF.CShop.domain.shop.models
 
 import com.lionTF.CShop.domain.admin.models.Item
+import com.lionTF.CShop.domain.shop.controller.dto.OrderItemDTO
+import com.lionTF.CShop.global.model.BaseTimeEntity
 import lombok.*
 import javax.persistence.*
 
@@ -13,17 +15,23 @@ class OrderItem (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val orderItemId: Long,
+    val orderItemId: Long=0,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orders_id")
-    private var orders: Orders,
+    var orders: Orders,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
-    private var item: Item,
+    var item: Item,
 
-    private var amount: Int,
-) {
+    var amount: Int,
+) : BaseTimeEntity()
 
+fun orderItemDTOtoOrderItem(orderItemDTO: OrderItemDTO) : OrderItem {
+    return OrderItem(
+        orders = orderItemDTO.orders,
+        item = orderItemDTO.item,
+        amount = orderItemDTO.amount,
+    )
 }
