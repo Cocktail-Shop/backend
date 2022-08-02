@@ -1,15 +1,11 @@
 package com.lionTF.CShop.domain.admin.models
 
-import com.fasterxml.jackson.databind.BeanDescription
-import com.lionTF.CShop.domain.shop.controller.dto.CocktailDTO
-import com.lionTF.CShop.domain.shop.controller.dto.CocktailItemDTO
-import com.lionTF.CShop.domain.shop.controller.dto.CocktailResultDTO
-import com.lionTF.CShop.domain.shop.controller.dto.ItemDTO
-import com.lionTF.CShop.global.HttpStatus
+import com.lionTF.CShop.global.model.BaseTimeEntity
 import lombok.*
 import javax.persistence.*
 
 @Entity
+@EntityListeners
 @Builder
 @Getter
 @AllArgsConstructor
@@ -26,4 +22,6 @@ class Cocktail (
     var cocktailName: String,
     var cocktailImgUrl: String,
     var cocktailStatus: Boolean,
-)
+) : BaseTimeEntity() {
+
+}
