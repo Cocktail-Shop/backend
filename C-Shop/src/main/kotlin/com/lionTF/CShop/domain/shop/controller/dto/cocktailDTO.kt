@@ -25,7 +25,7 @@ fun cocktailToCocktailDTO(cocktail: Cocktail): CocktailDTO {
     val itemList = cocktail.cocktailItem
     val dtoList: MutableList<CocktailItemDTO> = mutableListOf()
     for(item in itemList!!){
-        dtoList.add(CocktailItemToCocktailItemDTO(item))
+        dtoList.add(cocktailItemToCocktailItemDTO(item))
 
     }
     return CocktailDTO(

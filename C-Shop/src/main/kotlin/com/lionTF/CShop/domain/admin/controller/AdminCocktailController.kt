@@ -6,7 +6,7 @@ import com.lionTF.CShop.domain.admin.controller.dto.DeleteCocktailDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteCocktailResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
 import com.lionTF.CShop.domain.shop.controller.dto.CocktailResultDTO
-import com.lionTF.CShop.domain.shop.controller.dto.CocktailToCocktailDTO
+import com.lionTF.CShop.domain.shop.controller.dto.cocktailToCocktailDTO
 import com.lionTF.CShop.domain.shop.controller.dto.setCocktailResultDTO
 import com.lionTF.CShop.domain.shop.repository.CocktailRepository
 import lombok.RequiredArgsConstructor
@@ -29,7 +29,7 @@ class AdminCocktailController(
     // 칵테일 단건 조회
     @GetMapping("/admins/cocktails/{cocktailId}")
     fun getCocktail(@PathVariable("cocktailId") cocktailId: Long): CocktailResultDTO {
-        val cocktail = CocktailToCocktailDTO(cocktailRepository.getReferenceById(cocktailId))
+        val cocktail = cocktailToCocktailDTO(cocktailRepository.getReferenceById(cocktailId))
         return setCocktailResultDTO(cocktail)
     }
 
