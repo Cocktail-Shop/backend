@@ -3,7 +3,6 @@ package com.lionTF.CShop.domain.admin.models
 import javax.persistence.*
 
 import com.lionTF.CShop.global.model.BaseTimeEntity
-import javax.persistence.*
 
 @Entity
 @EntityListeners
@@ -20,4 +19,9 @@ class Cocktail (
     var cocktailName: String = "",
     var cocktailImgUrl: String = "",
     var cocktailStatus: Boolean = true,
-) : BaseTimeEntity()
+) : BaseTimeEntity() {
+
+    fun deleteCocktail(){
+        cocktailStatus = false
+    }
+}

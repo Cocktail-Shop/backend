@@ -14,7 +14,7 @@ interface AdminCocktailService {
 
     fun existedItem(itemId: Long): Optional<Item>
 
-    fun formToExistedItems(createCocktailDTO: CreateCocktailDTO): Boolean
+    fun formToExistedItems(itemList: MutableList<Long>): Boolean
 
     fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO
 }

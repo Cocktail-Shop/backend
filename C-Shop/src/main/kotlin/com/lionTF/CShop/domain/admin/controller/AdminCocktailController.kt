@@ -9,11 +9,9 @@ import com.lionTF.CShop.domain.shop.controller.dto.CocktailResultDTO
 import com.lionTF.CShop.domain.shop.controller.dto.cocktailToCocktailDTO
 import com.lionTF.CShop.domain.shop.controller.dto.setCocktailResultDTO
 import com.lionTF.CShop.domain.shop.repository.CocktailRepository
-import lombok.RequiredArgsConstructor
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequiredArgsConstructor
 class AdminCocktailController(
     private val adminCocktailService: AdminCocktailService,
     private var cocktailRepository: CocktailRepository,

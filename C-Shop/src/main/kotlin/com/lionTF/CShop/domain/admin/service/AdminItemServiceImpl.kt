@@ -20,7 +20,7 @@ class AdminItemServiceImpl(
     override fun createItem(createItemDTO: CreateItemDTO): CreateItemResultDTO {
 
         // 상품 존재 여부
-        val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName, true)
+        val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName, true, createItemDTO.degree)
 
         if (existsItemName == null) {
             adminItemRepository.save(itemToItemDTO(createItemDTO))

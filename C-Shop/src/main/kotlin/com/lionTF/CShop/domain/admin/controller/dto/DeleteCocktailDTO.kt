@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus
 
 // 삭제할 상품의 ID 정보
 data class DeleteCocktailDTO(
-    var itemIds: MutableList<Long> = mutableListOf<Long>()
+    var cocktailIds: MutableList<Long> = mutableListOf()
 )
 
 // 상태코드와 message를 반환하기 위한 DTO
@@ -17,7 +17,7 @@ data class DeleteCocktailResultDTO(
 fun setDeleteSuccessCocktailResultDTO(): DeleteCocktailResultDTO {
     return DeleteCocktailResultDTO(
         status = HttpStatus.NO_CONTENT.value(),
-        message = "상품이 삭제되었습니다."
+        message = "칵테일 상품이 삭제되었습니다."
     )
 }
 
