@@ -68,4 +68,12 @@ class AdminCocktailServiceImpl(
         return true
     }
 
+    // TODO 칵테일 삭제 로직 구현 예정
+    override fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO {
+        return DeleteCocktailResultDTO(
+            status = 1,
+            message = "test"
+        )
+    }
+
 }

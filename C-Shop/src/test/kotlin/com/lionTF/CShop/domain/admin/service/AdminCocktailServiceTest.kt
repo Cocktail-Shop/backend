@@ -29,6 +29,7 @@ internal class AdminCocktailServiceTest (
     fun initDB(){
         var createItemDTO1 = CreateItemDTO(
             itemName = "test1",
+
             category = Category.ALCOHOL,
             price = 1,
             amount = 2,
