@@ -7,26 +7,29 @@ import lombok.*
 import javax.persistence.*
 
 @Entity
-@Builder
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-class Member(
+data class Member(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val memberId: Long,
+    val memberId: Long? = null,
 
     @OneToMany(mappedBy = "member")
-    private var orders: List<Orders>,
+    private var orders: MutableList<Orders>? = null,
 
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY)
-    private var cart: Cart,
+    private var cart: Cart? = null,
 
-    private var id: String,
-    private var password: String,
-    private var phoneNumber: String,
-    private var memberName: String,
-    private var address: String,
-    private var memberStatus: Boolean,
-):BaseTimeEntity(){}
+    var id: String,
+    var password: String,
+    var phoneNumber: String,
+    var memberName: String,
+    var address: String,
+    private var memberStatus: Boolean=true,
+
+    var role:MemberRole?=null
+):BaseTimeEntity(){
+
+
+}

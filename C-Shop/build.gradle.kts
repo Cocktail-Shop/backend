@@ -35,7 +35,9 @@ dependencies {
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.mybatis.spring.boot:mybatis-spring-boot-starter:2.2.2")
-//	testImplementation("org.springframework.security:spring-security-test")
+	implementation("org.springframework.boot:spring-boot-starter-security")
+	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
+	testImplementation("org.springframework.security:spring-security-test")
 
 
 }
