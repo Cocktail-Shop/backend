@@ -4,16 +4,17 @@ import com.lionTF.CShop.domain.member.models.Member
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
-import org.springframework.security.core.userdetails.UserDetails
-import java.util.stream.Collectors
-import javax.persistence.*
 
 
+/*
+ * UserDetails 인터페이스를 구현해놓은 User 클래스 상속 받은 클래스
+ * loadByUsername 메서드에서 리턴값으로 사용하며 회원 정보를 담고 있음
+ */
 class AuthMemberDTO(
     username:String, password:String,
     authorities: MutableCollection<out GrantedAuthority>?,
     var memberId: Long?=null,
-): User(username,password,authorities) {//UserDetails 인터페이스를 구현해놓은 User 클래스 상속
+): User(username,password,authorities) {
 
     companion object{
         fun memberToAuthMemberDTO(member:Member) : AuthMemberDTO {
@@ -24,6 +25,7 @@ class AuthMemberDTO(
                 member.memberId
             )
         }
+
     }
 
 }

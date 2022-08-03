@@ -11,5 +11,4 @@ interface MemberAuthRepository:JpaRepository<Member,Long> {
     @Query("select m from Member m where m.id = :id")
     fun findById(@Param("id")id:String):Optional<Member>
 
-
 }
