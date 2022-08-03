@@ -16,7 +16,7 @@ class CocktailItem (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val cocktailItemId: Long,
+    val cocktailItemId: Long = 0,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")

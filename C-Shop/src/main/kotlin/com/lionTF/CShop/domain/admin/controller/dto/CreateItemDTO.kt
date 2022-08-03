@@ -15,12 +15,12 @@ data class CreateItemDTO(
 )
 
 // 상태코드와 message를 반환하기 위한 DTO
-data class createItemResultDTO(
+data class CreateItemResultDTO(
     val status: Int,
     val message: String,
 )
 // requestBody로 받아온 form을 entity로 변환하는 함수
-fun itemToItem(createItemDTO: CreateItemDTO): Item {
+fun itemToItemDTO(createItemDTO: CreateItemDTO): Item {
 
     return Item(
         itemName = createItemDTO.itemName,
@@ -34,32 +34,32 @@ fun itemToItem(createItemDTO: CreateItemDTO): Item {
 }
 
 // 등록 성공시 reposneBody에 저장되는 함수
-fun setCreateSuccessItemResultDTO(): createItemResultDTO {
-    return createItemResultDTO(
+fun setCreateSuccessItemResultDTO(): CreateItemResultDTO {
+    return CreateItemResultDTO(
         status = HttpStatus.CREATED.value(),
         message = "상품이 등록되었습니다."
     )
 }
 
 // 등록 실패시 reposneBody에 저장되는 함수
-fun setCreateFailItemResultDTO(): createItemResultDTO {
-    return createItemResultDTO(
+fun setCreateFailItemResultDTO(): CreateItemResultDTO {
+    return CreateItemResultDTO(
         status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
         message = "이미 존재하는 상품입니다."
     )
 }
 
 // 수정 성공시 reposneBody에 저장되는 함수
-fun setUpdateSuccessItemResultDTO(): createItemResultDTO {
-    return createItemResultDTO(
+fun setUpdateSuccessItemResultDTO(): CreateItemResultDTO {
+    return CreateItemResultDTO(
         status = HttpStatus.CREATED.value(),
         message = "상품이 수정되었습니다."
     )
 }
 
 // 수정 실패시 reposneBody에 저장되는 함수
-fun setUpdateFailItemResultDTO(): createItemResultDTO {
-    return createItemResultDTO(
+fun setUpdateFailItemResultDTO(): CreateItemResultDTO {
+    return CreateItemResultDTO(
         status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
         message = "존재하지 않는 상품입니다."
     )

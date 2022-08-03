@@ -9,6 +9,7 @@ import javax.transaction.Transactional
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 class AdminItemServiceImpl(
 
     private val adminItemRepository: AdminItemRepository,
@@ -16,14 +17,13 @@ class AdminItemServiceImpl(
 ): AdminItemService {
 
     // 상품 등록
-    @Transactional
-    override fun createItem(createItemDTO: CreateItemDTO): createItemResultDTO {
+    override fun createItem(createItemDTO: CreateItemDTO): CreateItemResultDTO {
 
         // 상품 존재 여부
         val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName, true)
 
         if (existsItemName == null) {
-            adminItemRepository.save(itemToItem(createItemDTO))
+            adminItemRepository.save(itemToItemDTO(createItemDTO))
 
             return setCreateSuccessItemResultDTO()
         } else {
@@ -33,8 +33,7 @@ class AdminItemServiceImpl(
 
 
     // 상품 수정
-    @Transactional
-    override fun updateItem(itemId: Long, createItemDTO: CreateItemDTO): createItemResultDTO {
+    override fun updateItem(itemId: Long, createItemDTO: CreateItemDTO): CreateItemResultDTO {
 
         val existsItem = adminItemRepository.existsById(itemId)
 
@@ -49,7 +48,6 @@ class AdminItemServiceImpl(
     }
 
     // 상품 삭제
-    @Transactional
     override fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
         deleteItemDTO.itemIds.forEach{
             val findItemStatusById = adminItemRepository.findItemStatusById(it)

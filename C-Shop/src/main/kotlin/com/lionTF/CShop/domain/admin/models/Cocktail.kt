@@ -1,27 +1,23 @@
 package com.lionTF.CShop.domain.admin.models
 
+import javax.persistence.*
+
 import com.lionTF.CShop.global.model.BaseTimeEntity
-import lombok.*
 import javax.persistence.*
 
 @Entity
 @EntityListeners
-@Builder
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 class Cocktail (
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val cocktailId: Long,
+    val cocktailId: Long = 0,
 
     @OneToMany(mappedBy = "cocktail")
-    var cocktailItem: List<CocktailItem>,
-    var cocktailDescription: String,
-    var cocktailName: String,
-    var cocktailImgUrl: String,
-    var cocktailStatus: Boolean,
-) : BaseTimeEntity() {
+    var cocktailItem: MutableList<CocktailItem>? = null,
 
-}
+    var cocktailDescription: String = "",
+    var cocktailName: String = "",
+    var cocktailImgUrl: String = "",
+    var cocktailStatus: Boolean = true,
+) : BaseTimeEntity()
