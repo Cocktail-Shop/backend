@@ -26,7 +26,7 @@ data class ItemResultDTO(
 )
 
 //아이템에 관한 정보를 dto로 변환하는 메소드
-fun ItemToItemDTO(item: Item): ItemDTO {
+fun itemToItemDTO(item: Item): ItemDTO {
     return ItemDTO(
         itemId = item.itemId,
         category = item.category,

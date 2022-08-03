@@ -2,10 +2,12 @@ package com.lionTF.CShop.domain.admin.models
 
 import com.lionTF.CShop.domain.shop.controller.dto.CocktailItemDTO
 import com.lionTF.CShop.domain.shop.controller.dto.CocktailItemInfoDTO
+import com.lionTF.CShop.global.model.BaseTimeEntity
 import lombok.*
 import javax.persistence.*
 
 @Entity
+@EntityListeners
 @Builder
 @Getter
 @AllArgsConstructor
@@ -23,4 +25,4 @@ class CocktailItem (
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cocktail_id")
     var cocktail: Cocktail,
-)
+) : BaseTimeEntity() {}

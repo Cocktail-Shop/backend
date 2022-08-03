@@ -2,6 +2,7 @@ package com.lionTF.CShop.domain.member.models
 
 import com.lionTF.CShop.domain.shop.models.Cart
 import com.lionTF.CShop.domain.shop.models.Orders
+import com.lionTF.CShop.global.model.BaseTimeEntity
 import lombok.*
 import javax.persistence.*
 
@@ -28,4 +29,4 @@ class Member(
     private var memberName: String,
     private var address: String,
     private var memberStatus: Boolean,
-)
+):BaseTimeEntity(){}

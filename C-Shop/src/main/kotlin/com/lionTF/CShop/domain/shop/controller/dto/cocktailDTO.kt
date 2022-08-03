@@ -21,11 +21,12 @@ data class CocktailResultDTO(
 )
 
 //칵테일 단건 조회 result부분에 들어갈 정보들을 dto로 변환
-fun CocktailToCocktailDTO(cocktail: Cocktail): CocktailDTO {
+fun cocktailToCocktailDTO(cocktail: Cocktail): CocktailDTO {
     val itemList = cocktail.cocktailItem
     val dtoList: MutableList<CocktailItemDTO> = mutableListOf()
     for(item in itemList!!){
         dtoList.add(CocktailItemToCocktailItemDTO(item))
+
     }
     return CocktailDTO(
         cocktailId = cocktail.cocktailId,

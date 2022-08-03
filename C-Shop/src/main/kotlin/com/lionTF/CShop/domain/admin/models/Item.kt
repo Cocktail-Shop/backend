@@ -3,11 +3,13 @@ package com.lionTF.CShop.domain.admin.models
 import com.lionTF.CShop.domain.admin.controller.dto.CreateItemDTO
 import com.lionTF.CShop.domain.shop.models.CartItem
 import com.lionTF.CShop.domain.shop.models.OrderItem
+import com.lionTF.CShop.global.model.BaseTimeEntity
 import lombok.*
 import javax.persistence.*
 
 @Entity
 @Builder
+@EntityListeners
 class Item(
 
     @Id
@@ -35,7 +37,7 @@ class Item(
     var category: Category,
 
     var itemStatus: Boolean,
-) {
+) :BaseTimeEntity(){
 
     // 상품 수정
     fun update(createItemDTO: CreateItemDTO) {

@@ -1,6 +1,7 @@
 package com.lionTF.CShop.domain.shop.models
 
 import com.lionTF.CShop.domain.member.models.Member
+import com.lionTF.CShop.global.model.BaseTimeEntity
 import lombok.*
 import javax.persistence.*
 
@@ -13,14 +14,12 @@ class Cart(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private val cartId: Long,
+    val cartId: Long,
 
     @OneToMany(mappedBy = "cart")
-    private var cartItem: List<CartItem>,
+    var cartItem: List<CartItem>,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    private var member: Member,
-) {
-
-}
+    var member: Member,
+) : BaseTimeEntity()
