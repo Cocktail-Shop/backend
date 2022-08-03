@@ -1,7 +1,5 @@
 package com.lionTF.CShop.domain.shop.controller.dto
 
-import com.lionTF.CShop.domain.admin.controller.dto.CreateItemDTO
-import com.lionTF.CShop.domain.admin.controller.dto.createItemResultDTO
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.shop.models.Cart
 
