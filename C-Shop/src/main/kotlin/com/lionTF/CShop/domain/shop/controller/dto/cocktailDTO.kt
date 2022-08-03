@@ -1,8 +1,7 @@
 package com.lionTF.CShop.domain.shop.controller.dto
 
 import com.lionTF.CShop.domain.admin.models.Cocktail
-import com.lionTF.CShop.domain.admin.models.CocktailItem
-import com.lionTF.CShop.global.HttpStatus
+import org.springframework.http.HttpStatus
 
 // 칵테일 단건 조회시 칵테일 정보를 담는 dto
 data class CocktailDTO(
@@ -22,11 +21,11 @@ data class CocktailResultDTO(
 )
 
 //칵테일 단건 조회 result부분에 들어갈 정보들을 dto로 변환
-fun CocktailToCocktailDTO(cocktail: Cocktail): CocktailDTO {
+fun cocktailToCocktailDTO(cocktail: Cocktail): CocktailDTO {
     val itemList = cocktail.cocktailItem
     val dtoList: MutableList<CocktailItemDTO> = mutableListOf()
     for(item in itemList){
-        dtoList.add(CocktailItemToCocktailItemDTO(item))
+        dtoList.add(cocktailItemToCocktailItemDTO(item))
     }
     return CocktailDTO(
         cocktailId = cocktail.cocktailId,
@@ -41,7 +40,7 @@ fun CocktailToCocktailDTO(cocktail: Cocktail): CocktailDTO {
 //칵테일 단건 조회 응답 최종 형태 dto를 만들어주는 메소드
 fun setCocktailResultDTO(result: CocktailDTO): CocktailResultDTO {
     return CocktailResultDTO(
-        status = HttpStatus.OK.code,
+        status = HttpStatus.OK.value(),
         message = "칵테일 단건 조회 성공",
         result = result
     )

@@ -16,7 +16,7 @@ class CocktailService (
     //칵테일 단건 조회 서비스 구현
     fun findByCocktailId(cocktailId: Long): CocktailResultDTO {
         val cocktail: CocktailDTO
-        cocktail = CocktailToCocktailDTO(cocktailRepository.getReferenceById(cocktailId))
+        cocktail = cocktailToCocktailDTO(cocktailRepository.getReferenceById(cocktailId))
         return setCocktailResultDTO(cocktail)
     }
 

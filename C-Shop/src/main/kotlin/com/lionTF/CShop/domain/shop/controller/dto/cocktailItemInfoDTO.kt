@@ -11,7 +11,7 @@ data class CocktailItemInfoDTO(
 )
 
 //CocktailItem entity에서 toReadCocktailItemDTO()를 수행시켜주기 위한 메소드
-fun ItemToCocktailItemInfoDTO(item: Item): CocktailItemInfoDTO {
+fun itemToCocktailItemInfoDTO(item: Item): CocktailItemInfoDTO {
     return CocktailItemInfoDTO(
         itemId = item.itemId,
         itemName = item.itemName,
