@@ -6,7 +6,11 @@ plugins {
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
 	kotlin("plugin.jpa") version "1.6.21"
+	kotlin("kapt") version "1.3.61" //Querydsl
+
 }
+val querydslVersion = "5.0.0" //querydsl
+apply(plugin = "kotlin-kapt") //querydsl
 
 group = "com.lionTF"
 version = "0.0.1-SNAPSHOT"
@@ -39,7 +43,15 @@ dependencies {
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
 	testImplementation("org.springframework.security:spring-security-test")
 
+	//querydsl
+	implementation("com.querydsl:querydsl-jpa:$querydslVersion")
+	kapt("com.querydsl:querydsl-apt:$querydslVersion:jpa")
+	kapt("org.springframework.boot:spring-boot-configuration-processor")
+}
 
+//querydsl
+sourceSets["main"].withConvention(org.jetbrains.kotlin.gradle.plugin.KotlinSourceSet::class) {
+	kotlin.srcDir("$buildDir/generated/source/kapt/main")
 }
 
 tasks.withType<KotlinCompile> {
