@@ -19,6 +19,7 @@ class AdminMemberServiceImpl(
 
 ) : AdminMemberService {
 
+    // 회원 삭제
     override fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
 
         if (formToExistedMembers(deleteMembersDTO.memberIds)) {

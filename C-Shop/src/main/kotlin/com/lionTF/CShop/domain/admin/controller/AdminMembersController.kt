@@ -12,6 +12,7 @@ class AdminMembersController(
     private val adminMemberService: AdminMemberService,
 ) {
 
+    // 회원 삭제
     @DeleteMapping("/admins/members")
     fun deleteMembers(@RequestBody deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
         return adminMemberService.deleteMembers(deleteMembersDTO)
