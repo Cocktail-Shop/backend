@@ -1,20 +1,18 @@
 package com.lionTF.CShop.domain.admin.service
 
 import com.lionTF.CShop.domain.admin.controller.dto.*
-import com.lionTF.CShop.domain.admin.models.Cocktail
 import com.lionTF.CShop.domain.admin.models.CocktailItem
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminCocktailItemRepository
 import com.lionTF.CShop.domain.admin.repository.AdminCocktailRepository
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
-import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
 import java.util.*
-import kotlin.math.ceil
+import javax.transaction.Transactional
 
 @Service
-@RequiredArgsConstructor
+@Transactional
 class AdminCocktailServiceImpl(
     private val adminCocktailRepository: AdminCocktailRepository,
     private val adminCocktailItemRepository: AdminCocktailItemRepository,
@@ -27,7 +25,7 @@ class AdminCocktailServiceImpl(
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
 
         if (existedCocktail(createCocktailDTO).isNullOrEmpty()) {
-            if (formToExistedItems(createCocktailDTO)) {
+            if (formToExistedItems(createCocktailDTO.itemIds)) {
                 val cocktail = adminCocktailRepository.save(cocktailToCockTailDTO(createCocktailDTO))
 
                 for (itemId in createCocktailDTO.itemIds) {
@@ -59,8 +57,8 @@ class AdminCocktailServiceImpl(
     }
 
     // Form으로부터 받아온 itemId들이 존재하는 상품인지 검사
-    override fun formToExistedItems(createCocktailDTO: CreateCocktailDTO): Boolean {
-        for (itemId in createCocktailDTO.itemIds) {
+    override fun formToExistedItems(itemList: MutableList<Long>): Boolean {
+        for (itemId in itemList) {
             when (existedItem(itemId).isEmpty) {
                 true -> {return false}
             }
@@ -68,12 +66,20 @@ class AdminCocktailServiceImpl(
         return true
     }
 
-    // TODO 칵테일 삭제 로직 구현 예정
+
     override fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO {
-        return DeleteCocktailResultDTO(
-            status = 1,
-            message = "test"
-        )
+
+        if (formToExistedItems(deleteCocktailDTO.cocktailIds)) {
+            for (cocktailId in deleteCocktailDTO.cocktailIds) {
+                val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
+                cocktail.deleteCocktail()
+            }
+
+            return setDeleteSuccessCocktailResultDTO()
+
+        } else {
+            return setDeleteFailCocktailResultDTO()
+        }
     }
 
 }

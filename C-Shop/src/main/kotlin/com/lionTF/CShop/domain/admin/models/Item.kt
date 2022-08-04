@@ -4,11 +4,9 @@ import com.lionTF.CShop.domain.admin.controller.dto.CreateItemDTO
 import com.lionTF.CShop.domain.shop.models.CartItem
 import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.global.model.BaseTimeEntity
-import lombok.*
 import javax.persistence.*
 
 @Entity
-@Builder
 @EntityListeners
 class Item(
 

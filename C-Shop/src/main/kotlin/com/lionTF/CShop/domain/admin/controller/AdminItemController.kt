@@ -7,11 +7,9 @@ import com.lionTF.CShop.domain.admin.controller.dto.CreateItemResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.CShop.domain.shop.controller.dto.ItemResultDTO
 import com.lionTF.CShop.domain.shop.service.ItemService
-import lombok.RequiredArgsConstructor
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequiredArgsConstructor
 class AdminItemController(
     private val adminItemService: AdminItemService,
     private val itemService: ItemService,

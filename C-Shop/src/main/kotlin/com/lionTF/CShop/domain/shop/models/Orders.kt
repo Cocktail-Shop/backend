@@ -26,9 +26,15 @@ class Orders(
     var member: Member,
 
     @Enumerated(EnumType.STRING)
-    var orderStatus: OrderStatus,
+    var orderStatus: OrderStatus = OrderStatus.COMPLETE,
     var orderAddress: String,
-) : BaseTimeEntity()
+) : BaseTimeEntity(){
+
+    // 주문 삭제
+    fun deleteOrder(){
+        orderStatus = OrderStatus.CANCEL
+    }
+}
 
 fun ordersDTOToOrders(ordersDTO: OrdersDTO) : Orders {
     return Orders(

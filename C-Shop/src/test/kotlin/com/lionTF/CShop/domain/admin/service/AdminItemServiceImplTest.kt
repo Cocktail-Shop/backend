@@ -94,7 +94,7 @@ internal class AdminItemServiceImplTest(
 
         var updateItemDTO = CreateItemDTO(
             itemName = "test-update",
-            category = Category.ALL,
+            category = Category.ALCOHOL,
             price = 40000,
             amount = 40,
             degree = 10,
@@ -136,7 +136,7 @@ internal class AdminItemServiceImplTest(
 
         var updateItemDTO = CreateItemDTO(
             itemName = "test-update",
-            category = Category.ALL,
+            category = Category.ALCOHOL,
             price = 40000,
             amount = 40,
             degree = 10,

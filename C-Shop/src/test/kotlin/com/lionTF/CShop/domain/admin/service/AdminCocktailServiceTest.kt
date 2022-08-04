@@ -2,6 +2,8 @@ package com.lionTF.CShop.domain.admin.service
 
 import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.models.Category
+import com.lionTF.CShop.domain.admin.models.Cocktail
+import com.lionTF.CShop.domain.admin.repository.AdminCocktailRepository
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
 import org.assertj.core.api.Assertions
@@ -22,6 +24,9 @@ internal class AdminCocktailServiceTest (
 
     @Autowired
     private val adminItemRepository: AdminItemRepository,
+
+    @Autowired
+    private val adminCocktailRepository: AdminCocktailRepository,
 
 ){
 
@@ -144,5 +149,65 @@ internal class AdminCocktailServiceTest (
         assertThat(duplicatedCocktail.status).isEqualTo(setCreateFailCocktailResultDTO().status)
         assertThat(duplicatedCocktail.message).isEqualTo(setCreateFailCocktailResultDTO().message)
         println("setCreateFailCocktailResultDTO().message = ${setCreateFailCocktailResultDTO().message}")
+    }
+
+
+    @Test
+    @DisplayName("칵테일 상품 삭제 test")
+    fun deleteItemsTest() {
+        //given
+        val cocktailTest = Cocktail(
+            cocktailDescription = "test",
+            cocktailName = "test"
+        )
+
+        val cocktail = adminCocktailRepository.save(cocktailTest)
+
+        val cocktailItemList: MutableList<Long> = mutableListOf()
+
+        cocktailItemList.add(cocktail.cocktailId)
+
+        val deleteCocktailDTO =  DeleteCocktailDTO(
+            cocktailItemList
+        )
+
+        //when
+        val deleteCocktail = adminCocktailService.deleteCocktail(deleteCocktailDTO)
+
+        //then
+        assertThat(deleteCocktail.status).isEqualTo(setDeleteSuccessCocktailResultDTO().status)
+        assertThat(deleteCocktail.message).isEqualTo(setDeleteSuccessCocktailResultDTO().message)
+
+        assertThat(cocktail.cocktailStatus).isEqualTo(false)
+    }
+
+    @Test
+    @DisplayName("존재하지 않는 칵테일을 삭제할 예외 test")
+    fun deleteItemsExceptionTest() {
+        //given
+        val cocktailTest = Cocktail(
+            cocktailDescription = "test",
+            cocktailName = "test"
+        )
+
+        val cocktail = adminCocktailRepository.save(cocktailTest)
+
+        val cocktailItemList: MutableList<Long> = mutableListOf()
+
+        cocktailItemList.add(cocktail.cocktailId)
+        cocktailItemList.add(1231L)
+
+        val deleteCocktailDTO =  DeleteCocktailDTO(
+            cocktailItemList
+        )
+
+        //when
+        val deleteCocktail = adminCocktailService.deleteCocktail(deleteCocktailDTO)
+
+        //then
+        assertThat(deleteCocktail.status).isEqualTo(setDeleteFailCocktailResultDTO().status)
+        assertThat(deleteCocktail.message).isEqualTo(setDeleteFailCocktailResultDTO().message)
+
+        assertThat(cocktail.cocktailStatus).isEqualTo(true)
     }
 }
