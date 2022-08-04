@@ -14,7 +14,7 @@ data class Member(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val memberId: Long? = null,
+    val memberId: Long = 0,
 
     @OneToMany(mappedBy = "member")
     private var orders: MutableList<Orders>? = null,
@@ -22,12 +22,12 @@ data class Member(
     @OneToOne(mappedBy = "member", fetch = FetchType.LAZY,cascade = [CascadeType.ALL])
     private var cart: Cart? = null,
 
-    var id: String,
-    var password: String,
-    var phoneNumber: String,
-    var memberName: String,
-    var address: String,
-    private var memberStatus: Boolean=true,
+    var id: String = "",
+    var password: String = "",
+    var phoneNumber: String = "",
+    var memberName: String = "",
+    var address: String = "",
+    var memberStatus: Boolean = true,
 
     var role:MemberRole?=null
 ):BaseTimeEntity(){
@@ -43,6 +43,10 @@ data class Member(
                 cart=Cart()
             )
         }
+    }
+
+    fun deleteMember(){
+        memberStatus = false
     }
 
 }
