@@ -26,8 +26,7 @@ class AdminMemberServiceImpl(
             for (memberId in deleteMembersDTO.memberIds) {
                 val member = adminMemberRepository.getReferenceById(memberId)
 
-                // TODO 충돌 방지를 위해 merge 후 작업 예정
-                //member.deleteMember()
+                member.deleteMember()
             }
 
             return setDeleteSuccessMembersResultDTO()
