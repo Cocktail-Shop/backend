@@ -1,12 +1,17 @@
 package com.lionTF.CShop.domain.member.security
 
 
-import com.lionTF.CShop.domain.member.dto.RequestSignUpDTO
+import com.lionTF.CShop.domain.member.dto.IdInquiryDTO
+import com.lionTF.CShop.domain.member.dto.ResponseDTO
+import com.lionTF.CShop.domain.member.dto.SignUpDTO
 import com.lionTF.CShop.domain.member.models.Member
 import com.lionTF.CShop.domain.member.models.MemberRole
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
 import com.lionTF.CShop.domain.member.service.MemberService
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.*
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.Matchers.instanceOf
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
@@ -38,17 +43,18 @@ class MemberTests{
     @Autowired
     private lateinit var memberService: MemberService
 
-
-    val id="TestUser"
-    val password="1111"
     //test용 id, 패스워드
+    val id="test"
+    val password="test123"
+
+    @BeforeEach
     fun insertMember(){
         val member: Member = Member(
             id = id,
             password= passwordEncoder.encode(password),
-            phoneNumber = "",
-            memberName = "",
-            address = ""
+            phoneNumber = "01012341234",
+            memberName = "사용자",
+            address = "서울시 동작구 상도동 XX빌딩 103호"
         )
         member.role=MemberRole.MEMBER
         repository.save(member)
@@ -57,7 +63,6 @@ class MemberTests{
     @Test
     @DisplayName("Login Success Test")
     fun loginSuccessTest(){
-        insertMember()
         mockMvc.perform(formLogin().user(id).password(password))
             .andExpect(authenticated())
     }
@@ -65,7 +70,6 @@ class MemberTests{
     @Test
     @DisplayName("Login Fail Test")
     fun loginFailedTest(){
-        insertMember()
         val wrongPassword="1112"
         mockMvc.perform(formLogin().user(id).password(wrongPassword))//잘못된 패스워드 입력
             .andExpect(unauthenticated())
@@ -74,7 +78,7 @@ class MemberTests{
     @Test
     @DisplayName("Signup Success Test")
     fun signUpSuccessTest(){
-        val requestSignUpDTO:RequestSignUpDTO= RequestSignUpDTO(
+        val requestSignUpDTO: SignUpDTO.RequestDTO = SignUpDTO.RequestDTO(
             id="test",
             password = "test123",
             phoneNumber = "01012341234",
@@ -86,14 +90,14 @@ class MemberTests{
         val signUpResult=memberService.registerMember(requestSignUpDTO)
 
         //then
-        Assertions.assertThat(signUpResult.statusCode).isEqualTo(HttpStatus.CREATED)
-        Assertions.assertThat(signUpResult.body!!.status).isEqualTo(HttpStatus.CREATED.value())
+        assertThat(signUpResult.statusCode).isEqualTo(HttpStatus.CREATED)
+        assertThat(signUpResult.body!!.status).isEqualTo(HttpStatus.CREATED.value())
     }
 
     @Test
     @DisplayName("Signup Fail Test")
     fun signUpFailTest(){
-        val requestSignUpDTO:RequestSignUpDTO= RequestSignUpDTO(
+        val requestSignUpDTO:SignUpDTO.RequestDTO = SignUpDTO.RequestDTO(
             id="test",
             password = "test123",
             phoneNumber = "01012341234",
@@ -105,8 +109,60 @@ class MemberTests{
         memberService.registerMember(requestSignUpDTO)
         val signUpResult=memberService.registerMember(requestSignUpDTO)
         //then
-        Assertions.assertThat(signUpResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
-        Assertions.assertThat(signUpResult.body!!.status).isEqualTo(HttpStatus.UNAUTHORIZED.value())
+        assertThat(signUpResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+        assertThat(signUpResult.body!!.status).isEqualTo(HttpStatus.UNAUTHORIZED.value())
+    }
+
+    @Test
+    @DisplayName("IdInquiry Success Test")
+    fun idInquirySuccessTest(){
+        val requestIdInquiryDTO=IdInquiryDTO.RequestDTO(
+            "사용자",
+            "01012341234"
+        )
+
+        //when
+        val idInquiryResult=memberService.idInquiry(requestIdInquiryDTO)
+        val responseBody=idInquiryResult.body
+
+        //then : status code, response type이 성공 형태인지 판단 + 찾아온 id가 사용자의 id인지 검사
+        assertThat(idInquiryResult.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(responseBody, instanceOf(IdInquiryDTO.ResponseDTO::class.java))
+        assertThat((responseBody as IdInquiryDTO.ResponseDTO).result.id).isEqualTo(id)
+    }
+
+    @Test
+    @DisplayName("IdInquiry Fail when wrong memberName Test")
+    fun idInquiryWhenWrongMemberName(){
+        val requestIdInquiryDTO=IdInquiryDTO.RequestDTO(
+            "없는사용자",
+            "01012341234"
+        )
+
+        //when : 존재하지 않는 사용자 정보를 줌
+        val idInquiryResult=memberService.idInquiry(requestIdInquiryDTO)
+        val responseBody=idInquiryResult.body
+
+        //then : status code, response type이 실패 형태인지 판단
+        assertThat(idInquiryResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+        assertThat(responseBody, instanceOf(ResponseDTO::class.java))
+    }
+
+    @Test
+    @DisplayName("IdInquiry Fail when wrong phoneNumber Test")
+    fun idInquiryWhenWrongPhoneNumber(){
+        val requestIdInquiryDTO=IdInquiryDTO.RequestDTO(
+            "사용자",
+            "01011111111"
+        )
+
+        //when : 존재하지 않는 사용자 정보를 줌
+        val idInquiryResult=memberService.idInquiry(requestIdInquiryDTO)
+        val responseBody=idInquiryResult.body
+
+        //then : status code, response type이 실패 형태인지 판단
+        assertThat(idInquiryResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+        assertThat(responseBody, instanceOf(ResponseDTO::class.java))
     }
 
 }

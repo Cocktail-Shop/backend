@@ -1,7 +1,8 @@
 package com.lionTF.CShop.domain.member.service
 
-import com.lionTF.CShop.domain.member.dto.RequestSignUpDTO
+import com.lionTF.CShop.domain.member.dto.IdInquiryDTO
 import com.lionTF.CShop.domain.member.dto.ResponseDTO
+import com.lionTF.CShop.domain.member.dto.SignUpDTO
 import com.lionTF.CShop.domain.member.models.Member
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
 import com.lionTF.CShop.domain.shop.models.Cart
@@ -17,7 +18,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
 
 
     //회원가입 로직
-    fun registerMember(requestSignUpDTO: RequestSignUpDTO):ResponseEntity<ResponseDTO>{
+    fun registerMember(requestSignUpDTO: SignUpDTO.RequestDTO):ResponseEntity<ResponseDTO>{
         val newMember= Member.requestSignUpDTOToMember(requestSignUpDTO)
         val existMember: Optional<Member> = memberAuthRepository.findById(newMember.id!!)
 
@@ -38,4 +39,31 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
 
         return  ResponseEntity(responseDTO,status)
     }
+
+
+    //아이디 찾기
+    fun idInquiry(idInquiryDTO: IdInquiryDTO.RequestDTO):ResponseEntity<Any?>{
+        //이름, 비밀번호 둘다 일치하는거 찾아옴
+        val existMember=memberAuthRepository.findByMemberNameAndPhoneNumber(idInquiryDTO.memberName,idInquiryDTO.phoneNumber)
+
+
+        if(existMember.isPresent){
+            val status=HttpStatus.OK
+            val responseDTO=IdInquiryDTO.ResponseDTO(
+                status.value(),
+                "회원아이디를 찾았습니다.",
+                IdInquiryDTO.ResultDTO(existMember.get().id)
+            )
+
+            return ResponseEntity(responseDTO,status)
+        }else{
+            val status=HttpStatus.UNAUTHORIZED
+            val responseDTO=ResponseDTO(status.value(),"존재하지않는 회원입니다.")
+
+            return ResponseEntity(responseDTO,status)
+        }
+
+
+    }
+
 }
