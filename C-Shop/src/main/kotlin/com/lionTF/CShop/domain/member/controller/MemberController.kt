@@ -2,6 +2,7 @@ package com.lionTF.CShop.domain.member.controller
 
 
 import com.lionTF.CShop.domain.member.dto.IdInquiryDTO
+import com.lionTF.CShop.domain.member.dto.PasswordInquiryDTO
 import com.lionTF.CShop.domain.member.dto.ResponseDTO
 import com.lionTF.CShop.domain.member.dto.SignUpDTO
 import com.lionTF.CShop.domain.member.service.MemberService
@@ -30,5 +31,9 @@ class MemberController(private val memberService: MemberService) {
         return memberService.idInquiry(requestIdInquiryDTO)
     }
 
+    @PostMapping("/passwordInquir")
+    fun passwordInquiry(@RequestBody requestPasswordInquiryDTO: PasswordInquiryDTO.RequestDTO):ResponseEntity<ResponseDTO>{
+        return memberService.passwordInquiry(requestPasswordInquiryDTO)
+    }
 
 }

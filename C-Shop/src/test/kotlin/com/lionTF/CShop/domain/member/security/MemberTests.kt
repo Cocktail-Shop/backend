@@ -2,6 +2,7 @@ package com.lionTF.CShop.domain.member.security
 
 
 import com.lionTF.CShop.domain.member.dto.IdInquiryDTO
+import com.lionTF.CShop.domain.member.dto.PasswordInquiryDTO
 import com.lionTF.CShop.domain.member.dto.ResponseDTO
 import com.lionTF.CShop.domain.member.dto.SignUpDTO
 import com.lionTF.CShop.domain.member.models.Member
@@ -121,10 +122,11 @@ class MemberTests{
             "01012341234"
         )
 
+
         //when
         val idInquiryResult=memberService.idInquiry(requestIdInquiryDTO)
         val responseBody=idInquiryResult.body
-
+        println(responseBody is IdInquiryDTO.ResponseDTO)
         //then : status code, response type이 성공 형태인지 판단 + 찾아온 id가 사용자의 id인지 검사
         assertThat(idInquiryResult.statusCode).isEqualTo(HttpStatus.OK)
         assertThat(responseBody, instanceOf(IdInquiryDTO.ResponseDTO::class.java))
@@ -156,13 +158,63 @@ class MemberTests{
             "01011111111"
         )
 
-        //when : 존재하지 않는 사용자 정보를 줌
+        //when : 사용자는 존재하지만 전화번호 잘못된 경우
         val idInquiryResult=memberService.idInquiry(requestIdInquiryDTO)
         val responseBody=idInquiryResult.body
 
         //then : status code, response type이 실패 형태인지 판단
         assertThat(idInquiryResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
         assertThat(responseBody, instanceOf(ResponseDTO::class.java))
+    }
+
+
+    @Test
+    @DisplayName("passwordInquiry Success Test")
+    fun passwordInquirySuccessTest(){
+        val requestPasswordInquiryDTO=PasswordInquiryDTO.RequestDTO(
+            "사용자",
+            "01012341234"
+        )
+
+
+        //when
+        val passwordInquiryResult=memberService.passwordInquiry(requestPasswordInquiryDTO)
+
+        //then
+        assertThat(passwordInquiryResult.statusCode).isEqualTo(HttpStatus.OK)
+        assertThat(passwordInquiryResult.body!!.status).isEqualTo(HttpStatus.OK.value())
+    }
+
+    @Test
+    @DisplayName("passwordInquiry Fail when wrong memberName Test")
+    fun passwordInquiryWhenWrongMemberName(){
+        val requestPasswordInquiryDTO=PasswordInquiryDTO.RequestDTO(
+            "없는사용자",
+            "01012341234"
+        )
+
+        //when : 존재하지 않는 사용자 정보를 줌
+        val passwordInquiryResult=memberService.passwordInquiry(requestPasswordInquiryDTO)
+
+        //then
+        assertThat(passwordInquiryResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+        assertThat(passwordInquiryResult.body!!.status).isEqualTo(HttpStatus.UNAUTHORIZED.value())
+    }
+
+    @Test
+    @DisplayName("passwordInquiry Fail when wrong phoneNumber Test")
+    fun passwordInquiryWhenWrongPhoneNumber(){
+        val requestPasswordInquiryDTO=PasswordInquiryDTO.RequestDTO(
+            "사용자",
+            "01011111111"
+        )
+
+        //when : 사용자는 존재하지만 전화번호 잘못된 경우
+        val passwordInquiryResult=memberService.passwordInquiry(requestPasswordInquiryDTO)
+
+        //then : status code
+        assertThat(passwordInquiryResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
+        assertThat(passwordInquiryResult.body!!.status).isEqualTo(HttpStatus.UNAUTHORIZED.value())
     }
 
 }
