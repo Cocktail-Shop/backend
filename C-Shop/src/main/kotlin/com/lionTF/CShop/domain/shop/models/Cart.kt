@@ -14,12 +14,12 @@ class Cart(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val cartId: Long,
+    val cartId: Long?=null,
 
     @OneToMany(mappedBy = "cart")
-    var cartItem: List<CartItem>,
+    var cartItem: List<CartItem>?=null,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    var member: Member,
+    var member: Member?=null,
 ) : BaseTimeEntity()
