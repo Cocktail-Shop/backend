@@ -1,6 +1,6 @@
 package com.lionTF.CShop.domain.member.service
 
-import com.lionTF.CShop.domain.member.dto.AuthMemberDTO
+import com.lionTF.CShop.domain.member.controller.dto.AuthMemberDTO
 import com.lionTF.CShop.domain.member.models.Member
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
 import org.springframework.security.core.userdetails.UserDetails

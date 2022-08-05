@@ -1,10 +1,10 @@
 package com.lionTF.CShop.domain.member.controller
 
 
-import com.lionTF.CShop.domain.member.dto.IdInquiryDTO
-import com.lionTF.CShop.domain.member.dto.PasswordInquiryDTO
-import com.lionTF.CShop.domain.member.dto.ResponseDTO
-import com.lionTF.CShop.domain.member.dto.SignUpDTO
+import com.lionTF.CShop.domain.member.controller.dto.RequestIdInquiryDTO
+import com.lionTF.CShop.domain.member.controller.dto.RequestPasswordInquiryDTO
+import com.lionTF.CShop.domain.member.controller.dto.RequestSignUpDTO
+import com.lionTF.CShop.domain.member.controller.dto.ResponseDTO
 import com.lionTF.CShop.domain.member.service.MemberService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -21,18 +21,18 @@ class MemberController(private val memberService: MemberService) {
    }
 
     @PostMapping("/signup")
-    fun signUp(@RequestBody requestSignUpDTO: SignUpDTO.RequestDTO):ResponseEntity<ResponseDTO>{
+    fun signUp(@RequestBody requestSignUpDTO: RequestSignUpDTO):ResponseEntity<ResponseDTO>{
         return memberService.registerMember(requestSignUpDTO)
     }
 
     //아이디 찾기
     @PostMapping("/idInquiry")
-    fun idInquiry(@RequestBody requestIdInquiryDTO: IdInquiryDTO.RequestDTO):ResponseEntity<Any?>{
+    fun idInquiry(@RequestBody requestIdInquiryDTO: RequestIdInquiryDTO):ResponseEntity<Any?>{
         return memberService.idInquiry(requestIdInquiryDTO)
     }
 
-    @PostMapping("/passwordInquir")
-    fun passwordInquiry(@RequestBody requestPasswordInquiryDTO: PasswordInquiryDTO.RequestDTO):ResponseEntity<ResponseDTO>{
+    @PostMapping("/passwordInquiry")
+    fun passwordInquiry(@RequestBody requestPasswordInquiryDTO: RequestPasswordInquiryDTO):ResponseEntity<ResponseDTO>{
         return memberService.passwordInquiry(requestPasswordInquiryDTO)
     }
 

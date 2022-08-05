@@ -1,9 +1,6 @@
 package com.lionTF.CShop.domain.member.service
 
-import com.lionTF.CShop.domain.member.dto.IdInquiryDTO
-import com.lionTF.CShop.domain.member.dto.PasswordInquiryDTO
-import com.lionTF.CShop.domain.member.dto.ResponseDTO
-import com.lionTF.CShop.domain.member.dto.SignUpDTO
+import com.lionTF.CShop.domain.member.controller.dto.*
 import com.lionTF.CShop.domain.member.models.Member
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
 import com.lionTF.CShop.domain.shop.models.Cart
@@ -19,7 +16,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
 
 
     //회원가입 로직
-    fun registerMember(requestSignUpDTO: SignUpDTO.RequestDTO):ResponseEntity<ResponseDTO>{
+    fun registerMember(requestSignUpDTO: RequestSignUpDTO):ResponseEntity<ResponseDTO>{
         val newMember= Member.requestSignUpDTOToMember(requestSignUpDTO)
         val existMember: Optional<Member> = memberAuthRepository.findById(newMember.id!!)
 
@@ -29,13 +26,13 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
         if(existMember.isPresent){
             //기존 아이디 존재하는 경우
             status=HttpStatus.UNAUTHORIZED
-            responseDTO=ResponseDTO(status.value(), message = "이미 존재하는 아이디입니다.")
+            responseDTO= ResponseDTO(status.value(), message = "이미 존재하는 아이디입니다.")
         }else{
             //기존 아이디 존재하지 않는 경우
             memberAuthRepository.save(newMember)
             cartRepository.save(Cart(member =newMember ))
             status=HttpStatus.CREATED
-            responseDTO=ResponseDTO(status=status.value(), message = "아이디 생성 성공입니다.")
+            responseDTO= ResponseDTO(status=status.value(), message = "아이디 생성 성공입니다.")
         }
 
         return  ResponseEntity(responseDTO,status)
@@ -43,21 +40,21 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
 
 
     //아이디 찾기
-    fun idInquiry(idInquiryDTO: IdInquiryDTO.RequestDTO):ResponseEntity<Any?>{
+    fun idInquiry(idInquiryDTO: RequestIdInquiryDTO):ResponseEntity<Any?>{
         val existMember=memberAuthRepository.findByMemberNameAndPhoneNumber(idInquiryDTO.memberName,idInquiryDTO.phoneNumber)
 
         if(existMember.isPresent){
             val status=HttpStatus.OK
-            val responseDTO=IdInquiryDTO.ResponseDTO(
+            val responseDTO= ResponseIdInquiryDTO.memberToResponseIdInquiryDTO(
                 status.value(),
                 "회원아이디를 찾았습니다.",
-                IdInquiryDTO.ResultDTO(existMember.get().id)
+                existMember.get().id
             )
 
             return ResponseEntity(responseDTO,status)
         }else{
             val status=HttpStatus.UNAUTHORIZED
-            val responseDTO=ResponseDTO(status.value(),"존재하지않는 회원입니다.")
+            val responseDTO= ResponseDTO(status.value(),"존재하지않는 회원입니다.")
 
             return ResponseEntity(responseDTO,status)
         }
@@ -65,7 +62,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
 
     }
     //비밀번호 찾기
-    fun passwordInquiry(passwordInquiryDTO: PasswordInquiryDTO.RequestDTO):ResponseEntity<ResponseDTO>{
+    fun passwordInquiry(passwordInquiryDTO: RequestPasswordInquiryDTO):ResponseEntity<ResponseDTO>{
         val existMember=memberAuthRepository.findByMemberNameAndPhoneNumber(passwordInquiryDTO.id,passwordInquiryDTO.phoneNumber)
 
         lateinit var status:HttpStatus
@@ -76,7 +73,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
             responseDTO= ResponseDTO(status.value(),"비밀번호를 찾았습니다.")
         }else{
             status=HttpStatus.UNAUTHORIZED
-            responseDTO=ResponseDTO(status.value(),"존재하지 않는 회원입니다.")
+            responseDTO= ResponseDTO(status.value(),"존재하지 않는 회원입니다.")
         }
 
         return ResponseEntity(responseDTO,status)

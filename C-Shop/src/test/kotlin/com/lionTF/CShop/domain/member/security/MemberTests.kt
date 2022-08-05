@@ -1,10 +1,7 @@
 package com.lionTF.CShop.domain.member.security
 
 
-import com.lionTF.CShop.domain.member.dto.IdInquiryDTO
-import com.lionTF.CShop.domain.member.dto.PasswordInquiryDTO
-import com.lionTF.CShop.domain.member.dto.ResponseDTO
-import com.lionTF.CShop.domain.member.dto.SignUpDTO
+import com.lionTF.CShop.domain.member.controller.dto.*
 import com.lionTF.CShop.domain.member.models.Member
 import com.lionTF.CShop.domain.member.models.MemberRole
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
@@ -79,7 +76,7 @@ class MemberTests{
     @Test
     @DisplayName("Signup Success Test")
     fun signUpSuccessTest(){
-        val requestSignUpDTO: SignUpDTO.RequestDTO = SignUpDTO.RequestDTO(
+        val requestSignUpDTO: RequestSignUpDTO = RequestSignUpDTO(
             id="test",
             password = "test123",
             phoneNumber = "01012341234",
@@ -98,7 +95,7 @@ class MemberTests{
     @Test
     @DisplayName("Signup Fail Test")
     fun signUpFailTest(){
-        val requestSignUpDTO:SignUpDTO.RequestDTO = SignUpDTO.RequestDTO(
+        val requestSignUpDTO: RequestSignUpDTO = RequestSignUpDTO(
             id="test",
             password = "test123",
             phoneNumber = "01012341234",
@@ -117,7 +114,7 @@ class MemberTests{
     @Test
     @DisplayName("IdInquiry Success Test")
     fun idInquirySuccessTest(){
-        val requestIdInquiryDTO=IdInquiryDTO.RequestDTO(
+        val requestIdInquiryDTO= RequestIdInquiryDTO(
             "사용자",
             "01012341234"
         )
@@ -126,17 +123,17 @@ class MemberTests{
         //when
         val idInquiryResult=memberService.idInquiry(requestIdInquiryDTO)
         val responseBody=idInquiryResult.body
-        println(responseBody is IdInquiryDTO.ResponseDTO)
+        println(responseBody is ResponseIdInquiryDTO)
         //then : status code, response type이 성공 형태인지 판단 + 찾아온 id가 사용자의 id인지 검사
         assertThat(idInquiryResult.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(responseBody, instanceOf(IdInquiryDTO.ResponseDTO::class.java))
-        assertThat((responseBody as IdInquiryDTO.ResponseDTO).result.id).isEqualTo(id)
+        assertThat(responseBody, instanceOf(ResponseIdInquiryDTO::class.java))
+        assertThat((responseBody as ResponseIdInquiryDTO).result.id).isEqualTo(id)
     }
 
     @Test
     @DisplayName("IdInquiry Fail when wrong memberName Test")
     fun idInquiryWhenWrongMemberName(){
-        val requestIdInquiryDTO=IdInquiryDTO.RequestDTO(
+        val requestIdInquiryDTO= RequestIdInquiryDTO(
             "없는사용자",
             "01012341234"
         )
@@ -153,7 +150,7 @@ class MemberTests{
     @Test
     @DisplayName("IdInquiry Fail when wrong phoneNumber Test")
     fun idInquiryWhenWrongPhoneNumber(){
-        val requestIdInquiryDTO=IdInquiryDTO.RequestDTO(
+        val requestIdInquiryDTO= RequestIdInquiryDTO(
             "사용자",
             "01011111111"
         )
@@ -171,7 +168,7 @@ class MemberTests{
     @Test
     @DisplayName("passwordInquiry Success Test")
     fun passwordInquirySuccessTest(){
-        val requestPasswordInquiryDTO=PasswordInquiryDTO.RequestDTO(
+        val requestPasswordInquiryDTO= RequestPasswordInquiryDTO(
             "사용자",
             "01012341234"
         )
@@ -188,7 +185,7 @@ class MemberTests{
     @Test
     @DisplayName("passwordInquiry Fail when wrong memberName Test")
     fun passwordInquiryWhenWrongMemberName(){
-        val requestPasswordInquiryDTO=PasswordInquiryDTO.RequestDTO(
+        val requestPasswordInquiryDTO= RequestPasswordInquiryDTO(
             "없는사용자",
             "01012341234"
         )
@@ -204,7 +201,7 @@ class MemberTests{
     @Test
     @DisplayName("passwordInquiry Fail when wrong phoneNumber Test")
     fun passwordInquiryWhenWrongPhoneNumber(){
-        val requestPasswordInquiryDTO=PasswordInquiryDTO.RequestDTO(
+        val requestPasswordInquiryDTO= RequestPasswordInquiryDTO(
             "사용자",
             "01011111111"
         )

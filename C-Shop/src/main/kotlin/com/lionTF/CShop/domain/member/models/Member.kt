@@ -1,6 +1,6 @@
 package com.lionTF.CShop.domain.member.models
 
-import com.lionTF.CShop.domain.member.dto.SignUpDTO
+import com.lionTF.CShop.domain.member.controller.dto.RequestSignUpDTO
 import com.lionTF.CShop.domain.shop.models.Cart
 import com.lionTF.CShop.domain.shop.models.Orders
 import com.lionTF.CShop.global.model.BaseTimeEntity
@@ -33,7 +33,7 @@ class Member(
 ):BaseTimeEntity(){
 
     companion object{
-        fun requestSignUpDTOToMember(requestSignUpDTO: SignUpDTO.RequestDTO):Member{
+        fun requestSignUpDTOToMember(requestSignUpDTO: RequestSignUpDTO):Member{
             return Member(
                 id=requestSignUpDTO.id,
                 password=requestSignUpDTO.password,
