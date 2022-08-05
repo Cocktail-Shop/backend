@@ -1,6 +1,6 @@
 package com.lionTF.CShop.domain.member.models
 
-import com.lionTF.CShop.domain.member.dto.RequestSignUpDTO
+import com.lionTF.CShop.domain.member.controller.dto.RequestSignUpDTO
 import com.lionTF.CShop.domain.shop.models.Cart
 import com.lionTF.CShop.domain.shop.models.Orders
 import com.lionTF.CShop.global.model.BaseTimeEntity
@@ -10,7 +10,7 @@ import javax.persistence.*
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-data class Member(
+class Member(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

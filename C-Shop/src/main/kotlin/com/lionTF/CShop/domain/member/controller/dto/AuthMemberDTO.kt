@@ -1,4 +1,4 @@
-package com.lionTF.CShop.domain.member.dto
+package com.lionTF.CShop.domain.member.controller.dto
 
 import com.lionTF.CShop.domain.member.models.Member
 import org.springframework.security.core.GrantedAuthority
