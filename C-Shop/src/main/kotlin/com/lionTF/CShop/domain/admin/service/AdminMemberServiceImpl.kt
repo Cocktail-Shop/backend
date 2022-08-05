@@ -1,14 +1,17 @@
 package com.lionTF.CShop.domain.admin.service
 
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersDTO
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.setDeleteFailMembersResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.setDeleteSuccessMembersResultDTO
+import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.repository.AdminMemberRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminMemberService
 import com.lionTF.CShop.domain.member.models.Member
+import com.lionTF.CShop.domain.member.models.QMember
+import com.lionTF.CShop.domain.member.models.QMember.*
+import com.querydsl.core.BooleanBuilder
+import com.querydsl.jpa.impl.JPAQueryFactory
 import org.springframework.stereotype.Service
 import java.util.*
+import java.util.function.Function
+import java.util.stream.Collectors
 import javax.transaction.Transactional
 
 @Service
@@ -16,8 +19,9 @@ import javax.transaction.Transactional
 class AdminMemberServiceImpl(
 
     private val adminMemberRepository: AdminMemberRepository,
+    private val queryFactory: JPAQueryFactory,
 
-) : AdminMemberService {
+    ) : AdminMemberService {
 
     // 회원 삭제
     override fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
@@ -33,6 +37,27 @@ class AdminMemberServiceImpl(
         } else {
             return setDeleteFailMembersResultDTO()
         }
+    }
+
+    // 회원 ID로 회원 검색
+    override fun findMembers(keyword: String): List<FindMembersDTO> {
+        val booleanBuilder: BooleanBuilder = BooleanBuilder()
+        booleanBuilder.and(member.id.contains(keyword))
+
+        val memberList = queryFactory
+            .selectFrom(member)
+            .where(booleanBuilder)
+            .fetch()
+
+        return memberList.stream()
+            .map<FindMembersDTO>(Function<Member, FindMembersDTO> { m: Member ->
+                FindMembersDTO(
+                    m.id,
+                    m.address,
+                    m.memberName,
+                    m.phoneNumber,
+                )
+            }).collect(Collectors.toList())
     }
 
     // 존재하는 사용자인지 검사하는 함수
