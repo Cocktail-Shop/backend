@@ -1,6 +1,7 @@
 package com.lionTF.CShop.domain.admin.service
 
 import com.lionTF.CShop.domain.admin.controller.dto.*
+import com.lionTF.CShop.domain.admin.models.Cocktail
 import com.lionTF.CShop.domain.admin.models.CocktailItem
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminCocktailItemRepository
@@ -24,7 +25,7 @@ class AdminCocktailServiceImpl(
     override fun createCocktail(createCocktailDTO: CreateCocktailDTO): CreateCocktailResultDTO {
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
 
-        return when (existedCocktail(createCocktailDTO)) {
+        return when (existedCocktailByCocktailName(createCocktailDTO)) {
             true -> when (formToExistedItems(createCocktailDTO.itemIds)) {
                 true -> {
                     val cocktail = adminCocktailRepository.save(cocktailToCockTailDTO(createCocktailDTO))
@@ -36,7 +37,7 @@ class AdminCocktailServiceImpl(
                     }
                     adminCocktailItemRepository.saveAll(cocktailItemList)
 
-                    return setCreateSuccessCocktailResultDTO()
+                    return setCreateSuccessCocktailResultDTO(cocktail.cocktailId)
                 }
                 else -> failToNoContentItemResultDTO()
             }
@@ -47,7 +48,7 @@ class AdminCocktailServiceImpl(
     // 칵테일 상품 삭제
     override fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO {
 
-        return when (formToExistedItems(deleteCocktailDTO.cocktailIds)){
+        return when (formToExistedCocktails(deleteCocktailDTO.cocktailIds)){
             true -> {
                 for (cocktailId in deleteCocktailDTO.cocktailIds) {
                     val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
@@ -86,7 +87,7 @@ class AdminCocktailServiceImpl(
 
                     adminCocktailItemRepository.saveAll(cocktailItemList)
 
-                    return setUpdateSuccessCocktailResultDTO()
+                    return setUpdateSuccessCocktailResultDTO(cocktail.cocktailId)
                 }
                 else -> failToNoContentItemResultDTO()
             }
@@ -96,7 +97,7 @@ class AdminCocktailServiceImpl(
 
 
     // 이미 등록된 칵테일인지 검사하는 함수
-    private fun existedCocktail(createCocktailDTO: CreateCocktailDTO): Boolean {
+    private fun existedCocktailByCocktailName(createCocktailDTO: CreateCocktailDTO): Boolean {
         val existsByCocktailName = adminCocktailRepository.existsByCocktailName(createCocktailDTO.cocktailName, true)
 
         return when (existsByCocktailName) {
@@ -115,6 +116,23 @@ class AdminCocktailServiceImpl(
     private fun formToExistedItems(itemList: MutableList<Long>): Boolean {
         for (itemId in itemList) {
             when (existedItem(itemId).isEmpty) {
+                true -> {return false}
+            }
+        }
+        return true
+    }
+
+
+    // 존재하는 단일 상품인지 검사하는 함수
+    private fun existedCocktail(cocktailId: Long): Optional<Cocktail> {
+        return adminCocktailRepository.findById(cocktailId)
+    }
+
+
+    // Form으로부터 받아온 cocktailId들이 존재하는 상품인지 검사
+    private fun formToExistedCocktails(cocktailList: MutableList<Long>): Boolean {
+        for (cocktailId in cocktailList) {
+            when (existedCocktail(cocktailId).isEmpty) {
                 true -> {return false}
             }
         }
