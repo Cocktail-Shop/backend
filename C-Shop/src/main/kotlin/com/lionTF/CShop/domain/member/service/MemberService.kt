@@ -45,7 +45,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
 
         if(existMember.isPresent){
             val status=HttpStatus.OK
-            val responseDTO= ResponseIdInquiryDTO.memberToResponseIdInquiryDTO(
+            val responseDTO:ResponseIdInquiryDTO= ResponseIdInquiryDTO.memberToResponseIdInquiryDTO(
                 status.value(),
                 "회원아이디를 찾았습니다.",
                 existMember.get().id
