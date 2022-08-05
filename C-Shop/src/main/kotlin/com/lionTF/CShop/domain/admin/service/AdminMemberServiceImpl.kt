@@ -41,15 +41,10 @@ class AdminMemberServiceImpl(
 
     // 회원 ID로 회원 검색
     override fun findMembers(keyword: String): List<FindMembersDTO> {
-        val booleanBuilder: BooleanBuilder = BooleanBuilder()
-        booleanBuilder.and(member.id.contains(keyword))
 
-        val memberList = queryFactory
-            .selectFrom(member)
-            .where(booleanBuilder)
-            .fetch()
+        val findMembersInfo = adminMemberRepository.findMembersInfo(keyword)
 
-        return memberList.stream()
+        return findMembersInfo!!.stream()
             .map<FindMembersDTO>(Function<Member, FindMembersDTO> { m: Member ->
                 FindMembersDTO(
                     m.id,

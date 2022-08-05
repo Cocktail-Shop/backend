@@ -1,10 +1,10 @@
 package com.lionTF.CShop.domain.admin.controller.dto
 
-data class FindMembersDTO(
+data class FindMembersDTO (
     val id: String,
     val address: String,
     val memberName: String,
-    val phoneNumber: String
+    val phoneNumber: String,
 )
 
 data class FindMembersResultDTO(
