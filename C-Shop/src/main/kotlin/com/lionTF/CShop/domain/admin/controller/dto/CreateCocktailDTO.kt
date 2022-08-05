@@ -18,7 +18,6 @@ data class CreateCocktailResultDTO(
 )
 
 fun cocktailToCockTailDTO(createCocktailDTO: CreateCocktailDTO): Cocktail {
-
     return Cocktail(
         cocktailName = createCocktailDTO.cocktailName,
         cocktailDescription = createCocktailDTO.cocktailDescription,
@@ -26,7 +25,6 @@ fun cocktailToCockTailDTO(createCocktailDTO: CreateCocktailDTO): Cocktail {
 }
 
 fun cocktailItemToCocktailItemDTO(itemId: Item, cocktailId: Cocktail): CocktailItem {
-
     return CocktailItem(
         item = itemId,
         cocktail = cocktailId,
@@ -50,9 +48,25 @@ fun setCreateFailCocktailResultDTO(): CreateCocktailResultDTO {
 }
 
 // 존재하지 않는 Item일 때 reposneBody에 저장되는 함수
-fun FailToNoContentItemResultDTO(): CreateCocktailResultDTO {
+fun failToNoContentItemResultDTO(): CreateCocktailResultDTO {
     return CreateCocktailResultDTO(
         status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
         message = "존재하지 않는 상품입니다."
+    )
+}
+
+// 수정 성공시 reposneBody에 저장되는 함수
+fun setUpdateSuccessCocktailResultDTO(): CreateCocktailResultDTO {
+    return CreateCocktailResultDTO(
+        status = HttpStatus.CREATED.value(),
+        message = "칵테일 상품이 수정되었습니다."
+    )
+}
+
+// 수정 실패시 reposneBody에 저장되는 함수
+fun setUpdateFailCocktailResultDTO(): CreateCocktailResultDTO {
+    return CreateCocktailResultDTO(
+        status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        message = "존재하지 않는 칵테일 상품입니다."
     )
 }

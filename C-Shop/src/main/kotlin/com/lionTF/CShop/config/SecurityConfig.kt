@@ -22,7 +22,7 @@ class SecurityConfig {
         http.csrf().disable()//post 요청 허용
         return http.authorizeRequests()
             //.antMatchers("/user/**").authenticated()
-            .antMatchers("/admins/**").hasRole("ADMIN")
+//            .antMatchers("/admins/**").hasRole("ADMIN")
             .anyRequest()    // 모든 요청에 대해서 허용하라.
             .permitAll()
             .and()

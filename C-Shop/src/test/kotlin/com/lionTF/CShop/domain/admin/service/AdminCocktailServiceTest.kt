@@ -6,7 +6,6 @@ import com.lionTF.CShop.domain.admin.models.Cocktail
 import com.lionTF.CShop.domain.admin.repository.AdminCocktailRepository
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -113,9 +112,9 @@ internal class AdminCocktailServiceTest (
         val cocktail = adminCocktailService.createCocktail(createCocktailDTO)
 
         //then
-        assertThat(cocktail.status).isEqualTo(FailToNoContentItemResultDTO().status)
-        assertThat(cocktail.message).isEqualTo(FailToNoContentItemResultDTO().message)
-        println("FailToNoContentItemResultDTO().message = ${FailToNoContentItemResultDTO().message}")
+        assertThat(cocktail.status).isEqualTo(failToNoContentItemResultDTO().status)
+        assertThat(cocktail.message).isEqualTo(failToNoContentItemResultDTO().message)
+        println("FailToNoContentItemResultDTO().message = ${failToNoContentItemResultDTO().message}")
     }
 
     @Test

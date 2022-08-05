@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.admin.models
 
+import com.lionTF.CShop.domain.admin.controller.dto.CreateCocktailDTO
 import javax.persistence.*
 
 import com.lionTF.CShop.global.model.BaseTimeEntity
@@ -21,7 +22,14 @@ class Cocktail (
     var cocktailStatus: Boolean = true,
 ) : BaseTimeEntity() {
 
+    // 칵테일 상품 삭제
     fun deleteCocktail(){
         cocktailStatus = false
+    }
+
+    // 칵테일 상품 수정
+    fun updateCocktail(createCocktailDTO: CreateCocktailDTO) {
+        cocktailName = createCocktailDTO.cocktailName
+        cocktailDescription = cocktailDescription
     }
 }

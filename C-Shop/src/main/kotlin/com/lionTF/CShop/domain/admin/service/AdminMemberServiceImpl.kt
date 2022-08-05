@@ -36,12 +36,12 @@ class AdminMemberServiceImpl(
     }
 
     // 존재하는 사용자인지 검사하는 함수
-    override fun existedMember(memberId: Long): Optional<Member> {
+    private fun existedMember(memberId: Long): Optional<Member> {
         return adminMemberRepository.findById(memberId)
     }
 
     // Form으로부터 받아온 memberId들이 존재하는지 검사
-    override fun formToExistedMembers(memberIdList: MutableList<Long>): Boolean {
+    private fun formToExistedMembers(memberIdList: MutableList<Long>): Boolean {
         for (memberId in memberIdList) {
             when (existedMember(memberId).isEmpty) {
                 true -> {return false}

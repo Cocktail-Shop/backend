@@ -36,12 +36,12 @@ class AdminOrderServiceImpl(
     }
 
     // 존재하는 주문인지 검사하는 함수
-    override fun existedOrder(OrderId: Long): Optional<Orders> {
-        return adminOrderRepository.findById(OrderId)
+    private fun existedOrder(orderId: Long): Optional<Orders> {
+        return adminOrderRepository.findById(orderId)
     }
 
     // Form으로부터 받아온 orderId들이 존재하는 주문인지 검사
-    override fun formToExistedItems(orderList: MutableList<Long>): Boolean {
+    private fun formToExistedItems(orderList: MutableList<Long>): Boolean {
         for (orderId in orderList) {
             when (existedOrder(orderId).isEmpty) {
                 true -> {return false}
