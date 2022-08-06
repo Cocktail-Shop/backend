@@ -72,7 +72,7 @@ class AdminItemServiceImpl(
 
     // 상품 전체 조회
     override fun getAllItems(): List<GetItemDTO>? {
-        val itemList = adminItemRepository.findAll()
+        val itemList = adminItemRepository.findAllByItemStatusTrue(true)
 
         return itemEntityToDTO(itemList)
     }

@@ -18,4 +18,7 @@ interface AdminItemRepository: JpaRepository<Item, Long> {
 
     @Query("select i.itemStatus from Item i where i.itemId = :itemId")
     fun findItemStatusById(@Param("itemId")itemId: Long): Boolean?
+
+    @Query("select i from Item i where i.itemStatus = :itemStatus")
+    fun findAllByItemStatusTrue(@Param("itemStatus")itemStatus: Boolean): List<Item>?
 }

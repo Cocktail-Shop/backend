@@ -77,7 +77,7 @@
                                 <td th:text="${items.itemImgUrl}"></td>
                                 <td th:text="${items.createdAt}"></td>
                                 <td><a href="#" th:href="@{/admins/items/{itemId} (itemId=${items.itemId})}" class="btn btn-default btn-asd">수정</a></td>
-                                <td><a href="order.html" class="btn btn-default btn-asd">삭제</a></td>
+                                <td><a href="/admins/items" class="btn btn-default btn-asd">삭제</a></td>
 <!--                                <td><a th:href="@{'product/'+${product.productId}}">세부정보보기</a></td>-->
                             </tr>
                         </table>

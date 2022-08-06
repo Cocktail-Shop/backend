@@ -51,7 +51,7 @@ class AdminItemController(
         @ModelAttribute("item") item: CreateItemDTO
     ): String {
         adminItemService.updateItem(itemId, item)
-        return "redirect:/"
+        return "redirect:/admins/all-item"
     }
 
     // 상품 삭제
