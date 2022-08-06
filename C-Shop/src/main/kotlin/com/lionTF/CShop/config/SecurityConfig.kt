@@ -20,6 +20,7 @@ class SecurityConfig {
     @Bean
     fun defaultSecurityFilterChain(http:HttpSecurity): SecurityFilterChain{
         http.csrf().disable()//post 요청 허용
+        http.httpBasic() //postman 테스트를 위해 설정
         return http.authorizeRequests()
             //.antMatchers("/user/**").authenticated()
             .antMatchers("/admins/**").hasRole("ADMIN")

@@ -79,5 +79,10 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
         return ResponseEntity(responseDTO,status)
     }
 
-        //비밀번호 재설정
+    //마이페이지 정보 조회
+    fun getMyPageInfo(memberId: Long?): ResponseMyPageDTO {
+        val member = memberAuthRepository.findByMemberId(memberId).get()
+        return ResponseMyPageDTO.memberToResponseMyPageDTO(member)
+    }
+
 }
