@@ -23,11 +23,11 @@ class Orders(
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    var member: Member,
+    var member: Member? = null,
 
     @Enumerated(EnumType.STRING)
     var orderStatus: OrderStatus = OrderStatus.COMPLETE,
-    var orderAddress: String,
+    var orderAddress: String = "",
 ) : BaseTimeEntity(){
 
     // 주문 삭제

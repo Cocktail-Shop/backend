@@ -15,10 +15,10 @@ data class CreateCocktailDTO(
 data class CreateCocktailResultDTO(
     val status: Int,
     val message: String,
+    val cocktailId: Long,
 )
 
 fun cocktailToCockTailDTO(createCocktailDTO: CreateCocktailDTO): Cocktail {
-
     return Cocktail(
         cocktailName = createCocktailDTO.cocktailName,
         cocktailDescription = createCocktailDTO.cocktailDescription,
@@ -26,7 +26,6 @@ fun cocktailToCockTailDTO(createCocktailDTO: CreateCocktailDTO): Cocktail {
 }
 
 fun cocktailItemToCocktailItemDTO(itemId: Item, cocktailId: Cocktail): CocktailItem {
-
     return CocktailItem(
         item = itemId,
         cocktail = cocktailId,
@@ -34,10 +33,11 @@ fun cocktailItemToCocktailItemDTO(itemId: Item, cocktailId: Cocktail): CocktailI
 }
 
 // 등록 성공시 reposneBody에 저장되는 함수
-fun setCreateSuccessCocktailResultDTO(): CreateCocktailResultDTO {
+fun setCreateSuccessCocktailResultDTO(cocktailId: Long): CreateCocktailResultDTO {
     return CreateCocktailResultDTO(
         status = HttpStatus.CREATED.value(),
-        message = "칵테일 상품이 등록되었습니다."
+        message = "칵테일 상품이 등록되었습니다.",
+        cocktailId = cocktailId
     )
 }
 
@@ -45,14 +45,34 @@ fun setCreateSuccessCocktailResultDTO(): CreateCocktailResultDTO {
 fun setCreateFailCocktailResultDTO(): CreateCocktailResultDTO {
     return CreateCocktailResultDTO(
         status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-        message = "이미 존재하는 칵테일 상품입니다."
+        message = "이미 존재하는 칵테일 상품입니다.",
+        cocktailId = 0L
     )
 }
 
 // 존재하지 않는 Item일 때 reposneBody에 저장되는 함수
-fun FailToNoContentItemResultDTO(): CreateCocktailResultDTO {
+fun failToNoContentItemResultDTO(): CreateCocktailResultDTO {
     return CreateCocktailResultDTO(
         status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-        message = "존재하지 않는 상품입니다."
+        message = "존재하지 않는 상품입니다.",
+        cocktailId = 0L
+    )
+}
+
+// 수정 성공시 reposneBody에 저장되는 함수
+fun setUpdateSuccessCocktailResultDTO(cocktailId: Long): CreateCocktailResultDTO {
+    return CreateCocktailResultDTO(
+        status = HttpStatus.CREATED.value(),
+        message = "칵테일 상품이 수정되었습니다.",
+        cocktailId = cocktailId
+    )
+}
+
+// 수정 실패시 reposneBody에 저장되는 함수
+fun setUpdateFailCocktailResultDTO(): CreateCocktailResultDTO {
+    return CreateCocktailResultDTO(
+        status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+        message = "존재하지 않는 칵테일 상품입니다.",
+        cocktailId = 0L
     )
 }

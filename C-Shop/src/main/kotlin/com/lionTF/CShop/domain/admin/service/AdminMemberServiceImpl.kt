@@ -1,14 +1,14 @@
 package com.lionTF.CShop.domain.admin.service
 
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersDTO
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.setDeleteFailMembersResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.setDeleteSuccessMembersResultDTO
+import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.repository.AdminMemberRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminMemberService
 import com.lionTF.CShop.domain.member.models.Member
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.util.*
+import java.util.function.Function
+import java.util.stream.Collectors.*
 import javax.transaction.Transactional
 
 @Service
@@ -17,7 +17,7 @@ class AdminMemberServiceImpl(
 
     private val adminMemberRepository: AdminMemberRepository,
 
-) : AdminMemberService {
+    ) : AdminMemberService {
 
     // 회원 삭제
     override fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
@@ -35,18 +35,50 @@ class AdminMemberServiceImpl(
         }
     }
 
+    // 회원 ID로 회원 검색
+    override fun findMembers(keyword: String): FindMembersResultDTO? {
+
+        val findMembersInfo = adminMemberRepository.findMembersInfo(keyword)
+
+        val memberList = memberEntityToDTO(findMembersInfo)
+
+        return memberList?.let { FindMembersResultDTO(HttpStatus.OK.value(), "멤버 검색 성공", it) }
+    }
+
+    override fun getAllMembers(): FindMembersResultDTO? {
+
+        val members = adminMemberRepository.findAll()
+
+        val memberList = memberEntityToDTO(members)
+
+        return memberList?.let { FindMembersResultDTO(HttpStatus.OK.value(), "회원이 성공적으로 조회되었습니다.", it) }
+    }
+
     // 존재하는 사용자인지 검사하는 함수
-    override fun existedMember(memberId: Long): Optional<Member> {
+    private fun existedMember(memberId: Long): Optional<Member> {
         return adminMemberRepository.findById(memberId)
     }
 
     // Form으로부터 받아온 memberId들이 존재하는지 검사
-    override fun formToExistedMembers(memberIdList: MutableList<Long>): Boolean {
+    private fun formToExistedMembers(memberIdList: MutableList<Long>): Boolean {
         for (memberId in memberIdList) {
             when (existedMember(memberId).isEmpty) {
                 true -> {return false}
             }
         }
         return true
+    }
+
+    // member entity를 dto로 변환시키는 함수
+    private fun memberEntityToDTO(findMembersInfo: List<Member>?): List<FindMembersDTO>? {
+        return findMembersInfo!!.stream()
+            .map<FindMembersDTO>(Function<Member, FindMembersDTO> { m: Member ->
+                FindMembersDTO(
+                    m.id,
+                    m.address,
+                    m.memberName,
+                    m.phoneNumber,
+                )
+            }).collect(toList())
     }
 }

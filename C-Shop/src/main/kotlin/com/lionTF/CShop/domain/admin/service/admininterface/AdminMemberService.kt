@@ -2,14 +2,14 @@ package com.lionTF.CShop.domain.admin.service.admininterface
 
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersResultDTO
-import com.lionTF.CShop.domain.member.models.Member
-import java.util.*
+import com.lionTF.CShop.domain.admin.controller.dto.FindMembersDTO
+import com.lionTF.CShop.domain.admin.controller.dto.FindMembersResultDTO
 
 interface AdminMemberService {
 
     fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO
 
-    fun existedMember(memberId: Long): Optional<Member>
+    fun findMembers(keyword: String): FindMembersResultDTO?
 
-    fun formToExistedMembers(memberIdList: MutableList<Long>): Boolean
+    fun getAllMembers(): FindMembersResultDTO?
 }

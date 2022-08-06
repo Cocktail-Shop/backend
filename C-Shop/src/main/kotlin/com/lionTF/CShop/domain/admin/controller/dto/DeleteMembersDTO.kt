@@ -16,7 +16,7 @@ data class DeleteMembersResultDTO(
 fun setDeleteSuccessMembersResultDTO(): DeleteMembersResultDTO {
     return DeleteMembersResultDTO(
         status = HttpStatus.NO_CONTENT.value(),
-        message = "상품이 삭제되었습니다."
+        message = "회원이 삭제되었습니다."
     )
 }
 
@@ -24,6 +24,6 @@ fun setDeleteSuccessMembersResultDTO(): DeleteMembersResultDTO {
 fun setDeleteFailMembersResultDTO(): DeleteMembersResultDTO {
     return DeleteMembersResultDTO(
         status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-        message = "존재하지 않는 상품입니다."
+        message = "존재하지 않는 회원입니다."
     )
 }
