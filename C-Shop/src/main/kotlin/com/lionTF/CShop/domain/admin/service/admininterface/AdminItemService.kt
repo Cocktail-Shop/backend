@@ -1,9 +1,6 @@
 package com.lionTF.CShop.domain.admin.service.admininterface
 
-import com.lionTF.CShop.domain.admin.controller.dto.CreateItemDTO
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemDTO
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.CreateItemResultDTO
+import com.lionTF.CShop.domain.admin.controller.dto.*
 
 interface AdminItemService {
 
@@ -12,4 +9,6 @@ interface AdminItemService {
     fun updateItem(itemId: Long, createItemDTO: CreateItemDTO): CreateItemResultDTO
 
     fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO
+
+    fun getAllItems(): List<GetItemDTO>?
 }

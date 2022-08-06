@@ -16,8 +16,8 @@ data class CreateItemDTO(
 
 // 상태코드와 message를 반환하기 위한 DTO
 data class CreateItemResultDTO(
-    val status: Int,
-    val message: String,
+    var status: Int,
+    var message: String,
 )
 // requestBody로 받아온 form을 entity로 변환하는 함수
 fun itemToItemDTO(createItemDTO: CreateItemDTO): Item {

@@ -21,6 +21,11 @@ class ItemService (
         return item?.let { setItemResultDTO(it) }!!
     }
 
+    fun findByItemIdTest(itemId: Long): ItemDTO {
+        return itemToItemDTO(itemRepository.getReferenceById(itemId))
+
+    }
+
     //상품 검색, 키워드가 포함되어 있는 상품 찾기
     fun getDataList(keyword: String) : List<SearchItemInfoDTO>{
         val booleanBuilder:BooleanBuilder = BooleanBuilder()

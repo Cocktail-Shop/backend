@@ -1,10 +1,13 @@
 package com.lionTF.CShop.domain.admin.service
 
 import com.lionTF.CShop.domain.admin.controller.dto.*
+import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
+import java.util.stream.Collectors
+import java.util.stream.Collectors.*
 import javax.transaction.Transactional
 
 @Service
@@ -55,7 +58,7 @@ class AdminItemServiceImpl(
             if (findItemStatusById == null) {
                 return setDeleteFailItemResultDTO()
 
-            } else if (findItemStatusById!!) {
+            } else if (findItemStatusById) {
                 val item = adminItemRepository.findById(it).orElseThrow()
                 item.delete()
 
@@ -65,5 +68,29 @@ class AdminItemServiceImpl(
         }
 
         return setDeleteSuccessItemResultDTO()
+    }
+
+    // 상품 전체 조회
+    override fun getAllItems(): List<GetItemDTO>? {
+        val itemList = adminItemRepository.findAll()
+
+        return itemEntityToDTO(itemList)
+    }
+
+    // item entity를 dto로 변환시키는 함수
+    private fun itemEntityToDTO(itemList: List<Item>?): List<GetItemDTO>? {
+        return itemList!!.stream()
+            .map { i: Item ->
+                GetItemDTO(
+                    i.itemId,
+                    i.itemName,
+                    i.price,
+                    i.amount,
+                    i.degree,
+                    i.itemDescription,
+                    i.itemImgUrl,
+                    i.createdAt.toString().substring(0, 10)
+                )
+            }.collect(toList())
     }
 }
