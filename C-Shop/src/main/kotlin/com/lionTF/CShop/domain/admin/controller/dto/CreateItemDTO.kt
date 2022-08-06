@@ -6,12 +6,12 @@ import org.springframework.http.HttpStatus
 
 // 상품 등록을 위한 정보가 실려오는 JSON 형태를 DB에 저장하기 위한 dto
 data class CreateItemDTO(
-    var itemName: String,
-    var category: Category,
-    var price: Int,
-    var amount: Int,
-    var degree: Int,
-    var itemDescription: String,
+    var itemName: String="",
+    var category: Category= Category.ALCOHOL,
+    var price: Int =  0,
+    var amount: Int = 0,
+    var degree: Int = 0,
+    var itemDescription: String = "",
 )
 
 // 상태코드와 message를 반환하기 위한 DTO

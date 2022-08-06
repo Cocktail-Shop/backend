@@ -7,18 +7,33 @@ import com.lionTF.CShop.domain.admin.controller.dto.CreateItemResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.CShop.domain.shop.controller.dto.ItemResultDTO
 import com.lionTF.CShop.domain.shop.service.ItemService
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@Controller
 class AdminItemController(
     private val adminItemService: AdminItemService,
     private val itemService: ItemService,
 ) {
 
+    // 상품 등록 페이지
+    @GetMapping("/admins/items")
+    fun getCreateItemForm(model: Model): String {
+        val createItemDTO = CreateItemDTO()
+        model.addAttribute("createItemDTO", createItemDTO)
+
+        return "admins/createItemForm"
+    }
+
     // 상품 등록
     @PostMapping("/admins/items")
-    fun createItem(@RequestBody createItemDTO: CreateItemDTO): CreateItemResultDTO {
-        return adminItemService.createItem(createItemDTO)
+    fun createItem(
+        createItemDTO: CreateItemDTO,
+        model: Model
+    ): String {
+        model.addAttribute("createItemDTO", adminItemService.createItem(createItemDTO))
+        return "redirect:/"
     }
 
     // 상품 수정
