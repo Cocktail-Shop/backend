@@ -63,7 +63,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
     }
     //비밀번호 찾기
     fun passwordInquiry(passwordInquiryDTO: RequestPasswordInquiryDTO):ResponseEntity<ResponseDTO>{
-        val existMember=memberAuthRepository.findByMemberNameAndPhoneNumber(passwordInquiryDTO.id,passwordInquiryDTO.phoneNumber)
+        val existMember=memberAuthRepository.findByIdAndPhoneNumber(passwordInquiryDTO.id,passwordInquiryDTO.phoneNumber)
 
         lateinit var status:HttpStatus
         lateinit var responseDTO: ResponseDTO

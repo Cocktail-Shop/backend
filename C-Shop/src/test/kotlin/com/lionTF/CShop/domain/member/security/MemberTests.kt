@@ -169,7 +169,7 @@ class MemberTests{
     @DisplayName("passwordInquiry Success Test")
     fun passwordInquirySuccessTest(){
         val requestPasswordInquiryDTO= RequestPasswordInquiryDTO(
-            "사용자",
+            "test",
             "01012341234"
         )
 
@@ -202,7 +202,7 @@ class MemberTests{
     @DisplayName("passwordInquiry Fail when wrong phoneNumber Test")
     fun passwordInquiryWhenWrongPhoneNumber(){
         val requestPasswordInquiryDTO= RequestPasswordInquiryDTO(
-            "사용자",
+            "test",
             "01011111111"
         )
 
