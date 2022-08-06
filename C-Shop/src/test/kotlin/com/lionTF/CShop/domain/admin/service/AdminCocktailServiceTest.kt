@@ -23,22 +23,22 @@ import javax.transaction.Transactional
 internal class AdminCocktailServiceTest {
 
     @Autowired
-    var adminCocktailService: AdminCocktailService? = null
+    private lateinit var adminCocktailService: AdminCocktailService
 
     @Autowired
-    var adminItemRepository: AdminItemRepository? = null
+    private lateinit var adminItemRepository: AdminItemRepository
 
     @Autowired
-    var adminCocktailRepository: AdminCocktailRepository? = null
+    private lateinit var adminCocktailRepository: AdminCocktailRepository
 
     @Autowired
-    var adminCocktailItemRepository: AdminCocktailItemRepository? = null
+    private lateinit var adminCocktailItemRepository: AdminCocktailItemRepository
 
-    var item1: Item? = null
-    var item2: Item? = null
-    var item3: Item? = null
-    var cocktail: CreateCocktailResultDTO? = null
-    var cocktailItem: List<CocktailItem>? = null
+    private var item1: Item? = null
+    private var item2: Item? = null
+    private var item3: Item? = null
+    private var cocktail: CreateCocktailResultDTO? = null
+    private var cocktailItem: List<CocktailItem>? = null
 
     @BeforeEach
     fun init(){
@@ -52,7 +52,7 @@ internal class AdminCocktailServiceTest {
             itemDescription = "test"
         )
 
-        item1 = adminItemRepository!!.save(itemToItemDTO(createItemDTO1))
+        item1 = adminItemRepository.save(itemToItemDTO(createItemDTO1))
 
         var createItemDTO2 = CreateItemDTO(
             itemName = "test2",
@@ -63,7 +63,7 @@ internal class AdminCocktailServiceTest {
             itemDescription = "test"
         )
 
-        item2 = adminItemRepository!!.save(itemToItemDTO(createItemDTO2))
+        item2 = adminItemRepository.save(itemToItemDTO(createItemDTO2))
 
         var createItemDTO3 = CreateItemDTO(
             itemName = "test2",
@@ -74,15 +74,15 @@ internal class AdminCocktailServiceTest {
             itemDescription = "test"
         )
 
-        item3 = adminItemRepository!!.save(itemToItemDTO(createItemDTO3))
+        item3 = adminItemRepository.save(itemToItemDTO(createItemDTO3))
 
 
         // 칵테일 생성
         var itemIdList: MutableList<Long> = mutableListOf()
 
-        itemIdList.add(item1!!.itemId)
-        itemIdList.add(item2!!.itemId)
-        itemIdList.add(item3!!.itemId)
+        item1?.let { itemIdList.add(it.itemId) }
+        item2?.let { itemIdList.add(it.itemId) }
+        item3?.let { itemIdList.add(it.itemId) }
 
         var createCocktailDTO = CreateCocktailDTO(
             cocktailName = "cocktail1",
@@ -90,17 +90,26 @@ internal class AdminCocktailServiceTest {
             itemIds = itemIdList
         )
 
-        cocktail = adminCocktailService!!.createCocktail(createCocktailDTO)
+        cocktail = adminCocktailService.createCocktail(createCocktailDTO)
 
-        val cocktailId = adminCocktailRepository!!.getReferenceById(cocktail!!.cocktailId)
+        val cocktailId = cocktail?.let { adminCocktailRepository.getReferenceById(it.cocktailId) }
 
         // 칵테일 아이템 생성
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
 
-        cocktailItemList.add(cocktailItemToCocktailItemDTO(item1!!, cocktailId))
-        cocktailItemList.add(cocktailItemToCocktailItemDTO(item2!!, cocktailId))
+        item1?.let {
+            cocktailId?.let {
+                    it1 -> cocktailItemToCocktailItemDTO(it, it1)
+            }
+        }?.let { cocktailItemList.add(it) }
 
-        cocktailItem = adminCocktailItemRepository!!.saveAll(cocktailItemList)
+        item2?.let {
+            cocktailId?.let {
+                    it1 -> cocktailItemToCocktailItemDTO(it, it1)
+            }
+        }?.let { cocktailItemList.add(it) }
+
+        cocktailItem = adminCocktailItemRepository.saveAll(cocktailItemList)
     }
 
     @Test
@@ -120,7 +129,7 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val cocktailTest = adminCocktailService!!.createCocktail(createCocktailDTO)
+        val cocktailTest = adminCocktailService.createCocktail(createCocktailDTO)
 
         //then
         assertThat(cocktailTest.status).isEqualTo(setCreateSuccessCocktailResultDTO(cocktailTest.cocktailId).status)
@@ -144,7 +153,7 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val cocktailException = adminCocktailService!!.createCocktail(createCocktailDTO)
+        val cocktailException = adminCocktailService.createCocktail(createCocktailDTO)
 
         //then
         assertThat(cocktailException.status).isEqualTo(failToNoContentItemResultDTO().status)
@@ -173,10 +182,10 @@ internal class AdminCocktailServiceTest {
             itemIds = itemIdList
         )
 
-        adminCocktailService?.createCocktail(createCocktailDTO1)
+        adminCocktailService.createCocktail(createCocktailDTO1)
 
         //when
-        val duplicatedCocktail = adminCocktailService!!.createCocktail(createCocktailDTO2)
+        val duplicatedCocktail = adminCocktailService.createCocktail(createCocktailDTO2)
 
         //then
         assertThat(duplicatedCocktail.status).isEqualTo(setCreateFailCocktailResultDTO().status)
@@ -252,9 +261,9 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val updateCocktail = cocktail?.let { adminCocktailService!!.updateCocktail(createCocktailDTO, it.cocktailId) }
+        val updateCocktail = cocktail?.let { adminCocktailService.updateCocktail(createCocktailDTO, it.cocktailId) }
 
-        val countCocktailItem = adminCocktailItemRepository!!.count()
+        val countCocktailItem = adminCocktailItemRepository.count()
 
         //then
         updateCocktail?.let { assertThat(it.status).isEqualTo(setUpdateSuccessCocktailResultDTO(updateCocktail.cocktailId).status) }
@@ -277,7 +286,7 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val updateCocktail = adminCocktailService!!.updateCocktail(createCocktailDTO, 10L)
+        val updateCocktail = adminCocktailService.updateCocktail(createCocktailDTO, 10L)
 
         //then
         assertThat(updateCocktail.status).isEqualTo(setUpdateFailCocktailResultDTO().status)
@@ -299,10 +308,10 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val updateCocktail = adminCocktailService!!.updateCocktail(createCocktailDTO, cocktail!!.cocktailId)
+        val updateCocktail = cocktail?.let { adminCocktailService.updateCocktail(createCocktailDTO, it.cocktailId) }
 
         //then
-        assertThat(updateCocktail.status).isEqualTo(failToNoContentItemResultDTO().status)
-        assertThat(updateCocktail.message).isEqualTo(failToNoContentItemResultDTO().message)
+        assertThat(updateCocktail?.status).isEqualTo(failToNoContentItemResultDTO().status)
+        assertThat(updateCocktail?.message).isEqualTo(failToNoContentItemResultDTO().message)
     }
 }

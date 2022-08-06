@@ -22,12 +22,12 @@ import javax.transaction.Transactional
 internal class AdminOrderServiceTest {
 
     @Autowired
-    var adminOrderService: AdminOrderService? = null
+    private lateinit var adminOrderService: AdminOrderService
 
     @Autowired
-    var orderRepository: OrderRepository? = null
+    private lateinit var orderRepository: OrderRepository
 
-    var order: Orders? = null
+    private var order: Orders? = null
 
     @BeforeEach
     fun init() {
@@ -35,7 +35,7 @@ internal class AdminOrderServiceTest {
             orderAddress = "test"
         )
 
-        order = orderRepository!!.save(orderDTO)
+        order = orderRepository.save(orderDTO)
     }
 
 
@@ -45,19 +45,19 @@ internal class AdminOrderServiceTest {
         //given
         var orderIds: MutableList<Long> = mutableListOf()
 
-        orderIds.add(order!!.orderId)
+        order?.let { orderIds.add(it.orderId) }
 
         var deleteOrdersDTO = DeleteOrdersDTO(
             orderIds
         )
 
         //when
-        val deleteOrders = adminOrderService!!.deleteOrders(deleteOrdersDTO)
+        val deleteOrders = adminOrderService.deleteOrders(deleteOrdersDTO)
 
         //then
         assertThat(deleteOrders.status).isEqualTo(setDeleteSuccessOrdersResultDTO().status)
         assertThat(deleteOrders.message).isEqualTo(setDeleteSuccessOrdersResultDTO().message)
-        assertThat(order!!.orderStatus).isEqualTo(OrderStatus.CANCEL)
+        assertThat(order?.orderStatus).isEqualTo(OrderStatus.CANCEL)
     }
 
 
@@ -74,12 +74,12 @@ internal class AdminOrderServiceTest {
         )
 
         //when
-        val deleteOrders = adminOrderService!!.deleteOrders(deleteOrdersDTO)
+        val deleteOrders = adminOrderService.deleteOrders(deleteOrdersDTO)
 
         //then
         assertThat(deleteOrders.status).isEqualTo(setDeleteFailOrdersResultDTO().status)
         assertThat(deleteOrders.message).isEqualTo(setDeleteFailOrdersResultDTO().message)
-        assertThat(order!!.orderStatus).isEqualTo(OrderStatus.COMPLETE)
+        assertThat(order?.orderStatus).isEqualTo(OrderStatus.COMPLETE)
     }
 
 }
