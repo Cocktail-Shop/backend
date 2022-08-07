@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="author" content="Themefisher">
+    <meta name="generator" content="Themefisher Constra HTML Template v1.0">
+
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/themefisher-font/style.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/animate/animate.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/slick/slick.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/slick/slick-theme.css}" rel="stylesheet" />
+
+</head>
+<body id="body">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="block text-center">
+                    <h2 class="text-center">상품 등록</h2>
+                    <form th:action="@{/admins/items}" th:object="${createItemDTO}" method="post">
+                        <div class="form-group">
+                            <label th:for="itemName">상품명</label>
+                            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력하세요"> </div>
+                        <div class="form-group">
+                            <label th:for="price">가격</label>
+                            <input type="number" th:field="*{price}" class="form-control" placeholder="상품의 가격을 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label th:for="amount">수량</label>
+                            <input type="number" th:field="*{amount}" class="form-control" placeholder="상품의 수량을 입력하세요"> </div>
+                        <div class="form-group">
+                            <label th:for="degree">도수</label>
+                            <input type="number" th:field="*{degree}" class="form-control" placeholder="상품의 도수를 입력하세요"> </div>
+                        <div class="form-group">
+                            <label th:for="itemDescription">상품 설명</label>
+                            <input type="text" th:field="*{itemDescription}" class="form-control" placeholder="상품에 대한 설명을 입력해주세요."> </div>
+                        <button type="submit" class="btn btn-primary">상품 등록</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--
+Essential Scripts
+=====================================-->
+
+<!-- Main jQuery -->
+<script src="plugins/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap 3.1 -->
+<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
+<!-- Bootstrap Touchpin -->
+<script src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+<!-- Instagram Feed Js -->
+<script src="plugins/instafeed/instafeed.min.js"></script>
+<!-- Video Lightbox Plugin -->
+<script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+<!-- Count Down Js -->
+<script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
+
+<!-- slick Carousel -->
+<script src="plugins/slick/slick.min.js"></script>
+<script src="plugins/slick/slick-animation.min.js"></script>
+
+<!-- Main Js File -->
+<script src="js/script.js"></script>
+
+</body>
+</html>
