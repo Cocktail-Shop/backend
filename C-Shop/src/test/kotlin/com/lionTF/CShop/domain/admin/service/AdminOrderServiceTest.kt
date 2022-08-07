@@ -115,7 +115,7 @@ internal class AdminOrderServiceTest {
         memberTest2 = memberAuthRepository.save(member2)
 
         val member3 = Member(
-            id = "test3",
+            id = "lee",
             password= passwordEncoder.encode("test1"),
             phoneNumber = "01012341234",
             memberName = "사용자",
@@ -235,5 +235,33 @@ internal class AdminOrderServiceTest {
         assertThat(allOrders.orders[1].itemId).isEqualTo(item2?.itemId)
         assertThat(allOrders.orders[2].memberId).isEqualTo(memberTest3?.memberId)
         assertThat(allOrders.orders[2].itemId).isEqualTo(item3?.itemId)
+    }
+
+    @Test
+    @DisplayName("회원 ID로 주문 조회 test")
+    fun getOrdersByMemberIdTest() {
+        //given
+        val keyword1: String = "te"
+        val keyword2: String = "le"
+        val keyword3: String = "e"
+
+        //when
+        val ordersByMemberId1 = adminOrderService.getOrdersByMemberId(keyword1)
+        val ordersByMemberId2 = adminOrderService.getOrdersByMemberId(keyword2)
+        val ordersByMemberId3 = adminOrderService.getOrdersByMemberId(keyword3)
+
+        //then
+        assertThat(ordersByMemberId1.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(ordersByMemberId1.message).isEqualTo("주문 조회가 성공했습니다.")
+        assertThat(ordersByMemberId1.orders.size).isEqualTo(2)
+
+        assertThat(ordersByMemberId1.orders[0].memberId).isEqualTo(memberTest1?.memberId)
+        assertThat(ordersByMemberId1.orders[0].itemId).isEqualTo(item1?.itemId)
+        assertThat(ordersByMemberId1.orders[1].memberId).isEqualTo(memberTest2?.memberId)
+        assertThat(ordersByMemberId1.orders[1].itemId).isEqualTo(item2?.itemId)
+
+        assertThat(ordersByMemberId2.orders.size).isEqualTo(1)
+
+        assertThat(ordersByMemberId3.orders.size).isEqualTo(3)
     }
 }

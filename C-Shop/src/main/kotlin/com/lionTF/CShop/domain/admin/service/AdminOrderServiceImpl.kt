@@ -45,6 +45,7 @@ class AdminOrderServiceImpl(
         )
     }
 
+    // 회원 ID로 주문 조회
     override fun getOrdersByMemberId(keyword: String): GetAllOrdersResultDTO {
 
         val findOrdersInfo = adminOrderRepository.findOrdersInfoByMemberId(keyword)
