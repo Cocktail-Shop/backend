@@ -131,7 +131,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
 
         when(canUpdate){
             true->{
-                existMember.password=passwordEncoder.encode(newPassword)
+                existMember.updateMemberPassword(newPassword,passwordEncoder)
                 memberAuthRepository.save(existMember)
                 status=HttpStatus.CREATED
                 responseDTO= ResponseDTO(status.value(),"비밀번호가 성공적으로 수정되었습니다.")

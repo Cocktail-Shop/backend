@@ -18,9 +18,15 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.http.HttpStatus
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf
 import org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.authenticated
 import org.springframework.security.test.web.servlet.response.SecurityMockMvcResultMatchers.unauthenticated
 import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+
 
 /**
  * 목표: 로그인 성공, 실패 테스트, 회원가입 성공, 실패 테스트
@@ -212,6 +218,15 @@ class MemberTests{
         //then : status code
         assertThat(passwordInquiryResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
         assertThat(passwordInquiryResult.body!!.status).isEqualTo(HttpStatus.UNAUTHORIZED.value())
+    }
+
+    @Test
+    @DisplayName("Logout Test")
+    @WithMockCustomUser
+    fun logoutPassword(){
+        mockMvc.perform(post("/members/logout")
+            .with(csrf()))
+            .andExpect(unauthenticated())
     }
 
 }

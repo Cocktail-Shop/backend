@@ -7,6 +7,7 @@ import com.lionTF.CShop.domain.shop.models.Cart
 import com.lionTF.CShop.domain.shop.models.Orders
 import com.lionTF.CShop.global.model.BaseTimeEntity
 import lombok.*
+import org.springframework.security.crypto.password.PasswordEncoder
 import javax.persistence.*
 
 @Entity
@@ -51,6 +52,10 @@ class Member(
     fun updateMember(requestUpdateMyPageDTO: RequestUpdateMyPageDTO){
         this.id=requestUpdateMyPageDTO.id
         this.address=requestUpdateMyPageDTO.address
+    }
+
+    fun updateMemberPassword(newPassword:String,passwordEncoder:PasswordEncoder){
+        this.password=passwordEncoder.encode(newPassword)
     }
     fun deleteMember(){
         memberStatus = false

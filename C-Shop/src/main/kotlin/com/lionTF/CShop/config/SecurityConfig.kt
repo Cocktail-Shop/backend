@@ -33,6 +33,10 @@ class SecurityConfig {
             .failureUrl("/")
             .and()
             .logout()
+            .logoutUrl("/members/logout") // 로그아웃 처리 URL
+            .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동페이지
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID")
             .and()
             .build()
     }
