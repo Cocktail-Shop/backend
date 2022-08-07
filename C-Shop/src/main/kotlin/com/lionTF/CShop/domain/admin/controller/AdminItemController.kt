@@ -12,13 +12,14 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
+@RequestMapping("/admins")
 class AdminItemController(
     private val adminItemService: AdminItemService,
     private val itemService: ItemService,
 ) {
 
     // 상품 등록 페이지
-    @GetMapping("/admins/items")
+    @GetMapping("items")
     fun getCreateItemForm(model: Model): String {
         val createItemDTO = CreateItemDTO()
         model.addAttribute("createItemDTO", createItemDTO)
@@ -27,7 +28,7 @@ class AdminItemController(
     }
 
     // 상품 등록
-    @PostMapping("/admins/items")
+    @PostMapping("items")
     fun createItem(
         createItemDTO: CreateItemDTO,
         model: Model
@@ -38,14 +39,14 @@ class AdminItemController(
 
 
     // 전체 상품 조회
-    @GetMapping("/admins/all-item")
+    @GetMapping("all-item")
     fun getAllItems(model: Model): String {
         model.addAttribute("itemList", adminItemService.getAllItems())
         return "admins/getAllItem"
     }
 
     // 상품 수정
-    @PutMapping("/admins/items/{itemId}")
+    @PutMapping("items/{itemId}")
     fun updateItem(
         @PathVariable("itemId") itemId: Long,
         @ModelAttribute("item") item: CreateItemDTO
@@ -55,13 +56,13 @@ class AdminItemController(
     }
 
     // 상품 삭제
-    @DeleteMapping("/admins/items")
+    @DeleteMapping("items")
     fun deleteItem(@RequestBody deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
         return adminItemService.deleteItems(deleteItemDTO)
     }
 
     // 단건 상품 조회
-    @GetMapping("/admins/items/{itemId}")
+    @GetMapping("items/{itemId}")
     fun getItem(@PathVariable("itemId") itemId: Long, model: Model): String {
         model.addAttribute("item", itemService.findByItemIdTest(itemId))
         return "admins/updateItemForm"

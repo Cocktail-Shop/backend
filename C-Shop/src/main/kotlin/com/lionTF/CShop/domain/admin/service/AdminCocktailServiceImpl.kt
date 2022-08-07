@@ -26,11 +26,11 @@ class AdminCocktailServiceImpl(
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
 
         return when (existedCocktailByCocktailName(createCocktailDTO)) {
-            true -> when (formToExistedItems(createCocktailDTO.itemIds)) {
+            true -> when (createCocktailDTO.itemIds?.let { formToExistedItems(it) }) {
                 true -> {
                     val cocktail = adminCocktailRepository.save(cocktailToCockTailDTO(createCocktailDTO))
 
-                    for (itemId in createCocktailDTO.itemIds) {
+                    for (itemId in createCocktailDTO.itemIds!!) {
                         val item = adminItemRepository.getReferenceById(itemId)
                         val cocktailItem = cocktailItemToCocktailItemDTO(item, cocktail)
                         cocktailItemList.add(cocktailItem)
@@ -70,7 +70,7 @@ class AdminCocktailServiceImpl(
 
         return when (existsCocktail) {
                          // form으로부터 받아온 cocktailI가 존재하는지 여부
-            true -> when (formToExistedItems(createCocktailDTO.itemIds)) {
+            true -> when (createCocktailDTO.itemIds?.let { formToExistedItems(it) }) {
                 true -> {
                     val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
 
@@ -79,7 +79,7 @@ class AdminCocktailServiceImpl(
                     val findAllByCocktailId = adminCocktailItemRepository.findAllByCocktailId(cocktailId)
                     adminCocktailItemRepository.deleteAll(findAllByCocktailId)
 
-                    for (itemId in createCocktailDTO.itemIds) {
+                    for (itemId in createCocktailDTO.itemIds!!) {
                         val item = adminItemRepository.getReferenceById(itemId)
                         val cocktailItem = cocktailItemToCocktailItemDTO(item, cocktail)
                         cocktailItemList.add(cocktailItem)

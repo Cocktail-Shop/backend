@@ -6,9 +6,9 @@ import com.lionTF.CShop.domain.admin.models.Item
 import org.springframework.http.HttpStatus
 
 data class CreateCocktailDTO(
-    val cocktailName: String,
-    val cocktailDescription: String,
-    val itemIds: MutableList<Long>,
+    var cocktailName: String = "",
+    var cocktailDescription: String = "",
+    var itemIds: MutableList<Long>? = null,
 )
 
 

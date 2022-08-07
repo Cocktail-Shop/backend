@@ -1,12 +1,10 @@
 package com.lionTF.CShop.domain.admin.service
 
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteOrdersDTO
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteOrdersResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.setDeleteFailOrdersResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.setDeleteSuccessOrdersResultDTO
+import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.repository.AdminOrderRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminOrderService
 import com.lionTF.CShop.domain.shop.models.Orders
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.util.*
 import javax.transaction.Transactional
@@ -33,6 +31,18 @@ class AdminOrderServiceImpl(
             return setDeleteFailOrdersResultDTO()
         }
 
+    }
+
+
+    // 주문 전체 조회
+    override fun getAllOrders(): GetAllOrdersResultDTO {
+        val ordersInfo = adminOrderRepository.findOrdersInfo()
+
+        return GetAllOrdersResultDTO(
+            HttpStatus.OK.value(),
+            "주문 조회가 성공했습니다.",
+            ordersInfo!!
+        )
     }
 
     // 존재하는 주문인지 검사하는 함수
