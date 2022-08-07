@@ -12,7 +12,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.support.PageableExecutionUtils
 
 
-class AdminMemberRepositoryCustomImpl(
+class AdminMemberRepositoryImpl(
 
     private val queryFactory: JPAQueryFactory? = null
 

@@ -2,8 +2,7 @@ package com.lionTF.CShop.domain.admin.controller
 
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteOrdersDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteOrdersResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.GetAllOrdersDTO
-import com.lionTF.CShop.domain.admin.controller.dto.GetAllOrdersResultDTO
+import com.lionTF.CShop.domain.admin.controller.dto.ResponseAllOrdersResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminOrderService
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -27,7 +26,7 @@ class AdminOrdersController(
     fun getAllOrders(
         model: Model,
         @PageableDefault(size = 10) pageable: Pageable
-    ): GetAllOrdersResultDTO {
+    ): ResponseAllOrdersResultDTO {
         return adminOrderService.getAllOrders(pageable)
     }
 
@@ -37,7 +36,7 @@ class AdminOrdersController(
         @RequestParam("keyword") keyword: String,
         model: Model,
         @PageableDefault(size = 10) pageable: Pageable
-    ) : GetAllOrdersResultDTO {
+    ) : ResponseAllOrdersResultDTO {
         return adminOrderService.getOrdersByMemberId(keyword, pageable)
     }
 }

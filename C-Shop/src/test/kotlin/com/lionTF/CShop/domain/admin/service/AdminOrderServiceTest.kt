@@ -62,7 +62,7 @@ internal class AdminOrderServiceTest {
 
         order = orderRepository.save(orderDTO)
 
-        val createItemDTO1 = CreateItemDTO(
+        val createItemDTO1 = ItemDTO(
             itemName = "test1",
 
             category = Category.ALCOHOL,
@@ -71,9 +71,9 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item1 = adminItemRepository.save(itemToItemDTO(createItemDTO1))
+        item1 = adminItemRepository.save(itemDTOToItem(createItemDTO1))
 
-        val createItemDTO2 = CreateItemDTO(
+        val createItemDTO2 = ItemDTO(
             itemName = "test2",
             category = Category.ALCOHOL,
             price = 1,
@@ -81,9 +81,9 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item2 = adminItemRepository.save(itemToItemDTO(createItemDTO2))
+        item2 = adminItemRepository.save(itemDTOToItem(createItemDTO2))
 
-        val createItemDTO3 = CreateItemDTO(
+        val createItemDTO3 = ItemDTO(
             itemName = "test2",
             category = Category.ALCOHOL,
             price = 1,
@@ -91,7 +91,7 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item3 = adminItemRepository.save(itemToItemDTO(createItemDTO3))
+        item3 = adminItemRepository.save(itemDTOToItem(createItemDTO3))
 
 
         val member1 = Member(

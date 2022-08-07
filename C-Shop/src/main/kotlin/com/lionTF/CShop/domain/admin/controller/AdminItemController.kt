@@ -1,11 +1,9 @@
 package com.lionTF.CShop.domain.admin.controller
 
-import com.lionTF.CShop.domain.admin.controller.dto.CreateItemDTO
+import com.lionTF.CShop.domain.admin.controller.dto.ItemDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.CreateItemResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
-import com.lionTF.CShop.domain.shop.controller.dto.ItemResultDTO
 import com.lionTF.CShop.domain.shop.service.ItemService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -21,7 +19,7 @@ class AdminItemController(
     // 상품 등록 페이지
     @GetMapping("items")
     fun getCreateItemForm(model: Model): String {
-        val createItemDTO = CreateItemDTO()
+        val createItemDTO = ItemDTO()
         model.addAttribute("createItemDTO", createItemDTO)
 
         return "admins/createItemForm"
@@ -30,7 +28,7 @@ class AdminItemController(
     // 상품 등록
     @PostMapping("items")
     fun createItem(
-        createItemDTO: CreateItemDTO,
+        createItemDTO: ItemDTO,
         model: Model
     ): String {
         model.addAttribute("createItemDTO", adminItemService.createItem(createItemDTO))
@@ -49,7 +47,7 @@ class AdminItemController(
     @PutMapping("items/{itemId}")
     fun updateItem(
         @PathVariable("itemId") itemId: Long,
-        @ModelAttribute("item") item: CreateItemDTO
+        @ModelAttribute("item") item: ItemDTO
     ): String {
         adminItemService.updateItem(itemId, item)
         return "redirect:/admins/all-item"

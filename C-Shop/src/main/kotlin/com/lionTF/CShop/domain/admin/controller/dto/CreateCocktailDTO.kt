@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus
 data class CreateCocktailDTO(
     var cocktailName: String = "",
     var cocktailDescription: String = "",
-    var itemIds: MutableList<Long>? = null,
+    var itemIds: MutableList<Long> = mutableListOf(),
 )
 
 
@@ -18,7 +18,7 @@ data class CreateCocktailResultDTO(
     val cocktailId: Long,
 )
 
-fun cocktailToCockTailDTO(createCocktailDTO: CreateCocktailDTO): Cocktail {
+fun cocktailDTOToCockTail(createCocktailDTO: CreateCocktailDTO): Cocktail {
     return Cocktail(
         cocktailName = createCocktailDTO.cocktailName,
         cocktailDescription = createCocktailDTO.cocktailDescription,

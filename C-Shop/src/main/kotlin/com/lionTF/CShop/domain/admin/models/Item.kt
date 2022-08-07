@@ -1,6 +1,6 @@
 package com.lionTF.CShop.domain.admin.models
 
-import com.lionTF.CShop.domain.admin.controller.dto.CreateItemDTO
+import com.lionTF.CShop.domain.admin.controller.dto.ItemDTO
 import com.lionTF.CShop.domain.shop.models.CartItem
 import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.global.model.BaseTimeEntity
@@ -38,7 +38,7 @@ class Item(
 ) :BaseTimeEntity(){
 
     // 상품 수정
-    fun update(createItemDTO: CreateItemDTO) {
+    fun update(createItemDTO: ItemDTO) {
         itemName = createItemDTO.itemName
         category = createItemDTO.category
         price = createItemDTO.price

@@ -36,10 +36,10 @@ class AdminOrderServiceImpl(
 
 
     // 주문 전체 조회
-    override fun getAllOrders(pageable: Pageable): GetAllOrdersResultDTO {
+    override fun getAllOrders(pageable: Pageable): ResponseAllOrdersResultDTO {
         val ordersInfo = adminOrderRepository.findOrdersInfo(pageable)
 
-        return GetAllOrdersResultDTO(
+        return ResponseAllOrdersResultDTO(
             HttpStatus.OK.value(),
             "주문 조회가 성공했습니다.",
             ordersInfo
@@ -47,11 +47,11 @@ class AdminOrderServiceImpl(
     }
 
     // 회원 ID로 주문 조회
-    override fun getOrdersByMemberId(keyword: String, pageable: Pageable): GetAllOrdersResultDTO {
+    override fun getOrdersByMemberId(keyword: String, pageable: Pageable): ResponseAllOrdersResultDTO {
 
         val findOrdersInfo = adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
 
-        return GetAllOrdersResultDTO(
+        return ResponseAllOrdersResultDTO(
             HttpStatus.OK.value(),
             "주문 조회가 성공했습니다.",
             findOrdersInfo

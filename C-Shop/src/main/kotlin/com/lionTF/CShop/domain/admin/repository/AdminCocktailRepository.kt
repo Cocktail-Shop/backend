@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.Query
 interface AdminCocktailRepository : JpaRepository<Cocktail, Long> {
 
     @Query("select ct.cocktailName from Cocktail ct where ct.cocktailName = :cocktailName and ct.cocktailStatus = :cocktailStatus")
-    fun existsByCocktailName(@Param("cocktailName")cocktailName: String, @Param("cocktailStatus")cocktailStatus: Boolean): String?
+    fun findCocktailNameByCocktailStatus(@Param("cocktailName")cocktailName: String, @Param("cocktailStatus")cocktailStatus: Boolean): String?
 
 }

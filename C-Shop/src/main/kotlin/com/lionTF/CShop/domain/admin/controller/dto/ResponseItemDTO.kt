@@ -1,6 +1,6 @@
 package com.lionTF.CShop.domain.admin.controller.dto
 
-data class GetItemDTO(
+data class ResponseItemDTO(
     var itemId: Long,
     var itemName: String,
     var price: Int,

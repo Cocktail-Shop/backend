@@ -5,7 +5,7 @@ import com.lionTF.CShop.domain.admin.models.Item
 import org.springframework.http.HttpStatus
 
 // 상품 등록을 위한 정보가 실려오는 JSON 형태를 DB에 저장하기 위한 dto
-data class CreateItemDTO(
+data class ItemDTO(
     var itemName: String="",
     var category: Category= Category.ALCOHOL,
     var price: Int =  0,
@@ -19,8 +19,9 @@ data class CreateItemResultDTO(
     var status: Int,
     var message: String,
 )
+
 // requestBody로 받아온 form을 entity로 변환하는 함수
-fun itemToItemDTO(createItemDTO: CreateItemDTO): Item {
+fun itemDTOToItem(createItemDTO: ItemDTO): Item {
 
     return Item(
         itemName = createItemDTO.itemName,
