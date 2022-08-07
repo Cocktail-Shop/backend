@@ -44,4 +44,9 @@ class MemberController(private val memberService: MemberService) {
     fun updateMyPageInfo(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @RequestBody requestUpdateMyPageDTO:RequestUpdateMyPageDTO):ResponseEntity<ResponseDTO>{
         return memberService.updateMyPageInfo(authMemberDTO?.memberId,requestUpdateMyPageDTO)
     }
+
+    @PutMapping("/password")
+    fun updatePassword(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,@RequestBody requestUpdatePasswordDTO: RequestUpdatePasswordDTO):ResponseEntity<ResponseDTO>{
+        return memberService.updatePassword(authMemberDTO?.memberId,requestUpdatePasswordDTO)
+    }
 }

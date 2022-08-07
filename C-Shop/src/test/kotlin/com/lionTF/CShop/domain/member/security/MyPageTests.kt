@@ -2,6 +2,7 @@ package com.lionTF.CShop.domain.member.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lionTF.CShop.domain.member.controller.dto.RequestUpdateMyPageDTO
+import com.lionTF.CShop.domain.member.controller.dto.RequestUpdatePasswordDTO
 import com.lionTF.CShop.domain.member.models.Member
 import com.lionTF.CShop.domain.member.models.MemberRole
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
@@ -55,7 +56,6 @@ class MyPageTests {
             "test",
             address = "서울시 동작구 상도동 XX빌딩 103호")
         val content: String = objectMapper.writeValueAsString(requestBody)
-        println(content)
         mockMvc.perform(
             put("/members")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -74,13 +74,56 @@ class MyPageTests {
             address = "서울시 동작구 상도동 XX빌딩 103호")
 
         val content: String = objectMapper.writeValueAsString(requestBody)
-        println(content)
         mockMvc.perform(
             put("/members")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content))
             .andDo { println() }
             .andExpect(status().isBadRequest)
+    }
+
+    @Test
+    @DisplayName("MyPage Password Update Success Test")
+    @WithMockCustomUser
+    fun updatePasswordSuccessTest(){
+        val requestBody=RequestUpdatePasswordDTO("test123","1234")
+
+        val content: String = objectMapper.writeValueAsString(requestBody)
+        mockMvc.perform(
+            put("/members/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content))
+            .andDo { println() }
+            .andExpect(status().isCreated)
+    }
+    @Test
+    @DisplayName("MyPage Password Update Failed when wrong Password Test")
+    @WithMockCustomUser
+    fun updatePasswordFailWhenWrongPasswordTest(){
+        val requestBody=RequestUpdatePasswordDTO("wrongPassword","1234")
+
+        val content: String = objectMapper.writeValueAsString(requestBody)
+        mockMvc.perform(
+            put("/members/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content))
+            .andDo { println() }
+            .andExpect(status().isUnauthorized)
+    }
+
+    @Test
+    @DisplayName("MyPage Password Update Failed Test")
+    @WithMockCustomUser
+    fun updatePasswordFailWhenSamePasswordTest(){
+        val requestBody=RequestUpdatePasswordDTO("test123","test123")
+
+        val content: String = objectMapper.writeValueAsString(requestBody)
+        mockMvc.perform(
+            put("/members/password")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(content))
+            .andDo { println() }
+            .andExpect(status().isUnauthorized)
     }
 
     fun insertUser(){

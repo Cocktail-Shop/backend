@@ -5,8 +5,11 @@ import com.lionTF.CShop.domain.member.models.Member
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
 import com.lionTF.CShop.domain.shop.models.Cart
 import com.lionTF.CShop.domain.shop.repository.CartRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
 
@@ -14,6 +17,8 @@ import java.util.*
 @Service
 class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepository: CartRepository) {
 
+    @Autowired
+    private lateinit var passwordEncoder: PasswordEncoder
 
     //회원가입 로직
     fun registerMember(requestSignUpDTO: RequestSignUpDTO):ResponseEntity<ResponseDTO>{
@@ -107,6 +112,36 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
                 responseDTO=ResponseDTO(status.value(),"이미 사용중인 아이디입니다.")
             }
         }
+        return ResponseEntity(responseDTO,status)
+    }
+
+    fun updatePassword(memberId:Long?,requestUpdatePasswordDTO: RequestUpdatePasswordDTO):ResponseEntity<ResponseDTO>{
+        val existMember=memberAuthRepository.findByMemberId(memberId).get()
+
+        val pastPassword=requestUpdatePasswordDTO.pastPassword
+        val newPassword=requestUpdatePasswordDTO.newPassword
+
+        val isMatchExistPassword = passwordEncoder.matches(pastPassword,existMember.password)
+        val isPastSameNewPassword= pastPassword==newPassword
+
+        val canUpdate=isMatchExistPassword&&!isPastSameNewPassword
+
+        lateinit var status:HttpStatus
+        lateinit var responseDTO: ResponseDTO
+
+        when(canUpdate){
+            true->{
+                existMember.password=passwordEncoder.encode(newPassword)
+                memberAuthRepository.save(existMember)
+                status=HttpStatus.CREATED
+                responseDTO= ResponseDTO(status.value(),"비밀번호가 성공적으로 수정되었습니다.")
+            }
+            false->{
+                status=HttpStatus.UNAUTHORIZED
+                responseDTO=ResponseDTO(status.value(),"비밀번호 변경이 불가능합니다. 기존 비밀번호와 새 비밀번호을 확인해주세요.")
+            }
+        }
+
         return ResponseEntity(responseDTO,status)
     }
 }

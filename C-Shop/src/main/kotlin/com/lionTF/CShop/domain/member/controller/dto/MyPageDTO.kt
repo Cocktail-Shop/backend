@@ -31,3 +31,4 @@ data class RequestUpdateMyPageDTO(val id:String,val address: String)
 
 data class MyPageResultDTO(val id:String,val phoneNumber: String,val memberName:String,val address:String)
 
+data class RequestUpdatePasswordDTO(val pastPassword:String,val newPassword:String)
