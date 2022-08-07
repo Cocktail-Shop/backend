@@ -10,4 +10,6 @@ interface AdminOrderService {
     fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO
 
     fun getAllOrders(): GetAllOrdersResultDTO
+
+    fun getOrdersByMemberId(keyword: String): GetAllOrdersResultDTO
 }

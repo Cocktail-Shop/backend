@@ -25,4 +25,13 @@ class AdminOrdersController(
     fun getAllOrders(model: Model): GetAllOrdersResultDTO {
         return adminOrderService.getAllOrders()
     }
+
+    // 회원 ID로 주문 조회
+    @GetMapping("members/orders")
+    fun getOrdersByMemberId(
+        @RequestParam("keyword") keyword: String,
+        model: Model
+    ) : GetAllOrdersResultDTO {
+        return adminOrderService.getOrdersByMemberId(keyword)
+    }
 }

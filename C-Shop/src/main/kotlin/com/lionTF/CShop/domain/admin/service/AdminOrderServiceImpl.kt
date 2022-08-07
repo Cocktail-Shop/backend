@@ -45,6 +45,17 @@ class AdminOrderServiceImpl(
         )
     }
 
+    override fun getOrdersByMemberId(keyword: String): GetAllOrdersResultDTO {
+
+        val findOrdersInfo = adminOrderRepository.findOrdersInfoByMemberId(keyword)
+
+        return GetAllOrdersResultDTO(
+            HttpStatus.OK.value(),
+            "주문 조회가 성공했습니다.",
+            findOrdersInfo!!
+        )
+    }
+
     // 존재하는 주문인지 검사하는 함수
     private fun existedOrder(orderId: Long): Optional<Orders> {
         return adminOrderRepository.findById(orderId)
