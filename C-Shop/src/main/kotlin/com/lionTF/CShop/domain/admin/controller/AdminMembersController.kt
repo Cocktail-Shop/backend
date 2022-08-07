@@ -34,7 +34,10 @@ class AdminMembersController(
 
     // 회원 전체 조회
     @GetMapping("members")
-    fun getAllMembers(model: Model, @PageableDefault(size = 10) pageable: Pageable): FindMembersResultDTO? {
+    fun getAllMembers(
+        model: Model,
+        @PageableDefault(size = 10) pageable: Pageable
+    ): FindMembersResultDTO? {
         return adminMemberService.getAllMembers(pageable)
     }
 }

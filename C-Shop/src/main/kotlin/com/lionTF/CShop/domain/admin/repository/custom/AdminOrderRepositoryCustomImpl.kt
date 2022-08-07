@@ -15,7 +15,7 @@ import org.springframework.data.support.PageableExecutionUtils
 
 class AdminOrderRepositoryCustomImpl(
 
-    var queryFactory: JPAQueryFactory? = null
+    private val queryFactory: JPAQueryFactory? = null
 
 ):AdminOrderRepositoryCustom {
 
@@ -23,26 +23,34 @@ class AdminOrderRepositoryCustomImpl(
      * 데이터 내용과 전체 카운트를 별도로 조회하는 방법을 이용하였습니다.
      */
     override fun findOrdersInfo(pageable: Pageable): Page<GetAllOrdersDTO> {
-
         // 데이터 내용을 조회하는 로직입니다.
-        val content: List<GetAllOrdersDTO> = findOrder(null)
+        // TODO 회원 ID로 회원 검색하는 로직과 비슷하여 함수로 추출하고 전체 조회이기 떄문에 booleanBuilder를 null로 처리하였는데 이것이 옳은가에 대한 고민입니다.
+        val content: List<GetAllOrdersDTO> = contentInquire(pageable, null)
 
-        // 카운트를 별도로 조회하여 데이터 내용과 같이 return 하는 로직입니다.
-        return page(content, pageable, null)
+        // 카운트를 별도로 조회하는 로직입니다.
+        // TODO 회원 ID로 회원 검색하는 로직과 비슷하여 함수로 추출하고 전체 조회이기 떄문에 booleanBuilder를 null로 처리하였는데 이것이 옳은가에 대한 고민입니다.
+        val countQuery: JPAQuery<GetAllOrdersDTO> = countInquire(null)
+
+        // 위에서 반환된 데이터 내용과 카운트를 반환합니다.
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
-    // 4개의 테이블을 조인하여 회원의 ID로 주문 조회
+    // 회원의 ID로 주문 조회
     override fun findOrdersInfoByMemberId(keyword: String, pageable: Pageable): Page<GetAllOrdersDTO> {
         val booleanBuilder = booleanBuilder(keyword)
 
-        val content: List<GetAllOrdersDTO> = findOrder(booleanBuilder)
+        val content: List<GetAllOrdersDTO> = contentInquire(pageable, booleanBuilder)
+        val countQuery: JPAQuery<GetAllOrdersDTO> = countInquire(booleanBuilder)
 
-        return page(content, pageable, booleanBuilder!!)
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
-    // 데이터 내용을 조회하는 로직입니다.
-    private fun findOrder(booleanBuilder: BooleanBuilder?): List<GetAllOrdersDTO> {
-        val content: List<GetAllOrdersDTO> = queryFactory!!
+    // 데이터 내용을 조회하는 함수입니다.
+    private fun contentInquire(
+        pageable: Pageable,
+        booleanBuilder: BooleanBuilder?
+    ): List<GetAllOrdersDTO> {
+        return queryFactory!!
             .select(
                 Projections.constructor(
                     GetAllOrdersDTO::class.java,
@@ -60,26 +68,20 @@ class AdminOrderRepositoryCustomImpl(
             ).from(orders, member)
             .leftJoin(orderItem).on(isEqualOrderId()).fetchJoin()
             .leftJoin(item).on(isEqualItemId()).fetchJoin()
+            .offset(pageable.offset)
+            .limit(pageable.pageSize.toLong())
             .where(
                 isEqualMemberId(),
                 booleanBuilder
             )
             .fetch()
-        return content
     }
 
-    // BooleanBuilder를 생성하는 함수입니다.
-    private fun booleanBuilder(keyword: String): BooleanBuilder? {
-        return BooleanBuilder().and(member.id.contains(keyword))
-    }
-
-    // 카운트를 별도로 조회하여 데이터 내용과 같이 return 하는 로직입니다.
-    private fun page(
-        content: List<GetAllOrdersDTO>,
-        pageable: Pageable,
+    // 카운트를 별도로 조회하는 함수입니다.
+    private fun countInquire(
         booleanBuilder: BooleanBuilder?
-    ): Page<GetAllOrdersDTO> {
-        val countQuery: JPAQuery<GetAllOrdersDTO> = queryFactory!!
+    ): JPAQuery<GetAllOrdersDTO> {
+        return queryFactory!!
             .select(
                 Projections.constructor(
                     GetAllOrdersDTO::class.java,
@@ -99,11 +101,14 @@ class AdminOrderRepositoryCustomImpl(
             .leftJoin(orderItem).on(isEqualOrderId()).fetchJoin()
             .leftJoin(item).on(isEqualItemId()).fetchJoin()
             .where(
-                isEqualMemberId(),
-                booleanBuilder
+                booleanBuilder,
+                isEqualMemberId()
             )
+    }
 
-        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
+    // BooleanBuilder를 생성하는 함수입니다.
+    private fun booleanBuilder(keyword: String): BooleanBuilder? {
+        return BooleanBuilder().and(member.id.contains(keyword))
     }
 
     private fun isEqualOrderId() = orders.orderId.eq(orderItem.orders.orderId)
