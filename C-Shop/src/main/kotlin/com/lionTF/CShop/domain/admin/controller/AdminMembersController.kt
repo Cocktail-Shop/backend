@@ -4,31 +4,37 @@ import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersResultDTO
 import com.lionTF.CShop.domain.admin.controller.dto.FindMembersResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminMemberService
-import org.springframework.http.HttpStatus
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 
 @RestController
+@RequestMapping("/admins")
 class AdminMembersController(
     private val adminMemberService: AdminMemberService,
 ) {
 
     // 회원 삭제
-    @DeleteMapping("/admins/members")
+    @DeleteMapping("members")
     fun deleteMembers(@RequestBody deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
         return adminMemberService.deleteMembers(deleteMembersDTO)
     }
 
     // 회원 ID로 회원 검색
     // TODO URL 변경 예정입니다.
-    @GetMapping("/admins/search/members")
-    fun findMembers(@RequestParam("keyword") keyword: String): FindMembersResultDTO? {
-        return adminMemberService.findMembers(keyword)
+    @GetMapping("search/members")
+    fun findMembers(
+        @RequestParam("keyword") keyword: String,
+        @PageableDefault(size = 10) pageable: Pageable
+    ): FindMembersResultDTO? {
+        return adminMemberService.findMembers(keyword, pageable)
     }
 
 
     // 회원 전체 조회
-    @GetMapping("/admins/members")
-    fun getAllMembers(): FindMembersResultDTO? {
-        return adminMemberService.getAllMembers()
+    @GetMapping("members")
+    fun getAllMembers(model: Model, @PageableDefault(size = 10) pageable: Pageable): FindMembersResultDTO? {
+        return adminMemberService.getAllMembers(pageable)
     }
 }

@@ -4,11 +4,10 @@ import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.repository.AdminMemberRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminMemberService
 import com.lionTF.CShop.domain.member.models.Member
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
 import java.util.*
-import java.util.function.Function
-import java.util.stream.Collectors.*
 import javax.transaction.Transactional
 
 @Service
@@ -36,22 +35,19 @@ class AdminMemberServiceImpl(
     }
 
     // 회원 ID로 회원 검색
-    override fun findMembers(keyword: String): FindMembersResultDTO? {
+    override fun findMembers(keyword: String, pageable: Pageable): FindMembersResultDTO? {
 
-        val findMembersInfo = adminMemberRepository.findMembersInfo(keyword)
+        val memberList = adminMemberRepository.findMembersInfo(keyword, pageable)
 
-        val memberList = memberEntityToDTO(findMembersInfo)
-
-        return memberList?.let { FindMembersResultDTO(HttpStatus.OK.value(), "멤버 검색 성공", it) }
+        return FindMembersResultDTO(HttpStatus.OK.value(), "회원이 성공적으로 조회되었습니다.", memberList)
     }
 
-    override fun getAllMembers(): FindMembersResultDTO? {
+    // 회원 전체 조회
+    override fun getAllMembers(pageable: Pageable): FindMembersResultDTO? {
 
-        val members = adminMemberRepository.findAll()
+        val memberList = adminMemberRepository.findAllByMemberStatus(pageable)
 
-        val memberList = memberEntityToDTO(members)
-
-        return memberList?.let { FindMembersResultDTO(HttpStatus.OK.value(), "회원이 성공적으로 조회되었습니다.", it) }
+        return FindMembersResultDTO(HttpStatus.OK.value(), "회원이 성공적으로 조회되었습니다.", memberList)
     }
 
     // 존재하는 사용자인지 검사하는 함수
@@ -67,18 +63,5 @@ class AdminMemberServiceImpl(
             }
         }
         return true
-    }
-
-    // member entity를 dto로 변환시키는 함수
-    private fun memberEntityToDTO(findMembersInfo: List<Member>?): List<FindMembersDTO>? {
-        return findMembersInfo!!.stream()
-            .map<FindMembersDTO>(Function<Member, FindMembersDTO> { m: Member ->
-                FindMembersDTO(
-                    m.id,
-                    m.address,
-                    m.memberName,
-                    m.phoneNumber,
-                )
-            }).collect(toList())
     }
 }

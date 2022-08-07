@@ -12,6 +12,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.domain.Pageable
 import javax.transaction.Transactional
 
 @SpringBootTest
@@ -103,9 +104,10 @@ internal class AdminMemberServiceTest{
     fun findMembers() {
         //given
         var keyword: String = "te"
+        var pageable: Pageable? = null
 
         //when
-        val findMembers = adminMemberService.findMembers(keyword)
+        val findMembers = adminMemberService.findMembers(keyword, pageable!!)
 
         //then
         assertThat(findMembers?.findMembersDTO?.get(0)?.id).isEqualTo(memberTest1?.id)
@@ -128,9 +130,10 @@ internal class AdminMemberServiceTest{
     @DisplayName("회원 전체 조회 test")
     fun getAllMembersTest() {
         //given
+        var pageable: Pageable? = null
 
         //when
-        val memberList = adminMemberService.getAllMembers()
+        val memberList = adminMemberService.getAllMembers(pageable!!)
 
         val count: Long = memberRepository.count()
 
