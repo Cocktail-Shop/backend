@@ -1,7 +1,7 @@
 package com.lionTF.CShop.domain.admin.controller.dto
 
 import com.lionTF.CShop.domain.shop.models.OrderStatus
-import org.springframework.http.HttpStatus
+import org.springframework.data.domain.Page
 
 data class GetAllOrdersDTO(
     var orderId: Long,
@@ -19,5 +19,5 @@ data class GetAllOrdersDTO(
 data class GetAllOrdersResultDTO(
     var httpStatus: Int,
     var message: String,
-    var orders: List<GetAllOrdersDTO>
+    var orders: Page<GetAllOrdersDTO>
 )
