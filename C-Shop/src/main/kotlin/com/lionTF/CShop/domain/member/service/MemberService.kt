@@ -85,4 +85,28 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
         return ResponseMyPageDTO.memberToResponseMyPageDTO(member)
     }
 
+    //마이페이지 정보  수정
+    fun updateMyPageInfo(memberId:Long?,requestUpdateMyPageDTO: RequestUpdateMyPageDTO):ResponseEntity<ResponseDTO>{
+        val existMember=memberAuthRepository.findByMemberId(memberId).get()
+
+        val existInfo=memberAuthRepository.findById(requestUpdateMyPageDTO.id)
+        val canUpdate=!(existInfo.isPresent && existInfo.get().memberId!=memberId)//이미 존재하는 아이디면서 본인 아이디가 아닌 케이스가 아닌 케이스
+
+        lateinit var status:HttpStatus
+        lateinit var responseDTO: ResponseDTO
+
+        when(canUpdate){
+            true->{
+                existMember.updateMember(requestUpdateMyPageDTO)
+                memberAuthRepository.save(existMember)
+                status=HttpStatus.CREATED
+                responseDTO= ResponseDTO(status.value(),"마이페이지 정보가 성공적으로 수정되었습니다.")
+            }
+            false -> {
+                status=HttpStatus.BAD_REQUEST
+                responseDTO=ResponseDTO(status.value(),"이미 사용중인 아이디입니다.")
+            }
+        }
+        return ResponseEntity(responseDTO,status)
+    }
 }

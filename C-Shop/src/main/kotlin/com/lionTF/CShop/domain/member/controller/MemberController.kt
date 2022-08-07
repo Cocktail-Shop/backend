@@ -39,4 +39,9 @@ class MemberController(private val memberService: MemberService) {
     fun getMyPageInfo(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?): ResponseMyPageDTO {
         return memberService.getMyPageInfo(authMemberDTO?.memberId)
     }
+
+    @PutMapping("")
+    fun updateMyPageInfo(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @RequestBody requestUpdateMyPageDTO:RequestUpdateMyPageDTO):ResponseEntity<ResponseDTO>{
+        return memberService.updateMyPageInfo(authMemberDTO?.memberId,requestUpdateMyPageDTO)
+    }
 }
