@@ -33,8 +33,15 @@ class OrderService(
             val requestAmount = info.amount
             val existAmount = itemRepository.getReferenceById(info.itemId).amount
 
-            // 요청한 주문 상품이 재고보다 많을 경우
-            if(requestAmount > existAmount){
+            //삭제된 아이템인지 확인
+            if(itemRepository.getReferenceById(info.itemId).itemStatus){
+                // 요청한 주문 상품이 재고보다 많을 경우
+                if(requestAmount > existAmount){
+                    canOrder = false
+                    errorItemsId.add(info.itemId)
+                }
+            }
+            else{
                 canOrder = false
                 errorItemsId.add(info.itemId)
             }
@@ -83,7 +90,7 @@ class OrderService(
         else{
             return RequestOrderResultDTO(
                 status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                message = "상품 재고가 부족하여 주문하지 못하였습니다.",
+                message = "상품 재고가 부족하거나 삭제된 상품이 존재하여 주문하지 못하였습니다.",
                 errorItems = errorItemsId,
             )
         }

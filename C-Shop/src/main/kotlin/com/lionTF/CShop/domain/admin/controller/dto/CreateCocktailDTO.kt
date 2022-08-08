@@ -1,14 +1,16 @@
 package com.lionTF.CShop.domain.admin.controller.dto
 
+import com.lionTF.CShop.domain.admin.models.Category
 import com.lionTF.CShop.domain.admin.models.Cocktail
 import com.lionTF.CShop.domain.admin.models.CocktailItem
 import com.lionTF.CShop.domain.admin.models.Item
 import org.springframework.http.HttpStatus
 
 data class CreateCocktailDTO(
-    var cocktailName: String = "",
-    var cocktailDescription: String = "",
-    var itemIds: MutableList<Long> = mutableListOf(),
+    val cocktailName: String = "",
+    val cocktailDescription: String ="",
+    val itemIds: MutableList<Long> = mutableListOf(),
+    val category: Category = Category.COCKTAIL,
 )
 
 
@@ -22,6 +24,7 @@ fun cocktailDTOToCockTail(createCocktailDTO: CreateCocktailDTO): Cocktail {
     return Cocktail(
         cocktailName = createCocktailDTO.cocktailName,
         cocktailDescription = createCocktailDTO.cocktailDescription,
+        category = createCocktailDTO.category,
     )
 }
 

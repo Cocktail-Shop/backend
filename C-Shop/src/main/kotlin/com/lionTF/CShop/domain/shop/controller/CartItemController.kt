@@ -1,5 +1,7 @@
 package com.lionTF.CShop.domain.shop.controller
 
+import com.lionTF.CShop.domain.shop.controller.dto.AddCartCocktailItemDTO
+import com.lionTF.CShop.domain.shop.controller.dto.AddCartCocktailItemResultDTO
 import com.lionTF.CShop.domain.shop.controller.dto.AddCartItemDTO
 import com.lionTF.CShop.domain.shop.controller.dto.AddCartItemResultDTO
 import com.lionTF.CShop.domain.shop.service.CartItemService
@@ -14,5 +16,10 @@ class CartItemController(
     @PostMapping("/items/cart")
     fun addItemToCart(@RequestBody addCartItemDTO: AddCartItemDTO): AddCartItemResultDTO {
         return cartItemService.addCartItem(addCartItemDTO)
+    }
+
+    @PostMapping("/items/cocktails/cart")
+    fun addCocktailItemToCart(@RequestBody addCartCocktailItemDTO: AddCartCocktailItemDTO) : AddCartCocktailItemResultDTO {
+        return cartItemService.addCartCocktailItem(addCartCocktailItemDTO)
     }
 }
