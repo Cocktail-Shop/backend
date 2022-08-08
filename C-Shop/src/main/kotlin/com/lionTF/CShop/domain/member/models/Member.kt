@@ -1,10 +1,13 @@
 package com.lionTF.CShop.domain.member.models
 
+import com.lionTF.CShop.domain.member.controller.dto.MyPageResultDTO
 import com.lionTF.CShop.domain.member.controller.dto.RequestSignUpDTO
+import com.lionTF.CShop.domain.member.controller.dto.RequestUpdateMyPageDTO
 import com.lionTF.CShop.domain.shop.models.Cart
 import com.lionTF.CShop.domain.shop.models.Orders
 import com.lionTF.CShop.global.model.BaseTimeEntity
 import lombok.*
+import org.springframework.security.crypto.password.PasswordEncoder
 import javax.persistence.*
 
 @Entity
@@ -40,11 +43,20 @@ class Member(
                 phoneNumber=requestSignUpDTO.phoneNumber,
                 memberName=requestSignUpDTO.memberName,
                 address=requestSignUpDTO.address,
-                cart=Cart()
+                cart=Cart(),
+                role = MemberRole.MEMBER
             )
         }
     }
 
+    fun updateMember(requestUpdateMyPageDTO: RequestUpdateMyPageDTO){
+        this.id=requestUpdateMyPageDTO.id
+        this.address=requestUpdateMyPageDTO.address
+    }
+
+    fun updateMemberPassword(newPassword:String,passwordEncoder:PasswordEncoder){
+        this.password=passwordEncoder.encode(newPassword)
+    }
     fun deleteMember(){
         memberStatus = false
     }

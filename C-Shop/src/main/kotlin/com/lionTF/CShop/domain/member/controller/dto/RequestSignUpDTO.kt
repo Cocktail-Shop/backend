@@ -11,7 +11,7 @@ data class RequestSignUpDTO(val id:String,
                             val address:String,){
 
 
-        val passwordEncoder: PasswordEncoder=BCryptPasswordEncoder()
+        private val passwordEncoder: PasswordEncoder=BCryptPasswordEncoder()
 
         init {
             password=passwordEncoder.encode(password)
