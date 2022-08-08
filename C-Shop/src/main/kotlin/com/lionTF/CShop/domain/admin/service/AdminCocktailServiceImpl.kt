@@ -25,80 +25,73 @@ class AdminCocktailServiceImpl(
     override fun createCocktail(createCocktailDTO: CreateCocktailDTO): CreateCocktailResultDTO {
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
 
-        return when (existedCocktailByCocktailName(createCocktailDTO)) {
-            true -> when (formToExistedItems(createCocktailDTO.itemIds)) {
-                true -> {
-                    val cocktail = adminCocktailRepository.save(cocktailToCockTailDTO(createCocktailDTO))
+        return if (!existedCocktailByCocktailName(createCocktailDTO)) {
+            setCreateFailCocktailResultDTO()
+        } else if (!formToExistedItems(createCocktailDTO.itemIds)) {
+            failToNoContentItemResultDTO()
+        } else {
+            val cocktail = adminCocktailRepository.save(cocktailDTOToCockTail(createCocktailDTO))
 
-                    for (itemId in createCocktailDTO.itemIds) {
-                        val item = adminItemRepository.getReferenceById(itemId)
-                        val cocktailItem = cocktailItemToCocktailItemDTO(item, cocktail)
-                        cocktailItemList.add(cocktailItem)
-                    }
-                    adminCocktailItemRepository.saveAll(cocktailItemList)
-
-                    return setCreateSuccessCocktailResultDTO(cocktail.cocktailId)
-                }
-                else -> failToNoContentItemResultDTO()
+            for (itemId in createCocktailDTO.itemIds) {
+                val item = adminItemRepository.getReferenceById(itemId)
+                val cocktailItem = cocktailItemToCocktailItemDTO(item, cocktail)
+                cocktailItemList.add(cocktailItem)
             }
-            else -> setCreateFailCocktailResultDTO()
+            adminCocktailItemRepository.saveAll(cocktailItemList)
+
+            setCreateSuccessCocktailResultDTO(cocktail.cocktailId)
         }
     }
 
     // 칵테일 상품 삭제
     override fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO {
-
-        return when (formToExistedCocktails(deleteCocktailDTO.cocktailIds)){
-            true -> {
-                for (cocktailId in deleteCocktailDTO.cocktailIds) {
-                    val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
-                    cocktail.deleteCocktail()
-                }
-
-                return setDeleteSuccessCocktailResultDTO()
+        return if (!formToExistedCocktails(deleteCocktailDTO.cocktailIds)) {
+            setDeleteFailCocktailResultDTO()
+        } else {
+            for (cocktailId in deleteCocktailDTO.cocktailIds) {
+                val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
+                cocktail.deleteCocktail()
             }
-            else -> setDeleteFailCocktailResultDTO()
+
+            setDeleteSuccessCocktailResultDTO()
         }
     }
 
     // 칵테일 상품 수정
     override fun updateCocktail(createCocktailDTO: CreateCocktailDTO, cocktailId: Long): CreateCocktailResultDTO {
-
         val existsCocktail = adminCocktailRepository.existsById(cocktailId)
 
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
 
-        return when (existsCocktail) {
-                         // form으로부터 받아온 cocktailI가 존재하는지 여부
-            true -> when (formToExistedItems(createCocktailDTO.itemIds)) {
-                true -> {
-                    val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
+        return if (!existsCocktail){
+            setUpdateFailCocktailResultDTO()
+        } else if (formToExistedItems(createCocktailDTO.itemIds)) {
+            failToNoContentItemResultDTO()
+        } else {
+            val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
 
-                    cocktail.updateCocktail(createCocktailDTO)
+            cocktail.updateCocktail(createCocktailDTO)
 
-                    val findAllByCocktailId = adminCocktailItemRepository.findAllByCocktailId(cocktailId)
-                    adminCocktailItemRepository.deleteAll(findAllByCocktailId)
+            val findAllByCocktailId = adminCocktailItemRepository.findAllByCocktailId(cocktailId)
+            adminCocktailItemRepository.deleteAll(findAllByCocktailId)
 
-                    for (itemId in createCocktailDTO.itemIds) {
-                        val item = adminItemRepository.getReferenceById(itemId)
-                        val cocktailItem = cocktailItemToCocktailItemDTO(item, cocktail)
-                        cocktailItemList.add(cocktailItem)
-                    }
-
-                    adminCocktailItemRepository.saveAll(cocktailItemList)
-
-                    return setUpdateSuccessCocktailResultDTO(cocktail.cocktailId)
-                }
-                else -> failToNoContentItemResultDTO()
+            for (itemId in createCocktailDTO.itemIds) {
+                val item = adminItemRepository.getReferenceById(itemId)
+                val cocktailItem = cocktailItemToCocktailItemDTO(item, cocktail)
+                cocktailItemList.add(cocktailItem)
             }
-            false -> setUpdateFailCocktailResultDTO()
+            adminCocktailItemRepository.saveAll(cocktailItemList)
+
+            setUpdateSuccessCocktailResultDTO(cocktail.cocktailId)
         }
+
+
     }
 
 
     // 이미 등록된 칵테일인지 검사하는 함수
     private fun existedCocktailByCocktailName(createCocktailDTO: CreateCocktailDTO): Boolean {
-        val existsByCocktailName = adminCocktailRepository.existsByCocktailName(createCocktailDTO.cocktailName, true)
+        val existsByCocktailName = adminCocktailRepository.findCocktailNameByCocktailStatus(createCocktailDTO.cocktailName, true)
 
         return when (existsByCocktailName) {
             null ->  true

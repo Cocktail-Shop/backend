@@ -42,7 +42,7 @@ internal class AdminCocktailServiceTest {
 
     @BeforeEach
     fun init(){
-        var createItemDTO1 = CreateItemDTO(
+        var createItemDTO1 = ItemDTO(
             itemName = "test1",
 
             category = Category.ALCOHOL,
@@ -52,9 +52,9 @@ internal class AdminCocktailServiceTest {
             itemDescription = "test"
         )
 
-        item1 = adminItemRepository.save(itemToItemDTO(createItemDTO1))
+        item1 = adminItemRepository.save(itemDTOToItem(createItemDTO1))
 
-        var createItemDTO2 = CreateItemDTO(
+        var createItemDTO2 = ItemDTO(
             itemName = "test2",
             category = Category.ALCOHOL,
             price = 1,
@@ -63,9 +63,9 @@ internal class AdminCocktailServiceTest {
             itemDescription = "test"
         )
 
-        item2 = adminItemRepository.save(itemToItemDTO(createItemDTO2))
+        item2 = adminItemRepository.save(itemDTOToItem(createItemDTO2))
 
-        var createItemDTO3 = CreateItemDTO(
+        var createItemDTO3 = ItemDTO(
             itemName = "test2",
             category = Category.ALCOHOL,
             price = 1,
@@ -74,7 +74,7 @@ internal class AdminCocktailServiceTest {
             itemDescription = "test"
         )
 
-        item3 = adminItemRepository.save(itemToItemDTO(createItemDTO3))
+        item3 = adminItemRepository.save(itemDTOToItem(createItemDTO3))
 
 
         // 칵테일 생성

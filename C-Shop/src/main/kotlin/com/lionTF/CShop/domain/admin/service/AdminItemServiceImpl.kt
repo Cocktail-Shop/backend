@@ -4,14 +4,11 @@ import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
-import lombok.RequiredArgsConstructor
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors
 import java.util.stream.Collectors.*
 import javax.transaction.Transactional
 
 @Service
-@RequiredArgsConstructor
 @Transactional
 class AdminItemServiceImpl(
 
@@ -20,33 +17,30 @@ class AdminItemServiceImpl(
 ): AdminItemService {
 
     // 상품 등록
-    override fun createItem(createItemDTO: CreateItemDTO): CreateItemResultDTO {
-
+    override fun createItem(createItemDTO: ItemDTO): CreateItemResultDTO {
         // 상품 존재 여부
         val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName, true, createItemDTO.degree)
 
-        if (existsItemName == null) {
-            adminItemRepository.save(itemToItemDTO(createItemDTO))
-
-            return setCreateSuccessItemResultDTO()
+        return if (existsItemName == null) {
+            adminItemRepository.save(itemDTOToItem(createItemDTO))
+            setCreateSuccessItemResultDTO()
         } else {
-            return setCreateFailItemResultDTO()
+            setCreateFailItemResultDTO()
         }
     }
 
 
     // 상품 수정
-    override fun updateItem(itemId: Long, createItemDTO: CreateItemDTO): CreateItemResultDTO {
-
+    override fun updateItem(itemId: Long, createItemDTO: ItemDTO): CreateItemResultDTO {
         val existsItem = adminItemRepository.existsById(itemId)
 
-        if (existsItem) {
+        return if (existsItem) {
             val item = adminItemRepository.findById(itemId).orElseThrow()
             item.update(createItemDTO)
 
-            return setUpdateSuccessItemResultDTO()
+            setUpdateSuccessItemResultDTO()
         } else {
-            return setUpdateFailItemResultDTO()
+            setUpdateFailItemResultDTO()
         }
     }
 
@@ -55,15 +49,17 @@ class AdminItemServiceImpl(
         deleteItemDTO.itemIds.forEach{
             val findItemStatusById = adminItemRepository.findItemStatusById(it)
 
-            if (findItemStatusById == null) {
-                return setDeleteFailItemResultDTO()
-
-            } else if (findItemStatusById) {
-                val item = adminItemRepository.findById(it).orElseThrow()
-                item.delete()
-
-            } else {
-                return setDeleteFailItemResultDTO()
+            when {
+                findItemStatusById == null -> {
+                    return setDeleteFailItemResultDTO()
+                }
+                findItemStatusById -> {
+                    val item = adminItemRepository.findById(it).orElseThrow()
+                    item.delete()
+                }
+                else -> {
+                    return setDeleteFailItemResultDTO()
+                }
             }
         }
 
@@ -71,17 +67,17 @@ class AdminItemServiceImpl(
     }
 
     // 상품 전체 조회
-    override fun getAllItems(): List<GetItemDTO>? {
+    override fun getAllItems(): List<ResponseItemDTO>? {
         val itemList = adminItemRepository.findAllByItemStatusTrue(true)
 
-        return itemEntityToDTO(itemList)
+        return itemToResponseDTO(itemList)
     }
 
     // item entity를 dto로 변환시키는 함수
-    private fun itemEntityToDTO(itemList: List<Item>?): List<GetItemDTO>? {
+    private fun itemToResponseDTO(itemList: List<Item>?): List<ResponseItemDTO>? {
         return itemList!!.stream()
             .map { i: Item ->
-                GetItemDTO(
+                ResponseItemDTO(
                     i.itemId,
                     i.itemName,
                     i.price,

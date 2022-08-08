@@ -8,10 +8,6 @@ import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
-@Builder
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 class Orders(
 
     @Id

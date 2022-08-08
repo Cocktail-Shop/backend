@@ -6,9 +6,9 @@ import com.lionTF.CShop.domain.admin.models.Item
 import org.springframework.http.HttpStatus
 
 data class CreateCocktailDTO(
-    val cocktailName: String,
-    val cocktailDescription: String,
-    val itemIds: MutableList<Long>,
+    var cocktailName: String = "",
+    var cocktailDescription: String = "",
+    var itemIds: MutableList<Long> = mutableListOf(),
 )
 
 
@@ -18,7 +18,7 @@ data class CreateCocktailResultDTO(
     val cocktailId: Long,
 )
 
-fun cocktailToCockTailDTO(createCocktailDTO: CreateCocktailDTO): Cocktail {
+fun cocktailDTOToCockTail(createCocktailDTO: CreateCocktailDTO): Cocktail {
     return Cocktail(
         cocktailName = createCocktailDTO.cocktailName,
         cocktailDescription = createCocktailDTO.cocktailDescription,
