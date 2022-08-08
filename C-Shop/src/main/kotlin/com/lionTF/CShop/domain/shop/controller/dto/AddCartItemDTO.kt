@@ -27,6 +27,6 @@ fun setSuccessAddCartItemResultDTO() : AddCartItemResultDTO{
 fun setFailAddCartItemResultDTO() : AddCartItemResultDTO{
     return AddCartItemResultDTO(
         status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-        message = "해당 상품의 재고가 부족하여 장바구니에 담지 못하였습니다."
+        message = "해당 상품의 재고가 부족하거나 삭제된 상품이어서 장바구니에 담지 못하였습니다."
     )
 }
