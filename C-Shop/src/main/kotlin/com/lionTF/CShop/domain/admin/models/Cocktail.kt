@@ -20,6 +20,9 @@ class Cocktail (
     var cocktailName: String = "",
     var cocktailImgUrl: String = "",
     var cocktailStatus: Boolean = true,
+
+    @Enumerated(EnumType.STRING)
+    var category: Category,
 ) : BaseTimeEntity() {
 
     // 칵테일 상품 삭제
