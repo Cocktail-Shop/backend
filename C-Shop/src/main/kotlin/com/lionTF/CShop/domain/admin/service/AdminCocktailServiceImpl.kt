@@ -23,6 +23,17 @@ class AdminCocktailServiceImpl(
 
 ): AdminCocktailService{
 
+    // 전체 칵테일 조회
+    override fun getAllCocktail(pageable: Pageable): Page<FindCocktails> {
+        return adminCocktailRepository.findAllCocktails(pageable)
+    }
+
+    override fun getCocktailsByName(keyword: String, pageable: Pageable): Page<FindCocktails> {
+        return adminCocktailRepository.findCocktailsByName(keyword, pageable)
+    }
+
+    // 칵테일 상품명으로 칵테일 조회
+
     // 칵테일 상품 등록
     override fun createCocktail(createCocktailDTO: CreateCocktailDTO): CreateCocktailResultDTO {
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
@@ -88,10 +99,6 @@ class AdminCocktailServiceImpl(
         }
 
 
-    }
-
-    override fun getAllCocktail(pageable: Pageable): Page<FindCocktails> {
-        return adminCocktailRepository.findAllByCocktailStatus(pageable)
     }
 
 

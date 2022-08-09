@@ -31,6 +31,17 @@ class AdminCocktailController(
         return "admins/cocktail/getAllCocktail"
     }
 
+    // 칵테일 이름 검색 페이지
+    @GetMapping("search/cocktails")
+    fun getCocktailByName(
+        model: Model,
+        @PageableDefault(size = 2) pageable: Pageable,
+        @RequestParam("keyword") keyword: String
+    ): String {
+        model.addAttribute("cocktails", adminCocktailService.getCocktailsByName(keyword, pageable))
+        return "admins/cocktail/getCocktailsByName"
+    }
+
     // 칵테일 상품 등록 페이지
     @GetMapping("cocktails")
     fun getCreateCocktailForm(model: Model): String {

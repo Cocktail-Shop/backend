@@ -5,11 +5,13 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface AdminCocktailService {
+    fun getAllCocktail(pageable: Pageable): Page<FindCocktails>
+
+    fun getCocktailsByName(keyword: String, pageable: Pageable): Page<FindCocktails>
+
     fun createCocktail(createCocktailDTO: CreateCocktailDTO): CreateCocktailResultDTO
 
     fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO
 
     fun updateCocktail(createCocktailDTO: CreateCocktailDTO, cocktailId: Long): CreateCocktailResultDTO
-
-    fun getAllCocktail(pageable: Pageable): Page<FindCocktails>
 }

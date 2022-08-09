@@ -7,7 +7,7 @@ import org.springframework.data.domain.Pageable
 
 interface AdminCocktailRepositoryCustom {
 
-    fun findCocktailsInfo(keyword: String, pageable: Pageable): Page<FindCocktails>
+    fun findAllCocktails(pageable: Pageable): Page<FindCocktails>
 
-    fun findAllByCocktailStatus(pageable: Pageable): Page<FindCocktails>
+    fun findCocktailsByName(keyword: String, pageable: Pageable): Page<FindCocktails>
 }

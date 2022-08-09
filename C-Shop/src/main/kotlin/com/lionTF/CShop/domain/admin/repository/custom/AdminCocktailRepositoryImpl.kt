@@ -19,7 +19,7 @@ class AdminCocktailRepositoryImpl(
 ) : AdminCocktailRepositoryCustom {
 
     // 칵테일 전체 조회
-    override fun findAllByCocktailStatus(pageable: Pageable): Page<FindCocktails> {
+    override fun findAllCocktails(pageable: Pageable): Page<FindCocktails> {
         // 데이터 내용을 조회하는 로직입니다.
         // TODO 회원 ID로 회원 검색하는 로직과 비슷하여 함수로 추출하고 전체 조회이기 떄문에 booleanBuilder를 null로 처리하였는데 이것이 옳은가에 대한 고민입니다.
         val content: List<FindCocktails> = contentInquire(pageable, null)
@@ -33,7 +33,7 @@ class AdminCocktailRepositoryImpl(
     }
 
     // 회원 ID로 회원 검색
-    override fun findCocktailsInfo(keyword: String, pageable: Pageable): Page<FindCocktails> {
+    override fun findCocktailsByName(keyword: String, pageable: Pageable): Page<FindCocktails> {
         val booleanBuilder = booleanBuilder(keyword)
 
         val content: List<FindCocktails> = contentInquire(pageable, booleanBuilder)
