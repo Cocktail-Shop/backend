@@ -48,6 +48,17 @@ class AdminItemController(
         return "admins/item/getAllItem"
     }
 
+    // 상품명으로 상품 조회
+    @GetMapping("search/items")
+    fun getItemsByName(
+        model: Model,
+        @PageableDefault(size = 2) pageable: Pageable,
+        @RequestParam("keyword") keyword: String
+    ): String {
+        model.addAttribute("items", adminItemService.getItemsByName(keyword, pageable))
+        return "admins/item/getItemsByName"
+    }
+
     // 상품 수정
     @PutMapping("items/{itemId}")
     fun updateItem(

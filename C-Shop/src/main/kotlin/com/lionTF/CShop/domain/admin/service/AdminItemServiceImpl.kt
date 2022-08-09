@@ -72,4 +72,8 @@ class AdminItemServiceImpl(
     override fun getAllItems(pageable: Pageable): Page<FindItemDTO> {
         return adminItemRepository.findAllItems(pageable)
     }
+
+    override fun getItemsByName(keyword: String, pageable: Pageable): Page<FindItemDTO> {
+        return adminItemRepository.findItemsByName(keyword, pageable)
+    }
 }
