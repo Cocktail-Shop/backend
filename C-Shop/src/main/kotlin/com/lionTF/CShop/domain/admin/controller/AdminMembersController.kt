@@ -2,7 +2,6 @@ package com.lionTF.CShop.domain.admin.controller
 
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.FindMembersResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminMemberService
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -27,9 +26,11 @@ class AdminMembersController(
     @GetMapping("search/members")
     fun findMembers(
         @RequestParam("keyword") keyword: String,
-        @PageableDefault(size = 2) pageable: Pageable
-    ): FindMembersResultDTO? {
-        return adminMemberService.findMembers(keyword, pageable)
+        @PageableDefault(size = 2) pageable: Pageable,
+        model: Model
+    ): String {
+        model.addAttribute("searchMembers", adminMemberService.findMembers(keyword, pageable))
+        return "admins/member/getSearchMember"
     }
 
 
@@ -41,6 +42,6 @@ class AdminMembersController(
     ): String {
 //        return adminMemberService.getAllMembers(pageable)
         model.addAttribute("members" ,adminMemberService.getAllMembers(pageable))
-        return "admins/getAllMember"
+        return "admins/member/getAllMember"
     }
 }
