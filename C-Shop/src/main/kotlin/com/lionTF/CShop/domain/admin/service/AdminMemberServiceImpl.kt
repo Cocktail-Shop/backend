@@ -4,6 +4,7 @@ import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.repository.AdminMemberRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminMemberService
 import com.lionTF.CShop.domain.member.models.Member
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -43,11 +44,11 @@ class AdminMemberServiceImpl(
     }
 
     // 회원 전체 조회
-    override fun getAllMembers(pageable: Pageable): FindMembersResultDTO? {
+    override fun getAllMembers(pageable: Pageable): Page<FindMembersDTO> {
 
-        val memberList = adminMemberRepository.findAllByMemberStatus(pageable)
+        return adminMemberRepository.findAllByMemberStatus(pageable)
 
-        return FindMembersResultDTO(HttpStatus.OK.value(), "회원이 성공적으로 조회되었습니다.", memberList)
+//        return FindMembersResultDTO(HttpStatus.OK.value(), "회원이 성공적으로 조회되었습니다.", memberList)
     }
 
     // 존재하는 사용자인지 검사하는 함수

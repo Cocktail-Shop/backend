@@ -3,13 +3,14 @@ package com.lionTF.CShop.domain.admin.controller
 import com.lionTF.CShop.domain.admin.controller.dto.ItemDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemResultDTO
+import com.lionTF.CShop.domain.admin.controller.dto.ResponseItemDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.CShop.domain.shop.service.ItemService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-@Controller
+@RestController
 @RequestMapping("/admins")
 class AdminItemController(
     private val adminItemService: AdminItemService,
@@ -38,9 +39,10 @@ class AdminItemController(
 
     // 전체 상품 조회
     @GetMapping("all-item")
-    fun getAllItems(model: Model): String {
-        model.addAttribute("itemList", adminItemService.getAllItems())
-        return "admins/getAllItem"
+    fun getAllItems(model: Model): List<ResponseItemDTO>? {
+        return adminItemService.getAllItems()
+//        model.addAttribute("itemList", adminItemService.getAllItems())
+//        return "admins/getAllItem"
     }
 
     // 상품 수정

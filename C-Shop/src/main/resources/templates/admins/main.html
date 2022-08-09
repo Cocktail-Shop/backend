@@ -40,16 +40,16 @@
                 </div>
             </div>
             <div class="col-md-4 col-xs-12 col-sm-4">
-                <!-- Search -->
-                <li class="dropdown search dropdown-slide">
-                    <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i
-                            class="tf-ion-ios-search-strong"></i> Search</a>
-                    <ul class="dropdown-menu search-dropdown">
-                        <li>
-                            <form action="post"><input type="search" class="form-control" placeholder="Search..."></form>
-                        </li>
-                    </ul>
-                </li><!-- / Search -->
+                    <!-- Search -->
+                    <li class="dropdown search dropdown-slide">
+                        <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i
+                                class="tf-ion-ios-search-strong"></i> Search</a>
+                        <ul class="dropdown-menu search-dropdown">
+                            <li>
+                                <form action="post"><input type="search" class="form-control" placeholder="Search..."></form>
+                            </li>
+                        </ul>
+                    </li><!-- / Search -->
                 </ul><!-- / .nav .navbar-nav .navbar-right -->
             </div>
         </div>
@@ -116,49 +116,17 @@
             <div class="col-md-12">
                 <ul class="list-inline dashboard-menu text-center">
                     <li><a href="profile-details.html">Profile Details</a></li>
-                    <li><a href="dashboard.html">Orders</a></li>
-                    <li><a href="order.html">Members</a></li>
+                    <li><a href="orders">Orders</a></li>
+                    <li><a href="members">Members</a></li>
                     <li><a href="all-item">Items</a></li>
                     <li><a href="address.html">Cocktails</a></li>
                 </ul>
                 <div class="dashboard-wrapper dashboard-user-profile">
                     <div class="media">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-md-12">
-                                    <div class="dashboard-wrapper user-dashboard">
-                                        <div class="table-responsive">
-                                            <table class="table">
-                                                <tr>
-                                                    <th>상품명</th>
-                                                    <th>가격</th>
-                                                    <th>수량</th>
-                                                    <th>도수</th>
-                                                    <th>아이템 설명</th>
-                                                    <th>이미지</th>
-                                                    <th>생성일</th>
-                                                    <th>수정</th>
-                                                    <th>삭제</th>
-                                                </tr>
-                                                <tr th:each="items : ${itemList}">
-                                                    <td th:text="${items.itemName}"></td>
-                                                    <td th:text="${items.price}"></td>
-                                                    <td th:text="${items.amount}"></td>
-                                                    <td th:text="${items.degree}"></td>
-                                                    <td th:text="${items.itemDescription}"></td>
-                                                    <td th:text="${items.itemImgUrl}"></td>
-                                                    <td th:text="${items.createdAt}"></td>
-                                                    <td><a href="#" th:href="@{/admins/items/{itemId} (itemId=${items.itemId})}" class="btn btn-default btn-asd">수정</a></td>
-                                                    <td><a href="/admins/items" class="btn btn-default btn-asd">삭제</a></td>
-                                                    <!--                                <td><a th:href="@{'product/'+${product.productId}}">세부정보보기</a></td>-->
-                                                </tr>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="pull-left text-center" href="#!">
+                            <img class="media-object user-img" src="images/avater.jpg" alt="Image">
+                            <a href="#x" class="btn btn-transparent mt-20">Change Image</a>
                         </div>
-
                     </div>
                 </div>
             </div>
