@@ -104,44 +104,39 @@ internal class AdminMemberServiceTest{
     fun findMembers() {
         //given
         var keyword: String = "te"
-        var pageable: Pageable? = null
 
         //when
-        val findMembers = adminMemberService.findMembers(keyword, pageable!!)
+        val findMembers = adminMemberService.findMembers(keyword, Pageable.unpaged())
 
         //then
-        assertThat(findMembers?.findMembersDTO?.get(0)?.id).isEqualTo(memberTest1?.id)
-        assertThat(findMembers?.findMembersDTO?.get(0)?.phoneNumber).isEqualTo(memberTest1?.phoneNumber)
-        assertThat(findMembers?.findMembersDTO?.get(0)?.memberName).isEqualTo(memberTest1?.memberName)
-        assertThat(findMembers?.findMembersDTO?.get(0)?. address).isEqualTo(memberTest1?.address)
-
-        assertThat(findMembers?.findMembersDTO?.get(1)?.id).isEqualTo(memberTest2?.id)
-        assertThat(findMembers?.findMembersDTO?.get(1)?.phoneNumber).isEqualTo(memberTest2?.phoneNumber)
-        assertThat(findMembers?.findMembersDTO?.get(1)?.memberName).isEqualTo(memberTest2?.memberName)
-        assertThat(findMembers?.findMembersDTO?.get(1)?.address).isEqualTo(memberTest2?.address)
-
-        assertThat(findMembers?.findMembersDTO?.get(2)?.id).isEqualTo(memberTest3?.id)
-        assertThat(findMembers?.findMembersDTO?.get(2)?.phoneNumber).isEqualTo(memberTest3?.phoneNumber)
-        assertThat(findMembers?.findMembersDTO?.get(2)?.memberName).isEqualTo(memberTest3?.memberName)
-        assertThat(findMembers?.findMembersDTO?.get(2)?.address).isEqualTo(memberTest3?.address)
+        assertThat(findMembers.content[0].id).isEqualTo(memberTest1?.id)
+        assertThat(findMembers.content[0].phoneNumber).isEqualTo(memberTest1?.phoneNumber)
+        assertThat(findMembers.content[0].memberName).isEqualTo(memberTest1?.memberName)
+        assertThat(findMembers.content[0]. address).isEqualTo(memberTest1?.address)
+        assertThat(findMembers.content[1].id).isEqualTo(memberTest2?.id)
+        assertThat(findMembers.content[1].phoneNumber).isEqualTo(memberTest2?.phoneNumber)
+        assertThat(findMembers.content[1].memberName).isEqualTo(memberTest2?.memberName)
+        assertThat(findMembers.content[1].address).isEqualTo(memberTest2?.address)
+        assertThat(findMembers.content[2].id).isEqualTo(memberTest3?.id)
+        assertThat(findMembers.content[2].phoneNumber).isEqualTo(memberTest3?.phoneNumber)
+        assertThat(findMembers.content[2].memberName).isEqualTo(memberTest3?.memberName)
+        assertThat(findMembers.content[2].address).isEqualTo(memberTest3?.address)
     }
 
     @Test
     @DisplayName("회원 전체 조회 test")
     fun getAllMembersTest() {
         //given
-        var pageable: Pageable? = null
 
         //when
-        val memberList = adminMemberService.getAllMembers(pageable!!)
+        val memberList = adminMemberService.getAllMembers(Pageable.unpaged())
 
         val count: Long = memberRepository.count()
 
         //then
-        assertThat(memberList?.findMembersDTO?.get(0)?.id).isEqualTo(memberTest1?.id)
-        assertThat(memberList?.findMembersDTO?.get(1)?.id).isEqualTo(memberTest2?.id)
-        assertThat(memberList?.findMembersDTO?.get(2)?.id).isEqualTo(memberTest3?.id)
-
-        assertThat(memberList?.findMembersDTO?.size).isEqualTo(count)
+        assertThat(memberList.content[0]?.id).isEqualTo(memberTest1?.id)
+        assertThat(memberList.content[1]?.id).isEqualTo(memberTest2?.id)
+        assertThat(memberList.content[2]?.id).isEqualTo(memberTest3?.id)
+        assertThat(memberList.content.size).isEqualTo(count)
     }
 }

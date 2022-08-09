@@ -20,6 +20,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.security.crypto.password.PasswordEncoder
 import javax.transaction.Transactional
@@ -223,18 +224,16 @@ internal class AdminOrderServiceTest {
         val orderCount = orderRepository.count()
 
         //when
-        val allOrders = adminOrderService.getAllOrders()
+        val allOrders = adminOrderService.getAllOrders(Pageable.unpaged())
 
         //then
-        assertThat(allOrders.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(allOrders.message).isEqualTo("주문 조회가 성공했습니다.")
-        assertThat(allOrders.orders.size).isEqualTo(orderCount-1)
-        assertThat(allOrders.orders[0].memberId).isEqualTo(memberTest1?.memberId)
-        assertThat(allOrders.orders[0].itemId).isEqualTo(item1?.itemId)
-        assertThat(allOrders.orders[1].memberId).isEqualTo(memberTest2?.memberId)
-        assertThat(allOrders.orders[1].itemId).isEqualTo(item2?.itemId)
-        assertThat(allOrders.orders[2].memberId).isEqualTo(memberTest3?.memberId)
-        assertThat(allOrders.orders[2].itemId).isEqualTo(item3?.itemId)
+        assertThat(allOrders.content.size).isEqualTo(orderCount-1)
+        assertThat(allOrders.content[0].memberId).isEqualTo(memberTest1?.memberId)
+        assertThat(allOrders.content[0].itemId).isEqualTo(item1?.itemId)
+        assertThat(allOrders.content[1].memberId).isEqualTo(memberTest2?.memberId)
+        assertThat(allOrders.content[1].itemId).isEqualTo(item2?.itemId)
+        assertThat(allOrders.content[2].memberId).isEqualTo(memberTest3?.memberId)
+        assertThat(allOrders.content[2].itemId).isEqualTo(item3?.itemId)
     }
 
     @Test
@@ -246,22 +245,17 @@ internal class AdminOrderServiceTest {
         val keyword3: String = "e"
 
         //when
-        val ordersByMemberId1 = adminOrderService.getOrdersByMemberId(keyword1)
-        val ordersByMemberId2 = adminOrderService.getOrdersByMemberId(keyword2)
-        val ordersByMemberId3 = adminOrderService.getOrdersByMemberId(keyword3)
+        val ordersByMemberId1 = adminOrderService.getOrdersByMemberId(keyword1, Pageable.unpaged())
+        val ordersByMemberId2 = adminOrderService.getOrdersByMemberId(keyword2, Pageable.unpaged())
+        val ordersByMemberId3 = adminOrderService.getOrdersByMemberId(keyword3, Pageable.unpaged())
 
         //then
-        assertThat(ordersByMemberId1.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(ordersByMemberId1.message).isEqualTo("주문 조회가 성공했습니다.")
-        assertThat(ordersByMemberId1.orders.size).isEqualTo(2)
-
-        assertThat(ordersByMemberId1.orders[0].memberId).isEqualTo(memberTest1?.memberId)
-        assertThat(ordersByMemberId1.orders[0].itemId).isEqualTo(item1?.itemId)
-        assertThat(ordersByMemberId1.orders[1].memberId).isEqualTo(memberTest2?.memberId)
-        assertThat(ordersByMemberId1.orders[1].itemId).isEqualTo(item2?.itemId)
-
-        assertThat(ordersByMemberId2.orders.size).isEqualTo(1)
-
-        assertThat(ordersByMemberId3.orders.size).isEqualTo(3)
+        assertThat(ordersByMemberId1.content.size).isEqualTo(2)
+        assertThat(ordersByMemberId1.content[0].memberId).isEqualTo(memberTest1?.memberId)
+        assertThat(ordersByMemberId1.content[0].itemId).isEqualTo(item1?.itemId)
+        assertThat(ordersByMemberId1.content[1].memberId).isEqualTo(memberTest2?.memberId)
+        assertThat(ordersByMemberId1.content[1].itemId).isEqualTo(item2?.itemId)
+        assertThat(ordersByMemberId2.content.size).isEqualTo(1)
+        assertThat(ordersByMemberId3.content.size).isEqualTo(3)
     }
 }
