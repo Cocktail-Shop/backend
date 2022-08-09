@@ -133,25 +133,72 @@
                                                     <th>가격</th>
                                                     <th>수량</th>
                                                     <th>도수</th>
+                                                    <th>카테고리</th>
                                                     <th>생성일</th>
                                                     <th>수정</th>
                                                     <th>삭제</th>
                                                 </tr>
-                                                <tr th:each="items : ${itemList}">
-                                                    <td th:text="${items.itemName}"></td>
-                                                    <td th:text="${items.price}"></td>
-                                                    <td th:text="${items.amount}"></td>
-                                                    <td th:text="${items.degree}"></td>
-                                                    <td th:text="${items.createdAt}"></td>
-                                                    <td><a href="#"
-                                                           th:href="@{/admins/items/{itemId} (itemId=${items.itemId})}"
-                                                           class="btn btn-default btn-asd">수정</a></td>
-                                                    <td><a href="/admins/items"
-                                                           class="btn btn-default btn-asd">삭제</a></td>
+                                                <tr th:each="item : ${items}">
+                                                    <td th:text="${item.itemName}"></td>
+                                                    <td th:text="${item.price}"></td>
+                                                    <td th:text="${item.amount}"></td>
+                                                    <td th:text="${item.degree}"></td>
+                                                    <td th:text="${item.category}"></td>
+                                                    <td th:text="${item.createdAt}"></td>
+                                                    <td><a href="#" th:href="@{/admins/items/{itemId} (itemId=${item.itemId})}" class="btn btn-default btn-asd">상세 보기</a></td>
+                                                    <td><a href="/admins/items" class="btn btn-default btn-asd">삭제</a></td>
                                                     <!--                                <td><a th:href="@{'product/'+${product.productId}}">세부정보보기</a></td>-->
                                                 </tr>
                                             </table>
                                         </div>
+                                        <div th:if="${items}">
+                                            <!-- 전역 변수 선언 -->
+                                            <nav th:with=" pageNumber = ${items.pageable.pageNumber},
+                                                pageSize = ${items.pageable.pageSize},
+                                                totalPages = ${items.totalPages},
+                                                startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
+                                                tempEndPage = ${startPage + pageSize - 1},
+                                                endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})" aria-label="Page navigation">
+                                                <ul class="pagination ">
+                                                    <!-- 처음으로 이동 -->
+                                                    <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">
+                                                        <a class="page-link" th:href="@{/admins/all-item/(page=0)}">
+                                                            <span>&laquo;</span>
+                                                            <span class="sr-only">First</span>
+                                                        </a>
+                                                    </li>
+
+                                                    <!-- 이전으로 이동 -->
+                                                    <li th:classappend="${items.first} ? 'disabled'" class="page-item">
+                                                        <a class="page-link" th:href="${items.first} ? '#' : @{/admins/all-item/(page=${pageNumber - 1})}" aria-label="Previous">
+                                                            <span aria-hidden="true">&lt;</span>
+                                                            <span class="sr-only">Previous</span>
+                                                        </a>
+                                                    </li>
+
+                                                    <!-- 특정 페이지로 이동 -->
+                                                    <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                                                        <a th:text="${page}" class="page-link" th:href="@{/admins/all-item/(page=${page - 1})}"></a>
+                                                    </li>
+
+                                                    <!-- 다음으로 이동 -->
+                                                    <li th:classappend="${items.last} ? 'disabled'" class="page-item">
+                                                        <a class="page-link" th:href="${items.last} ? '#' : @{/admins/all-item/(page=${pageNumber + 1})}" aria-label="Next">
+                                                            <span aria-hidden="true">&gt;</span>
+                                                            <span class="sr-only">Next</span>
+                                                        </a>
+                                                    </li>
+
+                                                    <!-- 마지막으로 이동 -->
+                                                    <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 <= startPage} ? 'disabled'" class="page-item">
+                                                        <a class="page-link" th:href="@{/admins/all-item/(page=${totalPages - 1})}">
+                                                            <span>&raquo;</span>
+                                                            <span class="sr-only">Last</span>
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div> <!-- /container -->
                                     </div>
                                 </div>
                             </div>

@@ -4,6 +4,8 @@ import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors.*
 import javax.transaction.Transactional
@@ -67,26 +69,7 @@ class AdminItemServiceImpl(
     }
 
     // 상품 전체 조회
-    override fun getAllItems(): List<ResponseItemDTO>? {
-        val itemList = adminItemRepository.findAllByItemStatusTrue(true)
-
-        return itemToResponseDTO(itemList)
-    }
-
-    // item entity를 dto로 변환시키는 함수
-    private fun itemToResponseDTO(itemList: List<Item>?): List<ResponseItemDTO>? {
-        return itemList!!.stream()
-            .map { i: Item ->
-                ResponseItemDTO(
-                    i.itemId,
-                    i.itemName,
-                    i.price,
-                    i.amount,
-                    i.degree,
-                    i.itemDescription,
-                    i.itemImgUrl,
-                    i.createdAt.toString().substring(0, 10)
-                )
-            }.collect(toList())
+    override fun getAllItems(pageable: Pageable): Page<FindItemDTO> {
+        return adminItemRepository.findAllItems(pageable)
     }
 }
