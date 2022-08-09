@@ -23,7 +23,7 @@
             <div class="col-md-4 col-xs-12 col-sm-4">
                 <!-- Site Logo -->
                 <div class="logo text-center">
-                    <a href="index.html">
+                    <a href="#" th:href="@{/admins/main}">
                         <!-- replace logo here -->
                         <svg width="135px" height="29px" viewBox="0 0 155 29" version="1.1" xmlns="http://www.w3.org/2000/svg"
                              xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -79,7 +79,7 @@
 
                     <!-- Home -->
                     <li class="dropdown ">
-                        <a href="index.html">Home</a>
+                        <a href="#" th:href="@{/admins/main}">Home</a>
                     </li><!-- / Home -->
 
 
@@ -116,9 +116,9 @@
             <div class="col-md-12">
                 <ul class="list-inline dashboard-menu text-center">
                     <li><a href="profile-details.html">Profile Details</a></li>
-                    <li><a href="dashboard.html">Orders</a></li>
-                    <li><a href="order.html">Members</a></li>
-                    <li><a href="all-item">Items</a></li>
+                    <li><a href="#" th:href="@{/admins/orders}">Orders</a></li>
+                    <li><a href="#" th:href="@{/admins/members}">Members</a></li>
+                    <li><a href="#" th:href="@{/admins/all-item}">Items</a></li>
                     <li><a href="address.html">Cocktails</a></li>
                 </ul>
                 <div class="dashboard-wrapper dashboard-user-profile">
@@ -128,6 +128,17 @@
                                 <div class="col-md-12">
                                     <div class="dashboard-wrapper user-dashboard">
                                         <div class="table-responsive">
+                                            <!-- Search -->
+                                            <li class="dropdown search dropdown-slide" style="float:right;">
+                                                <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i
+                                                        class="tf-ion-ios-search-strong"></i> Search</a>
+                                                <ul class="dropdown-menu search-dropdown">
+                                                    <li>
+                                                        <form th:action="@{/admins/search/members}" th:method="get">
+                                                            <input name="keyword" type="search" class="form-control" placeholder="회원 검색..."></form>
+                                                    </li>
+                                                </ul>
+                                            </li><!-- / Search -->
                                             <table class="table">
                                                 <tr>
                                                     <th>상품명</th>

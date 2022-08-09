@@ -10,7 +10,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@Controller
 @RequestMapping("/admins")
 class AdminItemController(
     private val adminItemService: AdminItemService,
@@ -23,7 +23,7 @@ class AdminItemController(
         val createItemDTO = ItemDTO()
         model.addAttribute("createItemDTO", createItemDTO)
 
-        return "admins/createItemForm"
+        return "admins/item/createItemForm"
     }
 
     // 상품 등록
@@ -39,10 +39,9 @@ class AdminItemController(
 
     // 전체 상품 조회
     @GetMapping("all-item")
-    fun getAllItems(model: Model): List<ResponseItemDTO>? {
-        return adminItemService.getAllItems()
-//        model.addAttribute("itemList", adminItemService.getAllItems())
-//        return "admins/getAllItem"
+    fun getAllItems(model: Model): String {
+        model.addAttribute("itemList", adminItemService.getAllItems())
+        return "admins/item/getAllItem"
     }
 
     // 상품 수정
@@ -65,7 +64,7 @@ class AdminItemController(
     @GetMapping("items/{itemId}")
     fun getItem(@PathVariable("itemId") itemId: Long, model: Model): String {
         model.addAttribute("item", itemService.findByItemIdTest(itemId))
-        return "admins/updateItemForm"
+        return "admins/item/updateItemForm"
     }
 
 }

@@ -4,6 +4,7 @@ import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.repository.AdminOrderRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminOrderService
 import com.lionTF.CShop.domain.shop.models.Orders
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -36,14 +37,8 @@ class AdminOrderServiceImpl(
 
 
     // 주문 전체 조회
-    override fun getAllOrders(pageable: Pageable): ResponseAllOrdersResultDTO {
-        val ordersInfo = adminOrderRepository.findOrdersInfo(pageable)
-
-        return ResponseAllOrdersResultDTO(
-            HttpStatus.OK.value(),
-            "주문 조회가 성공했습니다.",
-            ordersInfo
-        )
+    override fun getAllOrders(pageable: Pageable): Page<ResponseAllOrdersDTO> {
+        return adminOrderRepository.findOrdersInfo(pageable)
     }
 
     // 회원 ID로 주문 조회
