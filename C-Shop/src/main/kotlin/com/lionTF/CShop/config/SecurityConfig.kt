@@ -28,13 +28,14 @@ class SecurityConfig {
             .permitAll()
             .and()
             .formLogin()
-            //.loginPage("/members/login")
+            .loginPage("/members/login")
+            .loginProcessingUrl("/members/login")
             .defaultSuccessUrl("/members/success")
-            .failureUrl("/")
+            .failureUrl("/members/login")
             .and()
             .logout()
             .logoutUrl("/members/logout") // 로그아웃 처리 URL
-            .logoutSuccessUrl("/login") // 로그아웃 성공 후 이동페이지
+            .logoutSuccessUrl("/members/login") // 로그아웃 성공 후 이동페이지
             .invalidateHttpSession(true)
             .deleteCookies("JSESSIONID")
             .and()

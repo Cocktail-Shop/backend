@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
+<html lang="en">
+<head>
+
+  <!-- Basic Page Needs
+  ================================================== -->
+  <meta charset="utf-8">
+  <title>Aviato | E-commerce template</title>
+
+  <!-- Mobile Specific Metas
+  ================================================== -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Construction Html5 Template">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="author" content="Themefisher">
+  <meta name="generator" content="Themefisher Constra HTML Template v1.0">
+
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/themefisher-font/style.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/animate/animate.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/slick/slick.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/slick/slick-theme.css}" rel="stylesheet" />
+
+</head>
+
+<body id="body">
+
+<section class="signin-page account">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="block text-center">
+          <a class="logo" href="index.html">
+            <img src="images/logo.png" alt="">
+          </a>
+          <div class="mt-50" th:each="result : ${idInquiryResult}" >
+            <h3 class="mt-30" th:text="${result.message}"></h3>
+            <h3 class="mt-30" th:if="${result.status==200}"th:text="${result.result.id}" >NHNCommerce</h3>
+          </div>
+            <div class="text-center mt-50">
+              <div><button type="button" class="btn btn-small  text-center btn-round btn-login-page" onclick = "location.href = '/members/login'" >로그인</button></div>
+              <div><button type="button" class="btn btn-small  text-center btn-round btn-subcolor mt-10" onclick = "location.href = '/members/signup'" >회원가입</button></div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Main jQuery -->
+<script th:src="@{/plugins/jquery/dist/jquery.min.js}"></script>
+<!-- Bootstrap 3.1 -->
+<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<!-- Bootstrap Touchpin -->
+<script th:src="@{/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js}"></script>
+<!-- Instagram Feed Js -->
+<script th:src="@{//instafeed/instafeed.min.js}"></script>
+<!-- Video Lightbox Plugin -->
+<script th:src="@{/plugins/ekko-lightbox/dist/ekko-lightbox.min.js}"></script>
+<!-- Count Down Js -->
+<script th:src="@{/plugins/syo-timer/build/jquery.syotimer.min.js}"></script>
+
+<!-- slick Carousel -->
+<script th:src="@{/plugins/slick/slick.min.js}"></script>
+<script th:src="@{/plugins/slick/slick-animation.min.js}"></script>
+
+<!-- Main Js File -->
+<script th:src="@{/js/script.js}"></script>
+
+<!-- Login Js File -->
+<script th:src="@{/js/login-script.js}"></script>
+
+
+  </body>
+  </html>
