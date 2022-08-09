@@ -8,6 +8,8 @@ import com.lionTF.CShop.domain.admin.repository.AdminCocktailItemRepository
 import com.lionTF.CShop.domain.admin.repository.AdminCocktailRepository
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
 import javax.transaction.Transactional
@@ -86,6 +88,10 @@ class AdminCocktailServiceImpl(
         }
 
 
+    }
+
+    override fun getAllCocktail(pageable: Pageable): Page<FindCocktails> {
+        return adminCocktailRepository.findAllByCocktailStatus(pageable)
     }
 
 
