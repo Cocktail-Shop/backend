@@ -39,7 +39,8 @@ class AdminOrdersController(
         @RequestParam("keyword") keyword: String,
         model: Model,
         @PageableDefault(size = 2) pageable: Pageable
-    ) : ResponseAllOrdersResultDTO {
-        return adminOrderService.getOrdersByMemberId(keyword, pageable)
+    ) : String {
+        model.addAttribute("orders", adminOrderService.getOrdersByMemberId(keyword, pageable))
+        return "admins/order/getMemberOrder"
     }
 }

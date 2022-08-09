@@ -40,7 +40,6 @@ class AdminMembersController(
         model: Model,
         @PageableDefault(size = 2) pageable: Pageable
     ): String {
-//        return adminMemberService.getAllMembers(pageable)
         model.addAttribute("members" ,adminMemberService.getAllMembers(pageable))
         return "admins/member/getAllMember"
     }

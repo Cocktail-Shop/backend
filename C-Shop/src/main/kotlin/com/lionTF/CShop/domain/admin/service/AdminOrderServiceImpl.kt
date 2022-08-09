@@ -42,15 +42,8 @@ class AdminOrderServiceImpl(
     }
 
     // 회원 ID로 주문 조회
-    override fun getOrdersByMemberId(keyword: String, pageable: Pageable): ResponseAllOrdersResultDTO {
-
-        val findOrdersInfo = adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
-
-        return ResponseAllOrdersResultDTO(
-            HttpStatus.OK.value(),
-            "주문 조회가 성공했습니다.",
-            findOrdersInfo
-        )
+    override fun getOrdersByMemberId(keyword: String, pageable: Pageable): Page<ResponseAllOrdersDTO> {
+        return adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
     }
 
     // 존재하는 주문인지 검사하는 함수
