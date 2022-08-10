@@ -30,7 +30,7 @@ data class ResponseMyPageDTO(val status:Int,
 
 data class RequestUpdateMyPageDTO(var id:String="",var address: String="",var detailAddress:String=""){
     companion object{
-        fun formDTOfromResponseMyPageDTO(responseMyPageDTO: ResponseMyPageDTO):RequestUpdateMyPageDTO{
+        fun formDTOFromResponseMyPageDTO(responseMyPageDTO: ResponseMyPageDTO):RequestUpdateMyPageDTO{
             return RequestUpdateMyPageDTO(id=responseMyPageDTO.result.id, address = responseMyPageDTO.result.address, detailAddress = responseMyPageDTO.result.detailAddress)
         }
     }

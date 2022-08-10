@@ -24,7 +24,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
         requestSignUpDTO.encoding()
 
         val newMember= Member.requestSignUpDTOToMember(requestSignUpDTO)
-        val existMember: Optional<Member> = memberAuthRepository.findById(newMember.id!!)
+        val existMember: Optional<Member> = memberAuthRepository.findById(newMember.id)
 
         return if(existMember.isPresent){
             //기존 아이디 존재하는 경우

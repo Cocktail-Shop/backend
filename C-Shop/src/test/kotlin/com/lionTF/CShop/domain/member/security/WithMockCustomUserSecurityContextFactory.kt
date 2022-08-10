@@ -29,7 +29,8 @@ class WithMockCustomUserSecurityContextFactory : WithSecurityContextFactory<With
             password= passwordEncoder.encode("test123"),
             phoneNumber = "01012341234",
             memberName = "사용자",
-            address = "서울시 동작구 상도동 XX빌딩 103호"
+            address = "서울시 동작구 상도동",
+            detailAddress = "XX빌딩 103호"
         )
         member.role= MemberRole.MEMBER
         memberAuthRepository.save(member)

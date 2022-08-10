@@ -1,32 +1,13 @@
 <!DOCTYPE html>
 
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-
-  <!-- Basic Page Needs
-  ================================================== -->
-  <meta charset="utf-8">
-  <title>Aviato | E-commerce template</title>
-
-  <!-- Mobile Specific Metas
-  ================================================== -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Construction Html5 Template">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="author" content="Themefisher">
-  <meta name="generator" content="Themefisher Constra HTML Template v1.0">
-
-    <link th:href="@{/css/style.css}" rel="stylesheet" />
-    <link th:href="@{/plugins/themefisher-font/style.css}" rel="stylesheet" />
-    <link th:href="@{/plugins/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
-    <link th:href="@{/plugins/animate/animate.css}" rel="stylesheet" />
-    <link th:href="@{/plugins/slick/slick.css}" rel="stylesheet" />
-    <link th:href="@{/plugins/slick/slick-theme.css}" rel="stylesheet" />
-
-</head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<th:block th:replace="~{/global/headData:: headData}">
+</th:block>
 
 <body id="body">
-
+<th:block th:replace="~{/global/header :: header}">
+</th:block>
 <section class="signin-page account">
   <div class="container">
     <div class="row">
@@ -44,9 +25,9 @@
               <input type="password" id="password" name="password" class="form-control login-input"  placeholder="비밀번호를 입력해주세요">
             </div>
             <div class="login-oneline-group">
-              <a th:href="@{/members/idInquiry}">아이디 찾기 </a>
+              <a th:href="@{/members/id-inquiry}">아이디 찾기 </a>
               <span>&nbsp;&nbsp;|&nbsp;&nbsp;</span>
-              <a th:href="@{/members/passwordInquiry}"> 비밀번호 찾기</a>
+              <a th:href="@{/members/password-inquiry}"> 비밀번호 찾기</a>
             </div>
             <div class="text-center">
               <div><button type="submit" class="btn btn-small  text-center btn-round btn-login-page mt-10" >로그인</button></div>
@@ -59,33 +40,9 @@
   </div>
 </section>
 
-    <!-- 
-    Essential Scripts
-    =====================================-->
-    
-    <!-- Main jQuery -->
-    <script th:src="@{/plugins/jquery/dist/jquery.min.js}"></script>
-    <!-- Bootstrap 3.1 -->
-    <script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
-    <!-- Bootstrap Touchpin -->
-    <script th:src="@{/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js}"></script>
-    <!-- Instagram Feed Js -->
-    <script th:src="@{//instafeed/instafeed.min.js}"></script>
-    <!-- Video Lightbox Plugin -->
-    <script th:src="@{/plugins/ekko-lightbox/dist/ekko-lightbox.min.js}"></script>
-    <!-- Count Down Js -->
-    <script th:src="@{/plugins/syo-timer/build/jquery.syotimer.min.js}"></script>
-
-    <!-- slick Carousel -->
-    <script th:src="@{/plugins/slick/slick.min.js}"></script>
-    <script th:src="@{/plugins/slick/slick-animation.min.js}"></script>
-
-    <!-- Main Js File -->
-    <script th:src="@{/js/script.js}"></script>
-
-    <!-- Login Js File -->
-    <script th:src="@{/js/login-script.js}"></script>
+<th:block th:replace="~{/global/scriptData:: scriptData}">
+</th:block>
 
 
-  </body>
-  </html>
+</body>
+</html>

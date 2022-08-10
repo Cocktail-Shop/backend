@@ -1,8 +1,10 @@
 package com.lionTF.CShop.domain.member.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.lionTF.CShop.domain.member.controller.MemberController
 import com.lionTF.CShop.domain.member.controller.dto.RequestUpdateMyPageDTO
 import com.lionTF.CShop.domain.member.controller.dto.RequestUpdatePasswordDTO
+import com.lionTF.CShop.domain.member.controller.dto.ResponseDTO
 import com.lionTF.CShop.domain.member.models.Member
 import com.lionTF.CShop.domain.member.models.MemberRole
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
@@ -10,13 +12,19 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
+import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.test.annotation.Rollback
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers.model
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
+import javax.transaction.Transactional
 
 /*
     테스트 동작 방식
@@ -24,8 +32,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
     - 팩토리 메서드를 통해 custom Autentication을 생성하고 Security context에 넣어주는 작업해주는 어노테이션
     - 로그인 인증이 필요한 API를 테스트할 때 사용한다.
  */
+
 @SpringBootTest
 @AutoConfigureMockMvc
+
 class MyPageTests {
 
     @Autowired
@@ -45,7 +55,7 @@ class MyPageTests {
     @DisplayName("MyPage Success Test")
     @WithMockCustomUser
     fun getMyPageInfoTest(){
-        mockMvc.perform(get("/members")).andExpect(status().isOk()).andDo { println() }
+        mockMvc.perform(get("/members")).andExpect(status().isOk).andDo { println() }
     }
 
     @Test
@@ -54,14 +64,15 @@ class MyPageTests {
     fun updateMyPageInfoSuccessTest(){
         val requestBody=RequestUpdateMyPageDTO(
             "test",
-            address = "서울시 동작구 상도동 XX빌딩 103호")
+            address = "서울시 동작구 상도동", detailAddress = "XX빌딩 103호")
         val content: String = objectMapper.writeValueAsString(requestBody)
         mockMvc.perform(
             put("/members")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
+                .content(content)
+                .flashAttr("requestUpdateMyPageDTO",requestBody))
             .andDo { println() }
-            .andExpect(status().isCreated)
+            .andExpect(model().attribute("result",ResponseDTO.toSuccesUpdateMyPageResponseDTO()))
     }
 
     @Test
@@ -71,30 +82,33 @@ class MyPageTests {
         insertUser()
         val requestBody=RequestUpdateMyPageDTO(
             "existUser",
-            address = "서울시 동작구 상도동 XX빌딩 103호")
+            address = "서울시 동작구 상도동",
+            detailAddress = "XX빌딩 103호"
+        )
 
         val content: String = objectMapper.writeValueAsString(requestBody)
         mockMvc.perform(
             put("/members")
+                .accept(APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
-            .andDo { println() }
-            .andExpect(status().isBadRequest)
+                .content(content)
+                .flashAttr("requestUpdateMyPageDTO",requestBody))
+            .andExpect(model().attribute("result",ResponseDTO.toFailedUpdateMyPageResponseDTO()))
     }
 
     @Test
     @DisplayName("MyPage Password Update Success Test")
     @WithMockCustomUser
     fun updatePasswordSuccessTest(){
-        val requestBody=RequestUpdatePasswordDTO("test123","1234")
+        val requestBody:RequestUpdatePasswordDTO=RequestUpdatePasswordDTO(pastPassword = "test123", newPassword = "1234")
 
         val content: String = objectMapper.writeValueAsString(requestBody)
         mockMvc.perform(
             put("/members/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
-            .andDo { println() }
-            .andExpect(status().isCreated)
+                .content(content)
+                .flashAttr("requestUpdatePasswordDTO",requestBody))
+            .andExpect(model().attribute("result",ResponseDTO.toSuccessUpdatePasswordDTO()))
     }
     @Test
     @DisplayName("MyPage Password Update Failed when wrong Password Test")
@@ -106,9 +120,10 @@ class MyPageTests {
         mockMvc.perform(
             put("/members/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
+                .content(content)
+                .flashAttr("requestUpdatePasswordDTO",requestBody))
             .andDo { println() }
-            .andExpect(status().isUnauthorized)
+            .andExpect(model().attribute("result",ResponseDTO.toFailedUpdatePasswordDTO()))
     }
 
     @Test
@@ -121,9 +136,10 @@ class MyPageTests {
         mockMvc.perform(
             put("/members/password")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(content))
+                .content(content)
+                .flashAttr("requestUpdatePasswordDTO",requestBody))
             .andDo { println() }
-            .andExpect(status().isUnauthorized)
+            .andExpect(model().attribute("result",ResponseDTO.toFailedUpdatePasswordDTO()))
     }
 
     fun insertUser(){
@@ -132,7 +148,8 @@ class MyPageTests {
             password= passwordEncoder.encode("tempPW"),
             phoneNumber = "01012341234",
             memberName = "사용자",
-            address = "서울시 동작구 상도동 XX빌딩 103호"
+            address = "서울시 동작구 상도동",
+            detailAddress = "XX빌딩 103호"
         )
         member.role=MemberRole.MEMBER
         repository.save(member)

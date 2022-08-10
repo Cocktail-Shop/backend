@@ -3,6 +3,7 @@ package com.lionTF.CShop.domain.member.controller
 
 import com.lionTF.CShop.domain.member.controller.dto.*
 import com.lionTF.CShop.domain.member.service.MemberService
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
@@ -27,26 +28,26 @@ class MemberController(private val memberService: MemberService) {
 
 
     // 아이디 찾기
-    @GetMapping("/members/idInquiry")
+    @GetMapping("/members/id-inquiry")
     fun idInquiryPage( model: Model):String{
         model.addAttribute("requestIdInquiryDTO",RequestIdInquiryDTO.toFormDTO())
         return "members/forget-id"
     }
 
-    @PostMapping("/members/idInquiry")
+    @PostMapping("/members/id-inquiry")
     fun idInquiry(requestIdInquiryDTO: RequestIdInquiryDTO,model: Model):String{
         model.addAttribute("idInquiryResult",memberService.idInquiry(requestIdInquiryDTO))
         return "members/forget-id-result"
     }
 
     // 비밀번호 찾기
-    @GetMapping("/members/passwordInquiry")
+    @GetMapping("/members/password-inquiry")
     fun pwInquiryPage(model: Model):String{
         model.addAttribute("requestPasswordInquiryDTO",RequestPasswordInquiryDTO.toFormDTO())
         return "members/forget-password"
     }
 
-    @PostMapping("/members/passwordInquiry")
+    @PostMapping("/members/password-inquiry")
     fun passwordInquiry(requestPasswordInquiryDTO: RequestPasswordInquiryDTO,model: Model):String{
         model.addAttribute("result",memberService.passwordInquiry(requestPasswordInquiryDTO))
         return "global/message"
@@ -72,7 +73,7 @@ class MemberController(private val memberService: MemberService) {
     fun getMyPageInfo(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,model: Model): String {
         val responseDTO =memberService.getMyPageInfo(authMemberDTO?.memberId)
         model.addAttribute("myPageInfo",responseDTO)
-        model.addAttribute("requestUpdateMyPageDTO",RequestUpdateMyPageDTO.formDTOfromResponseMyPageDTO(responseDTO))
+        model.addAttribute("requestUpdateMyPageDTO",RequestUpdateMyPageDTO.formDTOFromResponseMyPageDTO(responseDTO))
         return "members/my-page"
     }
 
