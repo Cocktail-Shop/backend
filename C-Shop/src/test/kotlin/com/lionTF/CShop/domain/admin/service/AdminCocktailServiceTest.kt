@@ -12,8 +12,10 @@ import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
 import org.springframework.test.annotation.Rollback
 import javax.transaction.Transactional
 
@@ -82,7 +84,6 @@ internal class AdminCocktailServiceTest {
 
         item1?.let { itemIdList.add(it.itemId) }
         item2?.let { itemIdList.add(it.itemId) }
-        item3?.let { itemIdList.add(it.itemId) }
 
         var createCocktailDTO = CreateCocktailDTO(
             cocktailName = "cocktail1",
@@ -234,13 +235,13 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val deleteCocktail = adminCocktailService!!.deleteCocktail(deleteCocktailDTO)
+        val deleteCocktail = adminCocktailService.deleteCocktail(deleteCocktailDTO)
 
         //then
         assertThat(deleteCocktail.status).isEqualTo(setDeleteFailCocktailResultDTO().status)
         assertThat(deleteCocktail.message).isEqualTo(setDeleteFailCocktailResultDTO().message)
 
-        val referenceById = cocktail?.let { adminCocktailRepository!!.getReferenceById(it.cocktailId) }
+        val referenceById = cocktail?.let { adminCocktailRepository.getReferenceById(it.cocktailId) }
 
         referenceById?.let { assertThat(it.cocktailStatus).isEqualTo(true) }
     }
@@ -255,7 +256,7 @@ internal class AdminCocktailServiceTest {
         item3?.let { itemIdList.add(it.itemId) }
 
         var createCocktailDTO = CreateCocktailDTO(
-            cocktailName = "cocktail1",
+            cocktailName = "cocktail1123",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
         )
@@ -266,8 +267,9 @@ internal class AdminCocktailServiceTest {
         val countCocktailItem = adminCocktailItemRepository.count()
 
         //then
-        updateCocktail?.let { assertThat(it.status).isEqualTo(setUpdateSuccessCocktailResultDTO(updateCocktail.cocktailId).status) }
-        assertThat(updateCocktail?.message).isEqualTo(updateCocktail?.let { setUpdateSuccessCocktailResultDTO(it.cocktailId).message })
+        println("updateCocktail = ${updateCocktail!!.message}")
+        assertThat(updateCocktail.status).isEqualTo(setUpdateSuccessCocktailResultDTO(updateCocktail.cocktailId).status)
+        assertThat(updateCocktail.message).isEqualTo(updateCocktail.let { setUpdateSuccessCocktailResultDTO(it.cocktailId).message })
         assertThat(countCocktailItem).isEqualTo(1)
     }
 
@@ -308,10 +310,11 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val updateCocktail = cocktail?.let { adminCocktailService.updateCocktail(createCocktailDTO, it.cocktailId) }
+//        val updateCocktail = cocktail?.let { adminCocktailService.updateCocktail(createCocktailDTO, it.cocktailId) }
 
         //then
-        assertThat(updateCocktail?.status).isEqualTo(failToNoContentItemResultDTO().status)
-        assertThat(updateCocktail?.message).isEqualTo(failToNoContentItemResultDTO().message)
+        assertThrows<JpaObjectRetrievalFailureException> { cocktail?.let { adminCocktailService.updateCocktail(createCocktailDTO, it.cocktailId) } }
+//        assertThat(updateCocktail?.status).isEqualTo(failToNoContentItemResultDTO().status)
+//        assertThat(updateCocktail?.message).isEqualTo(failToNoContentItemResultDTO().message)
     }
 }

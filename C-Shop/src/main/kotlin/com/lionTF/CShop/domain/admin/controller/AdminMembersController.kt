@@ -2,14 +2,14 @@ package com.lionTF.CShop.domain.admin.controller
 
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.FindMembersResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminMemberService
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.stereotype.Controller
 
-@RestController
+@Controller
 @RequestMapping("/admins")
 class AdminMembersController(
     private val adminMemberService: AdminMemberService,
@@ -26,9 +26,11 @@ class AdminMembersController(
     @GetMapping("search/members")
     fun findMembers(
         @RequestParam("keyword") keyword: String,
-        @PageableDefault(size = 10) pageable: Pageable
-    ): FindMembersResultDTO? {
-        return adminMemberService.findMembers(keyword, pageable)
+        @PageableDefault(size = 2) pageable: Pageable,
+        model: Model
+    ): String {
+        model.addAttribute("searchMembers", adminMemberService.findMembers(keyword, pageable))
+        return "admins/member/getSearchMember"
     }
 
 
@@ -36,8 +38,9 @@ class AdminMembersController(
     @GetMapping("members")
     fun getAllMembers(
         model: Model,
-        @PageableDefault(size = 10) pageable: Pageable
-    ): FindMembersResultDTO? {
-        return adminMemberService.getAllMembers(pageable)
+        @PageableDefault(size = 2) pageable: Pageable
+    ): String {
+        model.addAttribute("members" ,adminMemberService.getAllMembers(pageable))
+        return "admins/member/getAllMember"
     }
 }

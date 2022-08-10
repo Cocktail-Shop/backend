@@ -7,17 +7,40 @@ import com.lionTF.CShop.domain.admin.controller.dto.DeleteCocktailResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
 import com.lionTF.CShop.domain.shop.controller.dto.CocktailResultDTO
 import com.lionTF.CShop.domain.shop.service.CocktailService
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@Controller
 @RequestMapping("/admins")
 class AdminCocktailController(
     private val adminCocktailService: AdminCocktailService,
 
     private val cocktailService: CocktailService,
 ) {
+
+    // 전체 칵테일 조회
+    @GetMapping("all-cocktails")
+    fun getCocktails(
+        model: Model,
+        @PageableDefault(size = 2) pageable: Pageable
+    ): String {
+        model.addAttribute("cocktails", adminCocktailService.getAllCocktail(pageable))
+        return "admins/cocktail/getAllCocktail"
+    }
+
+    // 칵테일 이름 검색 페이지
+    @GetMapping("search/cocktails")
+    fun getCocktailByName(
+        model: Model,
+        @PageableDefault(size = 2) pageable: Pageable,
+        @RequestParam("keyword") keyword: String
+    ): String {
+        model.addAttribute("cocktails", adminCocktailService.getCocktailsByName(keyword, pageable))
+        return "admins/cocktail/getCocktailsByName"
+    }
 
     // 칵테일 상품 등록 페이지
     @GetMapping("cocktails")

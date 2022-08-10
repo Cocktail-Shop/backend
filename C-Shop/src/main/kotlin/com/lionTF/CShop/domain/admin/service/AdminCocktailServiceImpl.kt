@@ -8,6 +8,8 @@ import com.lionTF.CShop.domain.admin.repository.AdminCocktailItemRepository
 import com.lionTF.CShop.domain.admin.repository.AdminCocktailRepository
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
 import javax.transaction.Transactional
@@ -20,6 +22,17 @@ class AdminCocktailServiceImpl(
     private val adminItemRepository: AdminItemRepository,
 
 ): AdminCocktailService{
+
+    // 전체 칵테일 조회
+    override fun getAllCocktail(pageable: Pageable): Page<FindCocktails> {
+        return adminCocktailRepository.findAllCocktails(pageable)
+    }
+
+    override fun getCocktailsByName(keyword: String, pageable: Pageable): Page<FindCocktails> {
+        return adminCocktailRepository.findCocktailsByName(keyword, pageable)
+    }
+
+    // 칵테일 상품명으로 칵테일 조회
 
     // 칵테일 상품 등록
     override fun createCocktail(createCocktailDTO: CreateCocktailDTO): CreateCocktailResultDTO {

@@ -2,14 +2,14 @@ package com.lionTF.CShop.domain.admin.controller
 
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteOrdersDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteOrdersResultDTO
-import com.lionTF.CShop.domain.admin.controller.dto.ResponseAllOrdersResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminOrderService
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
-@RestController
+@Controller
 @RequestMapping("/admins")
 class AdminOrdersController(
     private val adminOrderService: AdminOrderService,
@@ -25,9 +25,10 @@ class AdminOrdersController(
     @GetMapping("orders")
     fun getAllOrders(
         model: Model,
-        @PageableDefault(size = 10) pageable: Pageable
-    ): ResponseAllOrdersResultDTO {
-        return adminOrderService.getAllOrders(pageable)
+        @PageableDefault(size = 2) pageable: Pageable
+    ): String {
+        model.addAttribute("orders", adminOrderService.getAllOrders(pageable))
+        return "admins/order/getAllOrder"
     }
 
     // 회원 ID로 주문 조회
@@ -35,8 +36,9 @@ class AdminOrdersController(
     fun getOrdersByMemberId(
         @RequestParam("keyword") keyword: String,
         model: Model,
-        @PageableDefault(size = 10) pageable: Pageable
-    ) : ResponseAllOrdersResultDTO {
-        return adminOrderService.getOrdersByMemberId(keyword, pageable)
+        @PageableDefault(size = 2) pageable: Pageable
+    ) : String {
+        model.addAttribute("orders", adminOrderService.getOrdersByMemberId(keyword, pageable))
+        return "admins/order/getMemberOrder"
     }
 }

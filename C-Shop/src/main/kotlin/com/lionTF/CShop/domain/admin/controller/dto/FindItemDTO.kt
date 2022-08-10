@@ -1,6 +1,9 @@
 package com.lionTF.CShop.domain.admin.controller.dto
 
-data class ResponseItemDTO(
+import com.lionTF.CShop.domain.admin.models.Category
+import java.time.LocalDateTime
+
+data class FindItemDTO(
     var itemId: Long,
     var itemName: String,
     var price: Int,
@@ -8,5 +11,6 @@ data class ResponseItemDTO(
     var degree: Int,
     var itemDescription: String,
     var itemImgUrl: String,
-    var createdAt: String,
+    var category: Category,
+    var createdAt: LocalDateTime,
 )
