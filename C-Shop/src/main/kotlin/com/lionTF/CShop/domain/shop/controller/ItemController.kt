@@ -1,13 +1,16 @@
 package com.lionTF.CShop.domain.shop.controller
 
+import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.shop.controller.dto.ItemDTO
 import com.lionTF.CShop.domain.shop.controller.dto.ItemResultDTO
 import com.lionTF.CShop.domain.shop.service.ItemService
+import org.springframework.stereotype.Controller
+import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.PathVariable
 
-@RestController
+@Controller
 class ItemController (
     private val itemService: ItemService
     ){
@@ -20,9 +23,13 @@ class ItemController (
 
     //상품 단건 조회
     @GetMapping(path=["/items/{itemId}"])
-    fun getItemById(@PathVariable("itemId") itemId: Long): ItemResultDTO {
-        return itemService.findByItemId(itemId)
+    fun getItemById(@PathVariable("itemId") itemId: Long, model: Model): String {
+        model.addAttribute("item",itemService.findByItemId(itemId))
+        return "shop/singleItem"
     }
 
-
+//    @GetMapping(path=["items/all"])
+//    fun getAllItemsTest(): List<Item> {
+//        return itemService.finyAllItems()
+//    }
 }

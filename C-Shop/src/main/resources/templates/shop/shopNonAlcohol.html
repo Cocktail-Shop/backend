@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+
+    <!-- Basic Page Needs
+    ================================================== -->
+    <meta charset="utf-8">
+    <title>Aviato | E-commerce template</title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="Construction Html5 Template">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="author" content="Themefisher">
+    <meta name="generator" content="Themefisher Constra HTML Template v1.0">
+
+    <link th:href="@{/css/style.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/themefisher-font/style.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/bootstrap/css/bootstrap.min.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/animate/animate.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/slick/slick.css}" rel="stylesheet" />
+    <link th:href="@{/plugins/slick/slick-theme.css}" rel="stylesheet" />
+    <link th:href="@{/images/favicon.png}" rel="shortcut icon" />
+
+</head>
+
+<body id="body">
+
+<!-- Start Top Header Bar -->
+<section class="top-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 col-xs-12 col-sm-4">
+                <div class="contact-number">
+                    <i class="tf-ion-ios-telephone"></i>
+                    <span>012-1233-1233</span>
+                </div>
+            </div>
+            <div class="col-md-4 col-xs-12 col-sm-4">
+                <!-- Site Logo -->
+                <div class="logo text-center">
+                    <a href="/items">
+                        <!-- replace logo here -->
+                        <svg width="135px" height="29px" viewBox="0 0 155 29" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                             xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" font-size="40"
+                               font-family="AustinBold, Austin" font-weight="bold">
+                                <g id="Group" transform="translate(-108.000000, -297.000000)" fill="#000000">
+                                    <text id="AVIATO">
+                                        <tspan x="108.94" y="325">C-Shop</tspan>
+                                    </text>
+                                </g>
+                            </g>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-4 col-xs-12 col-sm-4">
+                <!-- Cart -->
+                <ul class="top-menu text-right list-inline">
+                    <li class="dropdown cart-nav dropdown-slide">
+                        <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i
+                                class="tf-ion-android-cart"></i>Cart</a>
+                        <!--                        <div class="dropdown-menu cart-dropdown">-->
+                        <!--                            &lt;!&ndash; Cart Item &ndash;&gt;-->
+                        <!--                            <div class="media">-->
+                        <!--                                <a class="pull-left" href="#!">-->
+                        <!--                                    <img class="media-object" src="../../static/images/shop/cart/cart-1.jpg" alt="image" />-->
+                        <!--                                </a>-->
+                        <!--                                <div class="media-body">-->
+                        <!--                                    <h4 class="media-heading"><a href="#!">Ladies Bag</a></h4>-->
+                        <!--                                    <div class="cart-price">-->
+                        <!--                                        <span>1 x</span>-->
+                        <!--                                        <span>1250.00</span>-->
+                        <!--                                    </div>-->
+                        <!--                                    <h5><strong>$1200</strong></h5>-->
+                        <!--                                </div>-->
+                        <!--                                <a href="#!" class="remove"><i class="tf-ion-close"></i></a>-->
+                        <!--                            </div>&lt;!&ndash; / Cart Item &ndash;&gt;-->
+                        <!--                            &lt;!&ndash; Cart Item &ndash;&gt;-->
+                        <!--                            <div class="media">-->
+                        <!--                                <a class="pull-left" href="#!">-->
+                        <!--                                    <img class="media-object" src="../../static/images/shop/cart/cart-2.jpg" alt="image" />-->
+                        <!--                                </a>-->
+                        <!--                                <div class="media-body">-->
+                        <!--                                    <h4 class="media-heading"><a href="#!">Ladies Bag</a></h4>-->
+                        <!--                                    <div class="cart-price">-->
+                        <!--                                        <span>1 x</span>-->
+                        <!--                                        <span>1250.00</span>-->
+                        <!--                                    </div>-->
+                        <!--                                    <h5><strong>$1200</strong></h5>-->
+                        <!--                                </div>-->
+                        <!--                                <a href="#!" class="remove"><i class="tf-ion-close"></i></a>-->
+                        <!--                            </div>&lt;!&ndash; / Cart Item &ndash;&gt;-->
+
+                        <!--                            <div class="cart-summary">-->
+                        <!--                                <span>Total</span>-->
+                        <!--                                <span class="total-price">$1799.00</span>-->
+                        <!--                            </div>-->
+                        <!--                            <ul class="text-center cart-buttons">-->
+                        <!--                                <li><a href="cart.html" class="btn btn-small">View Cart</a></li>-->
+                        <!--                                <li><a href="checkout.html" class="btn btn-small btn-solid-border">Checkout</a></li>-->
+                        <!--                            </ul>-->
+                        <!--                        </div>-->
+
+                    </li><!-- / Cart -->
+
+                    <!-- Search -->
+                    <li class="dropdown search dropdown-slide">
+                        <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i
+                                class="tf-ion-ios-search-strong"></i> Search</a>
+                        <ul class="dropdown-menu search-dropdown">
+                            <li>
+                                <form th:action="@{/items/search/NONALCOHOL}" th:method="get"><input name="keyword" type="search" class="form-control" placeholder="비주류 검색..."></form>
+                            </li>
+                        </ul>
+                    </li><!-- / Search -->
+                </ul><!-- / .nav .navbar-nav .navbar-right -->
+            </div>
+        </div>
+    </div>
+</section><!-- End Top Header Bar -->
+
+
+<!-- Main Menu Section -->
+<section class="menu">
+    <nav class="navbar navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <h2 class="menu-title">Main Menu</h2>
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                        aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+            </div><!-- / .navbar-header -->
+
+            <!-- Navbar Links -->
+            <div id="navbar" class="navbar-collapse collapse text-center">
+                <ul class="nav navbar-nav">
+
+                    <!-- 칵테일 -->
+                    <li class="dropdown ">
+                        <a href="/items?sort=cocktailName&category=COCKTAIL">칵테일</a>
+                    </li><!-- / 칵테일 -->
+
+
+                    <!--주류-->
+                    <li class="dropdown">
+                        <a href="/items?sort=itemName&category=ALCOHOL">주류</a>
+                    </li><!-- / 주류 -->
+
+
+                    <!-- 비주류 -->
+                    <li class="dropdown">
+                        <a href="/items?sort=itemName&category=NONALCOHOL">비주류</a>
+                    </li><!-- / 비주류 -->
+
+
+                    <!-- 정렬 -->
+                    <li class="dropdown dropdown-slide">
+                        <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="350"
+                           role="button" aria-haspopup="true" aria-expanded="false">정렬 <span
+                                class="tf-ion-ios-arrow-down"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/items?sort=itemName&category=NONALCOHOL">이름순</a></li>
+                            <li><a href="/items?sort=degree&category=NONALCOHOL">도수순</a></li>
+                            <li><a href="/items?sort=price&category=NONALCOHOL">가격순</a></li>
+                        </ul>
+                    </li><!-- / 정렬 -->
+                </ul><!-- / .nav .navbar-nav -->
+
+            </div>
+            <!--/.navbar-collapse -->
+        </div><!-- / .container -->
+    </nav>
+</section>
+
+<section class="products section">
+    <div class="container">
+        <div class="row">
+            <th:block th:each="items : ${items.result.data}">
+                <div class="col-md-4">
+                    <div class="product-item">
+                        <div class="product-thumb">
+                            <span class="bage">Sale</span>
+                            <img class="img-responsive" th:src="@{/images/shop/products/cocktail-1.jpg}" style="width: 15vw; height: 20vw" alt="product-img" />
+                            <div class="preview-meta">
+                                <ul>
+                                    <li>
+									<span  data-toggle="modal" data-target="#product-modal">
+										<i class="tf-ion-ios-search-strong">
+                                            <a th:href="'/items/'+${items.itemId}"></a>
+                                        </i>
+									</span>
+                                    </li>
+                                    <li>
+                                        <a href="#!"><i class="tf-ion-android-cart"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="product-content">
+                            <h4><a href="product-single.html">[[${items.itemName}]]</a></h4>
+                            <p class="price">가격:[[${items.price}]]원</p>
+                            <p class="price">도수:[[${items.degree}]]</p>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+
+            <ul class="pagination h-100 justify-content-center align-items-center">
+                <!-- 처음으로 이동 -->
+                <li th:classappend="${items.result.page < items.result.size} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="@{/items(page=1,sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
+                        <span>&laquo;</span>
+                        <span class="sr-only">First</span>
+                    </a>
+                </li>
+
+                <li class="page-item " th:if="${items.result.prev}">
+                    <a class="page-link" th:href="@{/items(page= ${items.result.start -1},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category} )}" tabindex="-1">Previous</a>
+                </li>
+                <li th:class=" 'page-item ' + ${items.result.page == page?'active':''} " th:each="page: ${items.result.pageList}">
+                    <a class="page-link" th:href="@{/items(page = ${page},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
+                        [[${page}]]
+                    </a>
+                </li>
+                <li class="page-item" th:if="${items.result.next}">
+                    <a class="page-link" th:href="@{/items(page= ${items.result.end + 1},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">Next</a>
+                </li>
+
+                <!-- 마지막으로 이동 -->
+                <li th:classappend=" ${T(java.lang.Math).floor(items.result.totalPage / items.result.size) * items.result.size - 1 <= items.result.start} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="@{/items(page=${items.result.totalPage},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
+                        <span>&raquo;</span>
+                        <span class="sr-only">Last</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+<footer class="footer section text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="copyright-text">Copyright &copy;2022, Designed &amp; Developed by <a href="https://themefisher.com/">Themefisher</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!--
+Essential Scripts
+=====================================-->
+
+<!-- Main jQuery -->
+<script th:src="@{/plugins/jquery/dist/jquery.min.js}"></script>
+<!-- Bootstrap 3.1 -->
+<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<!-- Bootstrap Touchpin -->
+<script th:src="@{/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js}"></script>
+<!-- Instagram Feed Js -->
+<script th:src="@{//instafeed/instafeed.min.js}"></script>
+<!-- Video Lightbox Plugin -->
+<script th:src="@{/plugins/ekko-lightbox/dist/ekko-lightbox.min.js}"></script>
+<!-- Count Down Js -->
+<script th:src="@{/plugins/syo-timer/build/jquery.syotimer.min.js}"></script>
+
+<!-- slick Carousel -->
+<script th:src="@{/plugins/slick/slick.min.js}"></script>
+<script th:src="@{/plugins/slick/slick-animation.min.js}"></script>
+
+<!-- Main Js File -->
+<script th:src="@{/js/script.js}"></script>
+
+<!-- Login Js File -->
+<script th:src="@{/js/login-script.js}"></script>
+
+
+
+</body>
+</html>
