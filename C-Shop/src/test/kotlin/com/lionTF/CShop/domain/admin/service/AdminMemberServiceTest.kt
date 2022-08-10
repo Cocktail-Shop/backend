@@ -10,9 +10,11 @@ import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.Pageable
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
 import javax.transaction.Transactional
 
 @SpringBootTest
@@ -79,6 +81,30 @@ internal class AdminMemberServiceTest{
     }
 
     @Test
+    @DisplayName("한명의 회원 삭제 test")
+    fun deleteOneMemberTest() {
+        //given
+
+        //when
+        val deleteOneMember = adminMemberService.deleteOneMember(memberTest1!!.memberId)
+
+        //then
+        assertThat(deleteOneMember.status).isEqualTo(setDeleteSuccessMembersResultDTO().status)
+        assertThat(deleteOneMember.message).isEqualTo(setDeleteSuccessMembersResultDTO().message)
+        assertThat(memberTest1!!.memberStatus).isEqualTo(false)
+    }
+
+    @Test
+    @DisplayName("한명의 회원 삭제 예외 test")
+    fun deleteOneMemberExceptionTest() {
+        //given
+        val memberId: Long = 98L
+
+        //then
+        assertThrows<JpaObjectRetrievalFailureException> { adminMemberService.deleteOneMember(memberId) }
+    }
+
+    @Test
     @DisplayName("존재하지 않는 회원 삭제시 예외 test")
     fun memberDeleteExceptionTest() {
         //given
@@ -98,6 +124,8 @@ internal class AdminMemberServiceTest{
         assertThat(deleteMembers.message).isEqualTo(setDeleteFailMembersResultDTO().message)
         assertThat(memberTest1?.memberStatus).isEqualTo(true)
     }
+
+
 
     @Test
     @DisplayName("회원 ID로 회원 검색 test")

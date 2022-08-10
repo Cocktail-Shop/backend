@@ -10,6 +10,8 @@ interface AdminMemberService {
 
     fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO
 
+    fun deleteOneMember(memberId: Long): DeleteMembersResultDTO
+
     fun findMembers(keyword: String, pageable: Pageable): Page<FindMembersDTO>
 
     fun getAllMembers(pageable: Pageable): Page<FindMembersDTO>
