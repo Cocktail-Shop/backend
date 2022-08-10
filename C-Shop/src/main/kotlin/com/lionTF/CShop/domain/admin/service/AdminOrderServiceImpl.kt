@@ -18,7 +18,7 @@ class AdminOrderServiceImpl(
 
 ) : AdminOrderService {
 
-    // 주문 삭제
+    // 하나 이상의 주문 취소
     override fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO {
 
         if (formToExistedItems(deleteOrdersDTO.orderIds)) {
@@ -32,6 +32,14 @@ class AdminOrderServiceImpl(
             return setDeleteFailOrdersResultDTO()
         }
 
+    }
+
+
+    // 하나의 주문 취소
+    override fun deleteOneOrder(orderId: Long): DeleteOrdersResultDTO {
+        val order = adminOrderRepository.getReferenceById(orderId)
+        order.deleteOrder()
+        return setDeleteSuccessOrdersResultDTO()
     }
 
 

@@ -18,10 +18,12 @@ import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
 import org.springframework.security.crypto.password.PasswordEncoder
 import javax.transaction.Transactional
 
@@ -216,6 +218,30 @@ internal class AdminOrderServiceTest {
         assertThat(deleteOrders.message).isEqualTo(setDeleteFailOrdersResultDTO().message)
         assertThat(order?.orderStatus).isEqualTo(OrderStatus.COMPLETE)
     }
+
+    @Test
+    @DisplayName("하나의 주문 취소 test")
+    fun deleteOneOrderTest() {
+        //given
+
+        //when
+        val deleteOneOrder = adminOrderService.deleteOneOrder(order!!.orderId)
+
+        //then
+        assertThat(deleteOneOrder.status).isEqualTo(setDeleteSuccessOrdersResultDTO().status)
+        assertThat(deleteOneOrder.message).isEqualTo(setDeleteSuccessOrdersResultDTO().message)
+        assertThat(order!!.orderStatus).isEqualTo(OrderStatus.CANCEL)
+    }
+    
+    @Test
+    @DisplayName("하나의 주문 취소 예외 test")
+    fun deleteOneOrderExceptionTest() {
+        //given
+        val orderId: Long = 98L
+
+        //then
+        assertThrows<JpaObjectRetrievalFailureException> { adminOrderService.deleteOneOrder(orderId) }
+    } 
 
     @Test
     @DisplayName("주문 전체 조회 test")

@@ -10,6 +10,8 @@ interface AdminOrderService {
 
     fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO
 
+    fun deleteOneOrder(orderId: Long): DeleteOrdersResultDTO
+
     fun getAllOrders(pageable: Pageable): Page<FindOrders>
 
     fun getOrdersByMemberId(keyword: String, pageable: Pageable): Page<FindOrders>
