@@ -64,10 +64,17 @@ class AdminCocktailController(
         return cocktailService.findByCocktailId(cocktailId)
     }
 
-    // 칵테일 삭제
+    // 한개 이상의 칵테일 삭제
     @DeleteMapping("cocktails")
     fun deleteCocktail(@RequestBody deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO {
         return adminCocktailService.deleteCocktail(deleteCocktailDTO)
+    }
+
+    // 한개의 칵테일 삭제
+    @DeleteMapping("cocktails/{cocktailId}")
+    fun deleteOneCocktail(@PathVariable("cocktailId") cocktailId: Long): String {
+        adminCocktailService.deleteOneCocktail(cocktailId)
+        return "admins/cocktail/getAllCocktail"
     }
 
 
