@@ -71,10 +71,17 @@ class AdminItemController(
         return "redirect:/admins/all-item"
     }
 
-    // 상품 삭제
+    // 복수 상품 삭제
     @DeleteMapping("items")
     fun deleteItem(@RequestBody deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
         return adminItemService.deleteItems(deleteItemDTO)
+    }
+
+    // 한개 상품 삭제
+    @DeleteMapping("items/{itemId}")
+    fun deleteOneItem(@PathVariable("itemId") itemId: Long): String {
+        adminItemService.deleteOneItem(itemId)
+        return "redirect:/admins/all-item"
     }
 
     // 단건 상품 조회

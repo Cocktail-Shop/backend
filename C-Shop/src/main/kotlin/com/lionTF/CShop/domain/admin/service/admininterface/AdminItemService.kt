@@ -15,4 +15,6 @@ interface AdminItemService {
     fun getAllItems(pageable: Pageable): Page<FindItemDTO>
 
     fun getItemsByName(keyword: String, pageable: Pageable): Page<FindItemDTO>
+
+    fun deleteOneItem(itemId: Long): DeleteItemResultDTO
 }

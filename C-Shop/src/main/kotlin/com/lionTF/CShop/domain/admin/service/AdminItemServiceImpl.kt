@@ -68,6 +68,14 @@ class AdminItemServiceImpl(
         return setDeleteSuccessItemResultDTO()
     }
 
+    // 하나의 상품 삭제
+    override fun deleteOneItem(itemId: Long): DeleteItemResultDTO {
+        val item = adminItemRepository.getReferenceById(itemId)
+
+        item.delete()
+        return setDeleteSuccessItemResultDTO()
+    }
+
     // 상품 전체 조회
     override fun getAllItems(pageable: Pageable): Page<FindItemDTO> {
         return adminItemRepository.findAllItems(pageable)

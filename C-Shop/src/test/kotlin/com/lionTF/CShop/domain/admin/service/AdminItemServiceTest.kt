@@ -6,11 +6,10 @@ import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import org.assertj.core.api.Assertions.*
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.DisplayName
-import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
 import javax.transaction.Transactional
 
 @SpringBootTest
@@ -181,6 +180,31 @@ internal class AdminItemServiceTest {
         item1?.let { assertThat(it.itemStatus).isEqualTo(false) }
         item2?.let { assertThat(it.itemStatus).isEqualTo(false) }
         item3?.let { assertThat(it.itemStatus).isEqualTo(true) }
+    }
+
+    @Test
+    @DisplayName("하나의 상품 삭제 Test")
+    fun deleteOneItemTest() {
+        //given
+
+        //when
+        val deleteOneItem = adminItemService.deleteOneItem(item1!!.itemId)
+
+        //then
+        assertThat(deleteOneItem.status).isEqualTo(setDeleteSuccessItemResultDTO().status)
+        assertThat(deleteOneItem.message).isEqualTo(setDeleteSuccessItemResultDTO().message)
+        assertThat(item1!!.itemStatus).isEqualTo(false)
+    }
+
+    @Test
+    @DisplayName("하나의 상품 삭제 예외 Test")
+    fun deleteOneItemExceptionTest() {
+        //given
+        var itemID: Long = 98L
+
+        //then
+        assertThrows<JpaObjectRetrievalFailureException> { adminItemService.deleteOneItem(itemID) }
+        assertThat(item1!!.itemStatus).isEqualTo(true)
     }
 
     @Test
