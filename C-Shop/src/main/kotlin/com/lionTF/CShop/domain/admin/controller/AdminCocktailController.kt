@@ -22,7 +22,7 @@ class AdminCocktailController(
 ) {
 
     // 전체 칵테일 조회
-    @GetMapping("all_cocktails")
+    @GetMapping("all-cocktails")
     fun getCocktails(
         model: Model,
         @PageableDefault(size = 2) pageable: Pageable
@@ -74,7 +74,7 @@ class AdminCocktailController(
     @DeleteMapping("cocktails/{cocktailId}")
     fun deleteOneCocktail(@PathVariable("cocktailId") cocktailId: Long): String {
         adminCocktailService.deleteOneCocktail(cocktailId)
-        return "admins/cocktail/getAllCocktail"
+        return "redirect:/admins/all-cocktails"
     }
 
 

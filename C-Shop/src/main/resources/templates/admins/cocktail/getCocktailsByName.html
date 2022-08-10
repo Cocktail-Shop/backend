@@ -130,12 +130,19 @@
                                                     <th>상품명</th>
                                                     <th>설명</th>
                                                     <th>생성일</th>
+                                                    <th>상세 보기</th>
+                                                    <th>칵테일 삭제</th>
                                                 </tr>
                                                 <tr th:each="cocktail : ${cocktails.content}">
                                                     <td th:text="${cocktail?.cocktailName}"></td>
                                                     <td th:text="${cocktail?.cocktailDescription}"></td>
                                                     <td th:text="${cocktail?.createdDate}"></td>
-                                                    <td><a href="/admins/items" class="btn btn-default btn-asd">회원 삭제</a></td>
+                                                    <td><a href="/admins/items" class="btn btn-default btn-asd">상세 보기</a></td>
+                                                    <td>
+                                                        <form  th:method="delete" th:action="@{/admins/cocktails/{cocktailId} (cocktailId=${cocktail.cocktailId})}" >
+                                                            <button type="submit" class="btn btn-default btn-asd" >삭제</button>
+                                                        </form>
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </div>

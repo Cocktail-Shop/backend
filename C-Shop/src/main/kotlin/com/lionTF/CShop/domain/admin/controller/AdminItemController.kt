@@ -41,7 +41,7 @@ class AdminItemController(
 
 
     // 전체 상품 조회
-    @GetMapping("all_item")
+    @GetMapping("all-item")
     fun getAllItems(
         model: Model,
         @PageableDefault(size = 2) pageable: Pageable,

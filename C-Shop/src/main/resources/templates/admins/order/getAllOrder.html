@@ -136,8 +136,9 @@
                                                     <th>수량</th>
                                                     <th>회원 아이디</th>
                                                     <th>회원 이름</th>
+                                                    <th>주문 취소</th>
                                                 </tr>
-                                                <tr th:each="order : ${orders.content}">
+                                                <tr th:each="order : ${orders}">
                                                     <td th:text="${order?.orderId}"></td>
                                                     <td th:text="${order?.orderStatus}"></td>
                                                     <td th:text="${order?.itemId}"></td>
@@ -146,7 +147,11 @@
                                                     <td th:text="${order?.amount}"></td>
                                                     <td th:text="${order?.id}"></td>
                                                     <td th:text="${order?.memberName}"></td>
-                                                    <td><a href="/admins/items" class="btn btn-default btn-asd">회원 삭제</a></td>
+                                                    <td>
+                                                        <form  th:method="delete" th:action="@{/admins/orders/{orderId} (orderId=${order.orderId})}" >
+                                                            <button type="submit" class="btn btn-default btn-asd" >취소</button>
+                                                        </form>
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </div>
