@@ -3,6 +3,7 @@ package com.lionTF.CShop.domain.admin.controller
 import com.lionTF.CShop.domain.admin.controller.dto.ItemDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemResultDTO
+import com.lionTF.CShop.domain.admin.models.Category
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.CShop.domain.shop.service.ItemService
 import org.springframework.data.domain.Pageable
@@ -10,6 +11,7 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.ModelAttribute
 
 @Controller
 @RequestMapping("/admins")
@@ -80,6 +82,11 @@ class AdminItemController(
     fun getItem(@PathVariable("itemId") itemId: Long, model: Model): String {
         model.addAttribute("item", itemService.findByItemIdTest(itemId))
         return "admins/item/updateItemForm"
+    }
+
+    @ModelAttribute("category")
+    fun itemTypes(): Array<Category> {
+        return Category.values()
     }
 
 }
