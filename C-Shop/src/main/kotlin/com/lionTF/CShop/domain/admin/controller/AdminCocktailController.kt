@@ -22,7 +22,7 @@ class AdminCocktailController(
 ) {
 
     // 전체 칵테일 조회
-    @GetMapping("all-cocktails")
+    @GetMapping("all_cocktails")
     fun getCocktails(
         model: Model,
         @PageableDefault(size = 2) pageable: Pageable

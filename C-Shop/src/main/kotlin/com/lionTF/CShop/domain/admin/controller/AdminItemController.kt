@@ -41,7 +41,7 @@ class AdminItemController(
 
 
     // 전체 상품 조회
-    @GetMapping("all-item")
+    @GetMapping("all_item")
     fun getAllItems(
         model: Model,
         @PageableDefault(size = 2) pageable: Pageable,
@@ -84,6 +84,7 @@ class AdminItemController(
         return "admins/item/updateItemForm"
     }
 
+    // 라디오 박스에 카테고리 이넘타입의 내용을 배열로 반환
     @ModelAttribute("category")
     fun itemTypes(): Array<Category> {
         return Category.values()
