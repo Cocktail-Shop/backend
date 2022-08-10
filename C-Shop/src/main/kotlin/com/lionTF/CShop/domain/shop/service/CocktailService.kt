@@ -19,18 +19,5 @@ class CocktailService (
         return setCocktailResultDTO(cocktail)
     }
 
-    //칵테일 검색, 키워드가 포함되어 있는 칵테일 찾기
-    fun getDataList(keyword: String) : List<SearchCocktailInfoDTO>{
-        val booleanBuilder: BooleanBuilder = BooleanBuilder()
-        booleanBuilder.and(cocktail.cocktailName.contains(keyword))
-        val cocktailList = queryFactory.selectFrom(cocktail).where(booleanBuilder).fetch()
-        val cocktailDTOList: MutableList<SearchCocktailInfoDTO> = mutableListOf()
-
-        for(cocktail in cocktailList){
-            cocktailDTOList.add(cocktailToSearchCocktailInfoDTO(cocktail))
-        }
-
-        return cocktailDTOList
-    }
 
 }
