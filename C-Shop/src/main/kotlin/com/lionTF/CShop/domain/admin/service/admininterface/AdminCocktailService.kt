@@ -13,5 +13,7 @@ interface AdminCocktailService {
 
     fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO
 
+    fun deleteOneCocktail(cocktailId: Long): DeleteCocktailResultDTO
+
     fun updateCocktail(createCocktailDTO: CreateCocktailDTO, cocktailId: Long): CreateCocktailResultDTO
 }

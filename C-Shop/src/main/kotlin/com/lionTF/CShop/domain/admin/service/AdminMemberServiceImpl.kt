@@ -18,7 +18,7 @@ class AdminMemberServiceImpl(
 
 ) : AdminMemberService {
 
-    // 회원 삭제
+    // 한명 이상의 회원 삭제
     override fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
 
         if (formToExistedMembers(deleteMembersDTO.memberIds)) {
@@ -32,6 +32,14 @@ class AdminMemberServiceImpl(
         } else {
             return setDeleteFailMembersResultDTO()
         }
+    }
+
+    // 한명의 회원 삭제
+    override fun deleteOneMember(memberId: Long): DeleteMembersResultDTO{
+        val member = adminMemberRepository.getReferenceById(memberId)
+        member.deleteMember()
+
+        return setDeleteSuccessMembersResultDTO()
     }
 
     // 회원 ID로 회원 검색

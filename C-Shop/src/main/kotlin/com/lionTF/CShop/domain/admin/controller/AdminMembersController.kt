@@ -15,12 +15,6 @@ class AdminMembersController(
     private val adminMemberService: AdminMemberService,
 ) {
 
-    // 회원 삭제
-    @DeleteMapping("members")
-    fun deleteMembers(@RequestBody deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
-        return adminMemberService.deleteMembers(deleteMembersDTO)
-    }
-
     // 회원 ID로 회원 검색
     // TODO URL 변경 예정입니다.
     @GetMapping("search/members")
@@ -41,6 +35,19 @@ class AdminMembersController(
         @PageableDefault(size = 2) pageable: Pageable
     ): String {
         model.addAttribute("members" ,adminMemberService.getAllMembers(pageable))
+        return "admins/member/getAllMember"
+    }
+
+    // 한명 이상의 회원 삭제
+    @DeleteMapping("members")
+    fun deleteMembers(@RequestBody deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
+        return adminMemberService.deleteMembers(deleteMembersDTO)
+    }
+
+    // 한명의 회원 삭제
+    @DeleteMapping("members/{memberId}")
+    fun deleteOneMember(@PathVariable("memberId") memberId: Long): String {
+        adminMemberService.deleteOneMember(memberId)
         return "admins/member/getAllMember"
     }
 }

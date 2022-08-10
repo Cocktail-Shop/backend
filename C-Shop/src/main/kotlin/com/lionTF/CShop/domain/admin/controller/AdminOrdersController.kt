@@ -15,10 +15,17 @@ class AdminOrdersController(
     private val adminOrderService: AdminOrderService,
 ) {
 
-    // 주문 삭제
+    // 하나 이상의 주문 취소
     @DeleteMapping("orders")
     fun deleteOrders(@RequestBody deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO {
         return adminOrderService.deleteOrders(deleteOrdersDTO)
+    }
+
+    // 하나의 주문 취소
+    @DeleteMapping("orders/{orderId}")
+    fun deleteOneOrder(@PathVariable("orderId") orderId: Long): String {
+        adminOrderService.deleteOneOrder(orderId)
+        return "admins/order/getAllOrder"
     }
 
     // 전체 주문 조회

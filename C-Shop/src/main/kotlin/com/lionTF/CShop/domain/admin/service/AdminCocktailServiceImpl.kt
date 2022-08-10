@@ -56,7 +56,7 @@ class AdminCocktailServiceImpl(
         }
     }
 
-    // 칵테일 상품 삭제
+    // 한개 이상의 칵테일 상품 삭제
     override fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO {
         return if (!formToExistedCocktails(deleteCocktailDTO.cocktailIds)) {
             setDeleteFailCocktailResultDTO()
@@ -68,6 +68,13 @@ class AdminCocktailServiceImpl(
 
             setDeleteSuccessCocktailResultDTO()
         }
+    }
+
+    // 한개의 칵테일 삭제
+    override fun deleteOneCocktail(cocktailId: Long): DeleteCocktailResultDTO {
+        val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
+        cocktail.deleteCocktail()
+        return setDeleteSuccessCocktailResultDTO()
     }
 
     // 칵테일 상품 수정

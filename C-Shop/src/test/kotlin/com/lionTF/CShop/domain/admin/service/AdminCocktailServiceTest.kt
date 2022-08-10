@@ -246,6 +246,31 @@ internal class AdminCocktailServiceTest {
         referenceById?.let { assertThat(it.cocktailStatus).isEqualTo(true) }
     }
 
+    @Test
+    @DisplayName("한개의 칵테일 삭제 test")
+    fun deleteOneCocktailTest() {
+        //when
+        val deleteOneCocktail = adminCocktailService.deleteOneCocktail(cocktail!!.cocktailId)
+
+        val optionalCocktail = adminCocktailRepository.findById(cocktail!!.cocktailId)
+
+        //then
+        assertThat(deleteOneCocktail.status).isEqualTo(setDeleteSuccessCocktailResultDTO().status)
+        assertThat(deleteOneCocktail.message).isEqualTo(setDeleteSuccessCocktailResultDTO().message)
+
+        assertThat(optionalCocktail.orElseThrow().cocktailStatus).isEqualTo(false)
+    }
+
+    @Test
+    @DisplayName("한개의 칵테일 삭제 예외 test")
+    fun deleteOneCocktailExceptionTest() {
+        //given
+        val cocktailId: Long = 98L
+
+        //then
+        assertThrows<JpaObjectRetrievalFailureException> { adminCocktailService.deleteOneCocktail(cocktailId) }
+    }
+
 
     @Test
     @DisplayName("칵테일 상품 수정 test")
