@@ -18,22 +18,6 @@ class AdminMemberServiceImpl(
 
 ) : AdminMemberService {
 
-    // 한명 이상의 회원 삭제
-    override fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
-
-        if (formToExistedMembers(deleteMembersDTO.memberIds)) {
-            for (memberId in deleteMembersDTO.memberIds) {
-                val member = adminMemberRepository.getReferenceById(memberId)
-
-                member.deleteMember()
-            }
-
-            return setDeleteSuccessMembersResultDTO()
-        } else {
-            return setDeleteFailMembersResultDTO()
-        }
-    }
-
     // 한명의 회원 삭제
     override fun deleteOneMember(memberId: Long): DeleteMembersResultDTO{
         val member = adminMemberRepository.getReferenceById(memberId)
@@ -43,15 +27,17 @@ class AdminMemberServiceImpl(
     }
 
     // 회원 ID로 회원 검색
-    override fun findMembers(keyword: String, pageable: Pageable): Page<FindMembersDTO> {
+    override fun findMembers(keyword: String, pageable: Pageable): ResponseSearchMembersResultDTO {
+        val findMembersInfo = adminMemberRepository.findMembersInfo(keyword, pageable)
 
-        return adminMemberRepository.findMembersInfo(keyword, pageable)
+        return ResponseSearchMembersResultDTO.memberToResponseMemberSearchPageDTO(findMembersInfo, keyword)
     }
 
     // 회원 전체 조회
-    override fun getAllMembers(pageable: Pageable): Page<FindMembersDTO> {
+    override fun getAllMembers(pageable: Pageable): ResponseSearchMembersResultDTO {
+        val findAllMember = adminMemberRepository.findAllByMemberStatus(pageable)
 
-        return adminMemberRepository.findAllByMemberStatus(pageable)
+        return ResponseSearchMembersResultDTO.memberToResponseMemberSearchPageDTO(findAllMember, "")
     }
 
     // 존재하는 사용자인지 검사하는 함수
@@ -68,4 +54,21 @@ class AdminMemberServiceImpl(
         }
         return true
     }
+
+
+    // 한명 이상의 회원 삭제
+//    override fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
+//
+//        if (formToExistedMembers(deleteMembersDTO.memberIds)) {
+//            for (memberId in deleteMembersDTO.memberIds) {
+//                val member = adminMemberRepository.getReferenceById(memberId)
+//
+//                member.deleteMember()
+//            }
+//
+//            return setDeleteSuccessMembersResultDTO()
+//        } else {
+//            return setDeleteFailMembersResultDTO()
+//        }
+//    }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.ModelAttribute
+import java.util.LinkedHashMap
 
 @Controller
 @RequestMapping("/admins")
@@ -20,8 +21,8 @@ class AdminItemController(
     // 전체 상품 조회
     @GetMapping("all-item")
     fun getAllItems(
-        model: Model,
         @PageableDefault(size = 2) pageable: Pageable,
+        model: Model
     ): String {
         model.addAttribute("items", adminItemService.getAllItems(pageable))
         return "admins/item/getAllItem"
@@ -30,9 +31,9 @@ class AdminItemController(
     // 상품명으로 상품 조회
     @GetMapping("search/items")
     fun getItemsByName(
-        model: Model,
+        @RequestParam("keyword") keyword: String,
         @PageableDefault(size = 2) pageable: Pageable,
-        @RequestParam("keyword") keyword: String
+        model: Model
     ): String {
         model.addAttribute("items", adminItemService.getItemsByName(keyword, pageable))
         return "admins/item/getItemsByName"
@@ -76,12 +77,6 @@ class AdminItemController(
         return "global/message"
     }
 
-    // 복수 상품 삭제
-    @DeleteMapping("items")
-    fun deleteItem(@RequestBody deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
-        return adminItemService.deleteItems(deleteItemDTO)
-    }
-
     // 한개 상품 삭제
     @DeleteMapping("items/{itemId}")
     fun deleteOneItem(
@@ -92,10 +87,29 @@ class AdminItemController(
         return "global/message"
     }
 
+
     // 라디오 박스에 카테고리 이넘타입의 내용을 배열로 반환
     @ModelAttribute("category")
     fun itemTypes(): Array<Category> {
         return Category.values()
     }
 
+
+//    @ModelAttribute("itemIds")
+//    fun favorite(pageable: Pageable): Map<Long, String> {
+//        var map: MutableMap<Long, String> = LinkedHashMap()
+//        var items = adminItemService.getAllItems(pageable)
+//
+//        for (item in items.result!!.content) {
+//            map[item.itemId] = ""
+//        }
+//
+//        return map
+//    }
+
+    //    복수 상품 삭제
+//    @DeleteMapping("items")
+//    fun deleteItem(@RequestBody deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
+//        return adminItemService.deleteItems(deleteItemDTO)
+//    }
 }

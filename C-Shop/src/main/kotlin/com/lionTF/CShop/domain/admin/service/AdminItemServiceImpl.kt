@@ -4,7 +4,6 @@ import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -60,25 +59,6 @@ class AdminItemServiceImpl(
         }
     }
 
-    // 상품 삭제
-    override fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
-        deleteItemDTO.itemIds.forEach{
-            val findItemStatusById = adminItemRepository.findItemStatusById(it)
-
-            if (findItemStatusById == null) {
-                return setDeleteFailItemResultDTO()
-            }
-            else if (findItemStatusById) {
-                val item = adminItemRepository.findById(it).orElseThrow()
-                item.delete()
-            }
-            else {
-                return setDeleteFailItemResultDTO()
-            }
-        }
-
-        return setDeleteSuccessItemResultDTO()
-    }
 
     // 하나의 상품 삭제
     override fun deleteOneItem(itemId: Long): AdminResponseDTO {
@@ -112,16 +92,36 @@ class AdminItemServiceImpl(
     }
 
     // 상품 전체 조회
-    override fun getAllItems(pageable: Pageable): ResponseItemSearchDTO {
+    override fun getAllItems(pageable: Pageable): ResponseSearchItemSearchDTO {
         val findAllItems = adminItemRepository.findAllItems(pageable)
 
-        return ResponseItemSearchDTO.itemToResponseItemSearchPageDTO(findAllItems, "")
+        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(findAllItems, "")
     }
 
     // 상품 이름으로 조회
-    override fun getItemsByName(keyword: String, pageable: Pageable): ResponseItemSearchDTO {
+    override fun getItemsByName(keyword: String, pageable: Pageable): ResponseSearchItemSearchDTO {
         val findItemsByItemName = adminItemRepository.findItemsByName(keyword, pageable)
 
-        return ResponseItemSearchDTO.itemToResponseItemSearchPageDTO(findItemsByItemName, keyword)
+        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(findItemsByItemName, keyword)
     }
+
+    // 상품 삭제
+//    override fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
+//        deleteItemDTO.itemIds.forEach{
+//            val findItemStatusById = adminItemRepository.findItemStatusById(it)
+//
+//            if (findItemStatusById == null) {
+//                return setDeleteFailItemResultDTO()
+//            }
+//            else if (findItemStatusById) {
+//                val item = adminItemRepository.findById(it).orElseThrow()
+//                item.delete()
+//            }
+//            else {
+//                return setDeleteFailItemResultDTO()
+//            }
+//        }
+//
+//        return setDeleteSuccessItemResultDTO()
+//    }
 }
