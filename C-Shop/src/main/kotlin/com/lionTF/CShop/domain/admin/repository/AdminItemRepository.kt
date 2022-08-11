@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.admin.repository
 
+import com.lionTF.CShop.domain.admin.controller.dto.ItemResultDTO
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.custom.AdminItemRepositoryCustom
 import org.apache.ibatis.annotations.Param
@@ -25,4 +26,8 @@ interface AdminItemRepository: JpaRepository<Item, Long>, AdminItemRepositoryCus
 
     @Query("select i from Item i where i.itemStatus = :itemStatus")
     fun findAllByItemStatusTrue(@Param("itemStatus")itemStatus: Boolean): List<Item>?
+
+    @Query("select new com.lionTF.CShop.domain.admin.controller.dto.ItemResultDTO(i.itemName, i.category, i.price, i.amount, i.degree, i.itemDescription)" +
+            " from Item i where i.itemId = :itemId")
+    fun findItemById(@Param("itemId")itemId: Long): ItemResultDTO
 }

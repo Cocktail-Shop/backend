@@ -1,6 +1,8 @@
 package com.lionTF.CShop.domain.admin.models
 
+import com.lionTF.CShop.domain.admin.controller.dto.ItemResultDTO
 import com.lionTF.CShop.domain.admin.controller.dto.RequestCreateItemDTO
+import com.lionTF.CShop.domain.admin.controller.dto.ResponseItemDTO
 import com.lionTF.CShop.domain.shop.models.CartItem
 import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.global.model.BaseTimeEntity
@@ -52,13 +54,13 @@ class Item(
     }
 
     // 상품 수정
-    fun update(createItemDTO: RequestCreateItemDTO) {
-        itemName = createItemDTO.itemName
-        category = createItemDTO.category
-        price = createItemDTO.price
-        amount = createItemDTO.amount
-        degree = createItemDTO.degree
-        itemDescription = createItemDTO.itemDescription
+    fun update(requestCreateItemDTO: RequestCreateItemDTO) {
+        itemName = requestCreateItemDTO.itemName
+        category = requestCreateItemDTO.category
+        price = requestCreateItemDTO.price
+        amount = requestCreateItemDTO.amount
+        degree = requestCreateItemDTO.degree
+        itemDescription = requestCreateItemDTO.itemDescription
     }
 
     fun delete() {
