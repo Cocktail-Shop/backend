@@ -1,7 +1,5 @@
 package com.lionTF.CShop.domain.admin.controller
 
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersDTO
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminMemberService
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -39,9 +37,12 @@ class AdminMembersController(
 
     // 한명의 회원 삭제
     @DeleteMapping("members/{memberId}")
-    fun deleteOneMember(@PathVariable("memberId") memberId: Long): String {
-        adminMemberService.deleteOneMember(memberId)
-        return "redirect:/admins/members"
+    fun deleteOneMember(
+        @PathVariable("memberId") memberId: Long,
+        model: Model
+    ): String {
+        model.addAttribute("result", adminMemberService.deleteOneMember(memberId))
+        return "global/message"
     }
 
 

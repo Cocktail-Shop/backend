@@ -19,11 +19,17 @@ class AdminMemberServiceImpl(
 ) : AdminMemberService {
 
     // 한명의 회원 삭제
-    override fun deleteOneMember(memberId: Long): DeleteMembersResultDTO{
-        val member = adminMemberRepository.getReferenceById(memberId)
-        member.deleteMember()
+    override fun deleteOneMember(memberId: Long): AdminResponseDTO{
+        val existsMember = adminMemberRepository.existsById(memberId)
 
-        return setDeleteSuccessMembersResultDTO()
+        return if (!existsMember) {
+            AdminResponseDTO.toFailDeleteMemberResponseDTO()
+        } else {
+            val member = adminMemberRepository.getReferenceById(memberId)
+            member.deleteMember()
+
+            AdminResponseDTO.toSuccessDeleteMemberResponseDTO()
+        }
     }
 
     // 회원 ID로 회원 검색

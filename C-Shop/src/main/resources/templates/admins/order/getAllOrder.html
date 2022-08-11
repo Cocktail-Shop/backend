@@ -138,15 +138,15 @@
                                                     <th>회원 이름</th>
                                                     <th>주문 취소</th>
                                                 </tr>
-                                                <tr th:each="order : ${orders}">
-                                                    <td th:text="${order?.orderId}"></td>
-                                                    <td th:text="${order?.orderStatus}"></td>
-                                                    <td th:text="${order?.itemId}"></td>
-                                                    <td th:text="${order?.itemName}"></td>
-                                                    <td th:text="${order?.price}"></td>
-                                                    <td th:text="${order?.amount}"></td>
-                                                    <td th:text="${order?.id}"></td>
-                                                    <td th:text="${order?.memberName}"></td>
+                                                <tr th:each="order : ${orders.result.content}">
+                                                    <td th:text="${order.orderId}"></td>
+                                                    <td th:text="${order.orderStatus}"></td>
+                                                    <td th:text="${order.itemId}"></td>
+                                                    <td th:text="${order.itemName}"></td>
+                                                    <td th:text="${order.price}"></td>
+                                                    <td th:text="${order.amount}"></td>
+                                                    <td th:text="${order.id}"></td>
+                                                    <td th:text="${order.memberName}"></td>
                                                     <td>
                                                         <form  th:method="delete" th:action="@{/admins/orders/{orderId} (orderId=${order.orderId})}" >
                                                             <button type="submit" class="btn btn-default btn-asd" >취소</button>
@@ -157,9 +157,9 @@
                                         </div>
                                         <div th:if="${orders}">
                                             <!-- 전역 변수 선언 -->
-                                            <nav th:with=" pageNumber = ${orders.pageable.pageNumber},
-                                                pageSize = ${orders.pageable.pageSize},
-                                                totalPages = ${orders.totalPages},
+                                            <nav th:with=" pageNumber = ${orders.result.pageable.pageNumber},
+                                                pageSize = ${orders.result.pageable.pageSize},
+                                                totalPages = ${orders.result.totalPages},
                                                 startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
                                                 tempEndPage = ${startPage + pageSize - 1},
                                                 endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})" aria-label="Page navigation">
@@ -173,8 +173,8 @@
                                                     </li>
 
                                                     <!-- 이전으로 이동 -->
-                                                    <li th:classappend="${orders.first} ? 'disabled'" class="page-item">
-                                                        <a class="page-link" th:href="${orders.first} ? '#' : @{/admins/orders/(page=${pageNumber - 1})}" aria-label="Previous">
+                                                    <li th:classappend="${orders.result.first} ? 'disabled'" class="page-item">
+                                                        <a class="page-link" th:href="${orders.result.first} ? '#' : @{/admins/orders/(page=${pageNumber - 1})}" aria-label="Previous">
                                                             <span aria-hidden="true">&lt;</span>
                                                             <span class="sr-only">Previous</span>
                                                         </a>
@@ -186,8 +186,8 @@
                                                     </li>
 
                                                     <!-- 다음으로 이동 -->
-                                                    <li th:classappend="${orders.last} ? 'disabled'" class="page-item">
-                                                        <a class="page-link" th:href="${orders.last} ? '#' : @{/admins/orders/(page=${pageNumber + 1})}" aria-label="Next">
+                                                    <li th:classappend="${orders.result.last} ? 'disabled'" class="page-item">
+                                                        <a class="page-link" th:href="${orders.result.last} ? '#' : @{/admins/orders/(page=${pageNumber + 1})}" aria-label="Next">
                                                             <span aria-hidden="true">&gt;</span>
                                                             <span class="sr-only">Next</span>
                                                         </a>

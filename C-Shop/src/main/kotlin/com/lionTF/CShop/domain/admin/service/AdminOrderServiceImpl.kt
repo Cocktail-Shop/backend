@@ -18,40 +18,36 @@ class AdminOrderServiceImpl(
 
 ) : AdminOrderService {
 
-    // 하나 이상의 주문 취소
-    override fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO {
-
-        if (formToExistedItems(deleteOrdersDTO.orderIds)) {
-            for (orderId in deleteOrdersDTO.orderIds) {
-                val orders = adminOrderRepository.getReferenceById(orderId)
-                orders.deleteOrder()
-            }
-
-            return setDeleteSuccessOrdersResultDTO()
-        } else {
-            return setDeleteFailOrdersResultDTO()
-        }
-
-    }
-
-
     // 하나의 주문 취소
-    override fun deleteOneOrder(orderId: Long): DeleteOrdersResultDTO {
-        val order = adminOrderRepository.getReferenceById(orderId)
-        order.deleteOrder()
-        return setDeleteSuccessOrdersResultDTO()
+    override fun deleteOneOrder(orderId: Long): AdminResponseDTO {
+        val existsOrder = adminOrderRepository.existsById(orderId)
+
+        return if (!existsOrder) {
+            AdminResponseDTO.toFailDeleteOrderResponseDTO()
+
+        } else {
+            val order = adminOrderRepository.getReferenceById(orderId)
+            order.deleteOrder()
+
+            AdminResponseDTO.toSuccessDeleteOrderResponseDTO()
+        }
     }
 
 
     // 주문 전체 조회
-    override fun getAllOrders(pageable: Pageable): Page<FindOrders> {
-        return adminOrderRepository.findOrdersInfo(pageable)
+    override fun getAllOrders(pageable: Pageable): ResponseSearchOrdersResultDTO {
+        val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
+
+        return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(findOrdersInfo, "")
     }
 
     // 회원 ID로 주문 조회
-    override fun getOrdersByMemberId(keyword: String, pageable: Pageable): Page<FindOrders> {
-        return adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
+    override fun getOrdersByMemberId(keyword: String, pageable: Pageable): ResponseSearchOrdersResultDTO {
+        val findOrdersInfoByMemberId = adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
+
+        return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(findOrdersInfoByMemberId, keyword)
     }
+
 
     // 존재하는 주문인지 검사하는 함수
     private fun existedOrder(orderId: Long): Optional<Orders> {
@@ -67,4 +63,20 @@ class AdminOrderServiceImpl(
         }
         return true
     }
+
+
+//    // 하나 이상의 주문 취소
+//    override fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO {
+//
+//        if (formToExistedItems(deleteOrdersDTO.orderIds)) {
+//            for (orderId in deleteOrdersDTO.orderIds) {
+//                val orders = adminOrderRepository.getReferenceById(orderId)
+//                orders.deleteOrder()
+//            }
+//
+//            return setDeleteSuccessOrdersResultDTO()
+//        } else {
+//            return setDeleteFailOrdersResultDTO()
+//        }
+//    }
 }

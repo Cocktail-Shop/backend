@@ -36,5 +36,21 @@ data class AdminResponseDTO(val httpStatus: Int, val message: String, var href: 
         fun toFailDeleteItemResponseDTO(): AdminResponseDTO {
             return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 않는 상품입니다.", "/admins/all-item")
         }
+
+        fun toFailDeleteMemberResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 않는 회원입니다.", "/admins/members")
+        }
+
+        fun toSuccessDeleteMemberResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.NO_CONTENT.value(), "회원이 정상적으로 삭제되었습니다.", "/admins/members")
+        }
+
+        fun toFailDeleteOrderResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 않는 주문입니다.", "/admins/orders")
+        }
+
+        fun toSuccessDeleteOrderResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.NO_CONTENT.value(), "주문이 정상적으로 취소되었습니다.", "/admins/orders")
+        }
     }
 }
