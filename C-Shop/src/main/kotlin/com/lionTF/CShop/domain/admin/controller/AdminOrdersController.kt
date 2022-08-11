@@ -25,7 +25,7 @@ class AdminOrdersController(
     @DeleteMapping("orders/{orderId}")
     fun deleteOneOrder(@PathVariable("orderId") orderId: Long): String {
         adminOrderService.deleteOneOrder(orderId)
-        return "admins/order/getAllOrder"
+        return "redirect:/admins/orders"
     }
 
     // 전체 주문 조회

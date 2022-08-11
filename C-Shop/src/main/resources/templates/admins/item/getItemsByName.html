@@ -83,8 +83,16 @@
                                     <ul>
                                         <li class="dropdown-header">Pages</li>
                                         <li role="separator" class="divider"></li>
-                                        <li><a href="items">ALCOHOL</a></li>
-                                        <li><a href="cart.html">COCKTAIL</a></li>
+                                        <li>
+                                            <form  th:method="get" th:action="@{/admins/items}" >
+                                                <button type="submit" class="btn btn-default btn-asd" >ALCOHOL</button>
+                                            </form>
+                                        </li>
+                                        <li>
+                                            <form  th:method="get" th:action="@{/admins/cocktails}" >
+                                                <button type="submit" class="btn btn-default btn-asd" >COCKTAIL</button>
+                                            </form>
+                                        </li>
                                     </ul>
                                 </div>
                             </div><!-- / .row -->
@@ -135,7 +143,7 @@
                                                     <th>카테고리</th>
                                                     <th>생성일</th>
                                                     <th>수정</th>
-                                                    <th>삭제</th>
+                                                    <th>상품 삭제</th>
                                                 </tr>
                                                 <tr th:each="item : ${items}">
                                                     <td th:text="${item.itemName}"></td>
@@ -145,8 +153,11 @@
                                                     <td th:text="${item.category}"></td>
                                                     <td th:text="${item.createdAt}"></td>
                                                     <td><a href="#" th:href="@{/admins/items/{itemId} (itemId=${item.itemId})}" class="btn btn-default btn-asd">상세 보기</a></td>
-                                                    <td><a href="/admins/items" class="btn btn-default btn-asd">삭제</a></td>
-                                                    <!--                                <td><a th:href="@{'product/'+${product.productId}}">세부정보보기</a></td>-->
+                                                    <td>
+                                                        <form  th:method="delete" th:action="@{/admins/items/{itemId} (itemId=${item.itemId})}" >
+                                                            <button type="submit" class="btn btn-default btn-asd" >삭제</button>
+                                                        </form>
+                                                    </td>
                                                 </tr>
                                             </table>
                                         </div>

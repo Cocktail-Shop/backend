@@ -7,10 +7,10 @@ import com.lionTF.CShop.domain.admin.models.Item
 import org.springframework.http.HttpStatus
 
 data class CreateCocktailDTO(
-    val cocktailName: String = "",
-    val cocktailDescription: String ="",
-    val itemIds: MutableList<Long> = mutableListOf(),
-    val category: Category = Category.COCKTAIL,
+    var cocktailName: String = "",
+    var cocktailDescription: String ="",
+    var itemIds: MutableList<Long> = mutableListOf(),
+    var category: Category = Category.COCKTAIL,
 )
 
 

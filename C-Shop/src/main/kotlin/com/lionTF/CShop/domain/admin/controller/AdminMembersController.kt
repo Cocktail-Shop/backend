@@ -48,6 +48,6 @@ class AdminMembersController(
     @DeleteMapping("members/{memberId}")
     fun deleteOneMember(@PathVariable("memberId") memberId: Long): String {
         adminMemberService.deleteOneMember(memberId)
-        return "admins/member/getAllMember"
+        return "redirect:/admins/members"
     }
 }

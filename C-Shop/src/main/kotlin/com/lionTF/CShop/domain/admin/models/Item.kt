@@ -49,5 +49,6 @@ class Item(
 
     fun delete() {
         itemStatus = false
+        amount++
     }
 }
