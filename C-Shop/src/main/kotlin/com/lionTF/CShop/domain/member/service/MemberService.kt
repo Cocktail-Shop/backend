@@ -53,7 +53,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
     }
     //비밀번호 찾기
     fun passwordInquiry(passwordInquiryDTO: RequestPasswordInquiryDTO):ResponseDTO{
-        val existMember=memberAuthRepository.findByIdAndPhoneNumber(passwordInquiryDTO.id,passwordInquiryDTO.phoneNumber)
+        val existMember=memberAuthRepository.findByIdAndEmail(passwordInquiryDTO.id,passwordInquiryDTO.email)
 
         return if(existMember.isPresent){
             ResponseDTO.toSuccessPasswordInquiryResponseDTO()
