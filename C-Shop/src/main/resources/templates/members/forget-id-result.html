@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
+<html lang="en">
+<th:block th:replace="~{/global/headData:: headData}">
+</th:block>
+
+<body id="body">
+
+<section class="signin-page account">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="block text-center">
+          <a class="logo" href="index.html">
+            <img src="images/logo.png" alt="">
+          </a>
+          <div class="mt-50" th:each="result : ${idInquiryResult}" >
+            <h3 class="mt-30" th:text="${result.message}"></h3>
+            <h3 class="mt-30" th:if="${result.status==200}"th:text="${result.result.id}" >NHNCommerce</h3>
+          </div>
+            <div class="text-center mt-50">
+              <div><button type="button" class="btn btn-small  text-center btn-round btn-login-page" onclick = "location.href = '/members/login'" >로그인</button></div>
+              <div><button type="button" class="btn btn-small  text-center btn-round btn-subcolor mt-10" onclick = "location.href = '/members/signup'" >회원가입</button></div>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<th:block th:replace="~{/global/scriptData:: scriptData}">
+</th:block>
+
+
+  </body>
+  </html>

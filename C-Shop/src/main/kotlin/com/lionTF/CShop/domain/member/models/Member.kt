@@ -7,12 +7,11 @@ import com.lionTF.CShop.domain.shop.models.Cart
 import com.lionTF.CShop.domain.shop.models.Orders
 import com.lionTF.CShop.global.model.BaseTimeEntity
 import lombok.*
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import javax.persistence.*
 
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 class Member(
 
     @Id
@@ -30,6 +29,7 @@ class Member(
     var phoneNumber: String = "",
     var memberName: String = "",
     var address: String = "",
+    var detailAddress:String="",
     var memberStatus: Boolean = true,
 
     var role:MemberRole?=null
@@ -43,7 +43,7 @@ class Member(
                 phoneNumber=requestSignUpDTO.phoneNumber,
                 memberName=requestSignUpDTO.memberName,
                 address=requestSignUpDTO.address,
-                cart=Cart(),
+                detailAddress=requestSignUpDTO.detailAddress,
                 role = MemberRole.MEMBER
             )
         }
@@ -52,6 +52,7 @@ class Member(
     fun updateMember(requestUpdateMyPageDTO: RequestUpdateMyPageDTO){
         this.id=requestUpdateMyPageDTO.id
         this.address=requestUpdateMyPageDTO.address
+        this.detailAddress=requestUpdateMyPageDTO.detailAddress
     }
 
     fun updateMemberPassword(newPassword:String,passwordEncoder:PasswordEncoder){

@@ -58,7 +58,8 @@ class MemberTests{
             password= passwordEncoder.encode(password),
             phoneNumber = "01012341234",
             memberName = "사용자",
-            address = "서울시 동작구 상도동 XX빌딩 103호"
+            address = "서울시 동작구 상도동",
+            detailAddress = "XX빌딩 103호"
         )
         member.role=MemberRole.MEMBER
         repository.save(member)
@@ -83,19 +84,19 @@ class MemberTests{
     @DisplayName("Signup Success Test")
     fun signUpSuccessTest(){
         val requestSignUpDTO: RequestSignUpDTO = RequestSignUpDTO(
-            id="test",
+            id="newUser",
             password = "test123",
             phoneNumber = "01012341234",
             memberName = "사용자",
-            address = "서울시 동작구 상도동 XX빌딩 103호"
+            address = "서울시 동작구 상도동",
+            detailAddress = "XX빌딩 103호"
         )
 
         //when
         val signUpResult=memberService.registerMember(requestSignUpDTO)
 
         //then
-        assertThat(signUpResult.statusCode).isEqualTo(HttpStatus.CREATED)
-        assertThat(signUpResult.body!!.status).isEqualTo(HttpStatus.CREATED.value())
+        assertThat(signUpResult.status).isEqualTo(ResponseDTO.toSuccessSignUpResponseDTO().status)
     }
 
     @Test
@@ -106,15 +107,15 @@ class MemberTests{
             password = "test123",
             phoneNumber = "01012341234",
             memberName = "사용자",
-            address = "서울시 동작구 상도동 XX빌딩 103호"
+            address = "서울시 동작구 상도동",
+            detailAddress = "XX빌딩 103호"
         )
 
         //when : 같은 정보갖는 회원 두번 삽입
         memberService.registerMember(requestSignUpDTO)
         val signUpResult=memberService.registerMember(requestSignUpDTO)
         //then
-        assertThat(signUpResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
-        assertThat(signUpResult.body!!.status).isEqualTo(HttpStatus.UNAUTHORIZED.value())
+        assertThat(signUpResult.status).isEqualTo(ResponseDTO.toFailedSignUpResponseDTO().status)
     }
 
     @Test
@@ -125,15 +126,11 @@ class MemberTests{
             "01012341234"
         )
 
-
         //when
         val idInquiryResult=memberService.idInquiry(requestIdInquiryDTO)
-        val responseBody=idInquiryResult.body
-        println(responseBody is ResponseIdInquiryDTO)
         //then : status code, response type이 성공 형태인지 판단 + 찾아온 id가 사용자의 id인지 검사
-        assertThat(idInquiryResult.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(responseBody, instanceOf(ResponseIdInquiryDTO::class.java))
-        assertThat((responseBody as ResponseIdInquiryDTO).result.id).isEqualTo(id)
+        assertThat(idInquiryResult, instanceOf(ResponseIdInquiryDTO::class.java))
+        assertThat((idInquiryResult as ResponseIdInquiryDTO).result.id).isEqualTo(id)
     }
 
     @Test
@@ -146,11 +143,11 @@ class MemberTests{
 
         //when : 존재하지 않는 사용자 정보를 줌
         val idInquiryResult=memberService.idInquiry(requestIdInquiryDTO)
-        val responseBody=idInquiryResult.body
 
         //then : status code, response type이 실패 형태인지 판단
-        assertThat(idInquiryResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
-        assertThat(responseBody, instanceOf(ResponseDTO::class.java))
+
+        assertThat(idInquiryResult, instanceOf(ResponseDTO::class.java))
+        assertThat((idInquiryResult as ResponseDTO).status).isEqualTo(ResponseDTO.toFailedIdInquiryResponseDTO().status)
     }
 
     @Test
@@ -163,11 +160,10 @@ class MemberTests{
 
         //when : 사용자는 존재하지만 전화번호 잘못된 경우
         val idInquiryResult=memberService.idInquiry(requestIdInquiryDTO)
-        val responseBody=idInquiryResult.body
 
         //then : status code, response type이 실패 형태인지 판단
-        assertThat(idInquiryResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
-        assertThat(responseBody, instanceOf(ResponseDTO::class.java))
+        assertThat(idInquiryResult, instanceOf(ResponseDTO::class.java))
+        assertThat((idInquiryResult as ResponseDTO).status).isEqualTo(ResponseDTO.toFailedIdInquiryResponseDTO().status)
     }
 
 
@@ -184,8 +180,7 @@ class MemberTests{
         val passwordInquiryResult=memberService.passwordInquiry(requestPasswordInquiryDTO)
 
         //then
-        assertThat(passwordInquiryResult.statusCode).isEqualTo(HttpStatus.OK)
-        assertThat(passwordInquiryResult.body!!.status).isEqualTo(HttpStatus.OK.value())
+        assertThat(passwordInquiryResult.status).isEqualTo(ResponseDTO.toSuccessPasswordInquiryResponseDTO().status)
     }
 
     @Test
@@ -196,12 +191,11 @@ class MemberTests{
             "01012341234"
         )
 
-        //when : 존재하지 않는 사용자 정보를 줌
+        //when : 존재하지 않는 사  용자 정보를 줌
         val passwordInquiryResult=memberService.passwordInquiry(requestPasswordInquiryDTO)
 
         //then
-        assertThat(passwordInquiryResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
-        assertThat(passwordInquiryResult.body!!.status).isEqualTo(HttpStatus.UNAUTHORIZED.value())
+        assertThat(passwordInquiryResult.status).isEqualTo(ResponseDTO.toFailedPasswordInquiryResponseDTO().status)
     }
 
     @Test
@@ -216,8 +210,7 @@ class MemberTests{
         val passwordInquiryResult=memberService.passwordInquiry(requestPasswordInquiryDTO)
 
         //then : status code
-        assertThat(passwordInquiryResult.statusCode).isEqualTo(HttpStatus.UNAUTHORIZED)
-        assertThat(passwordInquiryResult.body!!.status).isEqualTo(HttpStatus.UNAUTHORIZED.value())
+        assertThat(passwordInquiryResult.status).isEqualTo(ResponseDTO.toFailedPasswordInquiryResponseDTO().status)
     }
 
     @Test

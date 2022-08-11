@@ -129,9 +129,6 @@ function checkForgetPw(){
 function checkNewPw(){
     const result=checkPw()
     
-    if(result) 
-        alert("새 비밀번호 등록 완료!")
-    
      return result
 }
 
