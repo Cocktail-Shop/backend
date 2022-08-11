@@ -9,23 +9,8 @@ import org.springframework.data.jpa.repository.Query
 
 interface AdminItemRepository: JpaRepository<Item, Long>, AdminItemRepositoryCustom {
 
-    // 존재하는 상품이지 상품이름을 통해 검색
-    @Query(
-        "select i.itemName from Item i" +
-                " where i.itemName = :itemName and i.itemStatus = :itemStatus and i.degree = :degree"
-    )
-    fun existsByItemName(
-        @Param("itemName") itemName: String,
-        @Param("itemStatus") itemStatus: Boolean,
-        @Param("degree") degree: Int
-    ): String?
-
-
     @Query("select i.itemStatus from Item i where i.itemId = :itemId")
     fun findItemStatusById(@Param("itemId")itemId: Long): Boolean?
-
-    @Query("select i from Item i where i.itemStatus = :itemStatus")
-    fun findAllByItemStatusTrue(@Param("itemStatus")itemStatus: Boolean): List<Item>?
 
     @Query("select new com.lionTF.CShop.domain.admin.controller.dto.ItemResultDTO(i.itemName, i.category, i.price, i.amount, i.degree, i.itemDescription)" +
             " from Item i where i.itemId = :itemId")
