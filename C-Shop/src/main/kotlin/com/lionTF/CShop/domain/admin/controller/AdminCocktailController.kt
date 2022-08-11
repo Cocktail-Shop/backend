@@ -53,15 +53,18 @@ class AdminCocktailController(
     @GetMapping("cocktails")
     fun getCreateCocktailForm(model: Model): String {
         val createCocktailDTO = CreateCocktailDTO()
-        model.addAttribute("form", createCocktailDTO)
+        model.addAttribute("createCocktailDTO", createCocktailDTO)
 
         return "admins/cocktail/createCocktailForm"
     }
 
     // 칵테일 상품 등록
     @PostMapping("cocktails")
-    fun createCocktail(@RequestBody createCocktailDTO: CreateCocktailDTO): CreateCocktailResultDTO {
-        return adminCocktailService.createCocktail(createCocktailDTO)
+    fun createCocktail(
+        model: Model,
+        createCocktailDTO: CreateCocktailDTO): String {
+        model.addAttribute("createCocktailDTO",adminCocktailService.createCocktail(createCocktailDTO))
+        return "redirect:/admins/all-cocktails"
     }
 
 
@@ -94,15 +97,15 @@ class AdminCocktailController(
         return adminCocktailService.updateCocktail(createCocktailDTO, cocktailId)
     }
 
-    @ModelAttribute("getItems")
-    private fun favorite(pageable: Pageable): Map<Long, String> {
-        var getItems: MutableMap<Long, String> = LinkedHashMap()
+    @ModelAttribute("itemList")
+    fun favorite(pageable: Pageable): Map<Long, String> {
+        var map: MutableMap<Long, String> = LinkedHashMap()
         var items = adminItemService.getAllItems(pageable)
 
         for (item in items) {
-            getItems[item.itemId] = item.itemName
+            map[item.itemId] = item.itemName
         }
 
-        return getItems
+        return map
     }
 }
