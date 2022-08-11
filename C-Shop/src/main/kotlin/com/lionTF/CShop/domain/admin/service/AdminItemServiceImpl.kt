@@ -7,7 +7,6 @@ import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors.*
 import javax.transaction.Transactional
 
 @Service
@@ -19,21 +18,30 @@ class AdminItemServiceImpl(
 ): AdminItemService {
 
     // 상품 등록
-    override fun createItem(createItemDTO: ItemDTO): CreateItemResultDTO {
+    override fun createItem(requestCreateItemDTO: RequestCreateItemDTO): AdminResponseDTO {
         // 상품 존재 여부
-        val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName, true, createItemDTO.degree)
+        val existsItemName = adminItemRepository.existsByItemName(requestCreateItemDTO.itemName, true, requestCreateItemDTO.degree)
 
-        return if (existsItemName == null) {
-            adminItemRepository.save(itemDTOToItem(createItemDTO))
-            setCreateSuccessItemResultDTO()
-        } else {
-            setCreateFailItemResultDTO()
+        return when {
+            existsItemName != null -> {
+                AdminResponseDTO.toFailCreateItemResponseDTO()
+            }
+            requestCreateItemDTO.amount <= 0 -> {
+                AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO()
+            }
+            requestCreateItemDTO.price <= 0 -> {
+                AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO()
+            }
+            else -> {
+                adminItemRepository.save(Item.requestCreateItemDTOtoItem(requestCreateItemDTO))
+                AdminResponseDTO.toSuccessCreateItemResponseDTO()
+            }
         }
     }
 
 
     // 상품 수정
-    override fun updateItem(itemId: Long, createItemDTO: ItemDTO): CreateItemResultDTO {
+    override fun updateItem(itemId: Long, createItemDTO: RequestCreateItemDTO): CreateItemResultDTO {
         val existsItem = adminItemRepository.existsById(itemId)
 
         return if (existsItem) {

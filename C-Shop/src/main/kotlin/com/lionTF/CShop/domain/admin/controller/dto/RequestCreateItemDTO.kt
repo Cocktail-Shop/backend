@@ -2,37 +2,31 @@ package com.lionTF.CShop.domain.admin.controller.dto
 
 import com.lionTF.CShop.domain.admin.models.Category
 import com.lionTF.CShop.domain.admin.models.Item
+import com.lionTF.CShop.domain.member.controller.dto.RequestSignUpDTO
 import org.springframework.http.HttpStatus
 
 // 상품 등록을 위한 정보가 실려오는 JSON 형태를 DB에 저장하기 위한 dto
-data class ItemDTO(
+data class RequestCreateItemDTO(
     var itemName: String="",
     var category: Category= Category.ALCOHOL,
-    var price: Int =  0,
+    var price: Int = 0,
     var amount: Int = 0,
-    var degree: Int = 0,
+    var degree: Int = 10,
     var itemDescription: String = "",
-)
+
+) {
+    companion object {
+        fun toFormDTO(): RequestCreateItemDTO {
+            return RequestCreateItemDTO()
+        }
+    }
+}
 
 // 상태코드와 message를 반환하기 위한 DTO
 data class CreateItemResultDTO(
     var status: Int,
     var message: String,
 )
-
-// requestBody로 받아온 form을 entity로 변환하는 함수
-fun itemDTOToItem(createItemDTO: ItemDTO): Item {
-
-    return Item(
-        itemName = createItemDTO.itemName,
-        category = createItemDTO.category,
-        price = createItemDTO.price,
-        amount = createItemDTO.amount,
-        degree = createItemDTO.degree,
-        itemDescription = createItemDTO.itemDescription,
-        itemStatus = true,
-    )
-}
 
 // 등록 성공시 reposneBody에 저장되는 함수
 fun setCreateSuccessItemResultDTO(): CreateItemResultDTO {

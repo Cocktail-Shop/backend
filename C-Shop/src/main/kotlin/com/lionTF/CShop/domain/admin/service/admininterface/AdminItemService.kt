@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable
 
 interface AdminItemService {
 
-    fun createItem(createItemDTO: ItemDTO): CreateItemResultDTO
+    fun createItem(requestCreateItemDTO: RequestCreateItemDTO): AdminResponseDTO
 
-    fun updateItem(itemId: Long, createItemDTO: ItemDTO): CreateItemResultDTO
+    fun updateItem(itemId: Long, createItemDTO: RequestCreateItemDTO): CreateItemResultDTO
 
     fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO
 

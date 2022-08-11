@@ -1,6 +1,6 @@
 package com.lionTF.CShop.domain.admin.controller
 
-import com.lionTF.CShop.domain.admin.controller.dto.ItemDTO
+import com.lionTF.CShop.domain.admin.controller.dto.RequestCreateItemDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteItemResultDTO
 import com.lionTF.CShop.domain.admin.models.Category
@@ -23,20 +23,18 @@ class AdminItemController(
     // 상품 등록 페이지
     @GetMapping("items")
     fun getCreateItemForm(model: Model): String {
-        val createItemDTO = ItemDTO()
-        model.addAttribute("createItemDTO", createItemDTO)
-
+        model.addAttribute("createItemDTO", RequestCreateItemDTO.toFormDTO())
         return "admins/item/createItemForm"
     }
 
     // 상품 등록
     @PostMapping("items")
     fun createItem(
-        createItemDTO: ItemDTO,
-        model: Model
+        model: Model,
+        requestCreateItemDTO: RequestCreateItemDTO
     ): String {
-        model.addAttribute("createItemDTO", adminItemService.createItem(createItemDTO))
-        return "redirect:/admins/all-item"
+        model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO))
+        return "global/message"
     }
 
 
@@ -65,7 +63,7 @@ class AdminItemController(
     @PutMapping("items/{itemId}")
     fun updateItem(
         @PathVariable("itemId") itemId: Long,
-        @ModelAttribute("item") item: ItemDTO
+        @ModelAttribute("item") item: RequestCreateItemDTO
     ): String {
         adminItemService.updateItem(itemId, item)
         return "redirect:/admins/all-item"
