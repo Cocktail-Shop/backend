@@ -3,6 +3,7 @@ package com.lionTF.CShop.domain.admin.controller.dto
 import com.lionTF.CShop.domain.shop.models.OrderStatus
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
+import java.time.LocalDateTime
 
 
 data class ResponseSearchOrdersResultDTO(
@@ -31,6 +32,7 @@ data class FindOrdersDTO(
     var itemName: String,
     var price: Int,
     var amount: Int,
+    var createdAt: LocalDateTime,
     var itemImgUrl: String,
     var memberId: Long,
     var id: String,

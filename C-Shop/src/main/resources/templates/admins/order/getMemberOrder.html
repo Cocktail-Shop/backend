@@ -143,6 +143,7 @@
                                                     <th>상품명</th>
                                                     <th>가격</th>
                                                     <th>수량</th>
+                                                    <th>주문 날짜</th>
                                                     <th>회원 아이디</th>
                                                     <th>회원 이름</th>
                                                     <th>주문 취소</th>
@@ -152,8 +153,9 @@
                                                     <td th:text="${order.orderStatus}"></td>
                                                     <td th:text="${order.itemId}"></td>
                                                     <td th:text="${order.itemName}"></td>
-                                                    <td th:text="${order.price}"></td>
+                                                    <td th:text="${order.price * order.amount}"></td>
                                                     <td th:text="${order.amount}"></td>
+                                                    <td th:text="${order.createdAt}"></td>
                                                     <td th:text="${order.id}"></td>
                                                     <td th:text="${order.memberName}"></td>
                                                     <td>
@@ -175,7 +177,7 @@
                                                 <ul class="pagination ">
                                                     <!-- 이전으로 이동 -->
                                                     <li th:classappend="${searchOrders.result.first} ? 'disabled'" class="page-item">
-                                                        <a class="page-link" th:href="${searchOrders.result.first} ? '#' : @{/admins/orders/(page=${pageNumber - 1},keyword=${searchOrders.keyword})}" aria-label="Previous">
+                                                        <a class="page-link" th:href="${searchOrders.result.first} ? '#' : @{/admins/members/orders/(page=${pageNumber - 1},keyword=${searchOrders.keyword})}" aria-label="Previous">
                                                             <span aria-hidden="true">&lt;</span>
                                                             <span class="sr-only">Previous</span>
                                                         </a>
@@ -183,12 +185,12 @@
 
                                                     <!-- 특정 페이지로 이동 -->
                                                     <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
-                                                        <a th:text="${page}" class="page-link" th:href="@{/admins/orders/(page=${page - 1},keyword=${searchOrders.keyword})}"></a>
+                                                        <a th:text="${page}" class="page-link" th:href="@{/admins/members/orders/(page=${page - 1},keyword=${searchOrders.keyword})}"></a>
                                                     </li>
 
                                                     <!-- 다음으로 이동 -->
                                                     <li th:classappend="${searchOrders.result.last} ? 'disabled'" class="page-item">
-                                                        <a class="page-link" th:href="${searchOrders.result.last} ? '#' : @{/admins/orders/(page=${pageNumber + 1},keyword=${searchOrders.keyword})}" aria-label="Next">
+                                                        <a class="page-link" th:href="${searchOrders.result.last} ? '#' : @{/admins/members/orders/(page=${pageNumber + 1},keyword=${searchOrders.keyword})}" aria-label="Next">
                                                             <span aria-hidden="true">&gt;</span>
                                                             <span class="sr-only">Next</span>
                                                         </a>

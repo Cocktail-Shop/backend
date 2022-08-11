@@ -63,8 +63,14 @@ class Item(
         itemDescription = requestCreateItemDTO.itemDescription
     }
 
+
+    // 상품 삭제
     fun delete() {
         itemStatus = false
-        amount++
+    }
+
+    // 주문 취소 후 수량 복귀
+    fun addStock(quantity: Int) {
+        amount += quantity
     }
 }

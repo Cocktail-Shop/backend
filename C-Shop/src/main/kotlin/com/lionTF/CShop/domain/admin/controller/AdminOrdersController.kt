@@ -20,9 +20,6 @@ class AdminOrdersController(
         model: Model
     ): String {
         val allOrders = adminOrderService.getAllOrders(pageable)
-        println("all = ${allOrders.result!!.content[0].id}")
-        println("all = ${allOrders.result!!.content[0].memberName}")
-        println("all = ${allOrders.result!!.content[0].memberId}")
         model.addAttribute("orders", adminOrderService.getAllOrders(pageable))
         return "admins/order/getAllOrder"
     }
@@ -44,7 +41,7 @@ class AdminOrdersController(
         @PathVariable("orderId") orderId: Long,
         model: Model
     ): String {
-        model.addAttribute("result", adminOrderService.deleteOneOrder(orderId))
+        model.addAttribute("result", adminOrderService.cancelOneOrder(orderId))
         return "global/message"
     }
 

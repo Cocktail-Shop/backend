@@ -134,6 +134,7 @@
                                                     <th>상품명</th>
                                                     <th>가격</th>
                                                     <th>수량</th>
+                                                    <th>주문 날짜</th>
                                                     <th>회원 아이디</th>
                                                     <th>회원 이름</th>
                                                     <th>주문 취소</th>
@@ -143,8 +144,9 @@
                                                     <td th:text="${order.orderStatus}"></td>
                                                     <td th:text="${order.itemId}"></td>
                                                     <td th:text="${order.itemName}"></td>
-                                                    <td th:text="${order.price}"></td>
+                                                    <td th:text="${order.price * order.amount}"></td>
                                                     <td th:text="${order.amount}"></td>
+                                                    <td th:text="${order.createdAt}"></td>
                                                     <td th:text="${order.id}"></td>
                                                     <td th:text="${order.memberName}"></td>
                                                     <td>

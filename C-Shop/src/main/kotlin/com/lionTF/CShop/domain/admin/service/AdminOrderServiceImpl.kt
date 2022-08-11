@@ -1,10 +1,11 @@
 package com.lionTF.CShop.domain.admin.service
 
 import com.lionTF.CShop.domain.admin.controller.dto.*
+import com.lionTF.CShop.domain.admin.repository.AdminOrderItemRepository
 import com.lionTF.CShop.domain.admin.repository.AdminOrderRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminOrderService
 import com.lionTF.CShop.domain.shop.models.Orders
-import org.springframework.data.domain.Page
+import com.lionTF.CShop.domain.shop.repository.OrderItemRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
@@ -15,11 +16,12 @@ import javax.transaction.Transactional
 class AdminOrderServiceImpl(
 
     private val adminOrderRepository: AdminOrderRepository,
+    private val adminOrderItemRepository: AdminOrderItemRepository
 
 ) : AdminOrderService {
 
     // 하나의 주문 취소
-    override fun deleteOneOrder(orderId: Long): AdminResponseDTO {
+    override fun cancelOneOrder(orderId: Long): AdminResponseDTO {
         val existsOrder = adminOrderRepository.existsById(orderId)
 
         return if (!existsOrder) {
@@ -27,7 +29,10 @@ class AdminOrderServiceImpl(
 
         } else {
             val order = adminOrderRepository.getReferenceById(orderId)
-            order.deleteOrder()
+            order.cancelOrder()
+
+            val orderItem = adminOrderItemRepository.getOrderItemByOrdersId(orderId)
+            orderItem.cancel()
 
             AdminResponseDTO.toSuccessDeleteOrderResponseDTO()
         }

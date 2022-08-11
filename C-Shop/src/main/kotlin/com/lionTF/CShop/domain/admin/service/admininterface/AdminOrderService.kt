@@ -9,7 +9,7 @@ interface AdminOrderService {
 
 //    fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO
 
-    fun deleteOneOrder(orderId: Long): AdminResponseDTO
+    fun cancelOneOrder(orderId: Long): AdminResponseDTO
 
     fun getAllOrders(pageable: Pageable): ResponseSearchOrdersResultDTO
 

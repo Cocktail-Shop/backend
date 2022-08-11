@@ -224,7 +224,7 @@ internal class AdminOrderServiceTest {
         //given
 
         //when
-        val deleteOneOrder = adminOrderService.deleteOneOrder(order!!.orderId)
+        val deleteOneOrder = adminOrderService.cancelOneOrder(order!!.orderId)
 
         //then
         assertThat(deleteOneOrder.status).isEqualTo(setDeleteSuccessOrdersResultDTO().status)
@@ -239,7 +239,7 @@ internal class AdminOrderServiceTest {
         val orderId: Long = 98L
 
         //then
-        assertThrows<JpaObjectRetrievalFailureException> { adminOrderService.deleteOneOrder(orderId) }
+        assertThrows<JpaObjectRetrievalFailureException> { adminOrderService.cancelOneOrder(orderId) }
     } 
 
     @Test
