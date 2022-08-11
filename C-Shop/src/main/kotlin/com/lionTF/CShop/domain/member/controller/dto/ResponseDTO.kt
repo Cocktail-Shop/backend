@@ -5,7 +5,9 @@ import org.springframework.http.HttpStatus
 
 data class ResponseDTO(val status:Int,val message:String,var href:String="") {
     companion object{
-
+        fun toFailedLoginResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"아이디 혹은 비밀번호를 확인해주세요.","/members/login")
+        }
         fun toSuccessSignUpResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.CREATED.value(),"아이디 생성 성공입니다.","/members/login")
         }

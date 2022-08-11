@@ -31,7 +31,7 @@ class SecurityConfig {
             .loginPage("/members/login")
             .loginProcessingUrl("/members/login")
             .defaultSuccessUrl("/members")
-            .failureUrl("/members/login")
+            .failureUrl("/members/login-fail")
             .and()
             .logout()
             .logoutUrl("/members/logout") // 로그아웃 처리 URL

@@ -64,16 +64,17 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
 
     //마이페이지 정보 조회
     fun getMyPageInfo(memberId: Long?): ResponseMyPageDTO {
-        val member = memberAuthRepository.findByMemberId(memberId).get()
+        val member = memberAuthRepository.findByMemberId(memberId).orElseThrow()
         return ResponseMyPageDTO.memberToResponseMyPageDTO(member)
     }
 
     //마이페이지 정보 수정
     fun updateMyPageInfo(memberId:Long?,requestUpdateMyPageDTO: RequestUpdateMyPageDTO):ResponseDTO{
-        val existMember=memberAuthRepository.findByMemberId(memberId).get()
+        val existMember=memberAuthRepository.findByMemberId(memberId).orElseThrow()
 
         val existInfo=memberAuthRepository.findById(requestUpdateMyPageDTO.id)
         val canUpdate=!(existInfo.isPresent && existInfo.get().memberId!=memberId)//이미 존재하는 아이디면서 본인 아이디가 아닌 케이스가 아닌 케이스
+
 
         return if(canUpdate) {
             existMember.updateMember(requestUpdateMyPageDTO)
@@ -86,7 +87,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
     }
 
     fun updatePassword(memberId:Long?,requestUpdatePasswordDTO: RequestUpdatePasswordDTO):ResponseDTO{
-        val existMember=memberAuthRepository.findByMemberId(memberId).get()
+        val existMember=memberAuthRepository.findByMemberId(memberId).orElseThrow()
 
         val pastPassword=requestUpdatePasswordDTO.pastPassword
         val newPassword=requestUpdatePasswordDTO.newPassword
@@ -106,7 +107,7 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
     }
 
     fun deleteMember(authMemberDTO: AuthMemberDTO?):ResponseDTO{
-        val existMember=memberAuthRepository.findByMemberId(authMemberDTO?.memberId).get()
+        val existMember=memberAuthRepository.findByMemberId(authMemberDTO?.memberId).orElseThrow()
         existMember.deleteMember()
         return ResponseDTO.toDeleteMemberResponseDTO()
     }

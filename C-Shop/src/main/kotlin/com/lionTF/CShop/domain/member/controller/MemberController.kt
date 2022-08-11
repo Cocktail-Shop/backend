@@ -21,6 +21,12 @@ class MemberController(private val memberService: MemberService) {
         return "members/login"
     }
 
+    @GetMapping("/members/login-fail")
+    fun loginFail(model: Model):String{
+        model.addAttribute("result",ResponseDTO.toFailedLoginResponseDTO())
+        return "global/message"
+    }
+
     @GetMapping("/members/success")
     fun successLogin(): String {
         return "success"
