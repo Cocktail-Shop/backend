@@ -5,6 +5,7 @@ import com.lionTF.CShop.domain.admin.controller.dto.CreateCocktailResultDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteCocktailDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteCocktailResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
+import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.CShop.domain.shop.controller.dto.CocktailResultDTO
 import com.lionTF.CShop.domain.shop.service.CocktailService
 import org.springframework.data.domain.Pageable
@@ -12,12 +13,18 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import java.util.LinkedHashMap
+
+import org.springframework.web.bind.annotation.ModelAttribute
+
+
+
 
 @Controller
 @RequestMapping("/admins")
 class AdminCocktailController(
     private val adminCocktailService: AdminCocktailService,
-
+    private val adminItemService: AdminItemService,
     private val cocktailService: CocktailService,
 ) {
 
@@ -85,5 +92,17 @@ class AdminCocktailController(
         @RequestBody createCocktailDTO: CreateCocktailDTO
     ): CreateCocktailResultDTO {
         return adminCocktailService.updateCocktail(createCocktailDTO, cocktailId)
+    }
+
+    @ModelAttribute("getItems")
+    private fun favorite(pageable: Pageable): Map<Long, String> {
+        var getItems: MutableMap<Long, String> = LinkedHashMap()
+        var items = adminItemService.getAllItems(pageable)
+
+        for (item in items) {
+            getItems[item.itemId] = item.itemName
+        }
+
+        return getItems
     }
 }
