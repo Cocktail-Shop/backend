@@ -12,11 +12,11 @@ interface AdminItemService {
 
     fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO
 
-    fun getAllItems(pageable: Pageable): Page<FindItemDTO>
+    fun getAllItems(pageable: Pageable): ResponseItemSearchDTO
 
-    fun getItemsByName(keyword: String, pageable: Pageable): Page<FindItemDTO>
+    fun getItemsByName(keyword: String, pageable: Pageable): ResponseItemSearchDTO
 
-    fun deleteOneItem(itemId: Long): DeleteItemResultDTO
+    fun deleteOneItem(itemId: Long): AdminResponseDTO
 
     fun findItem(itemId: Long): ResponseItemDTO
 }

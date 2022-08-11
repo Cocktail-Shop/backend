@@ -83,11 +83,11 @@ class AdminItemServiceImpl(
     }
 
     // 하나의 상품 삭제
-    override fun deleteOneItem(itemId: Long): DeleteItemResultDTO {
+    override fun deleteOneItem(itemId: Long): AdminResponseDTO {
         val item = adminItemRepository.getReferenceById(itemId)
 
         item.delete()
-        return setDeleteSuccessItemResultDTO()
+        return AdminResponseDTO.toSuccessDeleteItemResponseDTO()
     }
 
     // 상품 단건 조회
@@ -108,11 +108,16 @@ class AdminItemServiceImpl(
     }
 
     // 상품 전체 조회
-    override fun getAllItems(pageable: Pageable): Page<FindItemDTO> {
-        return adminItemRepository.findAllItems(pageable)
+    override fun getAllItems(pageable: Pageable): ResponseItemSearchDTO {
+        val findAllItems = adminItemRepository.findAllItems(pageable)
+
+        return ResponseItemSearchDTO.itemToResponseItemSearchPageDTO(findAllItems, "")
     }
 
-    override fun getItemsByName(keyword: String, pageable: Pageable): Page<FindItemDTO> {
-        return adminItemRepository.findItemsByName(keyword, pageable)
+    // 상품 이름으로 조회
+    override fun getItemsByName(keyword: String, pageable: Pageable): ResponseItemSearchDTO {
+        val findItemsByItemName = adminItemRepository.findItemsByName(keyword, pageable)
+
+        return ResponseItemSearchDTO.itemToResponseItemSearchPageDTO(findItemsByItemName, keyword)
     }
 }

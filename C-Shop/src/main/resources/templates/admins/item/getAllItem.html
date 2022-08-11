@@ -121,7 +121,8 @@
                                                     <ul class="dropdown-menu search-dropdown">
                                                         <li>
                                                             <form th:action="@{/admins/search/items}" th:method="get">
-                                                                <input name="keyword" type="search" class="form-control" placeholder="상품 검색(to상품명)..."></form>
+                                                                <input name="keyword" type="search" class="form-control" placeholder="상품 검색(to상품명)...">
+                                                            </form>
                                                         </li>
                                                     </ul>
                                                 </li><!-- / Search -->
@@ -137,7 +138,7 @@
                                                     <th>수정</th>
                                                     <th>상품 삭제</th>
                                                 </tr>
-                                                <tr th:each="item : ${items}">
+                                                <tr th:each="item : ${items.result.content}">
                                                     <td th:text="${item.itemName}"></td>
                                                     <td th:text="${item.price}"></td>
                                                     <td th:text="${item.amount}"></td>
@@ -155,9 +156,9 @@
                                         </div>
                                         <div th:if="${items}">
                                             <!-- 전역 변수 선언 -->
-                                            <nav th:with=" pageNumber = ${items.pageable.pageNumber},
-                                                pageSize = ${items.pageable.pageSize},
-                                                totalPages = ${items.totalPages},
+                                            <nav th:with=" pageNumber = ${items.result.pageable.pageNumber},
+                                                pageSize = ${items.result.pageable.pageSize},
+                                                totalPages = ${items.result.totalPages},
                                                 startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
                                                 tempEndPage = ${startPage + pageSize - 1},
                                                 endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})" aria-label="Page navigation">
@@ -171,8 +172,8 @@
                                                     </li>
 
                                                     <!-- 이전으로 이동 -->
-                                                    <li th:classappend="${items.first} ? 'disabled'" class="page-item">
-                                                        <a class="page-link" th:href="${items.first} ? '#' : @{/admins/all-item/(page=${pageNumber - 1})}" aria-label="Previous">
+                                                    <li th:classappend="${items.result.first} ? 'disabled'" class="page-item">
+                                                        <a class="page-link" th:href="${items.result.first} ? '#' : @{/admins/all-item/(page=${pageNumber - 1})}" aria-label="Previous">
                                                             <span aria-hidden="true">&lt;</span>
                                                             <span class="sr-only">Previous</span>
                                                         </a>
@@ -184,8 +185,8 @@
                                                     </li>
 
                                                     <!-- 다음으로 이동 -->
-                                                    <li th:classappend="${items.last} ? 'disabled'" class="page-item">
-                                                        <a class="page-link" th:href="${items.last} ? '#' : @{/admins/all-item/(page=${pageNumber + 1})}" aria-label="Next">
+                                                    <li th:classappend="${items.result.last} ? 'disabled'" class="page-item">
+                                                        <a class="page-link" th:href="${items.result.last} ? '#' : @{/admins/all-item/(page=${pageNumber + 1})}" aria-label="Next">
                                                             <span aria-hidden="true">&gt;</span>
                                                             <span class="sr-only">Next</span>
                                                         </a>

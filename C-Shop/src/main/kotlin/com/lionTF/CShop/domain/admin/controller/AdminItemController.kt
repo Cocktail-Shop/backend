@@ -17,24 +17,6 @@ class AdminItemController(
     private val adminItemService: AdminItemService,
 ) {
 
-    // 상품 등록 페이지
-    @GetMapping("items")
-    fun getCreateItemForm(model: Model): String {
-        model.addAttribute("createItemDTO", RequestCreateItemDTO.toFormDTO())
-        return "admins/item/createItemForm"
-    }
-
-    // 상품 등록
-    @PostMapping("items")
-    fun createItem(
-        model: Model,
-        requestCreateItemDTO: RequestCreateItemDTO
-    ): String {
-        model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO))
-        return "global/message"
-    }
-
-
     // 전체 상품 조회
     @GetMapping("all-item")
     fun getAllItems(
@@ -54,6 +36,24 @@ class AdminItemController(
     ): String {
         model.addAttribute("items", adminItemService.getItemsByName(keyword, pageable))
         return "admins/item/getItemsByName"
+    }
+
+    // 상품 등록 페이지
+    @GetMapping("items")
+    fun getCreateItemForm(model: Model): String {
+        model.addAttribute("createItemDTO", RequestCreateItemDTO.toFormDTO())
+        return "admins/item/createItemForm"
+    }
+
+
+    // 상품 등록
+    @PostMapping("items")
+    fun createItem(
+        model: Model,
+        requestCreateItemDTO: RequestCreateItemDTO
+    ): String {
+        model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO))
+        return "global/message"
     }
 
     // 상품 수정 페이지
@@ -84,9 +84,12 @@ class AdminItemController(
 
     // 한개 상품 삭제
     @DeleteMapping("items/{itemId}")
-    fun deleteOneItem(@PathVariable("itemId") itemId: Long): String {
-        adminItemService.deleteOneItem(itemId)
-        return "redirect:/admins/all-item"
+    fun deleteOneItem(
+        @PathVariable("itemId") itemId: Long,
+        model: Model
+    ): String {
+        model.addAttribute("result", adminItemService.deleteOneItem(itemId))
+        return "global/message"
     }
 
     // 라디오 박스에 카테고리 이넘타입의 내용을 배열로 반환

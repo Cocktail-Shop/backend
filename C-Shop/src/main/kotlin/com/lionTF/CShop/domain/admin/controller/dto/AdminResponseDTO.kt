@@ -32,5 +32,13 @@ data class AdminResponseDTO(val httpStatus: Int, val message: String, var href: 
         fun toFailUpdateItemResponseDTO(): AdminResponseDTO {
             return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 않는 상품입니다.", "/admins/all-item")
         }
+
+        fun toSuccessDeleteItemResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.NO_CONTENT.value(), "상품이 정삭적으로 삭제되었습니다.", "/admins/all-item")
+        }
+
+        fun toFailDeleteItemResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 않는 상품입니다.", "/admins/all-item")
+        }
     }
 }

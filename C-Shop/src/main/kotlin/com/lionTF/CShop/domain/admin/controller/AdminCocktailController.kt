@@ -102,7 +102,7 @@ class AdminCocktailController(
         var map: MutableMap<Long, String> = LinkedHashMap()
         var items = adminItemService.getAllItems(pageable)
 
-        for (item in items) {
+        for (item in items.result!!.content) {
             map[item.itemId] = item.itemName
         }
 
