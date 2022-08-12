@@ -4,10 +4,9 @@ import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
-import java.util.stream.Collectors.*
 import javax.transaction.Transactional
 
 @Service
@@ -19,69 +18,110 @@ class AdminItemServiceImpl(
 ): AdminItemService {
 
     // 상품 등록
-    override fun createItem(createItemDTO: ItemDTO): CreateItemResultDTO {
-        // 상품 존재 여부
-        val existsItemName = adminItemRepository.existsByItemName(createItemDTO.itemName, true, createItemDTO.degree)
+    override fun createItem(requestCreateItemDTO: RequestCreateItemDTO): AdminResponseDTO {
 
-        return if (existsItemName == null) {
-            adminItemRepository.save(itemDTOToItem(createItemDTO))
-            setCreateSuccessItemResultDTO()
+        return if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) { // 가격 & 수량이 0이하일 경우
+            AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO()
+
+        } else if (requestCreateItemDTO.amount <= 0) {  // 수량이 0이하일 경우
+            AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO()
+
+        } else if (requestCreateItemDTO.price <= 0) {  // 가격이 0이하일 경우
+            AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO()
+
         } else {
-            setCreateFailItemResultDTO()
+            adminItemRepository.save(Item.requestCreateItemDTOtoItem(requestCreateItemDTO))
+            AdminResponseDTO.toSuccessCreateItemResponseDTO()
         }
     }
 
 
     // 상품 수정
-    override fun updateItem(itemId: Long, createItemDTO: ItemDTO): CreateItemResultDTO {
+    override fun updateItem(itemId: Long, requestCreateItemDTO: RequestCreateItemDTO): Any {
         val existsItem = adminItemRepository.existsById(itemId)
 
-        return if (existsItem) {
-            val item = adminItemRepository.findById(itemId).orElseThrow()
-            item.update(createItemDTO)
+        return if (!existsItem) { // 존재하지 않은 상품일 때
+            AdminResponseDTO.toFailUpdateItemResponseDTO()
+        }
+        else if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) { // 가격 & 수량이 0이하일 경우
+            AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO()
+        }
+        else if (requestCreateItemDTO.amount <= 0) { // 수량이 0이하일 경우
+            AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO()
+        }
+        else if (requestCreateItemDTO.price <= 0) { // 가격이 0이하일 경우
+            AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO()
+        }
+        else {
+            adminItemRepository.getReferenceById(itemId).update(requestCreateItemDTO)
 
-            setUpdateSuccessItemResultDTO()
-        } else {
-            setUpdateFailItemResultDTO()
+            AdminResponseDTO.toSuccessUpdateItemResponseDTO()
         }
     }
 
-    // 상품 삭제
-    override fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
-        deleteItemDTO.itemIds.forEach{
-            val findItemStatusById = adminItemRepository.findItemStatusById(it)
-
-            when {
-                findItemStatusById == null -> {
-                    return setDeleteFailItemResultDTO()
-                }
-                findItemStatusById -> {
-                    val item = adminItemRepository.findById(it).orElseThrow()
-                    item.delete()
-                }
-                else -> {
-                    return setDeleteFailItemResultDTO()
-                }
-            }
-        }
-
-        return setDeleteSuccessItemResultDTO()
-    }
 
     // 하나의 상품 삭제
-    override fun deleteOneItem(itemId: Long): DeleteItemResultDTO {
-        val item = adminItemRepository.getReferenceById(itemId)
+    override fun deleteOneItem(itemId: Long): AdminResponseDTO {
+        val existsItem = adminItemRepository.existsById(itemId)
 
-        item.delete()
-        return setDeleteSuccessItemResultDTO()
+        return if (!existsItem) {
+            AdminResponseDTO.toFailDeleteItemResponseDTO()
+        } else {
+            val item = adminItemRepository.getReferenceById(itemId)
+            item.delete()
+
+            AdminResponseDTO.toSuccessDeleteItemResponseDTO()
+        }
+    }
+
+    // 상품 단건 조회
+    override fun findItem(itemId: Long): ResponseItemDTO {
+        val existsItem = adminItemRepository.existsById(itemId)
+
+        return if (!existsItem) {
+            ResponseItemDTO(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "존재 하지 않는 상품입니다.",
+                null
+            )
+        } else {
+            val itemResultDTO = adminItemRepository.findItemById(itemId)
+            return ResponseItemDTO.itemToResponseItemPageDTO(itemResultDTO)
+        }
+
     }
 
     // 상품 전체 조회
-    override fun getAllItems(pageable: Pageable): Page<FindItemDTO> {
-        return adminItemRepository.findAllItems(pageable)
+    override fun getAllItems(pageable: Pageable): ResponseSearchItemSearchDTO {
+        val findAllItems = adminItemRepository.findAllItems(pageable)
+
+        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(findAllItems, "")
     }
 
-    override fun getItemsByName(keyword: String, pageable: Pageable): Page<FindItemDTO> {
-        return adminItemRepository.findItemsByName(keyword, pageable)
+    // 상품 이름으로 조회
+    override fun getItemsByName(keyword: String, pageable: Pageable): ResponseSearchItemSearchDTO {
+        val findItemsByItemName = adminItemRepository.findItemsByName(keyword, pageable)
+
+        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(findItemsByItemName, keyword)
     }
+
+    // 상품 삭제
+//    override fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
+//        deleteItemDTO.itemIds.forEach{
+//            val findItemStatusById = adminItemRepository.findItemStatusById(it)
+//
+//            if (findItemStatusById == null) {
+//                return setDeleteFailItemResultDTO()
+//            }
+//            else if (findItemStatusById) {
+//                val item = adminItemRepository.findById(it).orElseThrow()
+//                item.delete()
+//            }
+//            else {
+//                return setDeleteFailItemResultDTO()
+//            }
+//        }
+//
+//        return setDeleteSuccessItemResultDTO()
+//    }
 }

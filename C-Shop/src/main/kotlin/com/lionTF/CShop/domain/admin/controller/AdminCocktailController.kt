@@ -5,6 +5,7 @@ import com.lionTF.CShop.domain.admin.controller.dto.CreateCocktailResultDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteCocktailDTO
 import com.lionTF.CShop.domain.admin.controller.dto.DeleteCocktailResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
+import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.CShop.domain.shop.controller.dto.CocktailResultDTO
 import com.lionTF.CShop.domain.shop.service.CocktailService
 import org.springframework.data.domain.Pageable
@@ -12,17 +13,23 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import java.util.LinkedHashMap
+
+import org.springframework.web.bind.annotation.ModelAttribute
+
+
+
 
 @Controller
 @RequestMapping("/admins")
 class AdminCocktailController(
     private val adminCocktailService: AdminCocktailService,
-
+    private val adminItemService: AdminItemService,
     private val cocktailService: CocktailService,
 ) {
 
     // 전체 칵테일 조회
-    @GetMapping("all_cocktails")
+    @GetMapping("all-cocktails")
     fun getCocktails(
         model: Model,
         @PageableDefault(size = 2) pageable: Pageable
@@ -46,15 +53,18 @@ class AdminCocktailController(
     @GetMapping("cocktails")
     fun getCreateCocktailForm(model: Model): String {
         val createCocktailDTO = CreateCocktailDTO()
-        model.addAttribute("form", createCocktailDTO)
+        model.addAttribute("createCocktailDTO", createCocktailDTO)
 
         return "admins/cocktail/createCocktailForm"
     }
 
     // 칵테일 상품 등록
     @PostMapping("cocktails")
-    fun createCocktail(@RequestBody createCocktailDTO: CreateCocktailDTO): CreateCocktailResultDTO {
-        return adminCocktailService.createCocktail(createCocktailDTO)
+    fun createCocktail(
+        model: Model,
+        createCocktailDTO: CreateCocktailDTO): String {
+        model.addAttribute("createCocktailDTO",adminCocktailService.createCocktail(createCocktailDTO))
+        return "redirect:/admins/all-cocktails"
     }
 
 
@@ -74,7 +84,7 @@ class AdminCocktailController(
     @DeleteMapping("cocktails/{cocktailId}")
     fun deleteOneCocktail(@PathVariable("cocktailId") cocktailId: Long): String {
         adminCocktailService.deleteOneCocktail(cocktailId)
-        return "admins/cocktail/getAllCocktail"
+        return "redirect:/admins/all-cocktails"
     }
 
 
@@ -85,5 +95,17 @@ class AdminCocktailController(
         @RequestBody createCocktailDTO: CreateCocktailDTO
     ): CreateCocktailResultDTO {
         return adminCocktailService.updateCocktail(createCocktailDTO, cocktailId)
+    }
+
+    @ModelAttribute("itemIds")
+    fun favorite(pageable: Pageable): Map<Long, String> {
+        var map: MutableMap<Long, String> = LinkedHashMap()
+        var items = adminItemService.getAllItems(pageable)
+
+        for (item in items.result!!.content) {
+            map[item.itemId] = item.itemName
+        }
+
+        return map
     }
 }

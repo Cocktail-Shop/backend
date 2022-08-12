@@ -51,6 +51,7 @@ class AdminCocktailRepositoryImpl(
             .select(
                 Projections.constructor(
                     FindCocktails::class.java,
+                    cocktail.cocktailId,
                     cocktail.cocktailName,
                     cocktail.cocktailDescription,
                     cocktail.createdAt
