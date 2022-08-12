@@ -1,7 +1,7 @@
 package com.lionTF.CShop.domain.shop.controller
 
 import com.lionTF.CShop.domain.shop.controller.dto.PageRequestDTO
-import com.lionTF.CShop.domain.shop.service.PageSerivce
+import com.lionTF.CShop.domain.shop.service.shopinterface.PageSerivce
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping

@@ -16,36 +16,44 @@ data class ItemDTO (
     var itemDescription: String,
     var itemImgUrl: String,
     var itemStatus: Boolean,
-)
+){
+    companion object{
+        //아이템에 관한 정보를 dto로 변환하는 메소드
+        fun itemToItemDTO(item: Item): ItemDTO {
+            return ItemDTO(
+                itemId = item.itemId,
+                category = item.category,
+                itemName = item.itemName,
+                price = item.price,
+                amount = item.amount,
+                degree = item.degree,
+                itemDescription = item.itemDescription,
+                itemImgUrl = item.itemImgUrl,
+                itemStatus = item.itemStatus,
+            )
+        }
+    }
+}
 
 //상품 단건 조회시 최종 응답 형태를 맞춰주기 위한 dto
 data class ItemResultDTO(
     val status: Int,
     val message: String,
     val result: ItemDTO
-)
-
-//아이템에 관한 정보를 dto로 변환하는 메소드
-fun itemToItemDTO(item: Item): ItemDTO {
-    return ItemDTO(
-        itemId = item.itemId,
-        category = item.category,
-        itemName = item.itemName,
-        price = item.price,
-        amount = item.amount,
-        degree = item.degree,
-        itemDescription = item.itemDescription,
-        itemImgUrl = item.itemImgUrl,
-        itemStatus = item.itemStatus,
-    )
+){
+    companion object{
+        //상품 단건 조회시, 응답 형태를 맞춰주기 위한 메소드
+        fun setItemResultDTO(result: ItemDTO): ItemResultDTO {
+            return ItemResultDTO(
+                status = HttpStatus.OK.value(),
+                message = "상품 조회 성공",
+                result = result
+            )
+        }
+    }
 }
 
-//상품 단건 조회시, 응답 형태를 맞춰주기 위한 메소드
-fun setItemResultDTO(result: ItemDTO): ItemResultDTO {
-    return ItemResultDTO(
-        status = HttpStatus.OK.value(),
-        message = "상품 조회 성공",
-        result = result
-    )
-}
+
+
+
 
