@@ -6,8 +6,8 @@ import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
 import com.lionTF.CShop.domain.shop.models.Cart
 import com.lionTF.CShop.domain.shop.repository.CartRepository
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
-import org.springframework.http.ResponseEntity
+import org.springframework.mail.SimpleMailMessage
+import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
@@ -18,6 +18,9 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
 
     @Autowired
     private lateinit var passwordEncoder: PasswordEncoder
+
+    @Autowired
+    private lateinit var javaMailService: JavaMailSender
 
     //회원가입 로직
     fun registerMember(requestSignUpDTO: RequestSignUpDTO):ResponseDTO{
@@ -53,9 +56,20 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
     }
     //비밀번호 찾기
     fun passwordInquiry(passwordInquiryDTO: RequestPasswordInquiryDTO):ResponseDTO{
-        val existMember=memberAuthRepository.findByIdAndEmail(passwordInquiryDTO.id,passwordInquiryDTO.email)
+        val member=memberAuthRepository.findByIdAndEmail(passwordInquiryDTO.id,passwordInquiryDTO.email)
 
-        return if(existMember.isPresent){
+        return if(member.isPresent){
+            //임시 비밀번호 생성
+            var tempPw = UUID.randomUUID().toString().replace("-", "")
+            tempPw = tempPw.substring(0, 8)
+
+            //임시 비밀번호로 변경
+            val existMember=member.get()
+            existMember.password=passwordEncoder.encode(tempPw)
+            memberAuthRepository.save(existMember)
+
+            //메일보내고 return
+            sendTempPasswordMail(MailDTO.toPasswordInquiryMailDTO(existMember.id,existMember.email,tempPw))
             ResponseDTO.toSuccessPasswordInquiryResponseDTO()
         }else{
             ResponseDTO.toFailedPasswordInquiryResponseDTO()
@@ -106,10 +120,24 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
         }
     }
 
+    //회원탈퇴
     fun deleteMember(authMemberDTO: AuthMemberDTO?):ResponseDTO{
         val existMember=memberAuthRepository.findByMemberId(authMemberDTO?.memberId).orElseThrow()
         existMember.deleteMember()
         return ResponseDTO.toDeleteMemberResponseDTO()
     }
+
+    //메일관련
+    fun sendTempPasswordMail(mailDTO: MailDTO){
+        val mailMessage = SimpleMailMessage()
+        mailMessage.setTo(mailDTO.toAddress)
+        mailMessage.setSubject(mailDTO.title)
+        mailMessage.setText(mailDTO.message)
+        mailMessage.setFrom(mailDTO.fromAddress)
+        mailMessage.setReplyTo(mailDTO.fromAddress)
+
+        javaMailService.send(mailMessage)
+    }
+
 
 }
