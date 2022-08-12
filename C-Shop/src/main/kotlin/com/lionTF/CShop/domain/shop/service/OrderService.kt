@@ -49,7 +49,7 @@ class OrderService(
 
         //모든 상품의 재고가 충분한 경우
         if(canOrder){
-            val member = memberRepository.getReferenceById(requestOrderDTO.memberId)
+            val member = requestOrderDTO.memberId?.let { memberRepository.getReferenceById(it) }
 
             //order 저장
             val orders = orderRepository.save(

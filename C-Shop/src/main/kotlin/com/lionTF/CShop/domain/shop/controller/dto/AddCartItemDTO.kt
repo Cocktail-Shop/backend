@@ -4,9 +4,14 @@ import org.springframework.http.HttpStatus
 
 //request body를 저장하기 위한 dto
 data class AddCartItemDTO(
-    val memberId: Long,
+    val memberId: Long?,
     val itemId: Long,
     val amount: Int,
+)
+
+data class AddCartItemRequestDTO(
+    val itemId: Long,
+    var amount: Int = 1,
 )
 
 data class AddCartItemResultDTO(

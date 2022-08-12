@@ -3,11 +3,15 @@ package com.lionTF.CShop.domain.shop.controller.dto
 import org.springframework.http.HttpStatus
 
 data class RequestOrderDTO(
-    val memberId: Long,
+    val memberId: Long?,
     var orderItems: List<RequestOrderItemDTO>,
     val orderAddress: String,
 )
 
+data class RequestOrderInfoDTO(
+    var orderItems: List<RequestOrderItemDTO> = listOf(),
+    val orderAddress: String = "",
+)
 data class RequestOrderItemDTO(
     val itemId: Long,
     val amount: Int,
