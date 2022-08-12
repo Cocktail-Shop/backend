@@ -97,12 +97,12 @@ class AdminCocktailController(
         return adminCocktailService.updateCocktail(createCocktailDTO, cocktailId)
     }
 
-    @ModelAttribute("itemList")
+    @ModelAttribute("itemIds")
     fun favorite(pageable: Pageable): Map<Long, String> {
         var map: MutableMap<Long, String> = LinkedHashMap()
         var items = adminItemService.getAllItems(pageable)
 
-        for (item in items) {
+        for (item in items.result!!.content) {
             map[item.itemId] = item.itemName
         }
 

@@ -1,7 +1,5 @@
 package com.lionTF.CShop.domain.admin.controller
 
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersDTO
-import com.lionTF.CShop.domain.admin.controller.dto.DeleteMembersResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminMemberService
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -15,8 +13,18 @@ class AdminMembersController(
     private val adminMemberService: AdminMemberService,
 ) {
 
+    // 회원 전체 조회
+    @GetMapping("members")
+    fun getAllMembers(
+        @PageableDefault(size = 2) pageable: Pageable,
+        model: Model
+    ): String {
+        model.addAttribute("members" ,adminMemberService.getAllMembers(pageable))
+        return "admins/member/getAllMember"
+    }
+
+
     // 회원 ID로 회원 검색
-    // TODO URL 변경 예정입니다.
     @GetMapping("search/members")
     fun findMembers(
         @RequestParam("keyword") keyword: String,
@@ -27,27 +35,20 @@ class AdminMembersController(
         return "admins/member/getSearchMember"
     }
 
-
-    // 회원 전체 조회
-    @GetMapping("members")
-    fun getAllMembers(
-        model: Model,
-        @PageableDefault(size = 2) pageable: Pageable
-    ): String {
-        model.addAttribute("members" ,adminMemberService.getAllMembers(pageable))
-        return "admins/member/getAllMember"
-    }
-
-    // 한명 이상의 회원 삭제
-    @DeleteMapping("members")
-    fun deleteMembers(@RequestBody deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
-        return adminMemberService.deleteMembers(deleteMembersDTO)
-    }
-
     // 한명의 회원 삭제
     @DeleteMapping("members/{memberId}")
-    fun deleteOneMember(@PathVariable("memberId") memberId: Long): String {
-        adminMemberService.deleteOneMember(memberId)
-        return "redirect:/admins/members"
+    fun deleteOneMember(
+        @PathVariable("memberId") memberId: Long,
+        model: Model
+    ): String {
+        model.addAttribute("result", adminMemberService.deleteOneMember(memberId))
+        return "global/message"
     }
+
+
+    // 한명 이상의 회원 삭제
+//    @DeleteMapping("members")
+//    fun deleteMembers(@RequestBody deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
+//        return adminMemberService.deleteMembers(deleteMembersDTO)
+//    }
 }

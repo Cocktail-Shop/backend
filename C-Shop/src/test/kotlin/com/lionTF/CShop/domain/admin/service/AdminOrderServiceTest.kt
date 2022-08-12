@@ -22,7 +22,6 @@ import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.Pageable
-import org.springframework.http.HttpStatus
 import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
 import org.springframework.security.crypto.password.PasswordEncoder
 import javax.transaction.Transactional
@@ -65,7 +64,7 @@ internal class AdminOrderServiceTest {
 
         order = orderRepository.save(orderDTO)
 
-        val createItemDTO1 = ItemDTO(
+        val createItemDTO1 = RequestCreateItemDTO(
             itemName = "test1",
 
             category = Category.ALCOHOL,
@@ -76,7 +75,7 @@ internal class AdminOrderServiceTest {
         )
         item1 = adminItemRepository.save(itemDTOToItem(createItemDTO1))
 
-        val createItemDTO2 = ItemDTO(
+        val createItemDTO2 = RequestCreateItemDTO(
             itemName = "test2",
             category = Category.ALCOHOL,
             price = 1,
@@ -86,7 +85,7 @@ internal class AdminOrderServiceTest {
         )
         item2 = adminItemRepository.save(itemDTOToItem(createItemDTO2))
 
-        val createItemDTO3 = ItemDTO(
+        val createItemDTO3 = RequestCreateItemDTO(
             itemName = "test2",
             category = Category.ALCOHOL,
             price = 1,
@@ -225,7 +224,7 @@ internal class AdminOrderServiceTest {
         //given
 
         //when
-        val deleteOneOrder = adminOrderService.deleteOneOrder(order!!.orderId)
+        val deleteOneOrder = adminOrderService.cancelOneOrder(order!!.orderId)
 
         //then
         assertThat(deleteOneOrder.status).isEqualTo(setDeleteSuccessOrdersResultDTO().status)
@@ -240,7 +239,7 @@ internal class AdminOrderServiceTest {
         val orderId: Long = 98L
 
         //then
-        assertThrows<JpaObjectRetrievalFailureException> { adminOrderService.deleteOneOrder(orderId) }
+        assertThrows<JpaObjectRetrievalFailureException> { adminOrderService.cancelOneOrder(orderId) }
     } 
 
     @Test

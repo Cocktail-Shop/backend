@@ -69,7 +69,7 @@ internal class AdminItemServiceTest {
     @DisplayName("Item 생성 test")
     fun createItemTest() {
         //given
-        var createItemDTO = ItemDTO(
+        var createItemDTO = RequestCreateItemDTO(
             itemName = "test",
             category = Category.ALCOHOL,
             price = 10000,
@@ -90,7 +90,7 @@ internal class AdminItemServiceTest {
     @DisplayName("Item 생성 예외 test")
     fun createItemExceptionTest() {
         //given
-        var createDuplicatedItemDTO = ItemDTO(
+        var createDuplicatedItemDTO = RequestCreateItemDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 10000,
@@ -111,7 +111,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 test")
     fun updateItemTest() {
         //given
-        var updateItemDTO = ItemDTO(
+        var updateItemDTO = RequestCreateItemDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 40000,
@@ -141,7 +141,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 예외 test")
     fun updateItemExceptionTest() {
         //given
-        var updateItemDTO = ItemDTO(
+        var updateItemDTO = RequestCreateItemDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 40000,
@@ -246,7 +246,7 @@ internal class AdminItemServiceTest {
         adminItemService.deleteItems(deleteItemDTO)
 
         //when
-        var createItemDTO = ItemDTO(
+        var createItemDTO = RequestCreateItemDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 10000,

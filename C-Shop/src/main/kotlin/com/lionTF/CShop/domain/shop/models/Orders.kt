@@ -27,7 +27,7 @@ class Orders(
 ) : BaseTimeEntity(){
 
     // 주문 삭제
-    fun deleteOrder(){
+    fun cancelOrder(){
         orderStatus = OrderStatus.CANCEL
     }
 }
