@@ -25,20 +25,21 @@ class OrderItem (
     @JoinColumn(name = "item_id")
     var item: Item,
 
-    var amount: Int = 0,
-) : BaseTimeEntity() {
-
+    var amount: Int,
+) : BaseTimeEntity(){
 
     // 주문 취소
     fun cancel() {
         item.addStock(amount)
     }
+    companion object{
+        fun orderItemDTOtoOrderItem(orderItemDTO: OrderItemDTO) : OrderItem {
+            return OrderItem(
+                orders = orderItemDTO.orders,
+                item = orderItemDTO.item,
+                amount = orderItemDTO.amount,
+            )
+        }
+    }
 }
 
-    fun orderItemDTOtoOrderItem(orderItemDTO: OrderItemDTO) : OrderItem {
-    return OrderItem(
-        orders = orderItemDTO.orders,
-        item = orderItemDTO.item,
-        amount = orderItemDTO.amount,
-    )
-}

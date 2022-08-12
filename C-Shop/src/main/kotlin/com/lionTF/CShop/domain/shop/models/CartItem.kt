@@ -28,13 +28,16 @@ class CartItem(
     var amount: Int,
 
     ) : BaseTimeEntity() {
+    companion object{
+        fun cartItemDTOToCartItem(cartItemDTO: CartItemDTO) : CartItem {
+            return CartItem(
+                item = cartItemDTO.item,
+                cart = cartItemDTO.cart,
+                amount = cartItemDTO.amount,
+            )
+        }
+    }
     }
 
-fun cartItemDTOToCartItem(cartItemDTO: CartItemDTO) : CartItem {
-    return CartItem(
-        item = cartItemDTO.item,
-        cart = cartItemDTO.cart,
-        amount = cartItemDTO.amount,
-    )
-}
+
 

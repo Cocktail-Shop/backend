@@ -7,5 +7,6 @@ import com.lionTF.CShop.domain.shop.models.OrderStatus
 data class OrdersDTO(
     val member: Member?,
     val orderStatus: OrderStatus,
-    val orderAddress: String,
+    val Address: String,
+    val AddressDetail: String,
 )

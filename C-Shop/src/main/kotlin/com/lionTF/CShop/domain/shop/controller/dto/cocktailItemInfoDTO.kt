@@ -8,14 +8,17 @@ data class CocktailItemInfoDTO(
     val itemName: String,
     val price: Int,
     val amount: Int,
-)
-
-//CocktailItem entity에서 toReadCocktailItemDTO()를 수행시켜주기 위한 메소드
-fun itemToCocktailItemInfoDTO(item: Item): CocktailItemInfoDTO {
-    return CocktailItemInfoDTO(
-        itemId = item.itemId,
-        itemName = item.itemName,
-        price = item.price,
-        amount = item.amount,
-    )
+){
+    companion object{
+        //CocktailItem entity에서 toReadCocktailItemDTO()를 수행시켜주기 위한 메소드
+        fun itemToCocktailItemInfoDTO(item: Item): CocktailItemInfoDTO {
+            return CocktailItemInfoDTO(
+                itemId = item.itemId,
+                itemName = item.itemName,
+                price = item.price,
+                amount = item.amount,
+            )
+        }
+    }
 }
+
