@@ -1,31 +1,35 @@
 package com.lionTF.CShop.domain.shop.service
 
+import com.lionTF.CShop.domain.member.controller.dto.AddressDTO
 import com.lionTF.CShop.domain.shop.controller.dto.OrderItemDTO
 import com.lionTF.CShop.domain.shop.controller.dto.OrdersDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderResultDTO
+import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.domain.shop.models.OrderStatus
-import com.lionTF.CShop.domain.shop.models.orderItemDTOtoOrderItem
-import com.lionTF.CShop.domain.shop.models.ordersDTOToOrders
+import com.lionTF.CShop.domain.shop.models.Orders
 import com.lionTF.CShop.domain.shop.repository.ItemRepository
 import com.lionTF.CShop.domain.shop.repository.MemberRepository
 import com.lionTF.CShop.domain.shop.repository.OrderItemRepository
 import com.lionTF.CShop.domain.shop.repository.OrderRepository
-import org.springframework.http.HttpStatus
+import com.lionTF.CShop.domain.shop.service.shopinterface.OrderService
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
 @Service
-class OrderService(
+class OrderServiceImpl(
     private val orderRepository: OrderRepository,
     private val itemRepository: ItemRepository,
     private val memberRepository: MemberRepository,
     private val orderItemRepository: OrderItemRepository
-) {
+) : OrderService{
     //상품 주문 메소드
     @Transactional
-    fun requestOrder(requestOrderDTO: RequestOrderDTO) : RequestOrderResultDTO {
+    override fun requestOrder(requestOrderDTO: RequestOrderDTO) : RequestOrderResultDTO {
         var canOrder: Boolean = true
+        var isNotDeleted: Boolean = true
+        var isAmountEnough: Boolean = true
+        var isPositive: Boolean = true
         var errorItemsId: MutableList<Long> = mutableListOf()
 
         //요청한 상품들 재고 검사
@@ -33,31 +37,42 @@ class OrderService(
             val requestAmount = info.amount
             val existAmount = itemRepository.getReferenceById(info.itemId).amount
 
+            //요청 수량이 양수인지 확인
+            if(requestAmount <= 0){
+                isPositive = false
+                break
+            }
+
             //삭제된 아이템인지 확인
             if(itemRepository.getReferenceById(info.itemId).itemStatus){
                 // 요청한 주문 상품이 재고보다 많을 경우
                 if(requestAmount > existAmount){
-                    canOrder = false
+                    isAmountEnough = false
                     errorItemsId.add(info.itemId)
                 }
             }
             else{
-                canOrder = false
+                isNotDeleted = false
                 errorItemsId.add(info.itemId)
             }
         }
 
+        if(!isPositive){
+            return RequestOrderResultDTO.setNotPositiveError(errorItemsId)
+        }
+
         //모든 상품의 재고가 충분한 경우
-        if(canOrder){
+        if(isNotDeleted and isAmountEnough){
             val member = requestOrderDTO.memberId?.let { memberRepository.getReferenceById(it) }
 
             //order 저장
             val orders = orderRepository.save(
-                ordersDTOToOrders(
+                Orders.ordersDTOToOrders(
                     OrdersDTO(
                         member,
                         OrderStatus.COMPLETE,
-                        requestOrderDTO.orderAddress
+                        requestOrderDTO.Address,
+                        requestOrderDTO.AddressDetail
                     )
                 )
             )
@@ -71,7 +86,7 @@ class OrderService(
 
                 //orderitem 저장
                 orderItemRepository.save(
-                    orderItemDTOtoOrderItem(
+                    OrderItem.orderItemDTOtoOrderItem(
                         OrderItemDTO(
                             orders,
                             item,
@@ -81,18 +96,20 @@ class OrderService(
                 )
             }
 
-            return RequestOrderResultDTO(
-                status = HttpStatus.CREATED.value(),
-                message = "상품 주문을 성공하였습니다.",
-                errorItems = errorItemsId
-            )
+            return RequestOrderResultDTO.setRequestOrderSuccessResultDTO()
         }
         else{
-            return RequestOrderResultDTO(
-                status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                message = "상품 재고가 부족하거나 삭제된 상품이 존재하여 주문하지 못하였습니다.",
-                errorItems = errorItemsId,
-            )
+            if(isNotDeleted){
+                return RequestOrderResultDTO.setRequestOrderAmountFailResultDTO(errorItemsId)
+            }
+            else{
+                return RequestOrderResultDTO.setRequestOrderStatusFailResultDTO(errorItemsId)
+            }
         }
+    }
+
+    //주소 가져오기
+    override fun getAddress(memberId: Long) : AddressDTO {
+        return AddressDTO.memberToAddressDTO(memberRepository.getReferenceById(memberId))
     }
 }

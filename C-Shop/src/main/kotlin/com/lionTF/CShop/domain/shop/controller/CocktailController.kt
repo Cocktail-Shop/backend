@@ -1,11 +1,9 @@
 package com.lionTF.CShop.domain.shop.controller
 
-import com.lionTF.CShop.domain.shop.controller.dto.CocktailResultDTO
-import com.lionTF.CShop.domain.shop.service.CocktailService
+import com.lionTF.CShop.domain.shop.service.shopinterface.CocktailService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.PathVariable
 
 

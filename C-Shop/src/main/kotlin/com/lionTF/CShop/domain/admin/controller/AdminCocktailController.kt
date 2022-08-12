@@ -7,7 +7,7 @@ import com.lionTF.CShop.domain.admin.controller.dto.DeleteCocktailResultDTO
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.CShop.domain.shop.controller.dto.CocktailResultDTO
-import com.lionTF.CShop.domain.shop.service.CocktailService
+import com.lionTF.CShop.domain.shop.service.CocktailServiceImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.ModelAttribute
 class AdminCocktailController(
     private val adminCocktailService: AdminCocktailService,
     private val adminItemService: AdminItemService,
-    private val cocktailService: CocktailService,
+    private val cocktailService: CocktailServiceImpl,
 ) {
 
     // 전체 칵테일 조회
