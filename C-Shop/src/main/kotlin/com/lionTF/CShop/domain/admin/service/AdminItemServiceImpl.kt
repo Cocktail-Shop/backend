@@ -37,7 +37,7 @@ class AdminItemServiceImpl(
 
 
     // 상품 수정
-    override fun updateItem(itemId: Long, requestCreateItemDTO: RequestCreateItemDTO): Any {
+    override fun updateItem(itemId: Long, requestCreateItemDTO: RequestCreateItemDTO): AdminResponseDTO {
         val existsItem = adminItemRepository.existsById(itemId)
 
         return if (!existsItem) { // 존재하지 않은 상품일 때

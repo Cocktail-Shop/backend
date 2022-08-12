@@ -1,10 +1,7 @@
 package com.lionTF.CShop.domain.admin.repository.custom
 
-import com.lionTF.CShop.domain.admin.controller.dto.FindCocktails
 import com.lionTF.CShop.domain.admin.controller.dto.FindItemDTO
-import com.lionTF.CShop.domain.admin.models.Cocktail
 import com.lionTF.CShop.domain.admin.models.Item
-import com.lionTF.CShop.domain.admin.models.QCocktail.cocktail
 import com.lionTF.CShop.domain.admin.models.QItem.item
 import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.Projections

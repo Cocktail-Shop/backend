@@ -10,15 +10,15 @@ data class AdminResponseDTO(val httpStatus: Int, val message: String, var href: 
         }
 
         fun toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO(): AdminResponseDTO {
-            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "가격과 수량은 0이하가 될 수 없습니다.", "/admins/all-item")
+            return AdminResponseDTO(HttpStatus.BAD_REQUEST.value(), "가격과 수량은 0이하가 될 수 없습니다.", "/admins/all-item")
         }
 
         fun toFailCreateItemByInvalidFormatPriceResponseDTO(): AdminResponseDTO {
-            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "가격은 음수 또는 0원이 될 수 없습니다.", "/admins/all-item")
+            return AdminResponseDTO(HttpStatus.BAD_REQUEST.value(), "가격은 음수 또는 0원이 될 수 없습니다.", "/admins/all-item")
         }
 
         fun toFailCreateItemByInvalidFormatAmountResponseDTO(): AdminResponseDTO {
-            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "수량은 음수 또는 0이 될 수 없습니다.", "/admins/all-item")
+            return AdminResponseDTO(HttpStatus.BAD_REQUEST.value(), "수량은 음수 또는 0이 될 수 없습니다.", "/admins/all-item")
         }
 
         fun toSuccessUpdateItemResponseDTO(): AdminResponseDTO {
@@ -51,6 +51,30 @@ data class AdminResponseDTO(val httpStatus: Int, val message: String, var href: 
 
         fun toSuccessDeleteOrderResponseDTO(): AdminResponseDTO {
             return AdminResponseDTO(HttpStatus.NO_CONTENT.value(), "주문이 정상적으로 취소되었습니다.", "/admins/orders")
+        }
+
+        fun toSuccessCreateCocktailResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.CREATED.value(), "칵테일이 정상적으로 생성되었습니다.", "/admins/all-cocktails")
+        }
+
+        fun noContentItem(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 상품입니다..", "/admins/all-cocktails")
+        }
+
+        fun toFailCreateCocktailByNoContentResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.BAD_REQUEST.value(), "하나 이상의 상품을 선택해주세요.", "/admins/all-cocktails")
+        }
+
+        fun toSuccessDeleteCocktailResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.NO_CONTENT.value(), "칵테일이 정상적으로 삭제되었습니다.", "/admins/all-cocktails")
+        }
+
+        fun toFailDeleteCocktailResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 않은 칵테일입니다.", "/admins/all-cocktails")
+        }
+
+        fun toSuccessUpdateCocktailResponseDTO(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.CREATED.value(), "칵테일이 정상적으로 수정되었습니다.", "/admins/all-cocktails")
         }
     }
 }

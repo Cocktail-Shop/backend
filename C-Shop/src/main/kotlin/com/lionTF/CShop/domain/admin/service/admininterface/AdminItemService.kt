@@ -7,15 +7,15 @@ interface AdminItemService {
 
     fun createItem(requestCreateItemDTO: RequestCreateItemDTO): AdminResponseDTO
 
-    fun updateItem(itemId: Long, requestCreateItemDTO: RequestCreateItemDTO): Any
-
-//    fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO
+    fun updateItem(itemId: Long, requestCreateItemDTO: RequestCreateItemDTO): AdminResponseDTO
 
     fun getAllItems(pageable: Pageable): ResponseSearchItemSearchDTO
 
     fun getItemsByName(keyword: String, pageable: Pageable): ResponseSearchItemSearchDTO
 
+    fun findItem(itemId: Long): ResponseItemDTO
+
     fun deleteOneItem(itemId: Long): AdminResponseDTO
 
-    fun findItem(itemId: Long): ResponseItemDTO
+    //    fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO
 }

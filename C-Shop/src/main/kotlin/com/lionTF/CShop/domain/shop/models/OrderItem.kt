@@ -31,7 +31,7 @@ class OrderItem (
 
     // 주문 취소
     fun cancel() {
-        item.addStock(amount)
+        item.addAmount(amount)
     }
 }
 

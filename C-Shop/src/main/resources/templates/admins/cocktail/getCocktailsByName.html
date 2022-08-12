@@ -141,11 +141,11 @@
                                                     <th>상세 보기</th>
                                                     <th>칵테일 삭제</th>
                                                 </tr>
-                                                <tr th:each="cocktail : ${cocktails.content}">
-                                                    <td th:text="${cocktail?.cocktailName}"></td>
-                                                    <td th:text="${cocktail?.cocktailDescription}"></td>
-                                                    <td th:text="${cocktail?.createdDate}"></td>
-                                                    <td><a href="/admins/items" class="btn btn-default btn-asd">상세 보기</a></td>
+                                                <tr th:each="cocktail : ${cocktails.result.content}">
+                                                    <td th:text="${cocktail.cocktailName}"></td>
+                                                    <td th:text="${cocktail.cocktailDescription}"></td>
+                                                    <td th:text="${cocktail.createdDate}"></td>
+                                                    <td><a href="#" th:href="@{/admins/cocktails/{cocktailId} (cocktailId=${cocktail.cocktailId})}" class="btn btn-default btn-asd">상세 보기</a></td>
                                                     <td>
                                                         <form  th:method="delete" th:action="@{/admins/cocktails/{cocktailId} (cocktailId=${cocktail.cocktailId})}" >
                                                             <button type="submit" class="btn btn-default btn-asd" >삭제</button>
@@ -156,24 +156,16 @@
                                         </div>
                                         <div th:if="${cocktails}">
                                             <!-- 전역 변수 선언 -->
-                                            <nav th:with=" pageNumber = ${cocktails.pageable.pageNumber},
-                                                pageSize = ${cocktails.pageable.pageSize},
-                                                totalPages = ${cocktails.totalPages},
+                                            <nav th:with=" pageNumber = ${cocktails.result.pageable.pageNumber},
+                                                pageSize = ${cocktails.result.pageable.pageSize},
+                                                totalPages = ${cocktails.result.totalPages},
                                                 startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
                                                 tempEndPage = ${startPage + pageSize - 1},
                                                 endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})" aria-label="Page navigation">
                                                 <ul class="pagination ">
-                                                    <!-- 처음으로 이동 -->
-                                                    <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">
-                                                        <a class="page-link" th:href="@{/admins/search/cocktails/(page=0)}">
-                                                            <span>&laquo;</span>
-                                                            <span class="sr-only">First</span>
-                                                        </a>
-                                                    </li>
-
                                                     <!-- 이전으로 이동 -->
-                                                    <li th:classappend="${cocktails.first} ? 'disabled'" class="page-item">
-                                                        <a class="page-link" th:href="${cocktails.first} ? '#' : @{/admins/search/cocktails/(page=${pageNumber - 1})}" aria-label="Previous">
+                                                    <li th:classappend="${cocktails.result.first} ? 'disabled'" class="page-item">
+                                                        <a class="page-link" th:href="${cocktails.result.first} ? '#' : @{/admins/search/cocktails/(page=${pageNumber - 1},keyword=${cocktails.keyword})}" aria-label="Previous">
                                                             <span aria-hidden="true">&lt;</span>
                                                             <span class="sr-only">Previous</span>
                                                         </a>
@@ -181,22 +173,14 @@
 
                                                     <!-- 특정 페이지로 이동 -->
                                                     <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
-                                                        <a th:text="${page}" class="page-link" th:href="@{/admins/search/cocktails/(page=${page - 1})}"></a>
+                                                        <a th:text="${page}" class="page-link" th:href="@{/admins/search/cocktails/(page=${page - 1},keyword=${cocktails.keyword})}"></a>
                                                     </li>
 
                                                     <!-- 다음으로 이동 -->
-                                                    <li th:classappend="${cocktails.last} ? 'disabled'" class="page-item">
-                                                        <a class="page-link" th:href="${cocktails.last} ? '#' : @{/admins/search/cocktails/(page=${pageNumber + 1})}" aria-label="Next">
+                                                    <li th:classappend="${cocktails.result.last} ? 'disabled'" class="page-item">
+                                                        <a class="page-link" th:href="${cocktails.result.last} ? '#' : @{/admins/search/cocktails/(page=${pageNumber + 1},keyword=${cocktails.keyword})}" aria-label="Next">
                                                             <span aria-hidden="true">&gt;</span>
                                                             <span class="sr-only">Next</span>
-                                                        </a>
-                                                    </li>
-
-                                                    <!-- 마지막으로 이동 -->
-                                                    <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 <= startPage} ? 'disabled'" class="page-item">
-                                                        <a class="page-link" th:href="@{/admins/search/cocktails/(page=${totalPages - 1})}">
-                                                            <span>&raquo;</span>
-                                                            <span class="sr-only">Last</span>
                                                         </a>
                                                     </li>
                                                 </ul>

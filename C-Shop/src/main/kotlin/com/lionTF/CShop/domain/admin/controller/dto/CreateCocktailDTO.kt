@@ -20,13 +20,6 @@ data class CreateCocktailResultDTO(
     val cocktailId: Long,
 )
 
-fun cocktailDTOToCockTail(createCocktailDTO: CreateCocktailDTO): Cocktail {
-    return Cocktail(
-        cocktailName = createCocktailDTO.cocktailName,
-        cocktailDescription = createCocktailDTO.cocktailDescription,
-        category = createCocktailDTO.category,
-    )
-}
 
 fun cocktailItemToCocktailItemDTO(itemId: Item, cocktailId: Cocktail): CocktailItem {
     return CocktailItem(

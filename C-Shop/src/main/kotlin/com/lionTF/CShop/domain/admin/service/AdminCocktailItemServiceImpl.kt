@@ -12,4 +12,9 @@ class AdminCocktailItemServiceImpl(
 
 ): AdminCocktailItemService {
 
+    // itemId 가져오기
+    override fun getItemIds(cocktailId: Long): MutableList<Long> {
+        return adminCocktailItemRepository.findItemIdByCocktailId(cocktailId)
+    }
+
 }

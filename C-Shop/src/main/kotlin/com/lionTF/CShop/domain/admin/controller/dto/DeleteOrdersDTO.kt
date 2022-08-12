@@ -1,5 +1,5 @@
 package com.lionTF.CShop.domain.admin.controller.dto
 
-class DeleteOrdersDTO (
+data class DeleteOrdersDTO (
     var orderIds: MutableList<Long> = mutableListOf()
 )
