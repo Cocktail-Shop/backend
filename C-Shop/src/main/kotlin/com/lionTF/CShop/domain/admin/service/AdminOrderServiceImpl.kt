@@ -4,8 +4,8 @@ import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.repository.AdminOrderItemRepository
 import com.lionTF.CShop.domain.admin.repository.AdminOrderRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminOrderService
+import com.lionTF.CShop.domain.shop.models.OrderStatus
 import com.lionTF.CShop.domain.shop.models.Orders
-import com.lionTF.CShop.domain.shop.repository.OrderItemRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import java.util.*
@@ -25,16 +25,21 @@ class AdminOrderServiceImpl(
         val existsOrder = adminOrderRepository.existsById(orderId)
 
         return if (!existsOrder) {
-            AdminResponseDTO.toFailDeleteOrderResponseDTO()
+            AdminResponseDTO.toFailCancelOrderResponseDTO()
 
         } else {
             val order = adminOrderRepository.getReferenceById(orderId)
-            order.cancelOrder()
 
-            val orderItem = adminOrderItemRepository.getOrderItemByOrdersId(orderId)
-            orderItem.cancel()
+            if (order.orderStatus == OrderStatus.CANCEL) {
+                AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO()
+            } else {
+                order.cancelOrder()
 
-            AdminResponseDTO.toSuccessDeleteOrderResponseDTO()
+                val orderItem = adminOrderItemRepository.getOrderItemByOrdersId(orderId)
+                orderItem.cancel()
+
+                AdminResponseDTO.toSuccessCancelOrderResponseDTO()
+            }
         }
     }
 

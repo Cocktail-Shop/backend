@@ -19,11 +19,11 @@ class OrderItem (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "orders_id")
-    var orders: Orders,
+    var orders: Orders? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
-    var item: Item,
+    var item: Item? = null,
 
     var amount: Int = 0,
 ) : BaseTimeEntity() {
@@ -31,7 +31,7 @@ class OrderItem (
 
     // 주문 취소
     fun cancel() {
-        item.addAmount(amount)
+        item?.addAmount(amount)
     }
 }
 
