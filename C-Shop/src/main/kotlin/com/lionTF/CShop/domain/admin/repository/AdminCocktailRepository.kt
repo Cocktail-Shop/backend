@@ -16,4 +16,6 @@ interface AdminCocktailRepository : JpaRepository<Cocktail, Long>, AdminCocktail
             " from Cocktail c where c.cocktailId = :cocktailId")
     fun findCocktailById(@Param("cocktailId") cocktailId: Long): CocktailResultDTO
 
+
+    fun countAllByCocktailStatusIsTrue(): Long
 }

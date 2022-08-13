@@ -11,7 +11,7 @@ data class ResponseCocktailDTO (
         fun cocktailToResponseCocktailPageDTO(cocktailResultDTOAddItemIds: CocktailResultDTOAddItemIds): ResponseCocktailDTO {
             return ResponseCocktailDTO(
                 HttpStatus.OK.value(),
-                message="칵테일 조회를 성공했습니다.",
+                "칵테일 조회를 성공했습니다.",
                 cocktailResultDTOAddItemIds
             )
         }
