@@ -22,7 +22,7 @@
             <img src="images/logo.png" alt="">
           </a>
           <h4 class="text-center mt-30">아이디 찾기</h4>
-          <form class="text-left clearfix" th:action="@{/members/idInquiry}" th:object="${requestIdInquiryDTO}" th:method="post">
+          <form class="text-left clearfix" th:action="@{/members/id-inquiry}" th:object="${requestIdInquiryDTO}" th:method="post">
             <div class="form-group">
               <input type="text" class="form-control login-input" id="name" th:field="*{memberName}" placeholder="이름을 입력해주세요">
             </div>

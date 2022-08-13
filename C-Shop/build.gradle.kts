@@ -49,6 +49,9 @@ dependencies {
 
 	// thymeleaf 추가
 	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
+	//email
+	implementation ("org.springframework.boot:spring-boot-starter-mail")
 }
 
 //querydsl

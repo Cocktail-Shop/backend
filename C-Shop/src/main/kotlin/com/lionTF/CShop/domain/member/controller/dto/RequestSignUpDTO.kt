@@ -9,6 +9,7 @@ data class RequestSignUpDTO(var id:String="",
                             var phoneNumber:String="",
                             var memberName:String="",
                             var address:String="",
+                            var email:String="",
                             var detailAddress:String=""){
 
 
