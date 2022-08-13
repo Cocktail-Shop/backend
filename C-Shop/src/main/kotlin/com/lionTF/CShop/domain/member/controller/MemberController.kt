@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*
 
 
 @Controller
-//@RequestMapping("/members")
 class MemberController(private val memberService: MemberService) {
 
     //로그인 관련

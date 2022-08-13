@@ -5,7 +5,7 @@ import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailItemSer
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminCocktailService
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.CShop.domain.shop.controller.dto.CocktailResultDTO
-import com.lionTF.CShop.domain.shop.service.CocktailService
+import com.lionTF.CShop.domain.shop.service.CocktailServiceImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
@@ -21,6 +21,7 @@ class AdminCocktailController(
     private val adminCocktailItemService: AdminCocktailItemService,
     private val adminCocktailService: AdminCocktailService,
     private val adminItemService: AdminItemService,
+    private val cocktailService: CocktailServiceImpl,
 ) {
 
     // 전체 칵테일 조회

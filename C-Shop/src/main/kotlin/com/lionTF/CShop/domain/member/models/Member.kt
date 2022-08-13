@@ -29,6 +29,7 @@ class Member(
     var phoneNumber: String = "",
     var memberName: String = "",
     var address: String = "",
+    var email:String="",
     var detailAddress:String="",
     var memberStatus: Boolean = true,
 
@@ -43,6 +44,7 @@ class Member(
                 phoneNumber=requestSignUpDTO.phoneNumber,
                 memberName=requestSignUpDTO.memberName,
                 address=requestSignUpDTO.address,
+                email=requestSignUpDTO.email,
                 detailAddress=requestSignUpDTO.detailAddress,
                 role = MemberRole.MEMBER
             )

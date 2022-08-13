@@ -10,7 +10,6 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.querydsl.QuerydslPredicateExecutor
 
-
 @Repository
 interface CocktailRepository : JpaRepository<Cocktail, Long>, QuerydslPredicateExecutor<Cocktail> {
     fun findCocktailByCategoryAndCocktailStatus(category: Category,status: Boolean, pageable: Pageable) : Page<Cocktail>

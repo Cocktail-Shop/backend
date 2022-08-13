@@ -15,13 +15,33 @@ data class ItemPageResponseDTO(
     val status: Int,
     val message: String,
     val result: PageResultDTO<SearchItemInfoDTO, Item>
-)
+){
+    companion object{
+        fun setItemPageResponseDTO(pageResult: PageResultDTO<SearchItemInfoDTO, Item>) : ItemPageResponseDTO {
+            return ItemPageResponseDTO(
+                status = HttpStatus.OK.value(),
+                message = "상품 조회 성공",
+                result = pageResult
+            )
+        }
+    }
+}
 
 data class CocktailPageResponseDTO(
     val status: Int,
     val message: String,
     val result: PageResultDTO<SearchCocktailInfoDTO, Cocktail>
-)
+){
+    companion object{
+        fun setCocktailPageResponseDTO(pageResult: PageResultDTO<SearchCocktailInfoDTO, Cocktail>) : CocktailPageResponseDTO {
+            return CocktailPageResponseDTO(
+                status = HttpStatus.OK.value(),
+                message = "칵테일 상품 조회 성공",
+                result = pageResult
+            )
+        }
+    }
+}
 
 data class PageResultDTO<DTO,EN> (var data:List<DTO>?=null,
                                   var totalPage:Int?=null,
@@ -62,18 +82,5 @@ constructor(result: Page<EN>,fn:Function<EN,DTO>):this(){
     }
 }
 
-fun setItemPageResponseDTO(pageResult: PageResultDTO<SearchItemInfoDTO, Item>) : ItemPageResponseDTO {
-    return ItemPageResponseDTO(
-        status = HttpStatus.OK.value(),
-        message = "상품 조회 성공",
-        result = pageResult
-    )
-}
 
-fun setCocktailPageResponseDTO(pageResult: PageResultDTO<SearchCocktailInfoDTO, Cocktail>) : CocktailPageResponseDTO {
-    return CocktailPageResponseDTO(
-        status = HttpStatus.OK.value(),
-        message = "칵테일 상품 조회 성공",
-        result = pageResult
-    )
-}
+

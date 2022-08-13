@@ -24,19 +24,25 @@ class Orders(
     @Enumerated(EnumType.STRING)
     var orderStatus: OrderStatus = OrderStatus.COMPLETE,
     var orderAddress: String = "",
+    var orderAddressDetail: String = "",
 ) : BaseTimeEntity(){
 
     // 주문 삭제
     fun cancelOrder(){
         orderStatus = OrderStatus.CANCEL
     }
+
+    companion object{
+        fun ordersDTOToOrders(ordersDTO: OrdersDTO) : Orders {
+            return Orders(
+                //orderItem = ordersDTO.orderItem,
+                member = ordersDTO.member,
+                orderStatus = ordersDTO.orderStatus,
+                orderAddress = ordersDTO.Address,
+                orderAddressDetail = ordersDTO.AddressDetail
+            )
+        }
+    }
 }
 
-fun ordersDTOToOrders(ordersDTO: OrdersDTO) : Orders {
-    return Orders(
-        //orderItem = ordersDTO.orderItem,
-        member = ordersDTO.member,
-        orderStatus = ordersDTO.orderStatus,
-        orderAddress = ordersDTO.orderAddress,
-    )
-}
+
