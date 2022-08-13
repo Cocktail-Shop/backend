@@ -360,17 +360,19 @@ internal class AdminItemServiceTest {
         //given
         val page = 0
         val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize,)
+        val pageable = generatePageable(page = page, pageSize = pageSize)
 
         //when
         val allItems = adminItemService.getAllItems(pageable)
+
+        val count = adminItemRepository.countAllByItemStatusIsTrue()
 
         //then
         assertThat(allItems.httpStatus).isEqualTo(HttpStatus.OK.value())
         assertThat(allItems.message).isEqualTo("상품 조회를 성공했습니다.")
         assertThat(allItems.keyword).isEqualTo("")
-        assertThat(allItems.result!!.totalElements).isEqualTo(11)
-        assertThat(allItems.result!!.totalPages).isEqualTo(6)
+        assertThat(allItems.result!!.totalElements).isEqualTo(count)
+        assertThat(allItems.result!!.totalPages).isEqualTo((count / pageSize) + 1)
     }
 
     @Test
@@ -379,7 +381,7 @@ internal class AdminItemServiceTest {
         //given
         val page = 0
         val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize,)
+        val pageable = generatePageable(page = page, pageSize = pageSize)
         val keyword: String = "te"
 
         //when

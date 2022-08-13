@@ -13,7 +13,7 @@ data class ResponseSearchMembersResultDTO(
         fun memberToResponseMemberSearchPageDTO(findMemberDTO: Page<FindMembersDTO>, keyword: String?): ResponseSearchMembersResultDTO {
             return ResponseSearchMembersResultDTO(
                 HttpStatus.OK.value(),
-                "상품 조회를 성공했습니다.",
+                "회원 조회를 성공했습니다.",
                 keyword,
                 findMemberDTO
             )
