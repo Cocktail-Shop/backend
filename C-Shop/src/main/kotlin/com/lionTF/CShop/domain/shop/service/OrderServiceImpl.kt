@@ -1,10 +1,8 @@
 package com.lionTF.CShop.domain.shop.service
 
+import com.lionTF.CShop.domain.admin.controller.dto.AdminResponseDTO
 import com.lionTF.CShop.domain.member.controller.dto.AddressDTO
-import com.lionTF.CShop.domain.shop.controller.dto.OrderItemDTO
-import com.lionTF.CShop.domain.shop.controller.dto.OrdersDTO
-import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderDTO
-import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderResultDTO
+import com.lionTF.CShop.domain.shop.controller.dto.*
 import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.domain.shop.models.OrderStatus
 import com.lionTF.CShop.domain.shop.models.Orders
@@ -111,5 +109,23 @@ class OrderServiceImpl(
     //주소 가져오기
     override fun getAddress(memberId: Long) : AddressDTO {
         return AddressDTO.memberToAddressDTO(memberRepository.getReferenceById(memberId))
+    }
+
+    // 상품 삭제
+    override fun cancelOrder(orderId: Long): OrderResponseDTO {
+        val existsOrder = orderRepository.existsById(orderId)
+
+        return if (!existsOrder) {
+            OrderResponseDTO.toFailCancleItemResponseDTO()
+
+        } else {
+            val order = orderRepository.getReferenceById(orderId)
+            order.cancelOrder()
+
+            val orderItem = orderItemRepository.getOrderItemByOrdersId(orderId)
+            orderItem.cancel()
+
+            OrderResponseDTO.toSuccessDeleteItemResponseDTO()
+        }
     }
 }

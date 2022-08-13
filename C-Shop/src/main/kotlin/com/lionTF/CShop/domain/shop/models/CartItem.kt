@@ -28,6 +28,11 @@ class CartItem(
     var amount: Int,
 
     ) : BaseTimeEntity() {
+
+    // 장바구니 삭제
+    fun cancel() {
+        item.addStock(amount)
+    }
     companion object{
         fun cartItemDTOToCartItem(cartItemDTO: CartItemDTO) : CartItem {
             return CartItem(
