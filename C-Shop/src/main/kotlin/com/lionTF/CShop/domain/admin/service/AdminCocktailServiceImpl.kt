@@ -124,7 +124,7 @@ class AdminCocktailServiceImpl(
 
             for (itemId in requestCreateCocktailDTO.itemIds) {
                 val item = adminItemRepository.getReferenceById(itemId)
-                val cocktailItem = cocktailItemToCocktailItemDTO(item, cocktail)
+                val cocktailItem = CocktailItem.requestCreateCocktailItemDTOtoCocktailItem(item, cocktail)
                 cocktailItemList.add(cocktailItem)
             }
             adminCocktailItemRepository.saveAll(cocktailItemList)

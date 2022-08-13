@@ -1,6 +1,5 @@
 package com.lionTF.CShop.domain.admin.models
 
-import com.lionTF.CShop.domain.admin.controller.dto.CreateCocktailDTO
 import com.lionTF.CShop.domain.admin.controller.dto.RequestCreateCocktailDTO
 import javax.persistence.*
 
