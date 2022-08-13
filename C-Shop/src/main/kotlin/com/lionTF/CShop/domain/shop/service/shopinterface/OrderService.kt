@@ -13,5 +13,5 @@ interface OrderService {
     fun getAddress(memberId: Long) : AddressDTO
 
     // 상품 삭제
-    fun cancelOrder(orderId: Long): OrderResponseDTO
+    fun deleteOrder(orderId: Long): OrderResponseDTO
 }

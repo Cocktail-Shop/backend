@@ -22,4 +22,14 @@ class Cart(
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     var member: Member?=null,
-) : BaseTimeEntity()
+) : BaseTimeEntity() {
+    // 장바구니 상품 삭제
+    fun deleteCart(itemId: Long) {
+        for (item in cartItem!!) {
+            if (item.cartItemId == itemId) {
+                item.cancel()
+                // TODO : cartItem list에서 삭제
+            }
+        }
+    }
+}

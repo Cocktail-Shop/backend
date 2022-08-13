@@ -102,4 +102,22 @@ class CartItemServiceImpl(
             }
         }
     }
+
+    // 장바구니 상품 삭제
+    override fun deleteCart(itemId: Long): CartResponseDTO {
+        val existsOrder = cartItemRepository.existsById(itemId)
+
+        return if (!existsOrder) {
+            CartResponseDTO.toFailDeleteItemResponseDTO()
+
+        } else {
+            val cart = cartRepository.getReferenceById(itemId)
+            cart.deleteCart(itemId)
+
+            val orderItem = cartItemRepository.getCartItemByItemId(itemId)
+            orderItem.cancel()
+
+            CartResponseDTO.toSuccessDeleteItemResponseDTO()
+        }
+    }
 }

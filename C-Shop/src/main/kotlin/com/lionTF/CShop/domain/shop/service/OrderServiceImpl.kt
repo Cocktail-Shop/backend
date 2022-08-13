@@ -112,11 +112,11 @@ class OrderServiceImpl(
     }
 
     // 상품 삭제
-    override fun cancelOrder(orderId: Long): OrderResponseDTO {
+    override fun deleteOrder(orderId: Long): OrderResponseDTO {
         val existsOrder = orderRepository.existsById(orderId)
 
         return if (!existsOrder) {
-            OrderResponseDTO.toFailCancleItemResponseDTO()
+            OrderResponseDTO.toFailDeleteItemResponseDTO()
 
         } else {
             val order = orderRepository.getReferenceById(orderId)

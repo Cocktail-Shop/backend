@@ -24,4 +24,11 @@ class CartItemController(
     fun addCocktailItemToCart(@RequestBody addCartCocktailItemDTO: AddCartCocktailItemDTO) : AddCartCocktailItemResultDTO {
         return cartItemService.addCartCocktailItem(addCartCocktailItemDTO)
     }
+
+    // 장바구니 상품 삭제
+    @DeleteMapping("/cart/items/{itemId}")
+    fun deleteCart(@PathVariable("itemId") itemId: Long, model: Model): String {
+        model.addAttribute("result", cartItemService.deleteCart(itemId))
+        return "global/message"
+    }
 }
