@@ -6,6 +6,7 @@ import com.lionTF.CShop.domain.shop.repository.CartItemRepository
 import com.lionTF.CShop.domain.shop.repository.CartRepository
 import com.lionTF.CShop.domain.shop.repository.ItemRepository
 import com.lionTF.CShop.domain.shop.service.shopinterface.CartItemService
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -119,5 +120,12 @@ class CartItemServiceImpl(
 
             CartResponseDTO.toSuccessDeleteItemResponseDTO()
         }
+    }
+
+    // 장바구니 상품 조회
+    override fun getCart(pageable: Pageable): ResponseSearchCartResultDTO {
+        val findCart = cartRepository.findCartInfo(pageable)
+
+        return ResponseSearchCartResultDTO.cartToResponseCartSearchPageDTO(findCart)
     }
 }
