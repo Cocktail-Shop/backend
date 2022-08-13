@@ -4,6 +4,8 @@ import com.lionTF.CShop.domain.member.controller.dto.AuthMemberDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderInfoDTO
 import com.lionTF.CShop.domain.shop.service.shopinterface.OrderService
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -46,4 +48,10 @@ class OrderController(
         return "global/message"
     }
 
+    // 주문 조회
+    @GetMapping("/orders")
+    fun getOrders(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PageableDefault(size = 2) pageable: Pageable, model: Model): String {
+        model.addAttribute("searchOrders", orderService.getOrders(pageable))
+        return "global/message"
+    }
 }

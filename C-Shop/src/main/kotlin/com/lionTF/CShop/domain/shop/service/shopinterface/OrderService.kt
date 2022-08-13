@@ -4,6 +4,7 @@ import com.lionTF.CShop.domain.member.controller.dto.AddressDTO
 import com.lionTF.CShop.domain.shop.controller.dto.OrderResponseDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderResultDTO
+import org.springframework.data.domain.Pageable
 
 interface OrderService {
     //상품 주문 메소드
@@ -14,4 +15,7 @@ interface OrderService {
 
     // 상품 삭제
     fun deleteOrder(orderId: Long): OrderResponseDTO
+
+    // 주문 조회
+    fun getOrders(pageable: Pageable): OrderResponseDTO
 }

@@ -11,6 +11,7 @@ import com.lionTF.CShop.domain.shop.repository.MemberRepository
 import com.lionTF.CShop.domain.shop.repository.OrderItemRepository
 import com.lionTF.CShop.domain.shop.repository.OrderRepository
 import com.lionTF.CShop.domain.shop.service.shopinterface.OrderService
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -126,6 +127,17 @@ class OrderServiceImpl(
             orderItem.cancel()
 
             OrderResponseDTO.toSuccessDeleteItemResponseDTO()
+        }
+    }
+
+    // 주문 조회
+    override fun getOrders(pageable: Pageable): OrderResponseDTO {
+        val findOrdersInfo = orderRepository.findOrdersInfo(pageable)
+
+        return if (findOrdersInfo.isEmpty) {
+            OrderResponseDTO.toFailSearchOrdersDTO()
+        } else {
+            OrderResponseDTO.toSuccessSearchOrdersDTO()
         }
     }
 }
