@@ -130,6 +130,7 @@
                                                 <tr>
                                                     <th>주문 번호</th>
                                                     <th>주문 상태</th>
+                                                    <th>배달 상태</th>
                                                     <th>아이템 번호</th>
                                                     <th>상품명</th>
                                                     <th>가격</th>
@@ -142,6 +143,7 @@
                                                 <tr th:each="order : ${orders.result.content}">
                                                     <td th:text="${order.orderId}"></td>
                                                     <td th:text="${order.orderStatus}"></td>
+                                                    <td th:text="${order.deliveryStatus}"></td>
                                                     <td th:text="${order.itemId}"></td>
                                                     <td th:text="${order.itemName}"></td>
                                                     <td th:text="${order.price * order.amount}"></td>
