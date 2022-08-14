@@ -21,9 +21,10 @@ class SecurityConfig {
     fun defaultSecurityFilterChain(http:HttpSecurity): SecurityFilterChain{
         http.csrf().disable()//post 요청 허용
         http.httpBasic() //postman 테스트를 위해 설정
+        http.sessionManagement().maximumSessions(1)//중복로그인 방지
         return http.authorizeRequests()
             //.antMatchers("/user/**").authenticated()
-//            .antMatchers("/admins/**").hasRole("ADMIN")
+            //.antMatchers("/admins/**").hasRole("ADMIN")
             .anyRequest()    // 모든 요청에 대해서 허용하라.
             .permitAll()
             .and()

@@ -14,7 +14,7 @@ interface MemberAuthRepository:JpaRepository<Member,Long> {
 
     fun findByIdAndEmail(id:String,email: String):Optional<Member>
 
-    fun findByMemberNameAndPhoneNumber(memberName:String,phoneNumber:String):Optional<Member>
+    fun findByMemberNameAndEmail(memberName:String,email:String):Optional<Member>
 
     fun findByMemberId(memberId:Long?):Optional<Member>
 

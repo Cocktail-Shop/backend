@@ -59,7 +59,7 @@ class MemberTests{
             phoneNumber = "01012341234",
             memberName = "사용자",
             address = "서울시 동작구 상도동",
-            email="test@naver.com",
+            email="cshop1234@naver.com",
             detailAddress = "XX빌딩 103호"
         )
         member.role=MemberRole.MEMBER
@@ -89,7 +89,7 @@ class MemberTests{
             password = "test123",
             phoneNumber = "01012341234",
             memberName = "사용자",
-            email="test@naver.com",
+            email="cshop1234@naver.com",
             address = "서울시 동작구 상도동",
             detailAddress = "XX빌딩 103호"
         )
@@ -109,7 +109,7 @@ class MemberTests{
             password = "test123",
             phoneNumber = "01012341234",
             memberName = "사용자",
-            email="test@naver.com",
+            email="cshop1234@naver.com",
             address = "서울시 동작구 상도동",
             detailAddress = "XX빌딩 103호"
         )
@@ -125,7 +125,7 @@ class MemberTests{
     fun idInquirySuccessTest(){
         val requestIdInquiryDTO= RequestIdInquiryDTO(
             "사용자",
-            "01012341234"
+            "cshop1234@naver.com"
         )
 
         //when
@@ -140,7 +140,7 @@ class MemberTests{
     fun idInquiryWhenWrongMemberName(){
         val requestIdInquiryDTO= RequestIdInquiryDTO(
             "없는사용자",
-            "01012341234"
+            "cshop1234@naver.com"
         )
 
         //when : 존재하지 않는 사용자 정보를 줌
@@ -153,11 +153,11 @@ class MemberTests{
     }
 
     @Test
-    @DisplayName("IdInquiry Fail when wrong phoneNumber Test")
+    @DisplayName("IdInquiry Fail when wrong email Test")
     fun idInquiryWhenWrongPhoneNumber(){
         val requestIdInquiryDTO= RequestIdInquiryDTO(
             "사용자",
-            "01011111111"
+            "wrong1234@naver.com"
         )
 
         //when : 사용자는 존재하지만 전화번호 잘못된 경우
@@ -174,7 +174,7 @@ class MemberTests{
     fun passwordInquirySuccessTest(){
         val requestPasswordInquiryDTO= RequestPasswordInquiryDTO(
             "test",
-            "test@naver.com"
+            "cshop1234@naver.com"
         )
 
 
@@ -190,7 +190,7 @@ class MemberTests{
     fun passwordInquiryWhenWrongMemberName(){
         val requestPasswordInquiryDTO= RequestPasswordInquiryDTO(
             "없는사용자",
-            "test@naver.com"
+            "cshop1234@naver.com"
         )
 
         //when : 존재하지 않는 사  용자 정보를 줌

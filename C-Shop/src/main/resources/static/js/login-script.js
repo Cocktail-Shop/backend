@@ -72,12 +72,13 @@ function checkLoginPw(){
 
 function checkAuthNum(){
     const text = document.getElementById('auth-num').value;
-    const reg =  /^[0-9]+$/;
-    const result=reg.test(text)
-    if (!result) {
-        alert('인증번호가 일치하지 않습니다.');
+
+    if(document.getElementById('isAuth').value==="false"){
+        alert('이메일 인증을 진행해주세요.')
+        return false
+    }else{
+        return true
     }
-    return result
 }
 
 function checkPrePw(){
@@ -109,8 +110,8 @@ function checkAddr(){
 
 
 
-function checkSignin(){
-    return checkName()&&checkId()&&checkTel()&&checkAddr()
+function checkSignUp(){
+    return checkName()&&checkId()&&checkTel()&&checkAddr()&&checkAuthNum()
         &&checkPw()&&checkChbox()
 }
 
@@ -119,11 +120,11 @@ function checkLogin(){
 }
 
 function checkForgetId(){
-    return checkName()&&checkTel()&&checkAuthNum()
+    return checkName()&&checkAuthNum()
 }
 
 function checkForgetPw(){
-    return checkId()&&checkTel()&&checkAuthNum()
+    return checkId()&&checkAuthNum()
 }
 
 function checkNewPw(){
