@@ -241,7 +241,7 @@ internal class AdminCocktailServiceTest {
         //then
         assertThat(updateCocktail.httpStatus).isEqualTo(AdminResponseDTO.toSuccessUpdateCocktailResponseDTO().httpStatus)
         assertThat(updateCocktail.message).isEqualTo(AdminResponseDTO.toSuccessUpdateCocktailResponseDTO().message)
-        assertThat(countCocktailItem).isEqualTo(itemIdList.size)
+        assertThat(countCocktailItem).isEqualTo(itemIdList.size.toLong())
     }
 
 

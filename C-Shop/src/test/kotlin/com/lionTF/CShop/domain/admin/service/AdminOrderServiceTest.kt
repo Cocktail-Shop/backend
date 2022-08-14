@@ -15,7 +15,7 @@ import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.domain.shop.models.OrderStatus
 import com.lionTF.CShop.domain.shop.models.Orders
 import com.lionTF.CShop.domain.shop.repository.OrderRepository
-import com.lionTF.CShop.domain.shop.service.OrderService
+import com.lionTF.CShop.domain.shop.service.shopinterface.OrderService
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -149,7 +149,8 @@ internal class AdminOrderServiceTest {
         val requestOrderDTO1 = RequestOrderDTO(
             memberId = memberTest1!!.memberId,
             orderItems = orderItems,
-            orderAddress = "test-address"
+            Address = "test1",
+            AddressDetail = "test1"
         )
         orderService.requestOrder(requestOrderDTO1)
 
@@ -165,7 +166,8 @@ internal class AdminOrderServiceTest {
         val requestOrderDTO2 = RequestOrderDTO(
             memberId = memberTest2!!.memberId,
             orderItems = orderItems2,
-            orderAddress = "test-address"
+            Address = "test2",
+            AddressDetail = "test2"
         )
         orderService.requestOrder(requestOrderDTO2)
 
@@ -181,7 +183,8 @@ internal class AdminOrderServiceTest {
         val requestOrderDTO3 = RequestOrderDTO(
             memberId = memberTest3!!.memberId,
             orderItems = orderItems3,
-            orderAddress = "test-address"
+            Address = "test3",
+            AddressDetail = "test3"
         )
         orderService.requestOrder(requestOrderDTO3)
     }
