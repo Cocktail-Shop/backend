@@ -12,7 +12,7 @@ data class ResponseItemDTO (
         fun itemToResponseItemPageDTO(itemResultDTO: ItemResultDTO): ResponseItemDTO {
             return ResponseItemDTO(
                 HttpStatus.OK.value(),
-                message="상품 조회를 성공했습니다.",
+                "상품 조회를 성공했습니다.",
                 itemResultDTO
             )
         }

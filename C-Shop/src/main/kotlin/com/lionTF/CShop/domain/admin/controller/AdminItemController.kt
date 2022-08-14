@@ -48,19 +48,23 @@ class AdminItemController(
     // 상품 등록
     @PostMapping("items")
     fun createItem(
-        model: Model,
-        requestCreateItemDTO: RequestCreateItemDTO
+        requestCreateItemDTO: RequestCreateItemDTO,
+        model: Model
     ): String {
         model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO))
         return "global/message"
     }
 
-    // 상품 수정 페이지
+    // 상품 상세보기(수정) 페이지
     @GetMapping("items/{itemId}")
-    fun getItem(@PathVariable("itemId") itemId: Long, model: Model): String {
+    fun getItem(
+        @PathVariable("itemId") itemId: Long,
+        model: Model
+    ): String {
         val item = adminItemService.findItem(itemId)
         model.addAttribute("items", item)
         model.addAttribute("items", RequestUpdateItemDTO.formDTOFromResponseItemDTO(item))
+
         return "admins/item/updateItemForm"
     }
 

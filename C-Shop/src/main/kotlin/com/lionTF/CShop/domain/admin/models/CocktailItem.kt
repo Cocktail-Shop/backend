@@ -17,5 +17,16 @@ class CocktailItem (
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cocktail_id")
-    var cocktail: Cocktail,
-) : BaseTimeEntity() {}
+    var cocktail: Cocktail
+
+) : BaseTimeEntity() {
+
+    companion object {
+        fun requestCreateCocktailItemDTOtoCocktailItem(requestItem: Item, requestCocktail: Cocktail): CocktailItem {
+            return CocktailItem(
+                cocktail = requestCocktail,
+                item = requestItem
+            )
+        }
+    }
+}

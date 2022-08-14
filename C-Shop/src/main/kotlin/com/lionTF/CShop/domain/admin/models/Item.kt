@@ -1,8 +1,6 @@
 package com.lionTF.CShop.domain.admin.models
 
-import com.lionTF.CShop.domain.admin.controller.dto.ItemResultDTO
 import com.lionTF.CShop.domain.admin.controller.dto.RequestCreateItemDTO
-import com.lionTF.CShop.domain.admin.controller.dto.ResponseItemDTO
 import com.lionTF.CShop.domain.shop.models.CartItem
 import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.global.model.BaseTimeEntity
@@ -70,7 +68,7 @@ class Item(
     }
 
     // 주문 취소 후 수량 복귀
-    fun addStock(quantity: Int) {
+    fun addAmount(quantity: Int) {
         amount += quantity
     }
 }

@@ -1,6 +1,6 @@
 package com.lionTF.CShop.domain.admin.repository.custom
 
-import com.lionTF.CShop.domain.admin.controller.dto.FindCocktails
+import com.lionTF.CShop.domain.admin.controller.dto.FindCocktailsDTO
 import com.lionTF.CShop.domain.admin.models.Cocktail
 import com.lionTF.CShop.domain.admin.models.QCocktail.cocktail
 import com.querydsl.core.BooleanBuilder
@@ -19,10 +19,10 @@ class AdminCocktailRepositoryImpl(
 ) : AdminCocktailRepositoryCustom {
 
     // 칵테일 전체 조회
-    override fun findAllCocktails(pageable: Pageable): Page<FindCocktails> {
+    override fun findAllCocktails(pageable: Pageable): Page<FindCocktailsDTO> {
         // 데이터 내용을 조회하는 로직입니다.
         // TODO 회원 ID로 회원 검색하는 로직과 비슷하여 함수로 추출하고 전체 조회이기 떄문에 booleanBuilder를 null로 처리하였는데 이것이 옳은가에 대한 고민입니다.
-        val content: List<FindCocktails> = contentInquire(pageable, null)
+        val content: List<FindCocktailsDTO> = contentInquire(pageable, null)
 
         // 카운트를 별도로 조회하는 로직입니다.
         // TODO 회원 ID로 회원 검색하는 로직과 비슷하여 함수로 추출하고 전체 조회이기 떄문에 booleanBuilder를 null로 처리하였는데 이것이 옳은가에 대한 고민입니다.
@@ -33,10 +33,10 @@ class AdminCocktailRepositoryImpl(
     }
 
     // 회원 ID로 회원 검색
-    override fun findCocktailsByName(keyword: String, pageable: Pageable): Page<FindCocktails> {
+    override fun findCocktailsByName(keyword: String, pageable: Pageable): Page<FindCocktailsDTO> {
         val booleanBuilder = booleanBuilder(keyword)
 
-        val content: List<FindCocktails> = contentInquire(pageable, booleanBuilder)
+        val content: List<FindCocktailsDTO> = contentInquire(pageable, booleanBuilder)
         val countQuery: JPAQuery<Cocktail> = countInquire(booleanBuilder)
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
@@ -46,11 +46,11 @@ class AdminCocktailRepositoryImpl(
     private fun contentInquire(
         pageable: Pageable,
         booleanBuilder: BooleanBuilder?
-    ): List<FindCocktails> {
+    ): List<FindCocktailsDTO> {
         return queryFactory!!
             .select(
                 Projections.constructor(
-                    FindCocktails::class.java,
+                    FindCocktailsDTO::class.java,
                     cocktail.cocktailId,
                     cocktail.cocktailName,
                     cocktail.cocktailDescription,

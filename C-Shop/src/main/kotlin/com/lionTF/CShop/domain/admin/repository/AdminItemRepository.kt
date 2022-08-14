@@ -15,4 +15,6 @@ interface AdminItemRepository: JpaRepository<Item, Long>, AdminItemRepositoryCus
     @Query("select new com.lionTF.CShop.domain.admin.controller.dto.ItemResultDTO(i.itemName, i.category, i.price, i.amount, i.degree, i.itemDescription)" +
             " from Item i where i.itemId = :itemId")
     fun findItemById(@Param("itemId")itemId: Long): ItemResultDTO
+
+    fun countAllByItemStatusIsTrue(): Long
 }

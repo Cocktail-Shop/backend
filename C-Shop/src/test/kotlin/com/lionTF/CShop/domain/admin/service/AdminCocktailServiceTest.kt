@@ -2,6 +2,7 @@ package com.lionTF.CShop.domain.admin.service
 
 import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.models.Category
+import com.lionTF.CShop.domain.admin.models.Cocktail
 import com.lionTF.CShop.domain.admin.models.CocktailItem
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminCocktailItemRepository
@@ -12,10 +13,10 @@ import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
+import org.springframework.data.domain.PageRequest
+import org.springframework.http.HttpStatus
 import org.springframework.test.annotation.Rollback
 import javax.transaction.Transactional
 
@@ -39,44 +40,40 @@ internal class AdminCocktailServiceTest {
     private var item1: Item? = null
     private var item2: Item? = null
     private var item3: Item? = null
-    private var cocktail: CreateCocktailResultDTO? = null
+    private var cocktail: Cocktail? = null
     private var cocktailItem: List<CocktailItem>? = null
 
     @BeforeEach
     fun init(){
-        var createItemDTO1 = RequestCreateItemDTO(
+        val itemDTO1 = RequestCreateItemDTO(
             itemName = "test1",
-
             category = Category.ALCOHOL,
             price = 1,
-            amount = 2,
+            amount = 10,
             degree = 10,
             itemDescription = "test"
         )
+        item1 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO1))
 
-        item1 = adminItemRepository.save(itemDTOToItem(createItemDTO1))
-
-        var createItemDTO2 = RequestCreateItemDTO(
-            itemName = "test2",
+        val itemDTO2 = RequestCreateItemDTO(
+            itemName = "test1",
             category = Category.ALCOHOL,
             price = 1,
-            amount = 2,
+            amount = 10,
             degree = 10,
             itemDescription = "test"
         )
+        item2 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO2))
 
-        item2 = adminItemRepository.save(itemDTOToItem(createItemDTO2))
-
-        var createItemDTO3 = RequestCreateItemDTO(
-            itemName = "test2",
+        val itemDTO3 = RequestCreateItemDTO(
+            itemName = "test1",
             category = Category.ALCOHOL,
             price = 1,
-            amount = 2,
+            amount = 10,
             degree = 10,
             itemDescription = "test"
         )
-
-        item3 = adminItemRepository.save(itemDTOToItem(createItemDTO3))
+        item3 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO3))
 
 
         // 칵테일 생성
@@ -85,30 +82,36 @@ internal class AdminCocktailServiceTest {
         item1?.let { itemIdList.add(it.itemId) }
         item2?.let { itemIdList.add(it.itemId) }
 
-        var createCocktailDTO = CreateCocktailDTO(
+        var requestCreateCocktailDTO1 = RequestCreateCocktailDTO(
             cocktailName = "cocktail1",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
         )
 
-        cocktail = adminCocktailService.createCocktail(createCocktailDTO)
+        cocktail = adminCocktailRepository.save(Cocktail.requestCreateCocktailDTOtoCocktail(requestCreateCocktailDTO1))
 
-        val cocktailId = cocktail?.let { adminCocktailRepository.getReferenceById(it.cocktailId) }
 
         // 칵테일 아이템 생성
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
 
-        item1?.let {
-            cocktailId?.let {
-                    it1 -> cocktailItemToCocktailItemDTO(it, it1)
-            }
-        }?.let { cocktailItemList.add(it) }
+        val cocktailItem1 = CocktailItem(
+            cocktail = cocktail!!,
+            item = item1!!,
+        )
 
-        item2?.let {
-            cocktailId?.let {
-                    it1 -> cocktailItemToCocktailItemDTO(it, it1)
-            }
-        }?.let { cocktailItemList.add(it) }
+        val cocktailItem2 = CocktailItem(
+            cocktail = cocktail!!,
+            item = item2!!,
+        )
+
+        val cocktailItem3 = CocktailItem(
+            cocktail = cocktail!!,
+            item = item3!!,
+        )
+
+        cocktailItemList.add(cocktailItem1)
+        cocktailItemList.add(cocktailItem2)
+        cocktailItemList.add(cocktailItem3)
 
         cocktailItem = adminCocktailItemRepository.saveAll(cocktailItemList)
     }
@@ -117,134 +120,70 @@ internal class AdminCocktailServiceTest {
     @DisplayName("칵테일 생성 test")
     fun createCocktailTest() {
         //given
-        var itemIdList: MutableList<Long> = mutableListOf()
+        val itemIdList: MutableList<Long> = mutableListOf()
 
         item1?.let { itemIdList.add(it.itemId) }
         item2?.let { itemIdList.add(it.itemId) }
         item3?.let { itemIdList.add(it.itemId) }
 
-        var createCocktailDTO = CreateCocktailDTO(
+        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
             cocktailName = "cocktail2",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
         )
 
         //when
-        val cocktailTest = adminCocktailService.createCocktail(createCocktailDTO)
+        val cocktailTest = adminCocktailService.createCocktail(requestCreateCocktailDTO)
 
         //then
-        assertThat(cocktailTest.status).isEqualTo(setCreateSuccessCocktailResultDTO(cocktailTest.cocktailId).status)
-        assertThat(cocktailTest.message).isEqualTo(setCreateSuccessCocktailResultDTO(cocktailTest.cocktailId).message)
+        assertThat(cocktailTest.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCreateCocktailResponseDTO().httpStatus)
+        assertThat(cocktailTest.message).isEqualTo(AdminResponseDTO.toSuccessCreateCocktailResponseDTO().message)
+    }
+
+    @Test
+    @DisplayName("칵테일 생성시 칵테일에 들어가는 상품을 하나도 고르지 않을 예외 test")
+    fun createCocktailExceptionTest() {
+        //given
+        val itemIdList: MutableList<Long> = mutableListOf()
+
+        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
+            cocktailName = "cocktail2",
+            cocktailDescription = "cocktail-description",
+            itemIds = itemIdList
+        )
+
+        //when
+        val cocktailTest = adminCocktailService.createCocktail(requestCreateCocktailDTO)
+
+        //then
+        assertThat(cocktailTest.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().httpStatus)
+        assertThat(cocktailTest.message).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().message)
     }
 
     @Test
     @DisplayName("칵테일 생성시 존재하지 않는 상품 예외 test")
     fun formToExistedItemsTest() {
         //given
-        var itemIdList: MutableList<Long> = mutableListOf()
+        val itemIdList: MutableList<Long> = mutableListOf()
 
         item1?.let { itemIdList.add(it.itemId) }
         item2?.let { itemIdList.add(it.itemId) }
         itemIdList.add(310L)
 
-        var createCocktailDTO = CreateCocktailDTO(
+        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
             cocktailName = "cocktail10",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
         )
 
         //when
-        val cocktailException = adminCocktailService.createCocktail(createCocktailDTO)
+        val cocktailException = adminCocktailService.createCocktail(requestCreateCocktailDTO)
 
         //then
-        assertThat(cocktailException.status).isEqualTo(failToNoContentItemResultDTO().status)
-        assertThat(cocktailException.message).isEqualTo(failToNoContentItemResultDTO().message)
+        assertThat(cocktailException.httpStatus).isEqualTo(AdminResponseDTO.noContentItem().httpStatus)
+        assertThat(cocktailException.message).isEqualTo(AdminResponseDTO.noContentItem().message)
     }
 
-    @Test
-    @DisplayName("이미 등록된 칵테일인지 검사하는 test")
-    fun existedCocktailTest() {
-        //given
-        var itemIdList: MutableList<Long> = mutableListOf()
-
-        item1?.let { itemIdList.add(it.itemId) }
-        item2?.let { itemIdList.add(it.itemId) }
-        item3?.let { itemIdList.add(it.itemId) }
-
-        var createCocktailDTO1 = CreateCocktailDTO(
-            cocktailName = "cocktail19",
-            cocktailDescription = "cocktail-description",
-            itemIds = itemIdList
-        )
-
-        var createCocktailDTO2 = CreateCocktailDTO(
-            cocktailName = "cocktail19",
-            cocktailDescription = "cocktail-description",
-            itemIds = itemIdList
-        )
-
-        adminCocktailService.createCocktail(createCocktailDTO1)
-
-        //when
-        val duplicatedCocktail = adminCocktailService.createCocktail(createCocktailDTO2)
-
-        //then
-        assertThat(duplicatedCocktail.status).isEqualTo(setCreateFailCocktailResultDTO().status)
-        assertThat(duplicatedCocktail.message).isEqualTo(setCreateFailCocktailResultDTO().message)
-        println("setCreateFailCocktailResultDTO().message = ${setCreateFailCocktailResultDTO().message}")
-    }
-
-
-    @Test
-    @DisplayName("칵테일 상품 삭제 test")
-    fun deleteItemsTest() {
-        //given
-        val cocktailItemList: MutableList<Long> = mutableListOf()
-
-        cocktailItemList.add(cocktail!!.cocktailId)
-
-        val deleteCocktailDTO =  DeleteCocktailDTO(
-            cocktailItemList
-        )
-
-        //when
-        val deleteCocktail = adminCocktailService!!.deleteCocktail(deleteCocktailDTO)
-
-        println("deleteCocktail = ${deleteCocktail.message}")
-
-        //then
-        assertThat(deleteCocktail.status).isEqualTo(setDeleteSuccessCocktailResultDTO().status)
-        assertThat(deleteCocktail.message).isEqualTo(setDeleteSuccessCocktailResultDTO().message)
-
-        val referenceById = cocktail?.let { adminCocktailRepository!!.getReferenceById(it.cocktailId) }
-
-        referenceById?.let { assertThat(it.cocktailStatus).isEqualTo(false) }
-    }
-
-    @Test
-    @DisplayName("존재하지 않는 칵테일을 삭제할 예외 test")
-    fun deleteItemsExceptionTest() {
-        //given
-        val cocktailItemList: MutableList<Long> = mutableListOf()
-
-        cocktail?.let { cocktailItemList.add(it.cocktailId) }
-        cocktailItemList.add(1231L)
-
-        val deleteCocktailDTO =  DeleteCocktailDTO(
-            cocktailItemList
-        )
-
-        //when
-        val deleteCocktail = adminCocktailService.deleteCocktail(deleteCocktailDTO)
-
-        //then
-        assertThat(deleteCocktail.status).isEqualTo(setDeleteFailCocktailResultDTO().status)
-        assertThat(deleteCocktail.message).isEqualTo(setDeleteFailCocktailResultDTO().message)
-
-        val referenceById = cocktail?.let { adminCocktailRepository.getReferenceById(it.cocktailId) }
-
-        referenceById?.let { assertThat(it.cocktailStatus).isEqualTo(true) }
-    }
 
     @Test
     @DisplayName("한개의 칵테일 삭제 test")
@@ -255,8 +194,8 @@ internal class AdminCocktailServiceTest {
         val optionalCocktail = adminCocktailRepository.findById(cocktail!!.cocktailId)
 
         //then
-        assertThat(deleteOneCocktail.status).isEqualTo(setDeleteSuccessCocktailResultDTO().status)
-        assertThat(deleteOneCocktail.message).isEqualTo(setDeleteSuccessCocktailResultDTO().message)
+        assertThat(deleteOneCocktail.httpStatus).isEqualTo(AdminResponseDTO.toSuccessDeleteCocktailResponseDTO().httpStatus)
+        assertThat(deleteOneCocktail.message).isEqualTo(AdminResponseDTO.toSuccessDeleteCocktailResponseDTO().message)
 
         assertThat(optionalCocktail.orElseThrow().cocktailStatus).isEqualTo(false)
     }
@@ -267,8 +206,15 @@ internal class AdminCocktailServiceTest {
         //given
         val cocktailId: Long = 98L
 
+        //when
+        val deleteOneCocktail = adminCocktailService.deleteOneCocktail(cocktailId)
+        val optionalCocktail = adminCocktailRepository.findById(cocktail!!.cocktailId)
+
         //then
-        assertThrows<JpaObjectRetrievalFailureException> { adminCocktailService.deleteOneCocktail(cocktailId) }
+        assertThat(deleteOneCocktail.httpStatus).isEqualTo(AdminResponseDTO.toFailDeleteCocktailResponseDTO().httpStatus)
+        assertThat(deleteOneCocktail.message).isEqualTo(AdminResponseDTO.toFailDeleteCocktailResponseDTO().message)
+
+        assertThat(optionalCocktail.orElseThrow().cocktailStatus).isEqualTo(true)
     }
 
 
@@ -276,70 +222,238 @@ internal class AdminCocktailServiceTest {
     @DisplayName("칵테일 상품 수정 test")
     fun updateCocktailTest() {
         //given
-        var itemIdList: MutableList<Long> = mutableListOf()
+        val itemIdList: MutableList<Long> = mutableListOf()
 
         item3?.let { itemIdList.add(it.itemId) }
 
-        var createCocktailDTO = CreateCocktailDTO(
+        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
             cocktailName = "cocktail1123",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
         )
 
         //when
-        val updateCocktail = cocktail?.let { adminCocktailService.updateCocktail(createCocktailDTO, it.cocktailId) }
+        val updateCocktail =
+            adminCocktailService.updateCocktail(requestCreateCocktailDTO, cocktail!!.cocktailId, itemIdList)
 
-        val countCocktailItem = adminCocktailItemRepository.count()
+        val countCocktailItem = adminCocktailItemRepository.countAllByCocktailId(cocktail!!.cocktailId)
 
         //then
-        println("updateCocktail = ${updateCocktail!!.message}")
-        assertThat(updateCocktail.status).isEqualTo(setUpdateSuccessCocktailResultDTO(updateCocktail.cocktailId).status)
-        assertThat(updateCocktail.message).isEqualTo(updateCocktail.let { setUpdateSuccessCocktailResultDTO(it.cocktailId).message })
-        assertThat(countCocktailItem).isEqualTo(1)
+        assertThat(updateCocktail.httpStatus).isEqualTo(AdminResponseDTO.toSuccessUpdateCocktailResponseDTO().httpStatus)
+        assertThat(updateCocktail.message).isEqualTo(AdminResponseDTO.toSuccessUpdateCocktailResponseDTO().message)
+        assertThat(countCocktailItem).isEqualTo(itemIdList.size)
     }
+
 
     @Test
     @DisplayName("칵테일 상품 수정시 존재하지 않는 칵테일 수정시 예외 test")
     fun updateCocktailNoContentCocktailExceptionTest() {
         //given
-        var itemIdList: MutableList<Long> = mutableListOf()
+        val itemIdList: MutableList<Long> = mutableListOf()
 
         itemIdList.add(100L)
 
-        var createCocktailDTO = CreateCocktailDTO(
+
+        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
             cocktailName = "cocktail1",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
         )
 
         //when
-        val updateCocktail = adminCocktailService.updateCocktail(createCocktailDTO, 10L)
+        val updateCocktail = adminCocktailService.updateCocktail(requestCreateCocktailDTO, 10L, itemIdList)
 
         //then
-        assertThat(updateCocktail.status).isEqualTo(setUpdateFailCocktailResultDTO().status)
-        assertThat(updateCocktail.message).isEqualTo(setUpdateFailCocktailResultDTO().message)
+        assertThat(updateCocktail.httpStatus).isEqualTo(AdminResponseDTO.noContentItem().httpStatus)
+        assertThat(updateCocktail.message).isEqualTo(AdminResponseDTO.noContentItem().message)
     }
 
     @Test
     @DisplayName("칵테일 상품 수정시 존재하지 않는 item으로 발생하는 예외 test")
     fun updateCocktailNoContentItemExceptionTest() {
         //given
-        var itemIdList: MutableList<Long> = mutableListOf()
+        val itemIdList: MutableList<Long> = mutableListOf()
 
         itemIdList.add(100L)
 
-        var createCocktailDTO = CreateCocktailDTO(
+        val cocktailId = cocktail!!.cocktailId
+
+        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
             cocktailName = "cocktail1",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
         )
 
         //when
-//        val updateCocktail = cocktail?.let { adminCocktailService.updateCocktail(createCocktailDTO, it.cocktailId) }
+        val updateCocktail = adminCocktailService.updateCocktail(requestCreateCocktailDTO, cocktailId, itemIdList)
 
         //then
-        assertThrows<JpaObjectRetrievalFailureException> { cocktail?.let { adminCocktailService.updateCocktail(createCocktailDTO, it.cocktailId) } }
-//        assertThat(updateCocktail?.status).isEqualTo(failToNoContentItemResultDTO().status)
-//        assertThat(updateCocktail?.message).isEqualTo(failToNoContentItemResultDTO().message)
+        assertThat(updateCocktail.httpStatus).isEqualTo(AdminResponseDTO.noContentItem().httpStatus)
+        assertThat(updateCocktail.message).isEqualTo(AdminResponseDTO.noContentItem().message)
     }
+
+    @Test
+    @DisplayName("칵테일 상품 수정시 존재하지 않는 item을 선택하지 않았을 때 발생하는 예외 test")
+    fun updateCocktailNoSelectedItemExceptionTest() {
+        //given
+        val itemIdList: MutableList<Long> = mutableListOf()
+
+        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
+            cocktailName = "cocktail1",
+            cocktailDescription = "cocktail-description",
+            itemIds = itemIdList
+        )
+
+        val cocktailId = cocktail!!.cocktailId
+
+        //when
+        val updateCocktail = adminCocktailService.updateCocktail(requestCreateCocktailDTO, cocktailId, itemIdList)
+
+        //then
+        assertThat(updateCocktail.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().httpStatus)
+        assertThat(updateCocktail.message).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().message)
+    }
+
+
+    @Test
+    @DisplayName("칵테일 단건 조회 test")
+    fun findCocktailTest() {
+        //given
+        val cocktailId: Long = cocktail!!.cocktailId
+
+        val itemIdList: MutableList<Long> = mutableListOf()
+
+        item1?.let { itemIdList.add(it.itemId) }
+        item2?.let { itemIdList.add(it.itemId) }
+        item3?.let { itemIdList.add(it.itemId) }
+
+        //when
+        val findCocktail = adminCocktailService.findCocktail(cocktailId, itemIdList)
+
+        //then
+        assertThat(findCocktail.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(findCocktail.message).isEqualTo("칵테일 조회를 성공했습니다.")
+        assertThat(findCocktail.result!!.cocktailName).isEqualTo(cocktail!!.cocktailName)
+        assertThat(findCocktail.result!!.cocktailDescription).isEqualTo(cocktail!!.cocktailDescription)
+        assertThat(findCocktail.result!!.itemIds).isEqualTo(itemIdList)
+    }
+
+
+    @Test
+    @DisplayName("칵테일 단건 조회시 존재하지 않는 칵테일 예외 test")
+    fun findCocktailExceptionTest() {
+        //given
+        val cocktailId: Long = 98L
+
+        val itemIdList: MutableList<Long> = mutableListOf()
+
+        item1?.let { itemIdList.add(it.itemId) }
+        item2?.let { itemIdList.add(it.itemId) }
+        item3?.let { itemIdList.add(it.itemId) }
+
+        //when
+        val findCocktail = adminCocktailService.findCocktail(cocktailId, itemIdList)
+
+        //then
+        assertThat(findCocktail.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        assertThat(findCocktail.message).isEqualTo("존재하지 않는 칵테일입니다.")
+    }
+
+
+    private fun generatePageable(page: Int, pageSize: Int): PageRequest = PageRequest.of(page, pageSize)
+
+
+    @Test
+    @DisplayName("칵테일 전체 조회 test")
+    fun getAllCocktailTest() {
+        //given
+        val page = 0
+        val pageSize = 2
+        val pageable = generatePageable(page = page, pageSize = pageSize)
+
+        //when
+        val allCocktail = adminCocktailService.getAllCocktail(pageable)
+
+        val countCocktail = adminCocktailRepository.countAllByCocktailStatusIsTrue()
+
+        //then
+        assertThat(allCocktail.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(allCocktail.message).isEqualTo("칵테일 조회를 성공했습니다.")
+        assertThat(allCocktail.keyword).isEqualTo("")
+        assertThat(allCocktail.result!!.totalElements).isEqualTo(countCocktail)
+        assertThat(allCocktail.result!!.totalPages).isEqualTo(countCocktail/2)
+    }
+
+
+    @Test
+    @DisplayName("칵테일 상품명으로 칵테일 조회 test")
+    fun getCocktailsByNameTest() {
+        //given
+        val page = 0
+        val pageSize = 2
+        val pageable = generatePageable(page = page, pageSize = pageSize)
+        val keyword: String = "1"
+
+        //when
+        val allCocktail = adminCocktailService.getCocktailsByName(keyword, pageable)
+
+        //then
+        assertThat(allCocktail.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(allCocktail.message).isEqualTo("칵테일 조회를 성공했습니다.")
+        assertThat(allCocktail.keyword).isEqualTo(keyword)
+        assertThat(allCocktail.result!!.totalElements).isEqualTo(3)
+        assertThat(allCocktail.result!!.totalPages).isEqualTo(2)
+    }
+
+
+//    @Test
+//    @DisplayName("칵테일 상품 삭제 test")
+//    fun deleteItemsTest() {
+//        //given
+//        val cocktailItemList: MutableList<Long> = mutableListOf()
+//
+//        cocktailItemList.add(cocktail!!.cocktailId)
+//
+//        val deleteCocktailDTO =  DeleteCocktailDTO(
+//            cocktailItemList
+//        )
+//
+//        //when
+//        val deleteCocktail = adminCocktailService!!.deleteCocktail(deleteCocktailDTO)
+//
+//        println("deleteCocktail = ${deleteCocktail.message}")
+//
+//        //then
+//        assertThat(deleteCocktail.status).isEqualTo(setDeleteSuccessCocktailResultDTO().status)
+//        assertThat(deleteCocktail.message).isEqualTo(setDeleteSuccessCocktailResultDTO().message)
+//
+//        val referenceById = cocktail?.let { adminCocktailRepository!!.getReferenceById(it.cocktailId) }
+//
+//        referenceById?.let { assertThat(it.cocktailStatus).isEqualTo(false) }
+//    }
+//
+//    @Test
+//    @DisplayName("존재하지 않는 칵테일을 삭제할 예외 test")
+//    fun deleteItemsExceptionTest() {
+//        //given
+//        val cocktailItemList: MutableList<Long> = mutableListOf()
+//
+//        cocktail?.let { cocktailItemList.add(it.cocktailId) }
+//        cocktailItemList.add(1231L)
+//
+//        val deleteCocktailDTO =  DeleteCocktailDTO(
+//            cocktailItemList
+//        )
+//
+//        //when
+//        val deleteCocktail = adminCocktailService.deleteCocktail(deleteCocktailDTO)
+//
+//        //then
+//        assertThat(deleteCocktail.status).isEqualTo(setDeleteFailCocktailResultDTO().status)
+//        assertThat(deleteCocktail.message).isEqualTo(setDeleteFailCocktailResultDTO().message)
+//
+//        val referenceById = cocktail?.let { adminCocktailRepository.getReferenceById(it.cocktailId) }
+//
+//        referenceById?.let { assertThat(it.cocktailStatus).isEqualTo(true) }
+//    }
 }

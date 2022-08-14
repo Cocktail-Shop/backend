@@ -16,7 +16,7 @@ data class ResponseSearchOrdersResultDTO(
         fun orderToResponseOrderSearchPageDTO(findOrdersDTO: Page<FindOrdersDTO>, keyword: String?): ResponseSearchOrdersResultDTO {
             return ResponseSearchOrdersResultDTO(
                 HttpStatus.OK.value(),
-                "상품 조회를 성공했습니다.",
+                "주문 조회를 성공했습니다.",
                 keyword,
                 findOrdersDTO
             )

@@ -10,4 +10,9 @@ interface AdminCocktailItemRepository : JpaRepository<CocktailItem, Long> {
     @Query("select ci from CocktailItem ci where ci.cocktail.cocktailId = :cocktailId")
     fun findAllByCocktailId(@Param("cocktailId") cocktailId: Long): MutableList<CocktailItem>
 
+    @Query("select ci.item.itemId from CocktailItem ci where ci.cocktail.cocktailId = :cocktailId")
+    fun findItemIdByCocktailId(@Param("cocktailId")cocktailId: Long): MutableList<Long>
+
+    @Query("select count(ci) from CocktailItem ci where ci.cocktail.cocktailId = :cocktailId")
+    fun countAllByCocktailId(@Param("cocktailId") cocktailId: Long): Long
 }

@@ -4,12 +4,14 @@ import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.models.Category
 import com.lionTF.CShop.domain.admin.models.Item
 import com.lionTF.CShop.domain.admin.repository.AdminItemRepository
+import com.lionTF.CShop.domain.admin.repository.AdminOrderItemRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminOrderService
 import com.lionTF.CShop.domain.member.models.Member
 import com.lionTF.CShop.domain.member.models.MemberRole
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderItemDTO
+import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.domain.shop.models.OrderStatus
 import com.lionTF.CShop.domain.shop.models.Orders
 import com.lionTF.CShop.domain.shop.repository.OrderRepository
@@ -18,11 +20,10 @@ import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.data.domain.Pageable
-import org.springframework.orm.jpa.JpaObjectRetrievalFailureException
+import org.springframework.data.domain.PageRequest
+import org.springframework.http.HttpStatus
 import org.springframework.security.crypto.password.PasswordEncoder
 import javax.transaction.Transactional
 
@@ -48,7 +49,11 @@ internal class AdminOrderServiceTest {
     @Autowired
     private lateinit var orderService: OrderService
 
+    @Autowired
+    private lateinit var adminOrderItemRepository: AdminOrderItemRepository
+
     private var order: Orders? = null
+    private var orderItem: OrderItem? = null
     private var item1: Item? = null
     private var item2: Item? = null
     private var item3: Item? = null
@@ -58,42 +63,49 @@ internal class AdminOrderServiceTest {
 
     @BeforeEach
     fun init() {
-        var orderDTO = Orders(
-            orderAddress = "test"
+        val orderDTO = Orders(
+            orderAddress = "test",
+            orderStatus = OrderStatus.COMPLETE
         )
-
         order = orderRepository.save(orderDTO)
 
-        val createItemDTO1 = RequestCreateItemDTO(
+        val orderItemDTO = OrderItem(
+            amount = 5,
+            orders = order
+        )
+
+        orderItem = adminOrderItemRepository.save(orderItemDTO)
+
+
+        val itemDTO1 = RequestCreateItemDTO(
             itemName = "test1",
-
             category = Category.ALCOHOL,
             price = 1,
             amount = 10,
             degree = 10,
             itemDescription = "test"
         )
-        item1 = adminItemRepository.save(itemDTOToItem(createItemDTO1))
+        item1 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO1))
 
-        val createItemDTO2 = RequestCreateItemDTO(
-            itemName = "test2",
+        val itemDTO2 = RequestCreateItemDTO(
+            itemName = "test1",
             category = Category.ALCOHOL,
             price = 1,
             amount = 10,
             degree = 10,
             itemDescription = "test"
         )
-        item2 = adminItemRepository.save(itemDTOToItem(createItemDTO2))
+        item2 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO2))
 
-        val createItemDTO3 = RequestCreateItemDTO(
-            itemName = "test2",
+        val itemDTO3 = RequestCreateItemDTO(
+            itemName = "test1",
             category = Category.ALCOHOL,
             price = 1,
             amount = 10,
             degree = 10,
             itemDescription = "test"
         )
-        item3 = adminItemRepository.save(itemDTOToItem(createItemDTO3))
+        item3 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO3))
 
 
         val member1 = Member(
@@ -176,111 +188,135 @@ internal class AdminOrderServiceTest {
 
 
     @Test
-    @DisplayName("주문 취소 test")
-    fun deleteOrdersTest() {
-        //given
-        var orderIds: MutableList<Long> = mutableListOf()
-
-        order?.let { orderIds.add(it.orderId) }
-
-        var deleteOrdersDTO = DeleteOrdersDTO(
-            orderIds
-        )
-
-        //when
-        val deleteOrders = adminOrderService.deleteOrders(deleteOrdersDTO)
-
-        //then
-        assertThat(deleteOrders.status).isEqualTo(setDeleteSuccessOrdersResultDTO().status)
-        assertThat(deleteOrders.message).isEqualTo(setDeleteSuccessOrdersResultDTO().message)
-        assertThat(order?.orderStatus).isEqualTo(OrderStatus.CANCEL)
-    }
-
-
-    @Test
-    @DisplayName("없는 주문을 취소할 예외 test")
-    fun deleteOrdersExceptionTest() {
-        //given
-        var orderIds: MutableList<Long> = mutableListOf()
-
-        orderIds.add(10L)
-
-        var deleteOrdersDTO = DeleteOrdersDTO(
-            orderIds
-        )
-
-        //when
-        val deleteOrders = adminOrderService.deleteOrders(deleteOrdersDTO)
-
-        //then
-        assertThat(deleteOrders.status).isEqualTo(setDeleteFailOrdersResultDTO().status)
-        assertThat(deleteOrders.message).isEqualTo(setDeleteFailOrdersResultDTO().message)
-        assertThat(order?.orderStatus).isEqualTo(OrderStatus.COMPLETE)
-    }
-
-    @Test
     @DisplayName("하나의 주문 취소 test")
-    fun deleteOneOrderTest() {
+    fun cancelOneOrderTest() {
         //given
 
         //when
-        val deleteOneOrder = adminOrderService.cancelOneOrder(order!!.orderId)
+        val cancelOneOrder = adminOrderService.cancelOneOrder(order!!.orderId)
 
         //then
-        assertThat(deleteOneOrder.status).isEqualTo(setDeleteSuccessOrdersResultDTO().status)
-        assertThat(deleteOneOrder.message).isEqualTo(setDeleteSuccessOrdersResultDTO().message)
+        assertThat(cancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCancelOrderResponseDTO().httpStatus)
+        assertThat(cancelOneOrder.message).isEqualTo(AdminResponseDTO.toSuccessCancelOrderResponseDTO().message)
         assertThat(order!!.orderStatus).isEqualTo(OrderStatus.CANCEL)
+        println("cancelOneOrder = ${cancelOneOrder.message}")
     }
-    
+
+    @Test
+    @DisplayName("하나의 주문 취소 예외 중 이미 취소된 주문을 취소할 case test")
+    fun duplicatedCancelOneOrderExceptionTest() {
+        //given
+        adminOrderService.cancelOneOrder(order!!.orderId)
+
+        //when
+        val duplicatedCancelOneOrder = adminOrderService.cancelOneOrder(order!!.orderId)
+
+        //then
+        assertThat(duplicatedCancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO().httpStatus)
+        assertThat(duplicatedCancelOneOrder.message).isEqualTo(AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO().message)
+        println("duplicatedCancelOneOrder = ${duplicatedCancelOneOrder.message}")
+    }
+
     @Test
     @DisplayName("하나의 주문 취소 예외 test")
     fun deleteOneOrderExceptionTest() {
         //given
         val orderId: Long = 98L
 
+        //when
+        val cancelOneOrder = adminOrderService.cancelOneOrder(orderId)
+
         //then
-        assertThrows<JpaObjectRetrievalFailureException> { adminOrderService.cancelOneOrder(orderId) }
-    } 
+        assertThat(cancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderResponseDTO().httpStatus)
+        assertThat(cancelOneOrder.message).isEqualTo(AdminResponseDTO.toFailCancelOrderResponseDTO().message)
+        println("cancelOneOrder = ${cancelOneOrder.message}")
+    }
+
+    private fun generatePageable(page: Int, pageSize: Int): PageRequest = PageRequest.of(page, pageSize)
 
     @Test
     @DisplayName("주문 전체 조회 test")
     fun getAllOrdersTest() {
         //given
+        val page = 0
+        val pageSize = 2
+        val pageable = generatePageable(page = page, pageSize = pageSize)
+
         val orderCount = orderRepository.count()
 
         //when
-        val allOrders = adminOrderService.getAllOrders(Pageable.unpaged())
+        val allOrders = adminOrderService.getAllOrders(pageable)
 
         //then
-        assertThat(allOrders.content.size).isEqualTo(orderCount-1)
-        assertThat(allOrders.content[0].memberId).isEqualTo(memberTest1?.memberId)
-        assertThat(allOrders.content[0].itemId).isEqualTo(item1?.itemId)
-        assertThat(allOrders.content[1].memberId).isEqualTo(memberTest2?.memberId)
-        assertThat(allOrders.content[1].itemId).isEqualTo(item2?.itemId)
-        assertThat(allOrders.content[2].memberId).isEqualTo(memberTest3?.memberId)
-        assertThat(allOrders.content[2].itemId).isEqualTo(item3?.itemId)
+        assertThat(allOrders.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(allOrders.message).isEqualTo("주문 조회를 성공했습니다.")
+        assertThat(allOrders.keyword).isEqualTo("")
+        assertThat(allOrders.result!!.totalElements).isEqualTo(orderCount - 1)
+        assertThat(allOrders.result!!.totalPages).isEqualTo(3)
+
     }
 
     @Test
     @DisplayName("회원 ID로 주문 조회 test")
     fun getOrdersByMemberIdTest() {
         //given
-        val keyword1: String = "te"
-        val keyword2: String = "le"
-        val keyword3: String = "e"
+        val page = 0
+        val pageSize = 2
+        val pageable = generatePageable(page = page, pageSize = pageSize)
+        val keyword: String = "te"
 
         //when
-        val ordersByMemberId1 = adminOrderService.getOrdersByMemberId(keyword1, Pageable.unpaged())
-        val ordersByMemberId2 = adminOrderService.getOrdersByMemberId(keyword2, Pageable.unpaged())
-        val ordersByMemberId3 = adminOrderService.getOrdersByMemberId(keyword3, Pageable.unpaged())
+        val ordersByMemberId = adminOrderService.getOrdersByMemberId(keyword, pageable)
 
         //then
-        assertThat(ordersByMemberId1.content.size).isEqualTo(2)
-        assertThat(ordersByMemberId1.content[0].memberId).isEqualTo(memberTest1?.memberId)
-        assertThat(ordersByMemberId1.content[0].itemId).isEqualTo(item1?.itemId)
-        assertThat(ordersByMemberId1.content[1].memberId).isEqualTo(memberTest2?.memberId)
-        assertThat(ordersByMemberId1.content[1].itemId).isEqualTo(item2?.itemId)
-        assertThat(ordersByMemberId2.content.size).isEqualTo(1)
-        assertThat(ordersByMemberId3.content.size).isEqualTo(3)
+        assertThat(ordersByMemberId.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(ordersByMemberId.message).isEqualTo("주문 조회를 성공했습니다.")
+        assertThat(ordersByMemberId.keyword).isEqualTo(keyword)
+        assertThat(ordersByMemberId.result!!.totalElements).isEqualTo(4)
+        assertThat(ordersByMemberId.result!!.totalPages).isEqualTo(2)
     }
+
+
+//    @Test
+//    @DisplayName("주문 취소 test")
+//    fun deleteOrdersTest() {
+//        //given
+//        var orderIds: MutableList<Long> = mutableListOf()
+//
+//        order?.let { orderIds.add(it.orderId) }
+//
+//        var deleteOrdersDTO = DeleteOrdersDTO(
+//            orderIds
+//        )
+//
+//        //when
+//        val deleteOrders = adminOrderService.deleteOrders(deleteOrdersDTO)
+//
+//        //then
+//        assertThat(deleteOrders.status).isEqualTo(setDeleteSuccessOrdersResultDTO().status)
+//        assertThat(deleteOrders.message).isEqualTo(setDeleteSuccessOrdersResultDTO().message)
+//        assertThat(order?.orderStatus).isEqualTo(OrderStatus.CANCEL)
+//    }
+//
+//
+//    @Test
+//    @DisplayName("없는 주문을 취소할 예외 test")
+//    fun deleteOrdersExceptionTest() {
+//        //given
+//        var orderIds: MutableList<Long> = mutableListOf()
+//
+//        orderIds.add(10L)
+//
+//        var deleteOrdersDTO = DeleteOrdersDTO(
+//            orderIds
+//        )
+//
+//        //when
+//        val deleteOrders = adminOrderService.deleteOrders(deleteOrdersDTO)
+//
+//        //then
+//        assertThat(deleteOrders.status).isEqualTo(setDeleteFailOrdersResultDTO().status)
+//        assertThat(deleteOrders.message).isEqualTo(setDeleteFailOrdersResultDTO().message)
+//        assertThat(order?.orderStatus).isEqualTo(OrderStatus.COMPLETE)
+//    }
 }

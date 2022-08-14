@@ -1,6 +1,6 @@
 package com.lionTF.CShop.domain.admin.models
 
-import com.lionTF.CShop.domain.admin.controller.dto.CreateCocktailDTO
+import com.lionTF.CShop.domain.admin.controller.dto.RequestCreateCocktailDTO
 import javax.persistence.*
 
 import com.lionTF.CShop.global.model.BaseTimeEntity
@@ -25,14 +25,25 @@ class Cocktail (
     var category: Category,
 ) : BaseTimeEntity() {
 
+    companion object {
+        fun requestCreateCocktailDTOtoCocktail(requestCreateCocktailDTO: RequestCreateCocktailDTO): Cocktail {
+            return Cocktail(
+                cocktailDescription = requestCreateCocktailDTO.cocktailDescription,
+                cocktailName = requestCreateCocktailDTO.cocktailName,
+                category = requestCreateCocktailDTO.category
+            )
+        }
+    }
+
     // 칵테일 상품 삭제
     fun deleteCocktail(){
         cocktailStatus = false
     }
 
     // 칵테일 상품 수정
-    fun updateCocktail(createCocktailDTO: CreateCocktailDTO) {
-        cocktailName = createCocktailDTO.cocktailName
-        cocktailDescription = cocktailDescription
+    fun updateCocktail(requestCreateCocktailDTO: RequestCreateCocktailDTO) {
+        cocktailName = requestCreateCocktailDTO.cocktailName
+        cocktailDescription = requestCreateCocktailDTO.cocktailDescription
+        category = Category.COCKTAIL
     }
 }
