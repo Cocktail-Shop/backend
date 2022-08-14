@@ -11,6 +11,7 @@ import com.lionTF.CShop.domain.member.models.MemberRole
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderItemDTO
+import com.lionTF.CShop.domain.shop.models.DeliveryStatus
 import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.domain.shop.models.OrderStatus
 import com.lionTF.CShop.domain.shop.models.Orders
@@ -254,8 +255,9 @@ internal class AdminOrderServiceTest {
         assertThat(allOrders.httpStatus).isEqualTo(HttpStatus.OK.value())
         assertThat(allOrders.message).isEqualTo("주문 조회를 성공했습니다.")
         assertThat(allOrders.keyword).isEqualTo("")
+        assertThat(allOrders.result!!.content[0].deliveryStatus).isEqualTo(DeliveryStatus.READY)
         assertThat(allOrders.result!!.totalElements).isEqualTo(orderCount - 1)
-        assertThat(allOrders.result!!.totalPages).isEqualTo(3)
+        assertThat(allOrders.result!!.totalPages).isEqualTo(2)
 
     }
 

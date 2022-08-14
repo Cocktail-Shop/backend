@@ -4,6 +4,7 @@ import com.lionTF.CShop.domain.admin.controller.dto.*
 import com.lionTF.CShop.domain.admin.repository.AdminOrderItemRepository
 import com.lionTF.CShop.domain.admin.repository.AdminOrderRepository
 import com.lionTF.CShop.domain.admin.service.admininterface.AdminOrderService
+import com.lionTF.CShop.domain.shop.models.DeliveryStatus
 import com.lionTF.CShop.domain.shop.models.OrderStatus
 import com.lionTF.CShop.domain.shop.models.Orders
 import org.springframework.data.domain.Pageable
@@ -32,6 +33,10 @@ class AdminOrderServiceImpl(
 
             if (order.orderStatus == OrderStatus.CANCEL) {
                 AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO()
+
+            } else if (order.deliveryStatus == DeliveryStatus.COMPLETE) {
+                AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO()
+
             } else {
                 order.cancelOrder()
 
