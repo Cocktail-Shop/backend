@@ -22,5 +22,22 @@ data class MailDTO (var toAddress:String,
                 fromAddress
             )
         }
+
+        fun toAuthNumberMailDTO(toAddress: String,authPw:String):MailDTO{
+            val title = "C-Shop 이메일 인증 인증번호 이메일 입니다."
+            val message = """
+            안녕하세요. C-shop 이메일 인증 인증번호 안내 메일입니다.
+            회원님의 인증번호는 아래와 같습니다. 
+            인증번호 : $authPw
+            """.trimIndent()
+            val fromAddress = "cshop1234@naver.com"
+            return MailDTO(
+                toAddress,
+                title,
+                message,
+                fromAddress
+            )
+        }
+
     }
 }

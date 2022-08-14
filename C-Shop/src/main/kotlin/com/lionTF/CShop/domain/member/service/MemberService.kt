@@ -6,11 +6,13 @@ import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
 import com.lionTF.CShop.domain.shop.models.Cart
 import com.lionTF.CShop.domain.shop.repository.CartRepository
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 @Service
@@ -22,6 +24,8 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
     @Autowired
     private lateinit var javaMailService: JavaMailSender
 
+    @Autowired
+    private lateinit var redisTemplate: RedisTemplate<String, String>
     //회원가입 로직
     fun registerMember(requestSignUpDTO: RequestSignUpDTO):ResponseDTO{
         requestSignUpDTO.encoding()
@@ -44,16 +48,39 @@ class MemberService(val memberAuthRepository: MemberAuthRepository,val cartRepos
 
     //아이디 찾기
     fun idInquiry(idInquiryDTO: RequestIdInquiryDTO):Any?{
-        val existMember=memberAuthRepository.findByMemberNameAndPhoneNumber(idInquiryDTO.memberName,idInquiryDTO.phoneNumber)
+        val existMember=memberAuthRepository.findByMemberNameAndEmail(idInquiryDTO.memberName,idInquiryDTO.email)
 
         return if(existMember.isPresent) {
+
+
             ResponseIdInquiryDTO.memberToSuccessResponseIdInquiryDTO(existMember.get())
         }else{
             ResponseDTO.toFailedIdInquiryResponseDTO()
         }
-
-
     }
+
+    //인증관련
+    fun sendAuthNumber(authNumberDTO: RequestAuthNumberDTO){
+        //인증번호 생성
+        var authNumber = UUID.randomUUID().toString().replace("-", "")
+        authNumber = authNumber.substring(0, 6)
+
+        //인증번호 저장
+        val saveAuthNumberOperation=redisTemplate.opsForValue()
+        saveAuthNumberOperation.set(authNumberDTO.email,authNumber,4,TimeUnit.MINUTES)
+
+        //메일 보내기
+        sendTempPasswordMail(MailDTO.toAuthNumberMailDTO(authNumberDTO.email,authNumber))
+    }
+
+    fun verifyAuthNumber(authNumberDTO: RequestVerifyAuthNumberDTO):Boolean{
+        //인증번호 검증
+        val getAuthNumberOperation=redisTemplate.opsForValue()
+        val existAuthNumber=getAuthNumberOperation.get(authNumberDTO.email)
+
+        return authNumberDTO.authNumber==existAuthNumber
+    }
+
     //비밀번호 찾기
     fun passwordInquiry(passwordInquiryDTO: RequestPasswordInquiryDTO):ResponseDTO{
         val member=memberAuthRepository.findByIdAndEmail(passwordInquiryDTO.id,passwordInquiryDTO.email)

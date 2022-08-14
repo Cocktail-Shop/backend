@@ -26,11 +26,18 @@ class MemberController(private val memberService: MemberService) {
         return "global/message"
     }
 
-    @GetMapping("/members/success")
-    fun successLogin(): String {
-        return "success"
+    //인증번호 관련
+    @PostMapping("/members/auth-number")
+    @ResponseBody//AJAX 사용시 필요
+    fun sendAuthNumber(authNumberDTO: RequestAuthNumberDTO){
+        memberService.sendAuthNumber(authNumberDTO)
     }
 
+    @PostMapping("/members/auth-number/verify")
+    @ResponseBody//AJAX 사용시 필요
+    fun verifyAuthNumber(authNumberDTO: RequestVerifyAuthNumberDTO):Boolean{
+        return memberService.verifyAuthNumber(authNumberDTO)
+    }
 
     // 아이디 찾기
     @GetMapping("/members/id-inquiry")
