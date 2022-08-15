@@ -27,7 +27,7 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
             return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"존재하지 않는 회원입니다.","/members/login")
         }
 
-        fun toSuccesUpdateMyPageResponseDTO():ResponseDTO{
+        fun toSuccessUpdateMyPageResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.CREATED.value(),"마이페이지 정보가 성공적으로 수정되었습니다.","/members")
         }
 

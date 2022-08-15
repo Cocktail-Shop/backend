@@ -1,5 +1,8 @@
 package com.lionTF.CShop.domain.member.controller.dto
 
+import org.springframework.mail.SimpleMailMessage
+import org.springframework.mail.javamail.JavaMailSender
+
 data class MailDTO (var toAddress:String,
                    var title:String,
                    var message:String,
@@ -38,6 +41,15 @@ data class MailDTO (var toAddress:String,
                 fromAddress
             )
         }
+    }
+    fun sendMail(javaMailService: JavaMailSender){
+        val mailMessage = SimpleMailMessage()
+        mailMessage.setTo(this.toAddress)
+        mailMessage.setSubject(this.title)
+        mailMessage.setText(this.message)
+        mailMessage.setFrom(this.fromAddress)
+        mailMessage.setReplyTo(this.fromAddress)
 
+        javaMailService.send(mailMessage)
     }
 }

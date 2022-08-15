@@ -7,7 +7,7 @@ data class AddressDTO(
     var AddressDetail:String="",
 ){
     companion object{
-        fun memberToAddressDTO(member: Member) : AddressDTO{
+        fun fromMember(member: Member) : AddressDTO{
             return AddressDTO(member.address, member.detailAddress)
         }
     }

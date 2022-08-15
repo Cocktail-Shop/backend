@@ -21,6 +21,6 @@ class MemberDetailsService(private val memberAuthRepository: MemberAuthRepositor
 
         val member=existMember.get()
 
-        return AuthMemberDTO.memberToAuthMemberDTO(member)
+        return AuthMemberDTO.fromMember(member)
     }
 }
