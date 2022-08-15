@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.shop.service.shopinterface
 
+import com.lionTF.CShop.domain.admin.controller.dto.DeleteCartItemDTO
 import com.lionTF.CShop.domain.shop.controller.dto.*
 import org.springframework.data.domain.Pageable
 
@@ -12,7 +13,7 @@ interface CartItemService {
     fun  addCartCocktailItem(addCartCocktailItemDTO: AddCartCocktailItemDTO) : AddCartCocktailItemResultDTO
 
     // 장바구니 상품 삭제
-    fun deleteCart(itemId: Long): CartResponseDTO
+    fun deleteCartItem(deleteCartItemDTO: DeleteCartItemDTO): CartResponseDTO
 
     // 장바구니 상품 조회
     fun getCart(pageable: Pageable): ResponseSearchCartResultDTO

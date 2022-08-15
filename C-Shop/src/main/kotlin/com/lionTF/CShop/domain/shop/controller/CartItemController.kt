@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.shop.controller
 
+import com.lionTF.CShop.domain.admin.controller.dto.DeleteCartItemDTO
 import com.lionTF.CShop.domain.member.controller.dto.AuthMemberDTO
 import com.lionTF.CShop.domain.shop.controller.dto.*
 import com.lionTF.CShop.domain.shop.service.shopinterface.CartItemService
@@ -29,8 +30,9 @@ class CartItemController(
 
     // 장바구니 상품 삭제
     @DeleteMapping("/cart/items/{itemId}")
-    fun deleteCart(@PathVariable("itemId") itemId: Long, model: Model): String {
-        model.addAttribute("result", cartItemService.deleteCart(itemId))
+    fun deleteCartItem(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PathVariable("itemId") itemId: Long, model: Model): String {
+        val deleteCartItemDTO = DeleteCartItemDTO(authMemberDTO?.memberId, itemId)
+        model.addAttribute("result", cartItemService.deleteCartItem(deleteCartItemDTO))
         return "global/message"
     }
 

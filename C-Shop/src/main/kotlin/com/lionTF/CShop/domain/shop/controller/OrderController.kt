@@ -43,8 +43,8 @@ class OrderController(
 
     // 주문 취소
     @DeleteMapping("/orders/{orderId}")
-    fun deleteOrder(@PathVariable("orderId") orderId: Long, model: Model): String {
-        model.addAttribute("result", orderService.deleteOrder(orderId))
+    fun cancelOrder(@PathVariable("orderId") orderId: Long, model: Model): String {
+        model.addAttribute("result", orderService.cancelOrder(orderId))
         return "global/message"
     }
 

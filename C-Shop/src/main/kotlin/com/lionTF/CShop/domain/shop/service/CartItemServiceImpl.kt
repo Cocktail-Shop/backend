@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.shop.service
 
+import com.lionTF.CShop.domain.admin.controller.dto.DeleteCartItemDTO
 import com.lionTF.CShop.domain.shop.controller.dto.*
 import com.lionTF.CShop.domain.shop.models.CartItem
 import com.lionTF.CShop.domain.shop.repository.CartItemRepository
@@ -105,18 +106,15 @@ class CartItemServiceImpl(
     }
 
     // 장바구니 상품 삭제
-    override fun deleteCart(itemId: Long): CartResponseDTO {
-        val existsOrder = cartItemRepository.existsById(itemId)
+    override fun deleteCartItem(deleteCartDTO: DeleteCartItemDTO): CartResponseDTO {
+        val existsCart = cartItemRepository.existsById(deleteCartDTO.cartItemId)
 
-        return if (!existsOrder) {
+        return if (!existsCart) {
             CartResponseDTO.toFailDeleteItemResponseDTO()
 
         } else {
-            val cart = cartRepository.getReferenceById(itemId)
-            cart.deleteCart(itemId)
-
-            val orderItem = cartItemRepository.getCartItemByItemId(itemId)
-            orderItem.cancel()
+            val cart = cartRepository.getCart(deleteCartDTO.memberId)
+            cart.deleteCartItem(deleteCartDTO.cartItemId)
 
             CartResponseDTO.toSuccessDeleteItemResponseDTO()
         }

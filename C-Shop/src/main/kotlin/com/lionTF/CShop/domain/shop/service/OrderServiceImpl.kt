@@ -112,7 +112,7 @@ class OrderServiceImpl(
     }
 
     // 상품 삭제
-    override fun deleteOrder(orderId: Long): OrderResponseDTO {
+    override fun cancelOrder(orderId: Long): OrderResponseDTO {
         val existsOrder = orderRepository.existsById(orderId)
 
         return if (!existsOrder) {
@@ -131,7 +131,7 @@ class OrderServiceImpl(
 
     // 주문 조회
     override fun getShopOrders(pageable: Pageable): OrderResponseDTO {
-        val findOrdersInfo = orderRepository.findShopOrdersInfo(pageable)
+        val findOrdersInfo = orderRepository.findOrdersInfo(pageable)
 
         return if (findOrdersInfo.isEmpty) {
             OrderResponseDTO.toFailSearchShopOrdersDTO()

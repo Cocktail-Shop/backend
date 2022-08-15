@@ -24,12 +24,7 @@ class Cart(
     var member: Member?=null,
 ) : BaseTimeEntity() {
     // 장바구니 상품 삭제
-    fun deleteCart(itemId: Long) {
-        for (item in cartItem!!) {
-            if (item.cartItemId == itemId) {
-                item.cancel()
-                // TODO : cartItem list에서 삭제
-            }
-        }
+    fun deleteCartItem(itemId: Long) {
+        // TODO : cartItem list에서 삭제
     }
 }
