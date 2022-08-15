@@ -71,6 +71,7 @@ class MyPageServiceImpl(val memberAuthRepository: MemberAuthRepository) :MyPageS
     override fun deleteMember(authMemberDTO: AuthMemberDTO?):ResponseDTO{
         val existMember=memberAuthRepository.findByMemberId(authMemberDTO?.memberId).orElseThrow()
         existMember.deleteMember()
+        memberAuthRepository.save(existMember)
         return ResponseDTO.toDeleteMemberResponseDTO()
     }
 

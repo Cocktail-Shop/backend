@@ -52,7 +52,13 @@ class MemberServiceImpl(val memberAuthRepository: MemberAuthRepository,val cartR
         val existMember=memberAuthRepository.findByMemberNameAndEmail(idInquiryDTO.memberName,idInquiryDTO.email)
 
         return if(existMember.isPresent) {
-            ResponseIdInquiryDTO.toSuccessResponseIdInquiryDTO(existMember.get())
+            val member=existMember.get()
+            if(member.memberStatus){
+                ResponseIdInquiryDTO.toSuccessResponseIdInquiryDTO(member)
+            }else{
+                //탈퇴회원인 경우
+               ResponseDTO.toDeletedIdInquiryResponseDTO()
+            }
         }else{
             ResponseDTO.toFailedIdInquiryResponseDTO()
         }
@@ -65,19 +71,23 @@ class MemberServiceImpl(val memberAuthRepository: MemberAuthRepository,val cartR
         val member=memberAuthRepository.findByIdAndEmail(passwordInquiryDTO.id,passwordInquiryDTO.email)
 
         return if(member.isPresent){
-            //임시 비밀번호 생성
-            var tempPw = UUID.randomUUID().toString().replace("-", "")
-            tempPw = tempPw.substring(0, 8)
+            if(member.get().memberStatus) {
+                //임시 비밀번호 생성
+                var tempPw = UUID.randomUUID().toString().replace("-", "")
+                tempPw = tempPw.substring(0, 8)
 
-            //임시 비밀번호로 변경
-            val existMember=member.get()
-            existMember.password=passwordEncoder.encode(tempPw)
-            memberAuthRepository.save(existMember)
+                //임시 비밀번호로 변경
+                val existMember = member.get()
+                existMember.password = passwordEncoder.encode(tempPw)
+                memberAuthRepository.save(existMember)
 
-            //메일보내고 return
-            val mail=MailDTO.toPasswordInquiryMailDTO(existMember.id,existMember.email,tempPw)
-            mail.sendMail(javaMailService)
-            ResponseDTO.toSuccessPasswordInquiryResponseDTO()
+                //메일보내고 return
+                val mail = MailDTO.toPasswordInquiryMailDTO(existMember.id, existMember.email, tempPw)
+                mail.sendMail(javaMailService)
+                ResponseDTO.toSuccessPasswordInquiryResponseDTO()
+            }else{
+                ResponseDTO.toDeletedPasswordInquiryResponseDTO()
+            }
         }else{
             ResponseDTO.toFailedPasswordInquiryResponseDTO()
         }
