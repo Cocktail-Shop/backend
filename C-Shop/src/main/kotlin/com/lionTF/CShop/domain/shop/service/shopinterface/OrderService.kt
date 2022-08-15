@@ -17,5 +17,5 @@ interface OrderService {
     fun deleteOrder(orderId: Long): OrderResponseDTO
 
     // 주문 조회
-    fun getOrders(pageable: Pageable): OrderResponseDTO
+    fun getShopOrders(pageable: Pageable): OrderResponseDTO
 }

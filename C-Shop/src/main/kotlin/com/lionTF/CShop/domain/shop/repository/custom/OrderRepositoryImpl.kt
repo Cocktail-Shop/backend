@@ -1,8 +1,8 @@
 package com.lionTF.CShop.domain.shop.repository.custom
 
-import com.lionTF.CShop.domain.admin.controller.dto.FindOrdersDTO
 import com.lionTF.CShop.domain.admin.models.QItem.item
 import com.lionTF.CShop.domain.member.models.QMember.member
+import com.lionTF.CShop.domain.shop.controller.dto.FindShopOrdersDTO
 import com.lionTF.CShop.domain.shop.models.QOrderItem.orderItem
 import com.lionTF.CShop.domain.shop.models.QOrders.orders
 import com.querydsl.core.types.Projections
@@ -19,10 +19,13 @@ class OrderRepositoryImpl(
 ):OrderRepositoryCustom {
 
     // 주문 조회
-    override fun findOrdersInfo(pageable: Pageable): Page<FindOrdersDTO> {
+    override fun findShopOrdersInfo(pageable: Pageable): Page<FindShopOrdersDTO> {
 
-        val content: List<FindOrdersDTO> = contentInquire(pageable)
-        val countQuery: JPAQuery<FindOrdersDTO> = countInquire()
+        val content: List<FindShopOrdersDTO> = contentInquire(pageable)
+        val countQuery: JPAQuery<FindShopOrdersDTO> = countInquire()
+
+        // front 구현 전 test용
+        println(content[0])
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
@@ -30,22 +33,22 @@ class OrderRepositoryImpl(
     // 데이터 내용을 조회하는 함수입니다.
     private fun contentInquire(
         pageable: Pageable
-    ): List<FindOrdersDTO> {
+    ): List<FindShopOrdersDTO> {
         return queryFactory!!
             .select(
                 Projections.constructor(
-                    FindOrdersDTO::class.java,
+                    FindShopOrdersDTO::class.java,
+                    member.memberId,
                     orders.orderId,
+                    orders.createdAt,
                     orders.orderStatus,
+                    orders.orderAddress,
+                    orders.orderAddressDetail,
+                    orderItem.item.itemId,
                     item.itemId,
                     item.itemName,
                     item.price,
-                    orderItem.amount,
-                    orderItem.createdAt,
-                    item.itemImgUrl,
-                    member.memberId,
-                    member.id,
-                    member.memberName
+                    orderItem.amount
                 )
             ).from(orders, member)
             .leftJoin(orderItem).on(isEqualOrderId()).fetchJoin()
@@ -61,22 +64,22 @@ class OrderRepositoryImpl(
 
     // 카운트를 별도로 조회하는 함수입니다.
     private fun countInquire(
-    ): JPAQuery<FindOrdersDTO> {
+    ): JPAQuery<FindShopOrdersDTO> {
         return queryFactory!!
             .select(
                 Projections.constructor(
-                    FindOrdersDTO::class.java,
-                    orders.orderId,
-                    orders.orderStatus,
-                    item.itemId,
-                    item.itemName,
-                    item.price,
-                    orderItem.amount,
-                    orderItem.createdAt,
-                    item.itemImgUrl,
-                    member.memberId,
-                    member.id,
-                    member.memberName
+                    FindShopOrdersDTO::class.java,
+                        member.memberId,
+                        orders.orderId,
+                        orders.createdAt,
+                        orders.orderStatus,
+                        orders.orderAddress,
+                        orders.orderAddressDetail,
+                        orderItem.item.itemId,
+                        item.itemId,
+                        item.itemName,
+                        item.price,
+                        orderItem.amount
                 )
             )
             .from(orders, member)

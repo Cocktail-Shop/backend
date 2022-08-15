@@ -130,13 +130,13 @@ class OrderServiceImpl(
     }
 
     // 주문 조회
-    override fun getOrders(pageable: Pageable): OrderResponseDTO {
-        val findOrdersInfo = orderRepository.findOrdersInfo(pageable)
+    override fun getShopOrders(pageable: Pageable): OrderResponseDTO {
+        val findOrdersInfo = orderRepository.findShopOrdersInfo(pageable)
 
         return if (findOrdersInfo.isEmpty) {
-            OrderResponseDTO.toFailSearchOrdersDTO()
+            OrderResponseDTO.toFailSearchShopOrdersDTO()
         } else {
-            OrderResponseDTO.toSuccessSearchOrdersDTO()
+            OrderResponseDTO.toSuccessSearchShopOrdersDTO()
         }
     }
 }

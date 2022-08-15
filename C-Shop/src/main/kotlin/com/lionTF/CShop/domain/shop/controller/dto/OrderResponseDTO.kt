@@ -12,11 +12,11 @@ data class OrderResponseDTO(val httpStatus: Int, val message: String, var href: 
             return OrderResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 않는 상품입니다.", "/items")
         }
 
-        fun toSuccessSearchOrdersDTO(): OrderResponseDTO {
+        fun toSuccessSearchShopOrdersDTO(): OrderResponseDTO {
             return OrderResponseDTO(HttpStatus.OK.value(), "주문 조회를 성공했습니다.", "/orders")
         }
 
-        fun toFailSearchOrdersDTO(): OrderResponseDTO {
+        fun toFailSearchShopOrdersDTO(): OrderResponseDTO {
             return OrderResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "주문 조회를 실패했습니다.", "/items")
         }
     }

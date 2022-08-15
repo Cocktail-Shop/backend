@@ -51,7 +51,7 @@ class OrderController(
     // 주문 조회
     @GetMapping("/orders")
     fun getOrders(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PageableDefault(size = 2) pageable: Pageable, model: Model): String {
-        model.addAttribute("searchOrders", orderService.getOrders(pageable))
+        model.addAttribute("searchOrders", orderService.getShopOrders(pageable))
         return "global/message"
     }
 }
