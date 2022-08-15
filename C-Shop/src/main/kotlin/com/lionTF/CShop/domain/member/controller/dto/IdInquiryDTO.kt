@@ -17,7 +17,7 @@ data class RequestIdInquiryDTO(var memberName:String,var email:String){
 
 data class ResponseIdInquiryDTO(val status:Int,val message:String,val result: IdInquiryResultDTO){
     companion object{
-        fun memberToSuccessResponseIdInquiryDTO(member: Member): ResponseIdInquiryDTO {
+        fun toSuccessResponseIdInquiryDTO(member: Member): ResponseIdInquiryDTO {
                 return ResponseIdInquiryDTO(
                     HttpStatus.OK.value(),
                     "회원아이디를 찾았습니다.",

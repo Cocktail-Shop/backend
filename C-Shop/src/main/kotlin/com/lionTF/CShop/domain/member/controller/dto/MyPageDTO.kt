@@ -9,7 +9,7 @@ data class ResponseMyPageDTO(val status:Int,
 ){
 
     companion object{
-        fun memberToResponseMyPageDTO(member:Member): ResponseMyPageDTO {
+        fun fromMember(member:Member): ResponseMyPageDTO {
             val myPageResultDTO=MyPageResultDTO(
                 member.id,
                 member.phoneNumber,
@@ -30,7 +30,7 @@ data class ResponseMyPageDTO(val status:Int,
 
 data class RequestUpdateMyPageDTO(var id:String="",var address: String="",var detailAddress:String=""){
     companion object{
-        fun formDTOFromResponseMyPageDTO(responseMyPageDTO: ResponseMyPageDTO):RequestUpdateMyPageDTO{
+        fun toFormDTO(responseMyPageDTO: ResponseMyPageDTO):RequestUpdateMyPageDTO{
             return RequestUpdateMyPageDTO(id=responseMyPageDTO.result.id, address = responseMyPageDTO.result.address, detailAddress = responseMyPageDTO.result.detailAddress)
         }
     }

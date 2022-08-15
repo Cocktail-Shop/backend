@@ -72,7 +72,7 @@ class MyPageTests {
                 .content(content)
                 .flashAttr("requestUpdateMyPageDTO",requestBody))
             .andDo { println() }
-            .andExpect(model().attribute("result",ResponseDTO.toSuccesUpdateMyPageResponseDTO()))
+            .andExpect(model().attribute("result",ResponseDTO.toSuccessUpdateMyPageResponseDTO()))
     }
 
     @Test

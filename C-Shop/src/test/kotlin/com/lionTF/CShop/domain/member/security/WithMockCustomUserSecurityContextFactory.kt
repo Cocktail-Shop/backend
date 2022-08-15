@@ -36,7 +36,7 @@ class WithMockCustomUserSecurityContextFactory : WithSecurityContextFactory<With
         member.role= MemberRole.MEMBER
         memberAuthRepository.save(member)
 
-        val principal =AuthMemberDTO.memberToAuthMemberDTO(member)
+        val principal =AuthMemberDTO.fromMember(member)
         val auth: Authentication =
             UsernamePasswordAuthenticationToken(principal, principal.password, principal.authorities)
 

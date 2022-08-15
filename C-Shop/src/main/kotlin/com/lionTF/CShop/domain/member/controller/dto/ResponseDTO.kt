@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatus
 data class ResponseDTO(val status:Int,val message:String,var href:String="") {
     companion object{
         fun toFailedLoginResponseDTO():ResponseDTO{
-            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"아이디 혹은 비밀번호를 확인해주세요.","/members/login")
+            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"아이디 혹은 비밀번호를 확인해주세요. 또는 탈퇴한 회원입니다.","/members/login")
         }
         fun toSuccessSignUpResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.CREATED.value(),"아이디 생성 성공입니다.","/members/login")
@@ -15,6 +15,9 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
             return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"이미 존재하는 아이디입니다.")
         }
 
+        fun toDeletedIdInquiryResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"탈퇴한 회원입니다.")
+        }
         fun toFailedIdInquiryResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"존재하지 않는 회원입니다.")
         }
@@ -23,11 +26,15 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
             return ResponseDTO(HttpStatus.OK.value(),"임시비밀번호를 발송했습니다.","/members/login")
         }
 
+        fun toDeletedPasswordInquiryResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"탈퇴한 회원입니다.")
+        }
+
         fun toFailedPasswordInquiryResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"존재하지 않는 회원입니다.","/members/login")
         }
 
-        fun toSuccesUpdateMyPageResponseDTO():ResponseDTO{
+        fun toSuccessUpdateMyPageResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.CREATED.value(),"마이페이지 정보가 성공적으로 수정되었습니다.","/members")
         }
 

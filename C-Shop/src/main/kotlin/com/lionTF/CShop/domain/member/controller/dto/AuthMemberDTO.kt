@@ -17,7 +17,7 @@ class AuthMemberDTO(
 ): User(username,password,authorities) {
 
     companion object{
-        fun memberToAuthMemberDTO(member:Member) : AuthMemberDTO {
+        fun fromMember(member:Member) : AuthMemberDTO {
             return AuthMemberDTO(
                 member.id,
                 member.password,

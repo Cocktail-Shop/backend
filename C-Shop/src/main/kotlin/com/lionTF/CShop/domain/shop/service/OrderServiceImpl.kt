@@ -110,6 +110,6 @@ class OrderServiceImpl(
 
     //주소 가져오기
     override fun getAddress(memberId: Long) : AddressDTO {
-        return AddressDTO.memberToAddressDTO(memberRepository.getReferenceById(memberId))
+        return AddressDTO.fromMember(memberRepository.getReferenceById(memberId))
     }
 }
