@@ -2,9 +2,9 @@ package com.lionTF.CShop.domain.member.controller
 
 
 import com.lionTF.CShop.domain.member.controller.dto.*
-import com.lionTF.CShop.domain.member.service.MailAuthServiceImpl
-import com.lionTF.CShop.domain.member.service.MemberServiceImpl
-import com.lionTF.CShop.domain.member.service.MyPageServiceImpl
+import com.lionTF.CShop.domain.member.service.memberinterface.MailAuthService
+import com.lionTF.CShop.domain.member.service.memberinterface.MemberService
+import com.lionTF.CShop.domain.member.service.memberinterface.MyPageService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*
 
 
 @Controller
-class MemberController(private val memberService: MemberServiceImpl,
-                       private val myPageService: MyPageServiceImpl,
-                       private val mailAuthService: MailAuthServiceImpl) {
+class MemberController(private val memberService:MemberService,
+                       private val myPageService: MyPageService,
+                       private val mailAuthService: MailAuthService) {
 
     //로그인 관련
     @GetMapping("/members/login")
