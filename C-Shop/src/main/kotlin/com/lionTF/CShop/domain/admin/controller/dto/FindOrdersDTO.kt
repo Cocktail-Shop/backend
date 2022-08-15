@@ -30,6 +30,8 @@ data class FindOrdersDTO(
     var orderId: Long,
     var orderStatus: OrderStatus,
     var deliveryStatus: DeliveryStatus,
+    var orderAddress: String,
+    var orderAddressDetail: String,
     var itemId: Long,
     var itemName: String,
     var price: Int,
