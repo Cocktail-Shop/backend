@@ -223,7 +223,7 @@ internal class AdminOrderServiceTest {
 
     @Test
     @DisplayName("하나의 주문 취소 예외 test")
-    fun deleteOneOrderExceptionTest() {
+    fun cancelOneOrderExceptionTest() {
         //given
         val orderId: Long = 98L
 
@@ -233,6 +233,24 @@ internal class AdminOrderServiceTest {
         //then
         assertThat(cancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderResponseDTO().httpStatus)
         assertThat(cancelOneOrder.message).isEqualTo(AdminResponseDTO.toFailCancelOrderResponseDTO().message)
+        println("cancelOneOrder = ${cancelOneOrder.message}")
+    }
+
+
+    @Test
+    @DisplayName("주문 취소 시 이미 배달이 완료된 주문은 취소가 불가능한 test")
+    fun cancelOneOrderExceptionByDeliveryStatusTest() {
+        //given
+        val orderId: Long = order!!.orderId
+        order!!.deliveryStatus = DeliveryStatus.COMPLETE
+
+        //when
+        val cancelOneOrder = adminOrderService.cancelOneOrder(orderId)
+
+
+        //then
+        assertThat(cancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO().httpStatus)
+        assertThat(cancelOneOrder.message).isEqualTo(AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO().message)
         println("cancelOneOrder = ${cancelOneOrder.message}")
     }
 
