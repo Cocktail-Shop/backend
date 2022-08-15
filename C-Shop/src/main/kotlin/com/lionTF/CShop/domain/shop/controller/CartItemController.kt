@@ -38,7 +38,7 @@ class CartItemController(
 
     // 장바구니 상품 조회
     @GetMapping("/items/cart")
-    fun getCart(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PageableDefault(size = 2) pageable: Pageable, model: Model): String {
+    fun getCartItem(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PageableDefault(size = 2) pageable: Pageable, model: Model): String {
         model.addAttribute("searchCart", cartItemService.getCart(pageable))
         return "global/message"
     }
