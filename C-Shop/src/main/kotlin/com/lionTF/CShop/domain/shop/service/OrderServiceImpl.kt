@@ -70,8 +70,8 @@ class OrderServiceImpl(
                     OrdersDTO(
                         member,
                         OrderStatus.COMPLETE,
-                        requestOrderDTO.Address,
-                        requestOrderDTO.AddressDetail
+                        requestOrderDTO.address,
+                        requestOrderDTO.addressDetail
                     )
                 )
             )
