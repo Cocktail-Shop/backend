@@ -10,6 +10,7 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 
 
 @Controller
@@ -18,8 +19,9 @@ class OrderController(
 ) {
     //상품 주문
     @PostMapping("/orders")
-    fun createOrder(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @ModelAttribute("requestOrderInfoDTO") requestOrderInfoDTO: RequestOrderInfoDTO, model: Model) : String {
-        val requestOrderDTO = RequestOrderDTO(authMemberDTO?.memberId,requestOrderInfoDTO.orderItems,requestOrderInfoDTO.Address,requestOrderInfoDTO.AddressDetail)
+    fun createOrder(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, requestOrderInfoDTO: RequestOrderInfoDTO, model: Model) : String {
+        println(requestOrderInfoDTO)
+        val requestOrderDTO = RequestOrderDTO.toRequestOrderDTO(authMemberDTO?.memberId,requestOrderInfoDTO)
         model.addAttribute("result",orderService.requestOrder(requestOrderDTO))
         return "global/message"
     }
