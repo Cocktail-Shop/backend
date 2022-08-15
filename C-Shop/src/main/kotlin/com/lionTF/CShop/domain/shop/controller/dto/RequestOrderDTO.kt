@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.shop.controller.dto
 
+import com.lionTF.CShop.domain.member.controller.dto.AddressDTO
 import org.springframework.http.HttpStatus
 
 data class RequestOrderDTO(
@@ -10,10 +11,20 @@ data class RequestOrderDTO(
 )
 
 data class RequestOrderInfoDTO(
-    var orderItems: List<RequestOrderItemDTO> = listOf(),
+    var orderItems: MutableList<RequestOrderItemDTO> = mutableListOf(RequestOrderItemDTO(0,0,0)),
     var Address: String = "",
     var AddressDetail: String="",
-)
+){
+    companion object{
+        fun toFormRequestItemOrderInfoDTO(item:ItemDTO,addressDTO: AddressDTO):RequestOrderInfoDTO{
+            return RequestOrderInfoDTO(
+                orderItems = mutableListOf( RequestOrderItemDTO(item.itemId,0,item.price)),
+                Address=addressDTO.Address,
+                AddressDetail = addressDTO.AddressDetail
+            )
+        }
+    }
+}
 data class RequestOrderItemDTO(
     val itemId: Long,
     val amount: Int,

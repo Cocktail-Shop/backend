@@ -11,7 +11,7 @@ data class CocktailItemInfoDTO(
 ){
     companion object{
         //CocktailItem entity에서 toReadCocktailItemDTO()를 수행시켜주기 위한 메소드
-        fun itemToCocktailItemInfoDTO(item: Item): CocktailItemInfoDTO {
+        fun fromItem(item: Item): CocktailItemInfoDTO {
             return CocktailItemInfoDTO(
                 itemId = item.itemId,
                 itemName = item.itemName,

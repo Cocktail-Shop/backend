@@ -33,7 +33,7 @@ class CartItemServiceImpl(
             //장바구니에 담고자 하는 상품의 재고가 충분하다면
             if(addCartItemDTO.amount < item.amount){
                 val cartItemDTO = CartItemDTO(item,cart,addCartItemDTO.amount)
-                cartItemRepository.save(CartItem.cartItemDTOToCartItem(cartItemDTO))
+                cartItemRepository.save(CartItem.fromCartItemDTO(cartItemDTO))
                 return AddCartItemResultDTO.setSuccessAddCartItemResultDTO()
             }
             else{
@@ -89,7 +89,7 @@ class CartItemServiceImpl(
         //재고가 부족한 상품이 있거나 삭제된 상품이 있는지 확인하여 처리
         if(isNotDeleted and isAmountEnough){
             for(cartItemDTO in cartItemDTOList){
-                cartItemRepository.save(CartItem.cartItemDTOToCartItem(cartItemDTO))
+                cartItemRepository.save(CartItem.fromCartItemDTO(cartItemDTO))
             }
             return AddCartCocktailItemResultDTO.setSuccessAddCartCocktailItemResultDTO(errorItems)
         }

@@ -14,11 +14,11 @@ data class CocktailDTO(
 ){
     companion object{
         //칵테일 단건 조회 result부분에 들어갈 정보들을 dto로 변환
-        fun cocktailToCocktailDTO(cocktail: Cocktail): CocktailDTO {
+        fun fromCocktail(cocktail: Cocktail): CocktailDTO {
             val itemList = cocktail.cocktailItem
             val dtoList: MutableList<CocktailItemDTO> = mutableListOf()
             for(item in itemList!!){
-                dtoList.add(CocktailItemDTO.cocktailItemToCocktailItemDTO(item))
+                dtoList.add(CocktailItemDTO.fromCocktailItem(item))
 
             }
             return CocktailDTO(

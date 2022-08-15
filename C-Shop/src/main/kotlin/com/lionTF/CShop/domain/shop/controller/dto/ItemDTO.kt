@@ -19,7 +19,7 @@ data class ItemDTO (
 ){
     companion object{
         //아이템에 관한 정보를 dto로 변환하는 메소드
-        fun itemToItemDTO(item: Item): ItemDTO {
+        fun fromItem(item: Item): ItemDTO {
             return ItemDTO(
                 itemId = item.itemId,
                 category = item.category,

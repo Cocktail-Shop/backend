@@ -21,7 +21,7 @@ data class SearchItemInfoDTO(
     val itemImgUrl: String
 ){
     companion object{
-        fun itemToSearchIteminfoDTO(item: Item) : SearchItemInfoDTO{
+        fun fromItem(item: Item) : SearchItemInfoDTO{
             return SearchItemInfoDTO(
                 itemId = item.itemId,
                 itemName = item.itemName,
