@@ -23,6 +23,10 @@ class Orders(
 
     @Enumerated(EnumType.STRING)
     var orderStatus: OrderStatus = OrderStatus.COMPLETE,
+
+    @Enumerated(EnumType.STRING)
+    var deliveryStatus: DeliveryStatus = DeliveryStatus.READY,
+
     var orderAddress: String = "",
     var orderAddressDetail: String = "",
 ) : BaseTimeEntity(){

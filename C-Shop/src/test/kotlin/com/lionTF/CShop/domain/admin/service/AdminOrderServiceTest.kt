@@ -11,11 +11,12 @@ import com.lionTF.CShop.domain.member.models.MemberRole
 import com.lionTF.CShop.domain.member.repository.MemberAuthRepository
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderItemDTO
+import com.lionTF.CShop.domain.shop.models.DeliveryStatus
 import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.domain.shop.models.OrderStatus
 import com.lionTF.CShop.domain.shop.models.Orders
 import com.lionTF.CShop.domain.shop.repository.OrderRepository
-import com.lionTF.CShop.domain.shop.service.OrderService
+import com.lionTF.CShop.domain.shop.service.shopinterface.OrderService
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -149,7 +150,8 @@ internal class AdminOrderServiceTest {
         val requestOrderDTO1 = RequestOrderDTO(
             memberId = memberTest1!!.memberId,
             orderItems = orderItems,
-            orderAddress = "test-address"
+            Address = "test1",
+            AddressDetail = "test1"
         )
         orderService.requestOrder(requestOrderDTO1)
 
@@ -165,7 +167,8 @@ internal class AdminOrderServiceTest {
         val requestOrderDTO2 = RequestOrderDTO(
             memberId = memberTest2!!.memberId,
             orderItems = orderItems2,
-            orderAddress = "test-address"
+            Address = "test2",
+            AddressDetail = "test2"
         )
         orderService.requestOrder(requestOrderDTO2)
 
@@ -181,7 +184,8 @@ internal class AdminOrderServiceTest {
         val requestOrderDTO3 = RequestOrderDTO(
             memberId = memberTest3!!.memberId,
             orderItems = orderItems3,
-            orderAddress = "test-address"
+            Address = "test3",
+            AddressDetail = "test3"
         )
         orderService.requestOrder(requestOrderDTO3)
     }
@@ -219,7 +223,7 @@ internal class AdminOrderServiceTest {
 
     @Test
     @DisplayName("하나의 주문 취소 예외 test")
-    fun deleteOneOrderExceptionTest() {
+    fun cancelOneOrderExceptionTest() {
         //given
         val orderId: Long = 98L
 
@@ -229,6 +233,24 @@ internal class AdminOrderServiceTest {
         //then
         assertThat(cancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderResponseDTO().httpStatus)
         assertThat(cancelOneOrder.message).isEqualTo(AdminResponseDTO.toFailCancelOrderResponseDTO().message)
+        println("cancelOneOrder = ${cancelOneOrder.message}")
+    }
+
+
+    @Test
+    @DisplayName("주문 취소 시 이미 배달이 완료된 주문은 취소가 불가능한 test")
+    fun cancelOneOrderExceptionByDeliveryStatusTest() {
+        //given
+        val orderId: Long = order!!.orderId
+        order!!.deliveryStatus = DeliveryStatus.COMPLETE
+
+        //when
+        val cancelOneOrder = adminOrderService.cancelOneOrder(orderId)
+
+
+        //then
+        assertThat(cancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO().httpStatus)
+        assertThat(cancelOneOrder.message).isEqualTo(AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO().message)
         println("cancelOneOrder = ${cancelOneOrder.message}")
     }
 
@@ -251,8 +273,9 @@ internal class AdminOrderServiceTest {
         assertThat(allOrders.httpStatus).isEqualTo(HttpStatus.OK.value())
         assertThat(allOrders.message).isEqualTo("주문 조회를 성공했습니다.")
         assertThat(allOrders.keyword).isEqualTo("")
+        assertThat(allOrders.result!!.content[0].deliveryStatus).isEqualTo(DeliveryStatus.READY)
         assertThat(allOrders.result!!.totalElements).isEqualTo(orderCount - 1)
-        assertThat(allOrders.result!!.totalPages).isEqualTo(3)
+        assertThat(allOrders.result!!.totalPages).isEqualTo(2)
 
     }
 

@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.admin.controller.dto
 
+import com.lionTF.CShop.domain.shop.models.DeliveryStatus
 import com.lionTF.CShop.domain.shop.models.OrderStatus
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
@@ -28,6 +29,7 @@ data class ResponseSearchOrdersResultDTO(
 data class FindOrdersDTO(
     var orderId: Long,
     var orderStatus: OrderStatus,
+    var deliveryStatus: DeliveryStatus,
     var itemId: Long,
     var itemName: String,
     var price: Int,
