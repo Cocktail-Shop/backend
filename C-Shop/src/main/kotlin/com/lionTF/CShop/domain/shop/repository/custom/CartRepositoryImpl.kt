@@ -3,8 +3,8 @@ package com.lionTF.CShop.domain.shop.repository.custom
 import com.lionTF.CShop.domain.admin.models.QItem.item
 import com.lionTF.CShop.domain.member.models.QMember.member
 import com.lionTF.CShop.domain.shop.controller.dto.FindCartDTO
-import com.lionTF.CShop.domain.shop.models.QOrderItem.orderItem
-import com.lionTF.CShop.domain.shop.models.QOrders.orders
+import com.lionTF.CShop.domain.shop.models.QCart.cart
+import com.lionTF.CShop.domain.shop.models.QCartItem.cartItem
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -23,7 +23,6 @@ class CartRepositoryImpl(
 
         val content: List<FindCartDTO> = contentInquire(pageable)
         val countQuery: JPAQuery<FindCartDTO> = countInquire()
-
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
@@ -35,20 +34,17 @@ class CartRepositoryImpl(
             .select(
                 Projections.constructor(
                     FindCartDTO::class.java,
-                    orders.orderId,
-                    orders.orderStatus,
+                    cart.cartId,
                     item.itemId,
                     item.itemName,
                     item.price,
-                    orderItem.amount,
-                    orderItem.createdAt,
+                    cartItem.item,
+                    cartItem.amount,
                     item.itemImgUrl,
-                    member.memberId,
-                    member.id,
-                    member.memberName
+                    member.memberId
                 )
-            ).from(orders, member)
-            .leftJoin(orderItem).on(isEqualOrderId()).fetchJoin()
+            ).from(cart, member)
+            .leftJoin(cartItem).on(isEqualCartId()).fetchJoin()
             .leftJoin(item).on(isEqualItemId()).fetchJoin()
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
@@ -66,21 +62,18 @@ class CartRepositoryImpl(
             .select(
                 Projections.constructor(
                     FindCartDTO::class.java,
-                    orders.orderId,
-                    orders.orderStatus,
-                    item.itemId,
-                    item.itemName,
-                    item.price,
-                    orderItem.amount,
-                    orderItem.createdAt,
-                    item.itemImgUrl,
-                    member.memberId,
-                    member.id,
-                    member.memberName
+                        cart.cartId,
+                        item.itemId,
+                        item.itemName,
+                        item.price,
+                        cartItem.item,
+                        cartItem.amount,
+                        item.itemImgUrl,
+                        member.memberId
                 )
             )
-            .from(orders, member)
-            .leftJoin(orderItem).on(isEqualOrderId()).fetchJoin()
+            .from(cart, member)
+            .leftJoin(cartItem).on(isEqualCartId()).fetchJoin()
             .leftJoin(item).on(isEqualItemId()).fetchJoin()
             .where(
                 isEqualMemberId(),
@@ -88,11 +81,11 @@ class CartRepositoryImpl(
             )
     }
 
-    private fun isEqualOrderId() = orders.orderId.eq(orderItem.orders.orderId)
+    private fun isEqualCartId() = cart.cartId.eq(cartItem.cart.cartId)
 
-    private fun isEqualItemId() = orderItem.item.itemId.eq(item.itemId)
+    private fun isEqualItemId() = cartItem.item.itemId.eq(item.itemId)
 
-    private fun isEqualMemberId() = member.memberId.eq(orders.member.memberId)
+    private fun isEqualMemberId() = member.memberId.eq(cart.member.memberId)
 
     private fun isExistedMember() = member.memberStatus.eq(true)
 }
