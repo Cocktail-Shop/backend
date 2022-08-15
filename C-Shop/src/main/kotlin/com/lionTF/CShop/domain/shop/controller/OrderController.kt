@@ -19,7 +19,7 @@ class OrderController(
     //상품 주문
     @PostMapping("/orders")
     fun createOrder(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @ModelAttribute("requestOrderInfoDTO") requestOrderInfoDTO: RequestOrderInfoDTO, model: Model) : String {
-        val requestOrderDTO = RequestOrderDTO(authMemberDTO?.memberId,requestOrderInfoDTO.orderItems,requestOrderInfoDTO.Address,requestOrderInfoDTO.AddressDetail)
+        val requestOrderDTO = RequestOrderDTO(authMemberDTO?.memberId,requestOrderInfoDTO.orderItems,requestOrderInfoDTO.address,requestOrderInfoDTO.addressDetail)
         model.addAttribute("result",orderService.requestOrder(requestOrderDTO))
         return "global/message"
     }

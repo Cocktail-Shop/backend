@@ -16,12 +16,12 @@ class ItemServiceImpl (
 
     // 상품 단건 조회를 위한 메소드. 상품 id로 상품 검색
     override fun findByItemId(itemId: Long): ItemResultDTO {
-        val item =ItemDTO.itemToItemDTO(itemRepository.getReferenceById(itemId))
+        val item =ItemDTO.fromItem(itemRepository.getReferenceById(itemId))
         return item?.let { ItemResultDTO.setItemResultDTO(it) }!!
     }
 
     fun findByItemIdTest(itemId: Long): ItemDTO {
-        return ItemDTO.itemToItemDTO(itemRepository.getReferenceById(itemId))
+        return ItemDTO.fromItem(itemRepository.getReferenceById(itemId))
 
     }
 

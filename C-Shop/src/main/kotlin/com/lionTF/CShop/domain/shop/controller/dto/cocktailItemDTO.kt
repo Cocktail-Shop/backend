@@ -12,8 +12,8 @@ data class CocktailItemDTO(
 ){
     companion object{
         //칵테일 단건 조회시, cocktailItems에 들어갈 아이템 정보들을 dto로 변환해주는 메소드
-        fun cocktailItemToCocktailItemDTO(cocktailItem: CocktailItem): CocktailItemDTO {
-            val item =CocktailItemInfoDTO.itemToCocktailItemInfoDTO(cocktailItem.item)
+        fun fromCocktailItem(cocktailItem: CocktailItem): CocktailItemDTO {
+            val item =CocktailItemInfoDTO.fromItem(cocktailItem.item)
             return CocktailItemDTO(
                 itemId = item.itemId,
                 itemName = item.itemName,

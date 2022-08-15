@@ -20,8 +20,11 @@ class ItemController (
 
     //상품 단건 조회
     @GetMapping(path=["/items/{itemId}"])
-    fun getItemById(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PathVariable("itemId") itemId: Long, model: Model, addCartItemRequestDTO: AddCartItemRequestDTO, requestOrderInfoDTO: RequestOrderInfoDTO): String {
-        model.addAttribute("item",itemService.findByItemId(itemId))
+    fun getItemById(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PathVariable("itemId") itemId: Long, model: Model, addCartItemRequestDTO: AddCartItemRequestDTO): String {
+        val item=itemService.findByItemId(itemId)
+        val address=authMemberDTO?.memberId?.let { orderService.getAddress(it) }
+        val requestOrderInfoDTO=RequestOrderInfoDTO.toFormRequestItemOrderInfoDTO(item.result, address!!)
+        model.addAttribute("item",item)
         model.addAttribute("addCartItemRequestDTO",addCartItemRequestDTO)
         model.addAttribute("requestOrderInfoDTO",requestOrderInfoDTO)
         model.addAttribute("address", authMemberDTO?.memberId?.let { orderService.getAddress(it) })

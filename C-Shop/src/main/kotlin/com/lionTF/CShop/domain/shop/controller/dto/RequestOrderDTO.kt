@@ -1,19 +1,30 @@
 package com.lionTF.CShop.domain.shop.controller.dto
 
+import com.lionTF.CShop.domain.member.controller.dto.AddressDTO
 import org.springframework.http.HttpStatus
 
 data class RequestOrderDTO(
     val memberId: Long?,
     var orderItems: List<RequestOrderItemDTO>,
-    var Address: String,
-    var AddressDetail: String,
+    var address: String,
+    var addressDetail: String,
 )
 
 data class RequestOrderInfoDTO(
-    var orderItems: List<RequestOrderItemDTO> = listOf(),
-    var Address: String = "",
-    var AddressDetail: String="",
-)
+    var orderItems: MutableList<RequestOrderItemDTO> = mutableListOf(RequestOrderItemDTO(0,0,0)),
+    var address: String = "",
+    var addressDetail: String="",
+){
+    companion object{
+        fun toFormRequestItemOrderInfoDTO(item:ItemDTO,addressDTO: AddressDTO):RequestOrderInfoDTO{
+            return RequestOrderInfoDTO(
+                orderItems = mutableListOf( RequestOrderItemDTO(item.itemId,0,item.price)),
+                address=addressDTO.Address,
+                addressDetail = addressDTO.AddressDetail
+            )
+        }
+    }
+}
 data class RequestOrderItemDTO(
     val itemId: Long,
     val amount: Int,

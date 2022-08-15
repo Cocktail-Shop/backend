@@ -26,17 +26,17 @@ class PageSerivceImpl(
         val pageable: Pageable =requestDTO.getPageable(Sort.by(sort).descending())
         if(category == Category.ALCOHOL.toString()){
             val result: Page<Item> = itemRepository.findItemByCategoryAndItemStatus(Category.ALCOHOL,true,pageable)
-            val fn: Function<Item, SearchItemInfoDTO> = Function { Item -> SearchItemInfoDTO.itemToSearchIteminfoDTO(Item)}
+            val fn: Function<Item, SearchItemInfoDTO> = Function { Item -> SearchItemInfoDTO.fromItem(Item)}
             return ItemPageResponseDTO.setItemPageResponseDTO(PageResultDTO(result,fn))
         }
         else if(category == Category.NONALCOHOL.toString()){
             val result: Page<Item> = itemRepository.findItemByCategoryAndItemStatus(Category.NONALCOHOL,true,pageable)
-            val fn: Function<Item, SearchItemInfoDTO> = Function { Item -> SearchItemInfoDTO.itemToSearchIteminfoDTO(Item) }
+            val fn: Function<Item, SearchItemInfoDTO> = Function { Item -> SearchItemInfoDTO.fromItem(Item) }
             return ItemPageResponseDTO.setItemPageResponseDTO(PageResultDTO(result,fn))
         }
         else{
             val result: Page<Cocktail> = cocktailRepository.findCocktailByCategoryAndCocktailStatus(Category.COCKTAIL,true,pageable)
-            val fn: Function<Cocktail, SearchCocktailInfoDTO> = Function { Cocktail -> SearchCocktailInfoDTO.cocktailToSearchCocktailInfoDTO(Cocktail) }
+            val fn: Function<Cocktail, SearchCocktailInfoDTO> = Function { Cocktail -> SearchCocktailInfoDTO.fromCocktail(Cocktail) }
             return CocktailPageResponseDTO.setCocktailPageResponseDTO(PageResultDTO(result,fn))
         }
     }
@@ -59,7 +59,7 @@ class PageSerivceImpl(
                 end = start + pageable.pageSize
             }
             val result: Page<Item> = PageImpl(itemList.subList(start,end),pageable,itemList.size.toLong())
-            val fn: Function<Item, SearchItemInfoDTO> = Function { Item -> SearchItemInfoDTO.itemToSearchIteminfoDTO(Item)}
+            val fn: Function<Item, SearchItemInfoDTO> = Function { Item -> SearchItemInfoDTO.fromItem(Item)}
             return ItemPageResponseDTO.setItemPageResponseDTO(PageResultDTO(result,fn))
         }
         else if(category == Category.NONALCOHOL.toString()){
@@ -76,7 +76,7 @@ class PageSerivceImpl(
                 end = start + pageable.pageSize
             }
             val result: Page<Item> = PageImpl(itemList.subList(start,end),pageable,itemList.size.toLong())
-            val fn: Function<Item, SearchItemInfoDTO> = Function { Item -> SearchItemInfoDTO.itemToSearchIteminfoDTO(Item)}
+            val fn: Function<Item, SearchItemInfoDTO> = Function { Item -> SearchItemInfoDTO.fromItem(Item)}
             return ItemPageResponseDTO.setItemPageResponseDTO(PageResultDTO(result,fn))
         }
         else{
@@ -92,7 +92,7 @@ class PageSerivceImpl(
                 end = start + pageable.pageSize
             }
             val result: Page<Cocktail> = PageImpl(cocktailList.subList(start,end),pageable,cocktailList.size.toLong())
-            val fn: Function<Cocktail, SearchCocktailInfoDTO> = Function { Cocktail -> SearchCocktailInfoDTO.cocktailToSearchCocktailInfoDTO(Cocktail) }
+            val fn: Function<Cocktail, SearchCocktailInfoDTO> = Function { Cocktail -> SearchCocktailInfoDTO.fromCocktail(Cocktail) }
             return CocktailPageResponseDTO.setCocktailPageResponseDTO(PageResultDTO(result,fn))
         }
     }

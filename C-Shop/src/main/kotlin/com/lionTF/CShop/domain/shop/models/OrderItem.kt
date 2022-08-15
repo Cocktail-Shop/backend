@@ -33,7 +33,7 @@ class OrderItem (
         item?.addAmount(amount)
     }
     companion object{
-        fun orderItemDTOtoOrderItem(orderItemDTO: OrderItemDTO) : OrderItem {
+        fun fromOrderItemDTO(orderItemDTO: OrderItemDTO) : OrderItem {
             return OrderItem(
                 orders = orderItemDTO.orders,
                 item = orderItemDTO.item,

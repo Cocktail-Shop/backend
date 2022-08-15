@@ -64,15 +64,14 @@ class OrderServiceImpl(
         //모든 상품의 재고가 충분한 경우
         if(isNotDeleted and isAmountEnough){
             val member = requestOrderDTO.memberId?.let { memberRepository.getReferenceById(it) }
-
             //order 저장
             val orders = orderRepository.save(
-                Orders.ordersDTOToOrders(
+                Orders.fromOrdersDTO(
                     OrdersDTO(
                         member,
                         OrderStatus.COMPLETE,
-                        requestOrderDTO.Address,
-                        requestOrderDTO.AddressDetail
+                        requestOrderDTO.address,
+                        requestOrderDTO.addressDetail
                     )
                 )
             )
@@ -86,7 +85,7 @@ class OrderServiceImpl(
 
                 //orderitem 저장
                 orderItemRepository.save(
-                    OrderItem.orderItemDTOtoOrderItem(
+                    OrderItem.fromOrderItemDTO(
                         OrderItemDTO(
                             orders,
                             item,

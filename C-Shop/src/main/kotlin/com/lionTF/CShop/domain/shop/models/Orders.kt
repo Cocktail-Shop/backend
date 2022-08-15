@@ -33,7 +33,7 @@ class Orders(
     }
 
     companion object{
-        fun ordersDTOToOrders(ordersDTO: OrdersDTO) : Orders {
+        fun fromOrdersDTO(ordersDTO: OrdersDTO) : Orders {
             return Orders(
                 //orderItem = ordersDTO.orderItem,
                 member = ordersDTO.member,

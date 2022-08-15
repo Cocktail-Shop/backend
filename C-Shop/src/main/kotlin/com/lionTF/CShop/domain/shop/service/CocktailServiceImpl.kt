@@ -13,7 +13,7 @@ class CocktailServiceImpl (
 ): CocktailService{
     //칵테일 단건 조회 서비스 구현
     override fun findByCocktailId(cocktailId: Long): CocktailResultDTO {
-        val cocktail = CocktailDTO.cocktailToCocktailDTO(cocktailRepository.getReferenceById(cocktailId))
+        val cocktail = CocktailDTO.fromCocktail(cocktailRepository.getReferenceById(cocktailId))
         return CocktailResultDTO.setCocktailResultDTO(cocktail)
     }
 }
