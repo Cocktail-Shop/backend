@@ -1,10 +1,7 @@
 package com.lionTF.CShop.domain.shop.service
 
 import com.lionTF.CShop.domain.member.controller.dto.AddressDTO
-import com.lionTF.CShop.domain.shop.controller.dto.OrderItemDTO
-import com.lionTF.CShop.domain.shop.controller.dto.OrdersDTO
-import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderDTO
-import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderResultDTO
+import com.lionTF.CShop.domain.shop.controller.dto.*
 import com.lionTF.CShop.domain.shop.models.OrderItem
 import com.lionTF.CShop.domain.shop.models.OrderStatus
 import com.lionTF.CShop.domain.shop.models.Orders
@@ -13,6 +10,7 @@ import com.lionTF.CShop.domain.shop.repository.MemberRepository
 import com.lionTF.CShop.domain.shop.repository.OrderItemRepository
 import com.lionTF.CShop.domain.shop.repository.OrderRepository
 import com.lionTF.CShop.domain.shop.service.shopinterface.OrderService
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -110,5 +108,34 @@ class OrderServiceImpl(
     //주소 가져오기
     override fun getAddress(memberId: Long) : AddressDTO {
         return AddressDTO.fromMember(memberRepository.getReferenceById(memberId))
+    }
+
+    // 상품 삭제
+    override fun cancelOrder(orderId: Long): OrderResponseDTO {
+        val existsOrder = orderRepository.existsById(orderId)
+
+        return if (!existsOrder) {
+            OrderResponseDTO.toFailDeleteItemResponseDTO()
+
+        } else {
+            val order = orderRepository.getReferenceById(orderId)
+            order.cancelOrder()
+
+            val orderItem = orderItemRepository.getOrderItemByOrdersId(orderId)
+            orderItem.cancel()
+
+            OrderResponseDTO.toSuccessDeleteItemResponseDTO()
+        }
+    }
+
+    // 주문 조회
+    override fun getShopOrders(pageable: Pageable): OrderResponseDTO {
+        val findOrdersInfo = orderRepository.findOrdersInfo(pageable)
+
+        return if (findOrdersInfo.isEmpty) {
+            OrderResponseDTO.toFailSearchShopOrdersDTO()
+        } else {
+            OrderResponseDTO.toSuccessSearchShopOrdersDTO()
+        }
     }
 }

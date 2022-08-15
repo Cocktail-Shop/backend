@@ -4,12 +4,12 @@ import com.lionTF.CShop.domain.member.controller.dto.AuthMemberDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderInfoDTO
 import com.lionTF.CShop.domain.shop.service.shopinterface.OrderService
+import org.springframework.data.domain.Pageable
+import org.springframework.data.web.PageableDefault
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.*
 
 
 @Controller
@@ -31,4 +31,27 @@ class OrderController(
         return "redirect:/shop/singleItem"
     }
 
+    // 장바구니 상품 주문
+    // cartItem을 통해 cart에 있는 Item을 지우는 것 외에 동일
+    // TODO : cartItem을 통해 cart에 있는 Item을 지우는 것 -> 장바구니 상품 삭제 활용
+    @PostMapping("/orders/cart/items")
+    fun createCartOrder(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @ModelAttribute("requestOrderInfoDTO") requestOrderInfoDTO: RequestOrderInfoDTO, model: Model) : String {
+        val requestCartOrderDTO = RequestOrderDTO(authMemberDTO?.memberId, requestOrderInfoDTO.orderItems,requestOrderInfoDTO.Address,requestOrderInfoDTO.AddressDetail)
+        model.addAttribute("result", orderService.requestOrder(requestCartOrderDTO))
+        return "global/message"
+    }
+
+    // 주문 취소
+    @DeleteMapping("/orders/{orderId}")
+    fun cancelOrder(@PathVariable("orderId") orderId: Long, model: Model): String {
+        model.addAttribute("result", orderService.cancelOrder(orderId))
+        return "global/message"
+    }
+
+    // 주문 조회
+    @GetMapping("/orders")
+    fun getOrders(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PageableDefault(size = 2) pageable: Pageable, model: Model): String {
+        model.addAttribute("searchOrders", orderService.getShopOrders(pageable))
+        return "global/message"
+    }
 }

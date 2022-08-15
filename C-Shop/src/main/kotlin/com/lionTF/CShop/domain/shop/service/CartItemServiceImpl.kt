@@ -1,11 +1,13 @@
 package com.lionTF.CShop.domain.shop.service
 
+import com.lionTF.CShop.domain.admin.controller.dto.DeleteCartItemDTO
 import com.lionTF.CShop.domain.shop.controller.dto.*
 import com.lionTF.CShop.domain.shop.models.CartItem
 import com.lionTF.CShop.domain.shop.repository.CartItemRepository
 import com.lionTF.CShop.domain.shop.repository.CartRepository
 import com.lionTF.CShop.domain.shop.repository.ItemRepository
 import com.lionTF.CShop.domain.shop.service.shopinterface.CartItemService
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -101,5 +103,27 @@ class CartItemServiceImpl(
                 return AddCartCocktailItemResultDTO.setAmountFailAddCartCocktailItemResultDTO(errorItems)
             }
         }
+    }
+
+    // 장바구니 상품 삭제
+    override fun deleteCartItem(deleteCartDTO: DeleteCartItemDTO): CartResponseDTO {
+        val existsCart = cartItemRepository.existsById(deleteCartDTO.cartItemId)
+
+        return if (!existsCart) {
+            CartResponseDTO.toFailDeleteItemResponseDTO()
+
+        } else {
+            val cart = cartRepository.getCart(deleteCartDTO.memberId)
+            cart.deleteCartItem(deleteCartDTO.cartItemId)
+
+            CartResponseDTO.toSuccessDeleteItemResponseDTO()
+        }
+    }
+
+    // 장바구니 상품 조회
+    override fun getCart(pageable: Pageable): ResponseSearchCartResultDTO {
+        val findCart = cartRepository.findCartInfo(pageable)
+
+        return ResponseSearchCartResultDTO.cartToResponseCartSearchPageDTO(findCart)
     }
 }
