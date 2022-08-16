@@ -55,7 +55,8 @@ class AdminMemberRepositoryImpl(
                     member.id,
                     member.address,
                     member.memberName,
-                    member.phoneNumber
+                    member.phoneNumber,
+                    member.createdAt
                 )
             )
             .from(member)

@@ -136,7 +136,7 @@
                                                 <tr th:each="cocktail : ${cocktails.result.content}">
                                                     <td th:text="${cocktail.cocktailName}"></td>
                                                     <td th:text="${cocktail.cocktailDescription}"></td>
-                                                    <td th:text="${cocktail.createdDate}"></td>
+                                                    <td th:text="${#temporals.format(cocktail.createdAt, 'yyyy-MM-dd')}"></td>
                                                     <td><a href="#" th:href="@{/admins/cocktails/{cocktailId} (cocktailId=${cocktail.cocktailId})}" class="btn btn-default btn-asd">상세 보기</a></td>
                                                     <td>
                                                         <form  th:method="delete" th:action="@{/admins/cocktails/{cocktailId} (cocktailId=${cocktail.cocktailId})}" >

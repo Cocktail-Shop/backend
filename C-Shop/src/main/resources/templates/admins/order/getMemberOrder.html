@@ -155,7 +155,7 @@
                                                     <td th:text="${order.itemName}"></td>
                                                     <td th:text="${order.price * order.amount}"></td>
                                                     <td th:text="${order.amount}"></td>
-                                                    <td th:text="${order.createdAt}"></td>
+                                                    <td th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd')}"></td>
                                                     <td th:text="${order.id}"></td>
                                                     <td th:text="${order.memberName}"></td>
                                                     <td>

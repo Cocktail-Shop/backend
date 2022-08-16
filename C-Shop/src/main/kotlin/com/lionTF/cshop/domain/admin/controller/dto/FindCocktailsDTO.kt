@@ -26,5 +26,5 @@ data class FindCocktailsDTO(
     var cocktailId: Long,
     var cocktailName: String,
     var cocktailDescription: String,
-    var createdDate: LocalDateTime
+    var createdAt: LocalDateTime
 )
