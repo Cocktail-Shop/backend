@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.shop.service
 
+import com.lionTF.CShop.domain.admin.repository.AdminOrderRepository
 import com.lionTF.CShop.domain.member.controller.dto.AddressDTO
 import com.lionTF.CShop.domain.shop.controller.dto.*
 import com.lionTF.CShop.domain.shop.models.OrderItem
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class OrderServiceImpl(
     private val orderRepository: OrderRepository,
+    private val adminOrderRepository: AdminOrderRepository,
     private val itemRepository: ItemRepository,
     private val memberRepository: MemberRepository,
     private val orderItemRepository: OrderItemRepository
@@ -131,7 +133,7 @@ class OrderServiceImpl(
 
     // 주문 조회
     override fun getShopOrders(pageable: Pageable): OrderResponseDTO {
-        val findOrdersInfo = orderRepository.findOrdersInfo(pageable)
+        val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
 
         return if (findOrdersInfo.isEmpty) {
             OrderResponseDTO.toFailSearchShopOrdersDTO()
