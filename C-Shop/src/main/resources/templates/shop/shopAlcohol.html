@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
+<html xmlns:th="http://www.thymeleaf.org">
+<th:block th:replace="~{/global/headData:: headData}"></th:block>
+
+<body id="body">
+<th:block th:replace="~{/global/Alcoholheader :: header}"></th:block>
+
+<section class="products section">
+    <div class="container">
+        <div class="row">
+            <th:block th:each="items : ${items.result.data}">
+                <div class="col-md-4">
+                    <div class="product-item">
+                        <div class="product-thumb">
+                            <span class="bage">Sale</span>
+                            <img class="img-responsive" th:src="@{/images/shop/products/cocktail-1.jpg}" style="width: 15vw; height: 20vw" alt="product-img" />
+                            <div class="preview-meta">
+                                <ul>
+                                    <li>
+									<span  data-toggle="modal" data-target="#product-modal">
+										<i class="tf-ion-ios-search-strong">
+                                            <a th:href="'/items/'+${items.itemId}"></a>
+                                        </i>
+									</span>
+                                    </li>
+                                    <li>
+                                        <a href="#!"><i class="tf-ion-android-cart"></i></a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="product-content">
+                            <h4><a href="product-single.html">[[${items.itemName}]]</a></h4>
+                            <p class="price">가격:[[${items.price}]]원</p>
+                            <p class="price">도수:[[${items.degree}]]</p>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+
+            <ul class="pagination h-100 justify-content-center align-items-center">
+                <!-- 처음으로 이동 -->
+                <li th:classappend="${items.result.page < items.result.size} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="@{/items(page=1,sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
+                        <span>&laquo;</span>
+                        <span class="sr-only">First</span>
+                    </a>
+                </li>
+
+                <li class="page-item " th:if="${items.result.prev}">
+                    <a class="page-link" th:href="@{/items(page= ${items.result.start -1},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category} )}" tabindex="-1">Previous</a>
+                </li>
+                <li th:class=" 'page-item ' + ${items.result.page == page?'active':''} " th:each="page: ${items.result.pageList}">
+                    <a class="page-link" th:href="@{/items(page = ${page},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
+                        [[${page}]]
+                    </a>
+                </li>
+                <li class="page-item" th:if="${items.result.next}">
+                    <a class="page-link" th:href="@{/items(page= ${items.result.end + 1},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">Next</a>
+                </li>
+
+                <!-- 마지막으로 이동 -->
+                <li th:classappend=" ${T(java.lang.Math).floor(items.result.totalPage / items.result.size) * items.result.size - 1 <= items.result.start} ? 'disabled'" class="page-item">
+                    <a class="page-link" th:href="@{/items(page=${items.result.totalPage},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
+                        <span>&raquo;</span>
+                        <span class="sr-only">Last</span>
+                    </a>
+                </li>
+
+            </ul>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+<footer class="footer section text-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <p class="copyright-text">Copyright &copy;2022, Designed &amp; Developed by <a href="https://themefisher.com/">Themefisher</a></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!--
+Essential Scripts
+=====================================-->
+
+<!-- Main jQuery -->
+<script th:src="@{/plugins/jquery/dist/jquery.min.js}"></script>
+<!-- Bootstrap 3.1 -->
+<script th:src="@{/plugins/bootstrap/js/bootstrap.min.js}"></script>
+<!-- Bootstrap Touchpin -->
+<script th:src="@{/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js}"></script>
+<!-- Instagram Feed Js -->
+<script th:src="@{//instafeed/instafeed.min.js}"></script>
+<!-- Video Lightbox Plugin -->
+<script th:src="@{/plugins/ekko-lightbox/dist/ekko-lightbox.min.js}"></script>
+<!-- Count Down Js -->
+<script th:src="@{/plugins/syo-timer/build/jquery.syotimer.min.js}"></script>
+
+<!-- slick Carousel -->
+<script th:src="@{/plugins/slick/slick.min.js}"></script>
+<script th:src="@{/plugins/slick/slick-animation.min.js}"></script>
+
+<!-- Main Js File -->
+<script th:src="@{/js/script.js}"></script>
+
+<!-- Login Js File -->
+<script th:src="@{/js/login-script.js}"></script>
+
+
+
+</body>
+</html>

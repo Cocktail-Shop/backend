@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<th:block th:fragment="header">
+  <section class="top-header">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4 col-xs-12 col-sm-4">
+          <div class="contact-number">
+            <i class="tf-ion-ios-telephone"></i>
+            <span>010- 1233-1233</span>
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12 col-sm-4">
+          <!-- Site Logo -->
+          <div class="logo text-center">
+            <a href="/items">
+              <!-- replace logo here -->
+              <svg width="135px" height="29px" viewBox="0 0 155 29" version="1.1" xmlns="http://www.w3.org/2000/svg"
+                   xmlns:xlink="http://www.w3.org/1999/xlink">
+                <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" font-size="40"
+                   font-family="AustinBold, Austin" font-weight="bold">
+                  <g id="Group" transform="translate(-108.000000, -297.000000)" fill="#000000">
+                    <text id="AVIATO">
+                      <tspan x="108.94" y="325">C-SHOP</tspan>
+                    </text>
+                  </g>
+                </g>
+              </svg>
+            </a>
+          </div>
+        </div>
+        <div class="col-md-4 col-xs-12 col-sm-4">
+          <!-- Cart -->
+          <ul class="top-menu text-right list-inline" sec:authorize="isAuthenticated()">
+            <li class="dropdown cart-nav dropdown-slide">
+              <a th:href="@{/members}" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i
+                      class="tf-ion-android-home"  ></i><span sec:authentication="principal.username"></span>님</a>
+              <div class="dropdown-menu cart-dropdown">
+                <!-- Cart Item -->
+                <div><a href="my-page.html" th:href="@{/members}" >마이페이지 </a></div>
+                <div>---------</div>
+                <div><a href="#">주문조회 </a></div>
+              </div>
+            </li>
+            <li>
+              <a th:href="@{/members/logout}"><i class="tf-ion-log-out"></i>로그아웃</a>
+            </li><!-- / Languages -->
+
+
+          </ul><!-- / .nav .navbar-nav .navbar-right -->
+          <ul class="top-menu text-right list-inline" sec:authorize="isAnonymous()">
+            <li>
+              <a th:href="@{/members/login}"><i class="tf-ion-log-out"></i>로그인</a>
+            </li><!-- / Languages -->
+
+          </ul><!-- / .nav .navbar-nav .navbar-right -->
+          <!-- Search -->
+          <ul class="top-menu text-right list-inline">
+            <li class="dropdown search dropdown-slide">
+              <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"><i
+                      class="tf-ion-ios-search-strong"></i> Search</a>
+              <ul class="dropdown-menu search-dropdown">
+                <li>
+                  <form th:action="@{/items/search/NONALCOHOL}" th:method="get"><input name="keyword" type="search" class="form-control" placeholder="주류 검색..."></form>
+                </li>
+              </ul>
+            </li><!-- / Search -->
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section><!-- End Top Header Bar -->
+
+
+  <!-- Main Menu Section -->
+  <section class="menu">
+    <nav class="navbar navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <h2 class="menu-title">Main Menu</h2>
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                  aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+
+        </div><!-- / .navbar-header -->
+
+        <!-- Navbar Links -->
+        <div id="navbar" class="navbar-collapse collapse text-center">
+          <ul class="nav navbar-nav">
+
+            <!-- 칵테일 -->
+            <li class="dropdown ">
+              <a href="/items?sort=cocktailName&category=COCKTAIL">칵테일</a>
+            </li><!-- / 칵테일 -->
+
+
+            <!--주류-->
+            <li class="dropdown">
+              <a href="/items?sort=itemName&category=ALCOHOL">주류</a>
+            </li><!-- / 주류 -->
+
+
+            <!-- 비주류 -->
+            <li class="dropdown">
+              <a href="/items?sort=itemName&category=NONALCOHOL">비주류</a>
+            </li><!-- / 비주류 -->
+
+
+            <!-- 정렬 -->
+            <li class="dropdown dropdown-slide">
+              <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="350"
+                 role="button" aria-haspopup="true" aria-expanded="false">정렬 <span
+                      class="tf-ion-ios-arrow-down"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/items?sort=itemName&category=NONALCOHOL">이름순</a></li>
+                <li><a href="/items?sort=degree&category=NONALCOHOL">도수순</a></li>
+                <li><a href="/items?sort=price&category=NONALCOHOL">가격순</a></li>
+              </ul>
+            </li><!-- / 정렬 -->
+          </ul><!-- / .nav .navbar-nav -->
+
+        </div>
+        <!--/.navbar-collapse -->
+      </div><!-- / .container -->
+    </nav>
+  </section>
+</th:block>
+</html>
