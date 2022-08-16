@@ -2,6 +2,7 @@ package com.lionTF.CShop.domain.admin.controller.dto
 
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
+import java.time.LocalDateTime
 
 data class ResponseSearchMembersResultDTO(
     var httpStatus: Int,
@@ -28,4 +29,5 @@ data class FindMembersDTO (
     var address: String,
     var memberName: String,
     var phoneNumber: String,
+    var createdAt: LocalDateTime
 )

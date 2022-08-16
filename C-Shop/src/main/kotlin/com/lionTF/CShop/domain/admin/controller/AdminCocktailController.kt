@@ -78,7 +78,6 @@ class AdminCocktailController(
     }
 
     // 칵테일 수정
-    //TODO
     @PutMapping("cocktails/{cocktailId}")
     fun updateCocktail(
         @PathVariable("cocktailId") cocktailId: Long,
