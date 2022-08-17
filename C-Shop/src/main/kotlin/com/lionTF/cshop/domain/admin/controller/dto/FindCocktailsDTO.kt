@@ -26,5 +26,6 @@ data class FindCocktailsDTO(
     var cocktailId: Long,
     var cocktailName: String,
     var cocktailDescription: String,
+    val cocktailImgUrl: String,
     var createdAt: LocalDateTime
 )

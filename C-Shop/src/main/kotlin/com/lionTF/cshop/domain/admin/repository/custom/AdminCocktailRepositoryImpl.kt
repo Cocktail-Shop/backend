@@ -49,6 +49,7 @@ class AdminCocktailRepositoryImpl(
                     cocktail.cocktailId,
                     cocktail.cocktailName,
                     cocktail.cocktailDescription,
+                    cocktail.cocktailImgUrl,
                     cocktail.createdAt
                 )
             )

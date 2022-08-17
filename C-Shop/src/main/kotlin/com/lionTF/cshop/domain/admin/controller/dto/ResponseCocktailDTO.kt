@@ -20,12 +20,14 @@ data class ResponseCocktailDTO (
 
 data class CocktailResultDTO(
     var cocktailName: String,
-    var cocktailDescription: String
+    var cocktailDescription: String,
+    val cocktailImgUrl: String,
 )
 
 data class CocktailResultDTOAddItemIds(
     var cocktailName: String,
     var cocktailDescription: String,
+    val cocktailImgUrl: String,
     var itemIds: MutableList<Long>
 ){
     companion object {
@@ -33,6 +35,7 @@ data class CocktailResultDTOAddItemIds(
             return CocktailResultDTOAddItemIds(
                 cocktailName = cocktailResultDTO.cocktailName,
                 cocktailDescription = cocktailResultDTO.cocktailDescription,
+                cocktailImgUrl = cocktailResultDTO.cocktailImgUrl,
                 itemIds = itemIds
             )
         }
@@ -42,15 +45,19 @@ data class CocktailResultDTOAddItemIds(
 data class RequestUpdateCocktailDTO(
     var cocktailName: String,
     var cocktailDescription: String,
+    val cocktailImgUrl: String,
     var itemIds: MutableList<Long> = mutableListOf()
 ){
     companion object{
-        fun formDTOFromResponseCocktailDTO(responseCocktailDTO: ResponseCocktailDTO, itemIds: MutableList<Long>): RequestUpdateCocktailDTO {
-            return RequestUpdateCocktailDTO(
-                cocktailName = responseCocktailDTO.result!!.cocktailName,
-                cocktailDescription = responseCocktailDTO.result.cocktailDescription,
-                itemIds = itemIds
-            )
+        fun formDTOFromResponseCocktailDTO(responseCocktailDTO: ResponseCocktailDTO, itemIds: MutableList<Long>): RequestUpdateCocktailDTO? {
+            return responseCocktailDTO.result?.let {
+                RequestUpdateCocktailDTO(
+                    cocktailName = it.cocktailName,
+                    cocktailDescription = responseCocktailDTO.result.cocktailDescription,
+                    cocktailImgUrl = responseCocktailDTO.result.cocktailImgUrl,
+                    itemIds = itemIds
+                )
+            }
         }
     }
 }

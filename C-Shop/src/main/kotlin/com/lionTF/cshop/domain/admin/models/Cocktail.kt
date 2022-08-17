@@ -25,25 +25,27 @@ class Cocktail (
     var category: Category,
 ) : BaseTimeEntity() {
 
-    companion object {
-        fun requestCreateCocktailDTOtoCocktail(requestCreateCocktailDTO: RequestCreateCocktailDTO): Cocktail {
-            return Cocktail(
-                cocktailDescription = requestCreateCocktailDTO.cocktailDescription,
-                cocktailName = requestCreateCocktailDTO.cocktailName,
-                category = requestCreateCocktailDTO.category
-            )
-        }
-    }
-
     // 칵테일 상품 삭제
     fun deleteCocktail(){
         cocktailStatus = false
     }
 
     // 칵테일 상품 수정
-    fun updateCocktail(requestCreateCocktailDTO: RequestCreateCocktailDTO) {
+    fun updateCocktail(requestCreateCocktailDTO: RequestCreateCocktailDTO, cocktailImgUrl: String?) {
         cocktailName = requestCreateCocktailDTO.cocktailName
         cocktailDescription = requestCreateCocktailDTO.cocktailDescription
         category = Category.COCKTAIL
+        this.cocktailImgUrl = cocktailImgUrl!!
+    }
+
+    companion object {
+        fun requestCreateCocktailDTOtoCocktail(requestCreateCocktailDTO: RequestCreateCocktailDTO, cocktailImgUrl: String?): Cocktail {
+            return Cocktail(
+                cocktailDescription = requestCreateCocktailDTO.cocktailDescription,
+                cocktailName = requestCreateCocktailDTO.cocktailName,
+                category = requestCreateCocktailDTO.category,
+                cocktailImgUrl = cocktailImgUrl!!
+            )
+        }
     }
 }

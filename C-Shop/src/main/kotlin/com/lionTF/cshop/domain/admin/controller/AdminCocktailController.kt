@@ -1,10 +1,10 @@
 package com.lionTF.cshop.domain.admin.controller
 
 import com.lionTF.cshop.domain.admin.controller.dto.*
+import com.lionTF.cshop.domain.admin.service.ImageService
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminCocktailItemService
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminCocktailService
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminItemService
-import com.lionTF.cshop.domain.shop.service.CocktailServiceImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*
 import java.util.LinkedHashMap
 
 import org.springframework.web.bind.annotation.ModelAttribute
+import java.time.LocalDateTime
 
 @Controller
 @RequestMapping("/admins")
@@ -20,7 +21,7 @@ class AdminCocktailController(
     private val adminCocktailItemService: AdminCocktailItemService,
     private val adminCocktailService: AdminCocktailService,
     private val adminItemService: AdminItemService,
-    private val cocktailService: CocktailServiceImpl,
+    private val imageService: ImageService
 ) {
 
     // 전체 칵테일 조회
@@ -57,7 +58,8 @@ class AdminCocktailController(
         requestCreateCocktailDTO: RequestCreateCocktailDTO,
         model: Model
     ): String {
-        model.addAttribute("result", adminCocktailService.createCocktail(requestCreateCocktailDTO))
+        val cocktailImgUrl = getImageUrl(requestCreateCocktailDTO)
+        model.addAttribute("result", adminCocktailService.createCocktail(requestCreateCocktailDTO, cocktailImgUrl))
         return "global/message"
     }
 
@@ -83,7 +85,8 @@ class AdminCocktailController(
         requestCreateCocktailDTO: RequestCreateCocktailDTO,
         model: Model
     ): String {
-        model.addAttribute("result", adminCocktailService.updateCocktail(requestCreateCocktailDTO, cocktailId, requestCreateCocktailDTO.itemIds))
+        val cocktailImgUrl = getImageUrl(requestCreateCocktailDTO)
+        model.addAttribute("result", adminCocktailService.updateCocktail(requestCreateCocktailDTO, cocktailId, requestCreateCocktailDTO.itemIds, cocktailImgUrl))
         return "global/message"
     }
 
@@ -110,6 +113,18 @@ class AdminCocktailController(
         }
 
         return map
+    }
+
+    // API를 통해 이미지 URL을 가져오는 함
+    private fun getImageUrl(requestCreateCocktailDTO: RequestCreateCocktailDTO): String? {
+        imageService.requestToken()
+        val cocktailImgUrl = requestCreateCocktailDTO.cocktailImgUrl?.let {
+            imageService.uploadObject(
+                requestCreateCocktailDTO.cocktailName + LocalDateTime.now().toString(),
+                it
+            )
+        }
+        return cocktailImgUrl
     }
 
     // 한개 이상의 칵테일 삭제

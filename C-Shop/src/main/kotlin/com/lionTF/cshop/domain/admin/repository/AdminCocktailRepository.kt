@@ -13,7 +13,7 @@ interface AdminCocktailRepository : JpaRepository<Cocktail, Long>, AdminCocktail
     fun findCocktailNameByCocktailStatus(@Param("cocktailName")cocktailName: String, @Param("cocktailStatus")cocktailStatus: Boolean): String?
 
     @Query(
-        "select new com.lionTF.cshop.domain.admin.controller.dto.CocktailResultDTO(c.cocktailName, c.cocktailDescription)" +
+        "select new com.lionTF.cshop.domain.admin.controller.dto.CocktailResultDTO(c.cocktailName, c.cocktailDescription, c.cocktailImgUrl)" +
             " from Cocktail c where c.cocktailId = :cocktailId")
     fun findCocktailById(@Param("cocktailId") cocktailId: Long): CocktailResultDTO
 
