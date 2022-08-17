@@ -1,5 +1,6 @@
 package com.lionTF.CShop.domain.shop.service.shopinterface
 
+import com.lionTF.CShop.domain.admin.controller.dto.ResponseSearchOrdersResultDTO
 import com.lionTF.CShop.domain.member.controller.dto.AddressDTO
 import com.lionTF.CShop.domain.shop.controller.dto.OrderResponseDTO
 import com.lionTF.CShop.domain.shop.controller.dto.RequestOrderDTO
@@ -17,5 +18,5 @@ interface OrderService {
     fun cancelOrder(orderId: Long): OrderResponseDTO
 
     // 주문 조회
-    fun getShopOrders(pageable: Pageable): OrderResponseDTO
+    fun getShopOrders(pageable: Pageable): ResponseSearchOrdersResultDTO
 }
