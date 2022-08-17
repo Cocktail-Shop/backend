@@ -17,25 +17,25 @@ import java.util.*
 class ImageService(
 
     @Value("\${spring.img.authUrl}")
-    private val authUrl: String? = null,
+    private val authUrl: String? = "",
 
     @Value("\${spring.img.storageUrl}")
-    private val storageUrl: String? = null,
+    private val storageUrl: String? = "",
 
     @Value("\${spring.img.tenantId}")
-    private val tenantId: String? = null,
+    private val tenantId: String? = "",
 
     @Value("\${spring.img.username}")
-    private val username: String? = null,
+    private val username: String? = "",
 
     @Value("\${spring.img.password}")
-    private val password: String? = null,
+    private val password: String? = "",
 ) {
-    final val tokenRequest = TokenRequest()
+
+    private final val tokenRequest = TokenRequest()
     val restTemplate = RestTemplate()
     var tokenId: String = ""
     val containerName = "lion-test"
-
 
 
     init {
@@ -77,13 +77,13 @@ class ImageService(
 
         val body: JsonNode = mapper.readTree(response.body)
 
-        tokenId=body.path("access").path("token").path("id").toString()
+        tokenId = body.path("access").path("token").path("id").toString()
 
         return tokenId
     }
 
-    // lion-test컨테이너에 있는 object
-    fun getContainerObject():List<String>{
+    // lion-test 컨테이너에 있는 object
+    fun getContainerObject(): List<String> {
         val headers = HttpHeaders()
         headers.add("X-Auth-Token", tokenId)
 
@@ -92,22 +92,23 @@ class ImageService(
         // API 호출
 
         // API 호출
-        val response: ResponseEntity<String> = restTemplate.exchange(
-            this.storageUrl, HttpMethod.GET, requestHttpEntity,
-            String::class.java
-        )
+        val response: ResponseEntity<String> = this.storageUrl?.let {
+            restTemplate.exchange(
+                it, HttpMethod.GET, requestHttpEntity,
+                String::class.java
+            )
+        } as ResponseEntity<String>
 
         var containerList: List<String>? = null
         if (response.statusCode == HttpStatus.OK) {
-            // String으로 받은 목록을 배열로 변환
             containerList =
                 response.body!!.split("\\r?\\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().toList()
         }
-
-        // 배열을 List로 변환하여 반환
         return ArrayList(containerList)
+
     }
-    private fun getUrl(containerName: String?): String? {
+
+    private fun getUrl(containerName: String?): String {
         return this.storageUrl + "/" + containerName
     }
 
@@ -117,30 +118,26 @@ class ImageService(
     }
 
     fun getList(url: String?): List<String?>? {
-        // 헤더 생성
         val headers = HttpHeaders()
         headers.add("X-Auth-Token", tokenId)
         val requestHttpEntity = HttpEntity<String>(null, headers)
 
-        // API 호출
         val response = restTemplate.exchange(
             url!!, HttpMethod.GET, requestHttpEntity,
             String::class.java
         )
         return if (response.statusCode == HttpStatus.OK) {
-            // String으로 받은 목록을 배열로 변환
             response.body!!.split("\\r?\\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray().toList()
         } else Collections.emptyList()
     }
 
-    //오브젝트(사진) 업로드 또는 수정
     fun getUrl(containerName: String, objectName: String): String {
         return this.storageUrl + "/" + containerName + "/" + objectName
     }
 
-    fun uploadObject(objectName: String,multipartFile: MultipartFile) : String{
+    fun uploadObject(objectName: String, multipartFile: MultipartFile): String {
         val url = getUrl(containerName, objectName)
-        val inputStream= multipartFile.inputStream
+        val inputStream = multipartFile.inputStream
         val requestCallback = RequestCallback { request ->
             request.headers.add("X-Auth-Token", tokenId)
             IOUtils.copy(inputStream, request.body)
@@ -159,23 +156,20 @@ class ImageService(
         return url
     }
 
-    //delete object
     fun deleteObject(objectName: String?) {
         val url = this.getUrl(containerName, objectName!!)
 
-        // 헤더 생성
         val headers = HttpHeaders()
         headers.add("X-Auth-Token", tokenId)
         val requestHttpEntity = HttpEntity<String>(null, headers)
 
-        // API 호출
         restTemplate.exchange(url, HttpMethod.DELETE, requestHttpEntity, String::class.java)
     }
 
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val imageService=ImageService()
+            val imageService = ImageService()
             imageService.requestToken()
 
         }

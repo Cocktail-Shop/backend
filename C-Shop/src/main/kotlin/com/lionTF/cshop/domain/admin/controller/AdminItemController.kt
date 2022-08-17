@@ -10,9 +10,7 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.ModelAttribute
-import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.*
 
 @Controller
 @RequestMapping("/admins")
@@ -56,12 +54,7 @@ class AdminItemController(
         requestCreateItemDTO: RequestCreateItemDTO,
         model: Model
     ): String {
-        imageService.requestToken()
-        val itemImgUrl = requestCreateItemDTO.itemImgUrl?.let {
-            imageService.uploadObject(
-                requestCreateItemDTO.itemName + LocalDateTime.now().toString(),
-                it
-            )}
+        val itemImgUrl = getImageUrl(requestCreateItemDTO)
         model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO, itemImgUrl))
         return "global/message"
     }
@@ -86,8 +79,8 @@ class AdminItemController(
         requestCreateItemDTO: RequestCreateItemDTO,
         model: Model
     ): String {
-        imageService.requestToken()
-        val itemImgUrl = requestCreateItemDTO.itemImgUrl?.let { imageService.uploadObject("test", it) }
+        val itemImgUrl = getImageUrl(requestCreateItemDTO)
+        println("itemImgUrl = ${itemImgUrl}")
         model.addAttribute("result", adminItemService.updateItem(itemId, requestCreateItemDTO, itemImgUrl))
         return "global/message"
     }
@@ -102,11 +95,22 @@ class AdminItemController(
         return "global/message"
     }
 
-
     // 라디오 박스에 카테고리 이넘타입의 내용을 배열로 반환
     @ModelAttribute("category")
     fun itemTypes(): Array<Category> {
         return Category.values()
+    }
+
+    // API를 통해 이미지 URL을 가져오는 함
+    private fun getImageUrl(requestCreateItemDTO: RequestCreateItemDTO): String? {
+        imageService.requestToken()
+        val itemImgUrl = requestCreateItemDTO.itemImgUrl?.let {
+            imageService.uploadObject(
+                requestCreateItemDTO.itemName + LocalDateTime.now().toString(),
+                it
+            )
+        }
+        return itemImgUrl
     }
 
 
