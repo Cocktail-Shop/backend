@@ -49,17 +49,17 @@ class CartItemServiceImpl(
         val cartItemDTOList: MutableList<CartItemDTO> = mutableListOf()
         val items = addCartCocktailItemDTO.items
 
-        for(item in items){
-            val itemInfo = itemRepository.getReferenceById(item.itemId)
+        items.map{
+            val itemInfo = itemRepository.getReferenceById(it.itemId)
 
-            if(item.amount <= 0){
+            if(it.amount <= 0){
                 return AddCartCocktailItemResultDTO.setNotPositiveError()
             }
 
-            if(itemInfo.amount > item.amount){
+            if(itemInfo.amount > it.amount){
 
                 if(itemInfo.itemStatus){
-                    cartItemDTOList.add(CartItemDTO(itemInfo,cart,item.amount))
+                    cartItemDTOList.add(CartItemDTO(itemInfo,cart,it.amount))
                 }else{
                     return AddCartCocktailItemResultDTO.setStatusFailAddCartCocktailItemResultDTO()
                 }

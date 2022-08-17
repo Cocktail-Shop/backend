@@ -27,16 +27,16 @@ class OrderServiceImpl(
     @Transactional
     override fun requestOrder(requestOrderDTO: RequestOrderDTO) : RequestOrderResultDTO {
 
-        for(info in requestOrderDTO.orderItems){
-            val requestAmount = info.amount
-            val existAmount = itemRepository.getReferenceById(info.itemId).amount
+         requestOrderDTO.orderItems.map{
+            val requestAmount = it.amount
+            val existAmount = itemRepository.getReferenceById(it.itemId).amount
 
 
             if(requestAmount <= 0){
                 return RequestOrderResultDTO.setNotPositiveError()
             }
 
-            if(itemRepository.getReferenceById(info.itemId).itemStatus){
+            if(itemRepository.getReferenceById(it.itemId).itemStatus){
                 if(requestAmount > existAmount) return RequestOrderResultDTO.setRequestOrderAmountFailResultDTO()
             }
             else return RequestOrderResultDTO.setRequestOrderStatusFailResultDTO()
