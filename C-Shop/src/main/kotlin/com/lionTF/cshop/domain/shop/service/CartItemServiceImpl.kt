@@ -21,18 +21,14 @@ class CartItemServiceImpl(
     //장바구니에 단일 상품 추가 메소드
     @Transactional
     override fun addCartItem(addCartItemDTO: AddCartItemDTO): AddCartItemResultDTO{
-        //남은 재고 확인
         val item =itemRepository.getReferenceById(addCartItemDTO.itemId)
         val cart = cartRepository.getCart(addCartItemDTO.memberId)
 
-        //사용자가 입력한 수가 0보다 큰지 확인
         if(addCartItemDTO.amount <= 0){
             return AddCartItemResultDTO.setNotPositiveError()
         }
 
-        //삭제된 상품이 아니라면
         return if(item.itemStatus){
-            //장바구니에 담고자 하는 상품의 재고가 충분하다면
             if(addCartItemDTO.amount < item.amount){
                 val cartItemDTO = CartItemDTO(item,cart,addCartItemDTO.amount)
                 cartItemRepository.save(CartItem.fromCartItemDTO(cartItemDTO))
@@ -55,13 +51,13 @@ class CartItemServiceImpl(
 
         for(item in items){
             val itemInfo = itemRepository.getReferenceById(item.itemId)
-            //사용자가 요청한 수량이 양수가 아니면
+
             if(item.amount <= 0){
                 return AddCartCocktailItemResultDTO.setNotPositiveError()
             }
-            //재고가 충분하면
+
             if(itemInfo.amount > item.amount){
-                //삭제된 상품이 아닌지 확인
+
                 if(itemInfo.itemStatus){
                     cartItemDTOList.add(CartItemDTO(itemInfo,cart,item.amount))
                 }else{

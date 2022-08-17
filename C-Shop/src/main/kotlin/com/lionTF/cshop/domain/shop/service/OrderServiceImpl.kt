@@ -27,27 +27,24 @@ class OrderServiceImpl(
     @Transactional
     override fun requestOrder(requestOrderDTO: RequestOrderDTO) : RequestOrderResultDTO {
 
-        //요청한 상품들 재고 검사
         for(info in requestOrderDTO.orderItems){
             val requestAmount = info.amount
             val existAmount = itemRepository.getReferenceById(info.itemId).amount
 
-            //요청 수량이 양수인지 확인
+
             if(requestAmount <= 0){
                 return RequestOrderResultDTO.setNotPositiveError()
             }
 
-            //삭제된 아이템인지 확인
             if(itemRepository.getReferenceById(info.itemId).itemStatus){
-                // 요청한 주문 상품이 재고보다 많을 경우
                 if(requestAmount > existAmount) return RequestOrderResultDTO.setRequestOrderAmountFailResultDTO()
             }
             else return RequestOrderResultDTO.setRequestOrderStatusFailResultDTO()
         }
 
-        //주문 가능한 경우
+
         val member = requestOrderDTO.memberId?.let { memberRepository.getReferenceById(it) }
-        //order 저장
+
         val orders = orderRepository.save(
             Orders.fromOrdersDTO(
                 OrdersDTO(
@@ -61,11 +58,9 @@ class OrderServiceImpl(
 
         for(info in requestOrderDTO.orderItems){
             val item = itemRepository.getReferenceById(info.itemId)
-            //주문 수량만큼 재고 줄여주기
             item.amount -= info.amount
             itemRepository.save(item)
 
-            //orderitem 저장
             orderItemRepository.save(
                 OrderItem.fromOrderItemDTO(
                     OrderItemDTO(
