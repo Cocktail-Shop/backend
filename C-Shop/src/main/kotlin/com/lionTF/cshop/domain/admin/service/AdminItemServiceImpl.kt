@@ -10,23 +10,22 @@ import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
-@Transactional
 class AdminItemServiceImpl(
 
     private val adminItemRepository: AdminItemRepository,
 
-): AdminItemService {
+) : AdminItemService {
 
-    // 상품 등록
+    @Transactional
     override fun createItem(requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?): AdminResponseDTO {
 
-        return if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) { // 가격 & 수량이 0이하일 경우
+        return if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO()
 
-        } else if (requestCreateItemDTO.amount <= 0) {  // 수량이 0이하일 경우
+        } else if (requestCreateItemDTO.amount <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO()
 
-        } else if (requestCreateItemDTO.price <= 0) {  // 가격이 0이하일 경우
+        } else if (requestCreateItemDTO.price <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO()
 
         } else {
@@ -35,24 +34,23 @@ class AdminItemServiceImpl(
         }
     }
 
-
-    // 상품 수정
-    override fun updateItem(itemId: Long, requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?): AdminResponseDTO {
+    @Transactional
+    override fun updateItem(
+        itemId: Long,
+        requestCreateItemDTO: RequestCreateItemDTO,
+        itemImgUrl: String?
+    ): AdminResponseDTO {
         val existsItem = adminItemRepository.existsById(itemId)
 
-        return if (!existsItem) { // 존재하지 않은 상품일 때
+        return if (!existsItem) {
             AdminResponseDTO.toFailUpdateItemResponseDTO()
-        }
-        else if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) { // 가격 & 수량이 0이하일 경우
+        } else if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO()
-        }
-        else if (requestCreateItemDTO.amount <= 0) { // 수량이 0이하일 경우
+        } else if (requestCreateItemDTO.amount <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO()
-        }
-        else if (requestCreateItemDTO.price <= 0) { // 가격이 0이하일 경우
+        } else if (requestCreateItemDTO.price <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO()
-        }
-        else {
+        } else {
             adminItemRepository.getReferenceById(itemId).update(requestCreateItemDTO, itemImgUrl)
 
             AdminResponseDTO.toSuccessUpdateItemResponseDTO()
@@ -60,7 +58,7 @@ class AdminItemServiceImpl(
     }
 
 
-    // 하나의 상품 삭제
+    @Transactional
     override fun deleteOneItem(itemId: Long): AdminResponseDTO {
         val existsItem = adminItemRepository.existsById(itemId)
 
@@ -72,10 +70,6 @@ class AdminItemServiceImpl(
 
             AdminResponseDTO.toSuccessDeleteItemResponseDTO()
         }
-    }
-
-    override fun createItemImg(itemImgUrl: String?) {
-
     }
 
     // 상품 단건 조회

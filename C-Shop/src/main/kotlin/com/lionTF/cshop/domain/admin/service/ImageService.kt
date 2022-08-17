@@ -37,7 +37,6 @@ class ImageService(
     var tokenId: String = ""
     val containerName = "lion-test"
 
-
     init {
         tokenRequest.auth.tenantId = tenantId
         tokenRequest.auth.passwordCredentials.username = username
@@ -171,8 +170,6 @@ class ImageService(
         fun main(args: Array<String>) {
             val imageService = ImageService()
             imageService.requestToken()
-
         }
     }
-
 }

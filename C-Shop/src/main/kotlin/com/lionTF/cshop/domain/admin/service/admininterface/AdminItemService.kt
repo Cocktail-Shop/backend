@@ -17,7 +17,5 @@ interface AdminItemService {
 
     fun deleteOneItem(itemId: Long): AdminResponseDTO
 
-    fun createItemImg(itemImgUrl: String?)
-
     //    fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO
 }

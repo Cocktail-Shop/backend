@@ -5,7 +5,7 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners
-class CocktailItem (
+class CocktailItem(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

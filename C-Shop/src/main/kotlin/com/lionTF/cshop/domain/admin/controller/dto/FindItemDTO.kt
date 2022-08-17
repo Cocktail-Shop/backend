@@ -10,9 +10,12 @@ data class ResponseSearchItemSearchDTO(
     val message: String,
     val keyword: String? = null,
     val result: Page<FindItemDTO>? = null,
-){
-    companion object{
-        fun itemToResponseItemSearchPageDTO(findItemDTO: Page<FindItemDTO>, keyword: String?): ResponseSearchItemSearchDTO {
+) {
+    companion object {
+        fun itemToResponseItemSearchPageDTO(
+            findItemDTO: Page<FindItemDTO>,
+            keyword: String?
+        ): ResponseSearchItemSearchDTO {
             return ResponseSearchItemSearchDTO(
                 HttpStatus.OK.value(),
                 "상품 조회를 성공했습니다.",
@@ -24,13 +27,13 @@ data class ResponseSearchItemSearchDTO(
 }
 
 data class FindItemDTO(
-    var itemId: Long,
-    var itemName: String,
-    var price: Int,
-    var amount: Int,
-    var degree: Int,
-    var itemDescription: String,
-    var itemImgUrl: String,
-    var category: Category,
-    var createdAt: LocalDateTime,
+    val itemId: Long,
+    val itemName: String,
+    val price: Int,
+    val amount: Int,
+    val degree: Int,
+    val itemDescription: String,
+    val itemImgUrl: String,
+    val category: Category,
+    val createdAt: LocalDateTime,
 )

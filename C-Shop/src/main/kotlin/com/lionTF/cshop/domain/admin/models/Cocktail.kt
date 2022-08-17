@@ -7,7 +7,7 @@ import com.lionTF.cshop.global.model.BaseTimeEntity
 
 @Entity
 @EntityListeners
-class Cocktail (
+class Cocktail(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ class Cocktail (
 ) : BaseTimeEntity() {
 
     // 칵테일 상품 삭제
-    fun deleteCocktail(){
+    fun deleteCocktail() {
         cocktailStatus = false
     }
 
@@ -39,7 +39,10 @@ class Cocktail (
     }
 
     companion object {
-        fun requestCreateCocktailDTOtoCocktail(requestCreateCocktailDTO: RequestCreateCocktailDTO, cocktailImgUrl: String?): Cocktail {
+        fun requestCreateCocktailDTOtoCocktail(
+            requestCreateCocktailDTO: RequestCreateCocktailDTO,
+            cocktailImgUrl: String?
+        ): Cocktail {
             return Cocktail(
                 cocktailDescription = requestCreateCocktailDTO.cocktailDescription,
                 cocktailName = requestCreateCocktailDTO.cocktailName,

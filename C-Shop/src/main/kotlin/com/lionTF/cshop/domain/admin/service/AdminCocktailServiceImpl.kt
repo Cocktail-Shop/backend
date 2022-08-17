@@ -15,22 +15,19 @@ import java.util.*
 import javax.transaction.Transactional
 
 @Service
-@Transactional
 class AdminCocktailServiceImpl(
     private val adminCocktailRepository: AdminCocktailRepository,
     private val adminCocktailItemRepository: AdminCocktailItemRepository,
     private val adminItemRepository: AdminItemRepository,
 
-): AdminCocktailService{
+    ) : AdminCocktailService {
 
-    // 전체 칵테일 조회
     override fun getAllCocktail(pageable: Pageable): ResponseSearchCocktailSearchDTO {
         val findAllCocktails = adminCocktailRepository.findAllCocktails(pageable)
 
         return ResponseSearchCocktailSearchDTO.cocktailToResponseCocktailSearchPageDTO(findAllCocktails, "")
     }
 
-    // 칵테일 상품명으로 칵테일 조회
     override fun getCocktailsByName(keyword: String, pageable: Pageable): ResponseSearchCocktailSearchDTO {
         val findCocktailsByName = adminCocktailRepository.findCocktailsByName(keyword, pageable)
 
@@ -50,13 +47,21 @@ class AdminCocktailServiceImpl(
             )
         } else {
             val cocktailResultDTO = adminCocktailRepository.findCocktailById(cocktailId)
-            return ResponseCocktailDTO.cocktailToResponseCocktailPageDTO(CocktailResultDTOAddItemIds.addItemIds(cocktailResultDTO, itemIds))
+            return ResponseCocktailDTO.cocktailToResponseCocktailPageDTO(
+                CocktailResultDTOAddItemIds.addItemIds(
+                    cocktailResultDTO,
+                    itemIds
+                )
+            )
         }
     }
 
 
-    // 칵테일 상품 등록
-    override fun createCocktail(requestCreateCocktailDTO: RequestCreateCocktailDTO, cocktailImgUrl: String?): AdminResponseDTO {
+    @Transactional
+    override fun createCocktail(
+        requestCreateCocktailDTO: RequestCreateCocktailDTO,
+        cocktailImgUrl: String?
+    ): AdminResponseDTO {
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
 
         return if (!formToExistedItems(requestCreateCocktailDTO.itemIds)) {
@@ -66,7 +71,12 @@ class AdminCocktailServiceImpl(
             AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO()
 
         } else {
-            val cocktail = adminCocktailRepository.save(Cocktail.requestCreateCocktailDTOtoCocktail(requestCreateCocktailDTO, cocktailImgUrl))
+            val cocktail = adminCocktailRepository.save(
+                Cocktail.requestCreateCocktailDTOtoCocktail(
+                    requestCreateCocktailDTO,
+                    cocktailImgUrl
+                )
+            )
 
             for (itemId in requestCreateCocktailDTO.itemIds) {
                 val item = adminItemRepository.getReferenceById(itemId)
@@ -81,7 +91,7 @@ class AdminCocktailServiceImpl(
     }
 
 
-    // 한개의 칵테일 삭제
+    @Transactional
     override fun deleteOneCocktail(cocktailId: Long): AdminResponseDTO {
         val existsCocktail = adminCocktailRepository.existsById(cocktailId)
 
@@ -96,7 +106,7 @@ class AdminCocktailServiceImpl(
         }
     }
 
-    // 칵테일 상품 수정
+    @Transactional
     override fun updateCocktail(
         requestCreateCocktailDTO: RequestCreateCocktailDTO,
         cocktailId: Long,
@@ -111,7 +121,7 @@ class AdminCocktailServiceImpl(
         return if (!existsCocktail || !(formToExistedItems(itemIds))) {
             AdminResponseDTO.noContentItem()
 
-        }else if(itemIds.isEmpty()) {
+        } else if (itemIds.isEmpty()) {
             AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO()
 
         } else {
@@ -143,7 +153,9 @@ class AdminCocktailServiceImpl(
     private fun formToExistedItems(itemList: MutableList<Long>): Boolean {
         for (itemId in itemList) {
             when (existedItem(itemId).isEmpty) {
-                true -> {return false}
+                true -> {
+                    return false
+                }
             }
         }
         return true
@@ -160,7 +172,9 @@ class AdminCocktailServiceImpl(
     private fun formToExistedCocktails(cocktailList: MutableList<Long>): Boolean {
         for (cocktailId in cocktailList) {
             when (existedCocktail(cocktailId).isEmpty) {
-                true -> {return false}
+                true -> {
+                    return false
+                }
             }
         }
         return true

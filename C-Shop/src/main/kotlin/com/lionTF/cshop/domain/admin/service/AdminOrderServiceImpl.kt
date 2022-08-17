@@ -13,7 +13,6 @@ import java.util.*
 import javax.transaction.Transactional
 
 @Service
-@Transactional
 class AdminOrderServiceImpl(
 
     private val adminOrderRepository: AdminOrderRepository,
@@ -21,7 +20,7 @@ class AdminOrderServiceImpl(
 
 ) : AdminOrderService {
 
-    // 하나의 주문 취소
+    @Transactional
     override fun cancelOneOrder(orderId: Long): AdminResponseDTO {
         val existsOrder = adminOrderRepository.existsById(orderId)
 
@@ -48,15 +47,12 @@ class AdminOrderServiceImpl(
         }
     }
 
-
-    // 주문 전체 조회
     override fun getAllOrders(pageable: Pageable): ResponseSearchOrdersResultDTO {
         val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
 
         return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(findOrdersInfo, "")
     }
 
-    // 회원 ID로 주문 조회
     override fun getOrdersByMemberId(keyword: String, pageable: Pageable): ResponseSearchOrdersResultDTO {
         val findOrdersInfoByMemberId = adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
 
@@ -73,12 +69,13 @@ class AdminOrderServiceImpl(
     private fun formToExistedItems(orderList: MutableList<Long>): Boolean {
         for (orderId in orderList) {
             when (existedOrder(orderId).isEmpty) {
-                true -> {return false}
+                true -> {
+                    return false
+                }
             }
         }
         return true
     }
-
 
 //    // 하나 이상의 주문 취소
 //    override fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO {

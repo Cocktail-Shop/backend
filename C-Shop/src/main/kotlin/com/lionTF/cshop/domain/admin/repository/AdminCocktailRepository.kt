@@ -9,12 +9,10 @@ import org.springframework.data.jpa.repository.Query
 
 interface AdminCocktailRepository : JpaRepository<Cocktail, Long>, AdminCocktailRepositoryCustom {
 
-    @Query("select ct.cocktailName from Cocktail ct where ct.cocktailName = :cocktailName and ct.cocktailStatus = :cocktailStatus")
-    fun findCocktailNameByCocktailStatus(@Param("cocktailName")cocktailName: String, @Param("cocktailStatus")cocktailStatus: Boolean): String?
-
     @Query(
         "select new com.lionTF.cshop.domain.admin.controller.dto.CocktailResultDTO(c.cocktailName, c.cocktailDescription, c.cocktailImgUrl)" +
-            " from Cocktail c where c.cocktailId = :cocktailId")
+                " from Cocktail c where c.cocktailId = :cocktailId"
+    )
     fun findCocktailById(@Param("cocktailId") cocktailId: Long): CocktailResultDTO
 
 

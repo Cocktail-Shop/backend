@@ -9,9 +9,12 @@ data class ResponseSearchCocktailSearchDTO(
     val message: String,
     val keyword: String? = null,
     val result: Page<FindCocktailsDTO>? = null,
-){
-    companion object{
-        fun cocktailToResponseCocktailSearchPageDTO(findCocktailDTO: Page<FindCocktailsDTO>, keyword: String?): ResponseSearchCocktailSearchDTO {
+) {
+    companion object {
+        fun cocktailToResponseCocktailSearchPageDTO(
+            findCocktailDTO: Page<FindCocktailsDTO>,
+            keyword: String?
+        ): ResponseSearchCocktailSearchDTO {
             return ResponseSearchCocktailSearchDTO(
                 HttpStatus.OK.value(),
                 "칵테일 조회를 성공했습니다.",
@@ -23,9 +26,9 @@ data class ResponseSearchCocktailSearchDTO(
 }
 
 data class FindCocktailsDTO(
-    var cocktailId: Long,
-    var cocktailName: String,
-    var cocktailDescription: String,
+    val cocktailId: Long,
+    val cocktailName: String,
+    val cocktailDescription: String,
     val cocktailImgUrl: String,
-    var createdAt: LocalDateTime
+    val createdAt: LocalDateTime
 )

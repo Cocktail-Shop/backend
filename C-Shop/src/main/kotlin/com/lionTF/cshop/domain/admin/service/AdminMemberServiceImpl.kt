@@ -10,7 +10,6 @@ import java.util.*
 import javax.transaction.Transactional
 
 @Service
-@Transactional
 class AdminMemberServiceImpl(
 
     private val adminMemberRepository: AdminMemberRepository,
@@ -18,7 +17,8 @@ class AdminMemberServiceImpl(
 ) : AdminMemberService {
 
     // 한명의 회원 삭제
-    override fun deleteOneMember(memberId: Long): AdminResponseDTO{
+    @Transactional
+    override fun deleteOneMember(memberId: Long): AdminResponseDTO {
         val existsMember = adminMemberRepository.existsById(memberId)
 
         return if (!existsMember) {
@@ -54,7 +54,9 @@ class AdminMemberServiceImpl(
     private fun formToExistedMembers(memberIdList: MutableList<Long>): Boolean {
         for (memberId in memberIdList) {
             when (existedMember(memberId).isEmpty) {
-                true -> {return false}
+                true -> {
+                    return false
+                }
             }
         }
         return true

@@ -7,15 +7,13 @@ import org.apache.ibatis.annotations.Param
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
-interface AdminItemRepository: JpaRepository<Item, Long>, AdminItemRepositoryCustom {
-
-    @Query("select i.itemStatus from Item i where i.itemId = :itemId")
-    fun findItemStatusById(@Param("itemId")itemId: Long): Boolean?
+interface AdminItemRepository : JpaRepository<Item, Long>, AdminItemRepositoryCustom {
 
     @Query(
         "select new com.lionTF.cshop.domain.admin.controller.dto.ItemResultDTO(i.itemName, i.category, i.price, i.amount, i.degree, i.itemDescription, i.itemImgUrl)" +
-            " from Item i where i.itemId = :itemId")
-    fun findItemById(@Param("itemId")itemId: Long): ItemResultDTO
+                " from Item i where i.itemId = :itemId"
+    )
+    fun findItemById(@Param("itemId") itemId: Long): ItemResultDTO
 
     fun countAllByItemStatusIsTrue(): Long
 }

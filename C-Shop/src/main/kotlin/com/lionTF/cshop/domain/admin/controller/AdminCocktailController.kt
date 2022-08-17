@@ -86,10 +86,17 @@ class AdminCocktailController(
         model: Model
     ): String {
         val cocktailImgUrl = getImageUrl(requestCreateCocktailDTO)
-        model.addAttribute("result", adminCocktailService.updateCocktail(requestCreateCocktailDTO, cocktailId, requestCreateCocktailDTO.itemIds, cocktailImgUrl))
+        model.addAttribute(
+            "result",
+            adminCocktailService.updateCocktail(
+                requestCreateCocktailDTO,
+                cocktailId,
+                requestCreateCocktailDTO.itemIds,
+                cocktailImgUrl
+            )
+        )
         return "global/message"
     }
-
 
 
     // 한개의 칵테일 삭제
@@ -105,8 +112,8 @@ class AdminCocktailController(
 
     @ModelAttribute("itemIds")
     fun favorite(pageable: Pageable): Map<Long, String> {
-        var map: MutableMap<Long, String> = LinkedHashMap()
-        var items = adminItemService.getAllItems(pageable)
+        val map: MutableMap<Long, String> = LinkedHashMap()
+        val items = adminItemService.getAllItems(pageable)
 
         for (item in items.result!!.content) {
             map[item.itemId] = item.itemName

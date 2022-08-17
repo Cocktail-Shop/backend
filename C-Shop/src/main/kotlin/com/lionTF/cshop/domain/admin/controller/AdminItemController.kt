@@ -80,8 +80,8 @@ class AdminItemController(
         model: Model
     ): String {
         val itemImgUrl = getImageUrl(requestCreateItemDTO)
-        println("itemImgUrl = ${itemImgUrl}")
         model.addAttribute("result", adminItemService.updateItem(itemId, requestCreateItemDTO, itemImgUrl))
+
         return "global/message"
     }
 
