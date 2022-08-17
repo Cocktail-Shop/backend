@@ -23,13 +23,31 @@ data class RequestOrderInfoDTO(
                 addressDetail = addressDTO.AddressDetail
             )
         }
+
+        fun toFormRequestCocktailOrderInfoDTO(cocktailDTO: MutableList<RequestOrderItemDTO>,addressDTO: AddressDTO):RequestOrderInfoDTO{
+            return RequestOrderInfoDTO(
+                orderItems = cocktailDTO,
+                address = addressDTO.Address,
+                addressDetail = addressDTO.AddressDetail
+            )
+        }
     }
 }
 data class RequestOrderItemDTO(
-    val itemId: Long,
-    val amount: Int,
-    val price: Int,
-)
+    var itemId: Long,
+    var amount: Int,
+    var price: Int,
+){
+    companion object{
+        fun fromCocktailItemDTO(cocktailItemDTO: CocktailItemDTO) : RequestOrderItemDTO{
+            return RequestOrderItemDTO(
+                itemId = cocktailItemDTO.itemId,
+                amount = 0,
+                price = cocktailItemDTO.price,
+            )
+        }
+    }
+}
 
 data class RequestOrderResultDTO(
     val status: Int,

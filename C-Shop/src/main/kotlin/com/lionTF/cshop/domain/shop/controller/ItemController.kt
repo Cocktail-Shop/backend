@@ -27,7 +27,6 @@ class ItemController (
         model.addAttribute("item",item)
         model.addAttribute("addCartItemRequestDTO",addCartItemRequestDTO)
         model.addAttribute("requestOrderInfoDTO",requestOrderInfoDTO)
-        model.addAttribute("address", authMemberDTO?.memberId?.let { orderService.getAddress(it) })
 
         return "shop/singleItem"
     }

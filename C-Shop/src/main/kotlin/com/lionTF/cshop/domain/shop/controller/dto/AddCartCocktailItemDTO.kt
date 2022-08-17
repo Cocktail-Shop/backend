@@ -1,16 +1,40 @@
 package com.lionTF.cshop.domain.shop.controller.dto
 
+
 import org.springframework.http.HttpStatus
 
 data class AddCartCocktailItemDTO(
     val memberId: Long,
-    val items: List<AddCartCocktailItemInfoDTO>
+    val items: MutableList<AddCartCocktailItemInfoDTO>
 )
 
+data class AddCartCocktailItemRequestDTO(
+    val items: MutableList<AddCartCocktailItemInfoDTO>
+){
+    companion object{
+        fun toFormRequestCocktailCartInfoDTO(cocktailInfoDTO: MutableList<AddCartCocktailItemInfoDTO>):AddCartCocktailItemRequestDTO{
+            return AddCartCocktailItemRequestDTO(
+                items = cocktailInfoDTO
+            )
+        }
+    }
+}
+
 data class AddCartCocktailItemInfoDTO(
-    val itemId: Long,
-    val amount: Int
-)
+    var itemId: Long,
+    var amount: Int,
+    var price: Int,
+){
+    companion object{
+        fun fromCocktailItemDTO(cocktailItemDTO: CocktailItemDTO) : AddCartCocktailItemInfoDTO{
+            return AddCartCocktailItemInfoDTO(
+                itemId = cocktailItemDTO.itemId,
+                amount = 0,
+                price = cocktailItemDTO.price,
+            )
+        }
+    }
+}
 
 data class AddCartCocktailItemResultDTO(
     val status: Int,
