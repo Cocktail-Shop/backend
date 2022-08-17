@@ -11,3 +11,4 @@ interface CartRepository : JpaRepository<Cart, Long>, CartRepositoryCustom {
     fun getCart(@Param("memberId") memberId: Long?): Cart
 
 }
+

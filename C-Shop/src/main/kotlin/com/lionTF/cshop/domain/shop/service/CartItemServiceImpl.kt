@@ -21,29 +21,23 @@ class CartItemServiceImpl(
     //장바구니에 단일 상품 추가 메소드
     @Transactional
     override fun addCartItem(addCartItemDTO: AddCartItemDTO): AddCartItemResultDTO{
-        //남은 재고 확인
         val item =itemRepository.getReferenceById(addCartItemDTO.itemId)
         val cart = cartRepository.getCart(addCartItemDTO.memberId)
 
-        //사용자가 입력한 수가 0보다 큰지 확인
         if(addCartItemDTO.amount <= 0){
             return AddCartItemResultDTO.setNotPositiveError()
         }
 
-        //삭제된 상품이 아니라면
-        if(item.itemStatus){
-            //장바구니에 담고자 하는 상품의 재고가 충분하다면
+        return if(item.itemStatus){
             if(addCartItemDTO.amount < item.amount){
                 val cartItemDTO = CartItemDTO(item,cart,addCartItemDTO.amount)
                 cartItemRepository.save(CartItem.fromCartItemDTO(cartItemDTO))
-                return AddCartItemResultDTO.setSuccessAddCartItemResultDTO()
+                AddCartItemResultDTO.setSuccessAddCartItemResultDTO()
+            } else{
+                AddCartItemResultDTO.setAmountFailAddCartItemResultDTO()
             }
-            else{
-                return AddCartItemResultDTO.setAmountFailAddCartItemResultDTO()
-            }
-        }
-        else{
-            return AddCartItemResultDTO.setStatusFailAddCartItemResultDTO()
+        } else{
+            AddCartItemResultDTO.setStatusFailAddCartItemResultDTO()
         }
 
     }
@@ -51,56 +45,33 @@ class CartItemServiceImpl(
     //장바구니에 칵테일 상품 재료들 추가 메소드
     @Transactional
     override fun addCartCocktailItem(addCartCocktailItemDTO: AddCartCocktailItemDTO) : AddCartCocktailItemResultDTO{
-        val errorItems: MutableList<Long> = mutableListOf()
         val cart = cartRepository.getCart(addCartCocktailItemDTO.memberId)
         val cartItemDTOList: MutableList<CartItemDTO> = mutableListOf()
         val items = addCartCocktailItemDTO.items
-        var isAmountEnough: Boolean = true
-        var isNotDeleted: Boolean = true
-        var isPositive: Boolean = true
-        for(item in items){
-            val itemInfo = itemRepository.getReferenceById(item.itemId)
-            //사용자가 요청한 수량이 양수가 아니면
-            if(item.amount <= 0){
-                isPositive = false
-                break
+
+        items.map{
+            val itemInfo = itemRepository.getReferenceById(it.itemId)
+
+            if(it.amount <= 0){
+                return AddCartCocktailItemResultDTO.setNotPositiveError()
             }
 
-            //재고가 충분하면
-            if(itemInfo.amount > item.amount){
-                //삭제된 상품이 아닌지 확인
-                if(itemInfo.itemStatus){
-                    cartItemDTOList.add(CartItemDTO(itemInfo,cart,item.amount))
+            if(itemInfo.amount > it.amount){
 
+                if(itemInfo.itemStatus){
+                    cartItemDTOList.add(CartItemDTO(itemInfo,cart,it.amount))
                 }else{
-                    isNotDeleted = false
-                    errorItems.add(item.itemId)
+                    return AddCartCocktailItemResultDTO.setStatusFailAddCartCocktailItemResultDTO()
                 }
             }else{
-                isAmountEnough = false
-                errorItems.add(item.itemId)
-            }
-
-        }
-
-        //요청한 상품중에 수량이 양수가 아닌 수가 있는 경우
-        if(!isPositive){
-            return AddCartCocktailItemResultDTO.setNotPositiveError(errorItems)
-        }
-
-        //재고가 부족한 상품이 있거나 삭제된 상품이 있는지 확인하여 처리
-        return if(isNotDeleted and isAmountEnough){
-            for(cartItemDTO in cartItemDTOList){
-                cartItemRepository.save(CartItem.fromCartItemDTO(cartItemDTO))
-            }
-            AddCartCocktailItemResultDTO.setSuccessAddCartCocktailItemResultDTO(errorItems)
-        } else{
-            if(isNotDeleted){
-                AddCartCocktailItemResultDTO.setStatusFailAddCartCocktailItemResultDTO(errorItems)
-            } else{
-                AddCartCocktailItemResultDTO.setAmountFailAddCartCocktailItemResultDTO(errorItems)
+                return AddCartCocktailItemResultDTO.setAmountFailAddCartCocktailItemResultDTO()
             }
         }
+
+        for(cartItemDTO in cartItemDTOList){
+            cartItemRepository.save(CartItem.fromCartItemDTO(cartItemDTO))
+        }
+        return AddCartCocktailItemResultDTO.setSuccessAddCartCocktailItemResultDTO()
     }
 
     // 장바구니 상품 삭제
