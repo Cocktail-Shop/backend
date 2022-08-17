@@ -14,7 +14,7 @@ class Cocktail(
     val cocktailId: Long = 0,
 
     @OneToMany(mappedBy = "cocktail")
-    var cocktailItem: MutableList<CocktailItem>? = null,
+    val cocktailItem: MutableList<CocktailItem>? = null,
 
     var cocktailDescription: String = "",
     var cocktailName: String = "",

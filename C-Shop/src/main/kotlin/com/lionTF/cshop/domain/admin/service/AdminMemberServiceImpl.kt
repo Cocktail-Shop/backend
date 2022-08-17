@@ -6,7 +6,6 @@ import com.lionTF.cshop.domain.admin.service.admininterface.AdminMemberService
 import com.lionTF.cshop.domain.member.models.Member
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.util.*
 import javax.transaction.Transactional
 
 @Service
@@ -46,20 +45,13 @@ class AdminMemberServiceImpl(
     }
 
     // 존재하는 사용자인지 검사하는 함수
-    private fun existedMember(memberId: Long): Optional<Member> {
-        return adminMemberRepository.findById(memberId)
+    private fun existedMember(memberId: Long): Member? {
+        return adminMemberRepository.findMember(memberId)
     }
 
     // Form으로부터 받아온 memberId들이 존재하는지 검사
     private fun formToExistedMembers(memberIdList: MutableList<Long>): Boolean {
-        for (memberId in memberIdList) {
-            when (existedMember(memberId).isEmpty) {
-                true -> {
-                    return false
-                }
-            }
-        }
-        return true
+        return memberIdList.none { existedMember(it) == null }
     }
 
 

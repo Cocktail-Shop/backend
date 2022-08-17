@@ -1,9 +1,9 @@
 package com.lionTF.cshop.domain.admin.repository
 
 import com.lionTF.cshop.domain.admin.models.CocktailItem
-import org.apache.ibatis.annotations.Param
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
+import org.springframework.data.repository.query.Param
 
 interface AdminCocktailItemRepository : JpaRepository<CocktailItem, Long> {
 

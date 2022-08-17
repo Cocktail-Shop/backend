@@ -14,7 +14,7 @@ class AdminItemServiceImpl(
 
     private val adminItemRepository: AdminItemRepository,
 
-) : AdminItemService {
+    ) : AdminItemService {
 
     @Transactional
     override fun createItem(requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?): AdminResponseDTO {
@@ -44,12 +44,16 @@ class AdminItemServiceImpl(
 
         return if (!existsItem) {
             AdminResponseDTO.toFailUpdateItemResponseDTO()
+
         } else if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO()
+
         } else if (requestCreateItemDTO.amount <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO()
+
         } else if (requestCreateItemDTO.price <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO()
+
         } else {
             adminItemRepository.getReferenceById(itemId).update(requestCreateItemDTO, itemImgUrl)
 

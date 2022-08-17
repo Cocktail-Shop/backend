@@ -3,7 +3,7 @@ package com.lionTF.cshop.domain.admin.repository
 import com.lionTF.cshop.domain.admin.controller.dto.CocktailResultDTO
 import com.lionTF.cshop.domain.admin.models.Cocktail
 import com.lionTF.cshop.domain.admin.repository.custom.AdminCocktailRepositoryCustom
-import org.apache.ibatis.annotations.Param
+import org.springframework.data.repository.query.Param
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 
@@ -17,4 +17,7 @@ interface AdminCocktailRepository : JpaRepository<Cocktail, Long>, AdminCocktail
 
 
     fun countAllByCocktailStatusIsTrue(): Long
+
+    @Query("select c from Cocktail c where c.cocktailId = :cocktailId")
+    fun findCocktail(@Param("cocktailId") cocktailId: Long): Cocktail?
 }

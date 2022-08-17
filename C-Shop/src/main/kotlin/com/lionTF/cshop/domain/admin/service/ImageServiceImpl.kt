@@ -2,6 +2,7 @@ package com.lionTF.cshop.domain.admin.service
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.lionTF.cshop.domain.admin.service.admininterface.ImageService
 import org.apache.tomcat.util.http.fileupload.IOUtils
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.*
@@ -14,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile
 import java.util.*
 
 @Service
-class ImageService(
+class ImageServiceImpl(
 
     @Value("\${spring.img.authUrl}")
     private val authUrl: String? = "",
@@ -30,7 +31,7 @@ class ImageService(
 
     @Value("\${spring.img.password}")
     private val password: String? = "",
-) {
+): ImageService {
 
     private final val tokenRequest = TokenRequest()
     val restTemplate = RestTemplate()
@@ -59,7 +60,7 @@ class ImageService(
     }
 
     //토큰 발급
-    fun requestToken(): Any? {
+    override fun requestToken(): Any? {
         val identityUrl = "$authUrl/tokens"
 
         // 헤더 생성
@@ -81,8 +82,7 @@ class ImageService(
         return tokenId
     }
 
-    // lion-test 컨테이너에 있는 object
-    fun getContainerObject(): List<String> {
+    override fun getContainerObject(): List<String> {
         val headers = HttpHeaders()
         headers.add("X-Auth-Token", tokenId)
 
@@ -107,16 +107,16 @@ class ImageService(
 
     }
 
+
     private fun getUrl(containerName: String?): String {
         return this.storageUrl + "/" + containerName
     }
 
-
-    fun getObjectList(): List<String?>? {
+    override fun getObjectList(): List<String?>? {
         return getList(this.getUrl(containerName))
     }
 
-    fun getList(url: String?): List<String?>? {
+    override fun getList(url: String?): List<String?>? {
         val headers = HttpHeaders()
         headers.add("X-Auth-Token", tokenId)
         val requestHttpEntity = HttpEntity<String>(null, headers)
@@ -130,11 +130,11 @@ class ImageService(
         } else Collections.emptyList()
     }
 
-    fun getUrl(containerName: String, objectName: String): String {
+    override fun getUrl(containerName: String, objectName: String): String {
         return this.storageUrl + "/" + containerName + "/" + objectName
     }
 
-    fun uploadObject(objectName: String, multipartFile: MultipartFile): String {
+    override fun uploadObject(objectName: String, multipartFile: MultipartFile): String {
         val url = getUrl(containerName, objectName)
         val inputStream = multipartFile.inputStream
         val requestCallback = RequestCallback { request ->
@@ -155,7 +155,7 @@ class ImageService(
         return url
     }
 
-    fun deleteObject(objectName: String?) {
+    override fun deleteObject(objectName: String?) {
         val url = this.getUrl(containerName, objectName!!)
 
         val headers = HttpHeaders()
@@ -168,7 +168,7 @@ class ImageService(
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            val imageService = ImageService()
+            val imageService = ImageServiceImpl()
             imageService.requestToken()
         }
     }
