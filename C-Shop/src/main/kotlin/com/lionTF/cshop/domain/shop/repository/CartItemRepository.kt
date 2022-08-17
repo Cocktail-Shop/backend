@@ -9,3 +9,4 @@ interface CartItemRepository : JpaRepository<CartItem, Long> {
     @Query("select ci from CartItem ci where ci.cartItemId = :cartItemId")
     fun getCartItemByCartItemId(@Param("cartItemId")cartItemId: Long): CartItem
 }
+

@@ -84,3 +84,4 @@ constructor(result: Page<EN>,fn:Function<EN,DTO>):this(){
 
 
 
+

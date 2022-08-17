@@ -16,18 +16,16 @@ class SearchController(
 ) {
     @GetMapping(path=["/items/search/{category}"])
     fun searchItem(pageRequestDTO: PageRequestDTO,model: Model,@PathVariable("category") category: String, @RequestParam("keyword") keyword: String) : String {
-        if(category == Category.COCKTAIL.toString()){
+        return if(category == Category.COCKTAIL.toString()){
             model.addAttribute("cocktails",pageSerivce.getSearchPage(pageRequestDTO,"cocktailName",category,keyword))
-            return "shop/shopSearchCocktail"
-        }
-        else{
+            "shop/shopSearchCocktail"
+        } else{
             if(category==Category.ALCOHOL.toString()){
                 model.addAttribute("items",pageSerivce.getSearchPage(pageRequestDTO,"itemName",category,keyword))
-                return "shop/shopSearchAlcohol"
-            }
-            else{
+                "shop/shopSearchAlcohol"
+            } else{
                 model.addAttribute("items",pageSerivce.getSearchPage(pageRequestDTO,"itemName",category,keyword))
-                return "shop/shopSearchNonAlcohol"
+                "shop/shopSearchNonAlcohol"
             }
         }
 
