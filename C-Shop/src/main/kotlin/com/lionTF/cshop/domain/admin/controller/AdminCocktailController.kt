@@ -86,34 +86,39 @@ class AdminCocktailController(
         model: Model
     ): String {
         val cocktail = adminCocktailService.findCocktailById(cocktailId)
-        val isImgEmpty = requestCreateCocktailDTO.cocktailImgUrl?.isEmpty
 
-        if (isImgEmpty == true) {
-            model.addAttribute(
-                "result",
-                adminCocktailService.updateCocktail(
-                    requestCreateCocktailDTO,
-                    cocktailId,
-                    requestCreateCocktailDTO.itemIds,
-                    cocktail.cocktailImgUrl
+        when (requestCreateCocktailDTO.cocktailImgUrl?.isEmpty) {
+            true -> {
+                model.addAttribute(
+                    "result",
+                    adminCocktailService.updateCocktail(
+                        requestCreateCocktailDTO,
+                        cocktailId,
+                        requestCreateCocktailDTO.itemIds,
+                        cocktail.cocktailImgUrl
+                    )
                 )
-            )
-        } else {
-            val objectName: List<String> = cocktail.cocktailImgUrl.split("/")
+            }
+            else -> {
+                val objectName: List<String> = cocktail.cocktailImgUrl.split("/")
 
-            imageService.requestToken()
-            imageService.deleteObject(objectName[objectName.size - 1])
+                imageService.requestToken()
 
-            val cocktailImgUrl = getImageUrl(requestCreateCocktailDTO)
-            model.addAttribute(
-                "result",
-                adminCocktailService.updateCocktail(
-                    requestCreateCocktailDTO,
-                    cocktailId,
-                    requestCreateCocktailDTO.itemIds,
-                    cocktailImgUrl
+                if (cocktail.cocktailImgUrl.isNotEmpty()) {
+                    imageService.deleteObject(objectName[objectName.size - 1])
+                }
+
+                val cocktailImgUrl = getImageUrl(requestCreateCocktailDTO)
+                model.addAttribute(
+                    "result",
+                    adminCocktailService.updateCocktail(
+                        requestCreateCocktailDTO,
+                        cocktailId,
+                        requestCreateCocktailDTO.itemIds,
+                        cocktailImgUrl
+                    )
                 )
-            )
+            }
         }
 
         return "global/message"
@@ -136,7 +141,7 @@ class AdminCocktailController(
         val map: MutableMap<Long, String> = LinkedHashMap()
         val items = adminItemService.getAllItems(pageable)
 
-        for (item in items.result!!.content) {
+        items.result!!.content.forEach { item ->
             map[item.itemId] = item.itemName
         }
 

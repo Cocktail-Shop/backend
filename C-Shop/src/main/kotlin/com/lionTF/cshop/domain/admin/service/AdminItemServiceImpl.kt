@@ -76,6 +76,10 @@ class AdminItemServiceImpl(
         }
     }
 
+    override fun findItemById(itemId: Long): Item {
+        return adminItemRepository.getReferenceById(itemId)
+    }
+
     // 상품 단건 조회
     override fun findItem(itemId: Long): ResponseItemDTO {
         val existsItem = adminItemRepository.existsById(itemId)

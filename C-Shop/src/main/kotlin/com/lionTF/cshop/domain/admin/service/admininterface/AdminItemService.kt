@@ -1,6 +1,7 @@
 package com.lionTF.cshop.domain.admin.service.admininterface
 
 import com.lionTF.cshop.domain.admin.controller.dto.*
+import com.lionTF.cshop.domain.admin.models.Item
 import org.springframework.data.domain.Pageable
 
 interface AdminItemService {
@@ -16,6 +17,8 @@ interface AdminItemService {
     fun findItem(itemId: Long): ResponseItemDTO
 
     fun deleteOneItem(itemId: Long): AdminResponseDTO
+
+    fun findItemById(itemId: Long): Item
 
     //    fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO
 }
