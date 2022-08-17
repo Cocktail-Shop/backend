@@ -26,11 +26,6 @@ class OrderServiceImpl(
     //상품 주문 메소드
     @Transactional
     override fun requestOrder(requestOrderDTO: RequestOrderDTO) : RequestOrderResultDTO {
-        // var canOrder: Boolean = true
-        var isNotDeleted: Boolean = true
-        var isAmountEnough: Boolean = true
-        var isPositive: Boolean = true
-        var errorItemsId: MutableList<Long> = mutableListOf()
 
         //요청한 상품들 재고 검사
         for(info in requestOrderDTO.orderItems){
@@ -39,72 +34,49 @@ class OrderServiceImpl(
 
             //요청 수량이 양수인지 확인
             if(requestAmount <= 0){
-                isPositive = false
-                break
+                return RequestOrderResultDTO.setNotPositiveError()
             }
 
             //삭제된 아이템인지 확인
             if(itemRepository.getReferenceById(info.itemId).itemStatus){
                 // 요청한 주문 상품이 재고보다 많을 경우
-                if(requestAmount > existAmount){
-                    isAmountEnough = false
-                    errorItemsId.add(info.itemId)
-                }
+                if(requestAmount > existAmount) return RequestOrderResultDTO.setRequestOrderAmountFailResultDTO()
             }
-            else{
-                isNotDeleted = false
-                errorItemsId.add(info.itemId)
-            }
+            else return RequestOrderResultDTO.setRequestOrderStatusFailResultDTO()
         }
 
-        if(!isPositive){
-            return RequestOrderResultDTO.setNotPositiveError(errorItemsId)
-        }
+        //주문 가능한 경우
+        val member = requestOrderDTO.memberId?.let { memberRepository.getReferenceById(it) }
+        //order 저장
+        val orders = orderRepository.save(
+            Orders.fromOrdersDTO(
+                OrdersDTO(
+                    member,
+                    OrderStatus.COMPLETE,
+                    requestOrderDTO.address,
+                    requestOrderDTO.addressDetail
+                )
+            )
+        )
 
-        //모든 상품의 재고가 충분한 경우
-        if(isNotDeleted and isAmountEnough){
-            val member = requestOrderDTO.memberId?.let { memberRepository.getReferenceById(it) }
-            //order 저장
-            val orders = orderRepository.save(
-                Orders.fromOrdersDTO(
-                    OrdersDTO(
-                        member,
-                        OrderStatus.COMPLETE,
-                        requestOrderDTO.address,
-                        requestOrderDTO.addressDetail
+        for(info in requestOrderDTO.orderItems){
+            val item = itemRepository.getReferenceById(info.itemId)
+            //주문 수량만큼 재고 줄여주기
+            item.amount -= info.amount
+            itemRepository.save(item)
+
+            //orderitem 저장
+            orderItemRepository.save(
+                OrderItem.fromOrderItemDTO(
+                    OrderItemDTO(
+                        orders,
+                        item,
+                        info.amount
                     )
                 )
             )
-
-            //val orderId = orders.orderId
-            for(info in requestOrderDTO.orderItems){
-                val item = itemRepository.getReferenceById(info.itemId)
-                //주문 수량만큼 재고 줄여주기
-                item.amount -= info.amount
-                itemRepository.save(item)
-
-                //orderitem 저장
-                orderItemRepository.save(
-                    OrderItem.fromOrderItemDTO(
-                        OrderItemDTO(
-                            orders,
-                            item,
-                            info.amount
-                        )
-                    )
-                )
-            }
-
-            return RequestOrderResultDTO.setRequestOrderSuccessResultDTO()
         }
-        else{
-            if(isNotDeleted){
-                return RequestOrderResultDTO.setRequestOrderAmountFailResultDTO(errorItemsId)
-            }
-            else{
-                return RequestOrderResultDTO.setRequestOrderStatusFailResultDTO(errorItemsId)
-            }
-        }
+        return RequestOrderResultDTO.setRequestOrderSuccessResultDTO()
     }
 
     //주소 가져오기
