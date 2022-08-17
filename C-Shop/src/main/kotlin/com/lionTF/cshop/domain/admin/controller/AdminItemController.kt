@@ -2,6 +2,7 @@ package com.lionTF.cshop.domain.admin.controller
 
 import com.lionTF.cshop.domain.admin.controller.dto.*
 import com.lionTF.cshop.domain.admin.models.Category
+import com.lionTF.cshop.domain.admin.service.ImageService
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminItemService
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -9,11 +10,15 @@ import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.ModelAttribute
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 
 @Controller
 @RequestMapping("/admins")
 class AdminItemController(
     private val adminItemService: AdminItemService,
+    private val imageService: ImageService
 ) {
 
     // 전체 상품 조회
@@ -51,7 +56,13 @@ class AdminItemController(
         requestCreateItemDTO: RequestCreateItemDTO,
         model: Model
     ): String {
-        model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO))
+        imageService.requestToken()
+        val itemImgUrl = requestCreateItemDTO.itemImgUrl?.let {
+            imageService.uploadObject(
+                requestCreateItemDTO.itemName + LocalDateTime.now().toString(),
+                it
+            )}
+        model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO, itemImgUrl))
         return "global/message"
     }
 
@@ -75,7 +86,9 @@ class AdminItemController(
         requestCreateItemDTO: RequestCreateItemDTO,
         model: Model
     ): String {
-        model.addAttribute("result", adminItemService.updateItem(itemId, requestCreateItemDTO))
+        imageService.requestToken()
+        val itemImgUrl = requestCreateItemDTO.itemImgUrl?.let { imageService.uploadObject("test", it) }
+        model.addAttribute("result", adminItemService.updateItem(itemId, requestCreateItemDTO, itemImgUrl))
         return "global/message"
     }
 

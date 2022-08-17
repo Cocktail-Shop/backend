@@ -18,7 +18,7 @@ class AdminItemServiceImpl(
 ): AdminItemService {
 
     // 상품 등록
-    override fun createItem(requestCreateItemDTO: RequestCreateItemDTO): AdminResponseDTO {
+    override fun createItem(requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?): AdminResponseDTO {
 
         return if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) { // 가격 & 수량이 0이하일 경우
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO()
@@ -30,14 +30,14 @@ class AdminItemServiceImpl(
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO()
 
         } else {
-            adminItemRepository.save(Item.requestCreateItemDTOtoItem(requestCreateItemDTO))
+            adminItemRepository.save(Item.requestCreateItemDTOtoItem(requestCreateItemDTO, itemImgUrl))
             AdminResponseDTO.toSuccessCreateItemResponseDTO()
         }
     }
 
 
     // 상품 수정
-    override fun updateItem(itemId: Long, requestCreateItemDTO: RequestCreateItemDTO): AdminResponseDTO {
+    override fun updateItem(itemId: Long, requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?): AdminResponseDTO {
         val existsItem = adminItemRepository.existsById(itemId)
 
         return if (!existsItem) { // 존재하지 않은 상품일 때
@@ -53,7 +53,7 @@ class AdminItemServiceImpl(
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO()
         }
         else {
-            adminItemRepository.getReferenceById(itemId).update(requestCreateItemDTO)
+            adminItemRepository.getReferenceById(itemId).update(requestCreateItemDTO, itemImgUrl)
 
             AdminResponseDTO.toSuccessUpdateItemResponseDTO()
         }
@@ -72,6 +72,10 @@ class AdminItemServiceImpl(
 
             AdminResponseDTO.toSuccessDeleteItemResponseDTO()
         }
+    }
+
+    override fun createItemImg(itemImgUrl: String?) {
+
     }
 
     // 상품 단건 조회

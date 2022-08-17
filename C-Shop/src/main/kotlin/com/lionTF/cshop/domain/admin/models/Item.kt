@@ -38,7 +38,7 @@ class Item(
 ) :BaseTimeEntity(){
 
     companion object {
-        fun requestCreateItemDTOtoItem (requestCreateItemDTO: RequestCreateItemDTO): Item {
+        fun requestCreateItemDTOtoItem (requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?): Item {
             return Item(
                 itemName = requestCreateItemDTO.itemName,
                 category = requestCreateItemDTO.category,
@@ -47,18 +47,20 @@ class Item(
                 degree = requestCreateItemDTO.degree,
                 itemDescription = requestCreateItemDTO.itemDescription,
                 itemStatus = true,
+                itemImgUrl = itemImgUrl!!
             )
         }
     }
 
     // 상품 수정
-    fun update(requestCreateItemDTO: RequestCreateItemDTO) {
+    fun update(requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?) {
         itemName = requestCreateItemDTO.itemName
         category = requestCreateItemDTO.category
         price = requestCreateItemDTO.price
         amount = requestCreateItemDTO.amount
         degree = requestCreateItemDTO.degree
         itemDescription = requestCreateItemDTO.itemDescription
+        this.itemImgUrl = itemImgUrl!!
     }
 
 

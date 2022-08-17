@@ -26,6 +26,7 @@ data class ItemResultDTO (
     var amount: Int,
     var degree: Int,
     var itemDescription: String,
+    val itemImgUrl: String,
 )
 
 data class RequestUpdateItemDTO(
@@ -35,6 +36,7 @@ data class RequestUpdateItemDTO(
     var amount: Int = 0,
     var degree: Int = 0,
     var itemDescription: String = "",
+    val itemImgUrl: String = "",
 ){
     companion object{
         fun formDTOFromResponseItemDTO(responseItemDTO: ResponseItemDTO):RequestUpdateItemDTO{
@@ -44,7 +46,8 @@ data class RequestUpdateItemDTO(
                 price = responseItemDTO.result.price,
                 amount = responseItemDTO.result.amount,
                 degree = responseItemDTO.result.degree,
-                itemDescription = responseItemDTO.result.itemDescription
+                itemDescription = responseItemDTO.result.itemDescription,
+                itemImgUrl = responseItemDTO.result.itemImgUrl
             )
         }
     }
