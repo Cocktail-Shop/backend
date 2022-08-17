@@ -1,6 +1,7 @@
 package com.lionTF.cshop.domain.admin.service.admininterface
 
 import com.lionTF.cshop.domain.admin.controller.dto.*
+import com.lionTF.cshop.domain.admin.models.Cocktail
 import org.springframework.data.domain.Pageable
 
 interface AdminCocktailService {
@@ -20,6 +21,8 @@ interface AdminCocktailService {
     fun findCocktail(cocktailId: Long, itemIds: MutableList<Long>): ResponseCocktailDTO
 
     fun deleteOneCocktail(cocktailId: Long): AdminResponseDTO
+
+    fun findCocktailById(cocktailId: Long): Cocktail
 
 //    fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO
 }

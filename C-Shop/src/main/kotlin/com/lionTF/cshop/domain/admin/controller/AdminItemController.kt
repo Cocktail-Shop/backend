@@ -79,8 +79,22 @@ class AdminItemController(
         requestCreateItemDTO: RequestCreateItemDTO,
         model: Model
     ): String {
-        val itemImgUrl = getImageUrl(requestCreateItemDTO)
-        model.addAttribute("result", adminItemService.updateItem(itemId, requestCreateItemDTO, itemImgUrl))
+        val item = adminItemService.findItem(itemId)
+        val isImgEmpty = requestCreateItemDTO.itemImgUrl?.isEmpty
+
+        if (isImgEmpty == true) {
+            model.addAttribute(
+                "result",
+                adminItemService.updateItem(itemId, requestCreateItemDTO, item.result?.itemImgUrl)
+            )
+        } else {
+            val objectName: List<String>? = item.result?.itemImgUrl?.split("/")
+
+            imageService.requestToken()
+            imageService.deleteObject(objectName?.get(objectName.size - 1))
+            val itemImgUrl = getImageUrl(requestCreateItemDTO)
+            model.addAttribute("result", adminItemService.updateItem(itemId, requestCreateItemDTO, itemImgUrl))
+        }
 
         return "global/message"
     }

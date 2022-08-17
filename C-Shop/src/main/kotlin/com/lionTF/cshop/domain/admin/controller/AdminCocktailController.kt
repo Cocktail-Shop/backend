@@ -85,16 +85,37 @@ class AdminCocktailController(
         requestCreateCocktailDTO: RequestCreateCocktailDTO,
         model: Model
     ): String {
-        val cocktailImgUrl = getImageUrl(requestCreateCocktailDTO)
-        model.addAttribute(
-            "result",
-            adminCocktailService.updateCocktail(
-                requestCreateCocktailDTO,
-                cocktailId,
-                requestCreateCocktailDTO.itemIds,
-                cocktailImgUrl
+        val cocktail = adminCocktailService.findCocktailById(cocktailId)
+        val isImgEmpty = requestCreateCocktailDTO.cocktailImgUrl?.isEmpty
+
+        if (isImgEmpty == true) {
+            model.addAttribute(
+                "result",
+                adminCocktailService.updateCocktail(
+                    requestCreateCocktailDTO,
+                    cocktailId,
+                    requestCreateCocktailDTO.itemIds,
+                    cocktail.cocktailImgUrl
+                )
             )
-        )
+        } else {
+            val objectName: List<String> = cocktail.cocktailImgUrl.split("/")
+
+            imageService.requestToken()
+            imageService.deleteObject(objectName[objectName.size - 1])
+
+            val cocktailImgUrl = getImageUrl(requestCreateCocktailDTO)
+            model.addAttribute(
+                "result",
+                adminCocktailService.updateCocktail(
+                    requestCreateCocktailDTO,
+                    cocktailId,
+                    requestCreateCocktailDTO.itemIds,
+                    cocktailImgUrl
+                )
+            )
+        }
+
         return "global/message"
     }
 

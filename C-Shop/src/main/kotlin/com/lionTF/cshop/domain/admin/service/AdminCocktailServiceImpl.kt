@@ -106,6 +106,10 @@ class AdminCocktailServiceImpl(
         }
     }
 
+    override fun findCocktailById(cocktailId: Long): Cocktail {
+        return adminCocktailRepository.getReferenceById(cocktailId)
+    }
+
     @Transactional
     override fun updateCocktail(
         requestCreateCocktailDTO: RequestCreateCocktailDTO,
