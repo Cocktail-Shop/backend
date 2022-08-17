@@ -21,36 +21,6 @@
                         <div class='carousel-outer'>
                             <!-- me art lab slider -->
                             <img class="img-responsive" th:src="@{/images/shop/products/cocktail-1.jpg}" alt='',data-zoom-image="@{/images/shop/products/cocktail-1.jpg}" />
-                            <!--                            <div class='carousel-inner '>-->
-                            <!--                                <div class='item active'>-->
-                            <!--                                    <img class="img-responsive" th:src="@{/images/shop/products/cocktail-1.jpg}" alt='',data-zoom-image="@{/images/shop/products/cocktail-1.jpg}" />-->
-                            <!--                                </div>-->
-                            <!--                                <div class='item'>-->
-                            <!--                                    <img src='images/shop/single-products/product-2.jpg' alt='' data-zoom-image="images/shop/single-products/product-2.jpg" />-->
-                            <!--                                </div>-->
-
-                            <!--                                <div class='item'>-->
-                            <!--                                    <img src='images/shop/single-products/product-3.jpg' alt='' data-zoom-image="images/shop/single-products/product-3.jpg" />-->
-                            <!--                                </div>-->
-                            <!--                                <div class='item'>-->
-                            <!--                                    <img src='images/shop/single-products/product-4.jpg' alt='' data-zoom-image="images/shop/single-products/product-4.jpg" />-->
-                            <!--                                </div>-->
-                            <!--                                <div class='item'>-->
-                            <!--                                    <img src='images/shop/single-products/product-5.jpg' alt='' data-zoom-image="images/shop/single-products/product-5.jpg" />-->
-                            <!--                                </div>-->
-                            <!--                                <div class='item'>-->
-                            <!--                                    <img src='images/shop/single-products/product-6.jpg' alt='' data-zoom-image="images/shop/single-products/product-6.jpg" />-->
-                            <!--                                </div>-->
-
-                            <!--                            </div>-->
-
-                            <!--                            &lt;!&ndash; sag sol &ndash;&gt;-->
-                            <!--                            <a class='left carousel-control' href='#carousel-custom' data-slide='prev'>-->
-                            <!--                                <i class="tf-ion-ios-arrow-left"></i>-->
-                            <!--                            </a>-->
-                            <!--                            <a class='right carousel-control' href='#carousel-custom' data-slide='next'>-->
-                            <!--                                <i class="tf-ion-ios-arrow-right"></i>-->
-                            <!--                            </a>-->
                         </div>
 
                     </div>
@@ -58,49 +28,81 @@
             </div>
             <div class="col-md-7">
                 <div class="single-product-details">
+                    <form  method="post" th:action="@{/orders}" th:object="${requestOrderInfoDTO}">
                     <h2 th:text="${cocktail.result.cocktailName}"></h2>
 
                     <p class="product-description mt-20">
                         <span th:text="${cocktail.result.cocktailDescription}"></span>
                     </p>
-                    <div class="color-swatches">
-                        <span>color:</span>
-                        <ul>
-                            <li>
-                                <a href="#!" class="swatch-violet"></a>
-                            </li>
-                            <li>
-                                <a href="#!" class="swatch-black"></a>
-                            </li>
-                            <li>
-                                <a href="#!" class="swatch-cream"></a>
-                            </li>
-                        </ul>
-                    </div>
+
+                    <th:block th:each="items, i : ${cocktail.result.cocktailItems}">
                     <div class="product-quantity">
-                        <th:block th:each="items : ${cocktail.result.cocktailItems}">
-                        <span th:text="${items.itemName}"></span>
-                        <div class="product-quantity-slider">
-                            <input id="product-quantity" type="text" value="0" name="product-quantity">
-                        </div>
-                        <br><br>
+                        <span>수량 선택:</span>
+                        <div th:text="${items.itemName}"></div>
+                        <div th:text="${i.index}"></div>
+
+                        <input type="text" th:field="${requestOrderInfoDTO.orderItems[0].itemId}">
+                        <input type="text" th:field="${requestOrderInfoDTO.orderItems[0].price}">
+                        <input id="product-quantity" type="number"  name="product-quantity"  onchange="eventKeyup(this.value)" th:field="${requestOrderInfoDTO.orderItems[0].amount}">
+                        <script>
+                            function eventKeyup(str)
+                            {
+                                $("#amount2").val(str);    // jQuery 이용
+                            }
+                        </script>
                     </div>
+                    </th:block>
                     <div class="product-category">
                         <span>결재금액:</span>
                         계산해서 넣어야됨
                     </div>
                     <div class="product-category">
-                        <span>배송지:</span>
-                        <a href="cart.html" class="btn btn-main mt-20">기존배송지</a>
-                        <a href="cart.html" class="btn btn-main mt-20">배송지추가</a>
+                        <div><span>기본 주소:</span></div>
+                        <label>주소</label>
+                        <input type="text" class="form-control signin-input" id="addr" th:field="${requestOrderInfoDTO.address}" readonly >
+                        <label>상세주소</label>
+                        <input type="text" class="form-control signin-input"  th:field="${requestOrderInfoDTO.addressDetail}">
+                        <input type="button" href="cart.html" class="btn btn-main mt-20" onclick="searchAddr()" value="배송지변경">
                     </div>
-                    <a href="cart.html" class="btn btn-main mt-20">장바구니 추가</a>
-                    <a href="cart.html" class="btn btn-main mt-20">주문하기</a>
+                    <input type="submit" class="btn btn-main mt-20" value="바로 주문하기">
+
+                    </form>
+<!--                    <form method="post" th:action="@{/items/cart}" th:object="${addCartItemRequestDTO}">-->
+<!--                        <input type="hidden" th:value="${item.result.itemId}" th:field="*{itemId}">-->
+<!--                        <input type="hidden"  id="amount2" class="form-control signin-input"  value="0" th:field="*{amount}" >-->
+<!--                        <input type="submit" class="btn btn-main mt-20" value="장바구니 추가">-->
+<!--                    </form>-->
                 </div>
             </div>
         </div>
     </div>
 </section>
+
+
+
+<!--<div class="product-quantity">-->
+<!--                        <th:block th:each="items : ${cocktail.result.cocktailItems}">-->
+<!--                        <span th:text="${items.itemName}"></span>-->
+<!--                        <div class="product-quantity-slider">-->
+<!--                            <input id="product-quantity" type="text" value="0" name="product-quantity">-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                    <div class="product-category">-->
+<!--                        <span>결재금액:</span>-->
+<!--                        계산해서 넣어야됨-->
+<!--                    </div>-->
+<!--                    <div class="product-category">-->
+<!--                        <span>배송지:</span>-->
+<!--                        <a href="cart.html" class="btn btn-main mt-20">기존배송지</a>-->
+<!--                        <a href="cart.html" class="btn btn-main mt-20">배송지추가</a>-->
+<!--                    </div>-->
+<!--                    <a href="cart.html" class="btn btn-main mt-20">장바구니 추가</a>-->
+<!--                    <a href="cart.html" class="btn btn-main mt-20">주문하기</a>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</section>-->
 
 <footer class="footer section text-center">
     <div class="container">
