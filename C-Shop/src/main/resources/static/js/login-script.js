@@ -120,7 +120,7 @@ function checkLogin(){
 }
 
 function checkForgetId(){
-    return checkName()&&checkAuthNum()
+    return checkAuthNum()
 }
 
 function checkForgetPw(){

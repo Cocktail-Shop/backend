@@ -21,6 +21,9 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
         fun toFailedIdInquiryResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"존재하지 않는 회원입니다.")
         }
+        fun toSocialIdInquiryResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"소셜 로그인 회원입니다.")
+        }
 
         fun toSuccessPasswordInquiryResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.OK.value(),"임시비밀번호를 발송했습니다.","/members/login")
@@ -32,6 +35,10 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
 
         fun toFailedPasswordInquiryResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"존재하지 않는 회원입니다.","/members/login")
+        }
+
+        fun toSocialPasswordInquiryResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"소셜 로그인 회원입니다.","/members/login")
         }
 
         fun toSuccessUpdateMyPageResponseDTO():ResponseDTO{

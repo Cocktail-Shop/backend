@@ -19,9 +19,6 @@ class OAuth2UserDetailsService(private val memberAuthRepository: MemberAuthRepos
     override fun loadUser(userRequest: OAuth2UserRequest?): OAuth2User {
         val oAuth2User = super.loadUser(userRequest)
 
-        val provider = userRequest?.clientRegistration?.registrationId
-        val providerId = oAuth2User.attributes["sub"] as String?
-        val memberName = "${provider}_${providerId}"
         val email=oAuth2User.attributes["email"] as String
 
         val existMember=memberAuthRepository.findById(email)
@@ -29,7 +26,7 @@ class OAuth2UserDetailsService(private val memberAuthRepository: MemberAuthRepos
         return if(existMember.isPresent){
             AuthMemberDTO.fromMember(existMember.get())
         }else{
-            val newMember=Member.fromOAuth2User(email,memberName)
+            val newMember=Member.fromOAuth2User(email)
             memberAuthRepository.save(newMember)
             AuthMemberDTO.fromMember(newMember)
         }
