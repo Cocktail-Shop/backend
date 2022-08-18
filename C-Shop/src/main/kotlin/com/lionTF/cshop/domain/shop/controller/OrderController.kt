@@ -6,9 +6,11 @@ import com.lionTF.cshop.domain.shop.controller.dto.RequestOrderInfoDTO
 import com.lionTF.cshop.domain.shop.service.shopinterface.OrderService
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.MediaType
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 
 
@@ -18,7 +20,7 @@ class OrderController(
 ) {
     //상품 주문
     @PostMapping("/orders")
-    fun createOrder(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @ModelAttribute("requestOrderInfoDTO") requestOrderInfoDTO: RequestOrderInfoDTO, model: Model) : String {
+    fun createOrder(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, requestOrderInfoDTO: RequestOrderInfoDTO, model: Model) : String {
         val requestOrderDTO = RequestOrderDTO(authMemberDTO?.memberId,requestOrderInfoDTO.orderItems,requestOrderInfoDTO.address,requestOrderInfoDTO.addressDetail)
         model.addAttribute("result",orderService.requestOrder(requestOrderDTO))
         return "global/message"

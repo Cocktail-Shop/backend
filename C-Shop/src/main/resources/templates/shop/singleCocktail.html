@@ -21,36 +21,6 @@
                         <div class='carousel-outer'>
                             <!-- me art lab slider -->
                             <img class="img-responsive" th:src="@{/images/shop/products/cocktail-1.jpg}" alt='',data-zoom-image="@{/images/shop/products/cocktail-1.jpg}" />
-                            <!--                            <div class='carousel-inner '>-->
-                            <!--                                <div class='item active'>-->
-                            <!--                                    <img class="img-responsive" th:src="@{/images/shop/products/cocktail-1.jpg}" alt='',data-zoom-image="@{/images/shop/products/cocktail-1.jpg}" />-->
-                            <!--                                </div>-->
-                            <!--                                <div class='item'>-->
-                            <!--                                    <img src='images/shop/single-products/product-2.jpg' alt='' data-zoom-image="images/shop/single-products/product-2.jpg" />-->
-                            <!--                                </div>-->
-
-                            <!--                                <div class='item'>-->
-                            <!--                                    <img src='images/shop/single-products/product-3.jpg' alt='' data-zoom-image="images/shop/single-products/product-3.jpg" />-->
-                            <!--                                </div>-->
-                            <!--                                <div class='item'>-->
-                            <!--                                    <img src='images/shop/single-products/product-4.jpg' alt='' data-zoom-image="images/shop/single-products/product-4.jpg" />-->
-                            <!--                                </div>-->
-                            <!--                                <div class='item'>-->
-                            <!--                                    <img src='images/shop/single-products/product-5.jpg' alt='' data-zoom-image="images/shop/single-products/product-5.jpg" />-->
-                            <!--                                </div>-->
-                            <!--                                <div class='item'>-->
-                            <!--                                    <img src='images/shop/single-products/product-6.jpg' alt='' data-zoom-image="images/shop/single-products/product-6.jpg" />-->
-                            <!--                                </div>-->
-
-                            <!--                            </div>-->
-
-                            <!--                            &lt;!&ndash; sag sol &ndash;&gt;-->
-                            <!--                            <a class='left carousel-control' href='#carousel-custom' data-slide='prev'>-->
-                            <!--                                <i class="tf-ion-ios-arrow-left"></i>-->
-                            <!--                            </a>-->
-                            <!--                            <a class='right carousel-control' href='#carousel-custom' data-slide='next'>-->
-                            <!--                                <i class="tf-ion-ios-arrow-right"></i>-->
-                            <!--                            </a>-->
                         </div>
 
                     </div>
@@ -58,49 +28,72 @@
             </div>
             <div class="col-md-7">
                 <div class="single-product-details">
+                    <form  method="post" th:action="@{/orders}" th:object="${requestOrderInfoDTO}">
                     <h2 th:text="${cocktail.result.cocktailName}"></h2>
 
                     <p class="product-description mt-20">
                         <span th:text="${cocktail.result.cocktailDescription}"></span>
                     </p>
-                    <div class="color-swatches">
-                        <span>color:</span>
-                        <ul>
-                            <li>
-                                <a href="#!" class="swatch-violet"></a>
-                            </li>
-                            <li>
-                                <a href="#!" class="swatch-black"></a>
-                            </li>
-                            <li>
-                                <a href="#!" class="swatch-cream"></a>
-                            </li>
-                        </ul>
-                    </div>
+
+                    <th:block th:each="items, i : *{orderItems}">
                     <div class="product-quantity">
-                        <th:block th:each="items : ${cocktail.result.cocktailItems}">
-                        <span th:text="${items.itemName}"></span>
-                        <div class="product-quantity-slider">
-                            <input id="product-quantity" type="text" value="0" name="product-quantity">
-                        </div>
-                        <br><br>
+                        <span><div th:text="${items.itemName}"></div></span>
+
+<!--                        <input th:type="text" th:field="*{orderItems[__${i.index}__].itemId}">-->
+                        <span>가격<input type="text" th:field="*{orderItems[__${i.index}__].price}" readonly></span>
+
+                        <span></span>
+
+                        <span>수량
+                        <input id="product-quantity" th:myIdx="${i.index}" type="number"  name="product-quantity"  th:onchange="eventKeyup(this.value,this.getAttribute('myIdx'))" th:field="*{orderItems[__${i.index}__].amount}">
+<!--                        <script>-->
+<!--                            function eventKeyup(str,)-->
+<!--                            {-->
+<!--                                $("#amount2").val(str);    // jQuery 이용-->
+<!--                            }-->
+<!--                        </script>-->
+                            <script th:inline="javascript">
+                                /*<![CDATA[*/
+                                function eventKeyup(str,idx)
+                                {
+                                    $("#amount"+idx).val(str);    // jQuery 이용
+                                }
+                                /*]]>*/
+                            </script>
+
+                        </span>
                     </div>
+                    </th:block>
+<!--                    <div class="product-category">-->
+<!--                        <span>결재금액:</span>-->
+<!--                        계산해서 넣어야됨-->
+<!--                    </div>-->
                     <div class="product-category">
-                        <span>결재금액:</span>
-                        계산해서 넣어야됨
+                        <div><span>기본 주소:</span></div>
+                        <label>주소</label>
+                        <input type="text" class="form-control signin-input" id="addr" th:field="${requestOrderInfoDTO.address}" readonly >
+                        <label>상세주소</label>
+                        <input type="text" class="form-control signin-input"  th:field="${requestOrderInfoDTO.addressDetail}">
+                        <input type="button" href="cart.html" class="btn btn-main mt-20" onclick="searchAddr()" value="배송지변경">
                     </div>
-                    <div class="product-category">
-                        <span>배송지:</span>
-                        <a href="cart.html" class="btn btn-main mt-20">기존배송지</a>
-                        <a href="cart.html" class="btn btn-main mt-20">배송지추가</a>
-                    </div>
-                    <a href="cart.html" class="btn btn-main mt-20">장바구니 추가</a>
-                    <a href="cart.html" class="btn btn-main mt-20">주문하기</a>
+                    <input type="submit" class="btn btn-main mt-20" value="바로 주문하기">
+
+                    </form>
+                    <form method="post" th:action="@{/items/cocktails/cart}" th:object="${addCartItemRequestDTO}">
+                        <th:block th:each="items, i : *{items}">
+
+                        <input type="hidden" th:value="${addCartItemRequestDTO.items[__${i.index}__].itemId}" th:field="*{items[__${i.index}__].itemId}">
+                            <input type="hidden" th:value="${addCartItemRequestDTO.items[__${i.index}__].price}" th:field="*{items[__${i.index}__].price}">
+                        <input type="hidden"  th:id="'amount'+${i.index}" class="form-control signin-input"  value="0" th:field="*{items[__${i.index}__].amount}" >
+                        </th:block>
+                        <input type="submit" class="btn btn-main mt-20" value="장바구니 추가">
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 
 <footer class="footer section text-center">
     <div class="container">
@@ -137,6 +130,28 @@ Essential Scripts
 
 <!-- Login Js File -->
 <script th:src="@{/js/login-script.js}"></script>
+
+<!-- Kakao 우편번호 서비스 -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function searchAddr() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = ''; // 주소 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+                // 주소 정보를 해당 필드에 넣는다.
+                document.getElementById("addr").value = addr;
+                document.getElementById("sub-addr").focus();
+            }
+        }).open();
+    }
+</script>
 
 
 
