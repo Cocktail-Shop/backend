@@ -84,5 +84,9 @@ data class AdminResponseDTO(val httpStatus: Int, val message: String, var href: 
         fun toSuccessUpdateCocktailResponseDTO(): AdminResponseDTO {
             return AdminResponseDTO(HttpStatus.CREATED.value(), "칵테일이 정상적으로 수정되었습니다.", "/admins/all-cocktails")
         }
+
+        fun successUpdateDeliveryStatus(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.CREATED.value(), "배송이 시작되었습니다~", "/admins/orders")
+        }
     }
 }

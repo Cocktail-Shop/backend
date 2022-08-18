@@ -34,6 +34,10 @@ class Orders(
         orderStatus = OrderStatus.CANCEL
     }
 
+    fun InDelieveryStatus() {
+        deliveryStatus = DeliveryStatus.IN_DELIVERY
+    }
+
     companion object{
         fun fromOrdersDTO(ordersDTO: OrdersDTO) : Orders {
             return Orders(

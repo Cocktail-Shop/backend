@@ -63,6 +63,20 @@ class AdminOrderServiceImpl(
     }
 
 
+    override fun getAllSales(pageable: Pageable): ResponseSearchOrdersResultDTO {
+        val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
+
+        return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(findOrdersInfo, "")
+    }
+
+    override fun changeDeliveryReady(orderId: Long): AdminResponseDTO {
+        val order = existedOrder(orderId)
+        order?.InDelieveryStatus()
+
+        return AdminResponseDTO.successUpdateDeliveryStatus()
+    }
+
+
     // 존재하는 주문인지 검사하는 함수
     private fun existedOrder(orderId: Long): Orders? {
         return adminOrderRepository.findOrders(orderId)
