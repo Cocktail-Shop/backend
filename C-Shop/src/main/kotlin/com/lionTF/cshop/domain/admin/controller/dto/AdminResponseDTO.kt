@@ -85,8 +85,20 @@ data class AdminResponseDTO(val httpStatus: Int, val message: String, var href: 
             return AdminResponseDTO(HttpStatus.CREATED.value(), "칵테일이 정상적으로 수정되었습니다.", "/admins/all-cocktails")
         }
 
-        fun successUpdateDeliveryStatus(): AdminResponseDTO {
+        fun toSuccessUpdateDeliveryStatusInDelivery(): AdminResponseDTO {
             return AdminResponseDTO(HttpStatus.CREATED.value(), "배송이 시작되었습니다~", "/admins/orders")
+        }
+
+        fun toSuccessUpdateDeliveryStatusComplete(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.CREATED.value(), "배송이 완료되었습니다.", "/admins/orders")
+        }
+
+        fun toFailUpdateDeliveryStatus(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 않는 주문입니다.", "/admins/orders")
+        }
+
+        fun toFailUpdateDeliveryStatusByCancelOrder(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.BAD_REQUEST.value(), "취소된 주문은 배달 상태를 변경할 수 없습니다.", "/admins/orders")
         }
     }
 }

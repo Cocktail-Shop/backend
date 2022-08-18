@@ -69,11 +69,40 @@ class AdminOrderServiceImpl(
         return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(findOrdersInfo, "")
     }
 
+    @Transactional
     override fun changeDeliveryReady(orderId: Long): AdminResponseDTO {
         val order = existedOrder(orderId)
-        order?.InDelieveryStatus()
 
-        return AdminResponseDTO.successUpdateDeliveryStatus()
+        return when {
+            order == null -> {
+                AdminResponseDTO.toFailUpdateDeliveryStatus()
+            }
+            order.deliveryStatus == DeliveryStatus.REFUND -> {
+                AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder()
+            }
+            else -> {
+                order.InDelieveryStatus()
+                AdminResponseDTO.toSuccessUpdateDeliveryStatusInDelivery()
+            }
+        }
+    }
+
+    @Transactional
+    override fun changeDeliveryComplete(orderId: Long): AdminResponseDTO {
+        val order = existedOrder(orderId)
+
+        return when {
+            order == null -> {
+                AdminResponseDTO.toFailUpdateDeliveryStatus()
+            }
+            order.deliveryStatus == DeliveryStatus.REFUND -> {
+                AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder()
+            }
+            else -> {
+                order.CompleteDelivery()
+                return AdminResponseDTO.toSuccessUpdateDeliveryStatusComplete()
+            }
+        }
     }
 
 

@@ -16,5 +16,7 @@ interface AdminOrderService {
 
     fun changeDeliveryReady(orderId: Long): AdminResponseDTO
 
+    fun changeDeliveryComplete(orderId: Long): AdminResponseDTO
+
     //    fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO
 }

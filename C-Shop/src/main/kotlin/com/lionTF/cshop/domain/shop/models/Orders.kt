@@ -32,10 +32,15 @@ class Orders(
     // 주문 삭제
     fun cancelOrder(){
         orderStatus = OrderStatus.CANCEL
+        deliveryStatus = DeliveryStatus.REFUND
     }
 
     fun InDelieveryStatus() {
         deliveryStatus = DeliveryStatus.IN_DELIVERY
+    }
+
+    fun CompleteDelivery() {
+        deliveryStatus = DeliveryStatus.COMPLETE
     }
 
     companion object{
