@@ -34,10 +34,10 @@ data class RequestOrderInfoDTO(
     }
 }
 data class RequestOrderItemDTO(
-    var itemId: Long,
-    var amount: Int,
-    var price: Int,
-    var itemName: String,
+    var itemId: Long = 0,
+    var amount: Int = 0,
+    var price: Int = 0,
+    var itemName: String = "",
 ){
     companion object{
         fun fromCocktailItemDTO(cocktailItemDTO: CocktailItemDTO) : RequestOrderItemDTO{

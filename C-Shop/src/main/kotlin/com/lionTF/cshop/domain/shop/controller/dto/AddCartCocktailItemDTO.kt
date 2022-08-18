@@ -9,7 +9,7 @@ data class AddCartCocktailItemDTO(
 )
 
 data class AddCartCocktailItemRequestDTO(
-    val items: MutableList<AddCartCocktailItemInfoDTO>
+    val items: MutableList<AddCartCocktailItemInfoDTO> = mutableListOf()
 ){
     companion object{
         fun toFormRequestCocktailCartInfoDTO(cocktailInfoDTO: MutableList<AddCartCocktailItemInfoDTO>):AddCartCocktailItemRequestDTO{
@@ -21,9 +21,9 @@ data class AddCartCocktailItemRequestDTO(
 }
 
 data class AddCartCocktailItemInfoDTO(
-    var itemId: Long,
-    var amount: Int,
-    var price: Int,
+    var itemId: Long = 0,
+    var amount: Int = 0,
+    var price: Int = 0,
 ){
     companion object{
         fun fromCocktailItemDTO(cocktailItemDTO: CocktailItemDTO) : AddCartCocktailItemInfoDTO{

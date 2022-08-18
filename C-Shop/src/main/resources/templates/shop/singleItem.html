@@ -39,8 +39,8 @@
                         </div>
                         <div class="product-quantity">
                             <span>수량 선택:</span>
-                            <input type="text" th:field="${requestOrderInfoDTO.orderItems[0].itemId}">
-                            <input type="text" th:field="${requestOrderInfoDTO.orderItems[0].price}">
+                            <input type="hidden" th:field="${requestOrderInfoDTO.orderItems[0].itemId}">
+                            <input type="hidden" th:field="${requestOrderInfoDTO.orderItems[0].price}">
                             <input id="product-quantity" type="number"  name="product-quantity"  onchange="eventKeyup(this.value)" th:field="${requestOrderInfoDTO.orderItems[0].amount}">
                             <script>
                                 function eventKeyup(str)
@@ -49,10 +49,10 @@
                                 }
                             </script>
                         </div>
-                        <div class="product-category">
-                            <span>결재금액:</span>
-                            계산해서 넣어야됨
-                        </div>
+<!--                        <div class="product-category">-->
+<!--                            <span>결재금액:</span>-->
+<!--                            계산해서 넣어야됨-->
+<!--                        </div>-->
                         <div class="product-category">
                             <div><span>기본 주소:</span></div>
                             <label>주소</label>

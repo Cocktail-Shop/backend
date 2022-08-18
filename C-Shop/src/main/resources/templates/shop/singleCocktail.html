@@ -35,27 +35,40 @@
                         <span th:text="${cocktail.result.cocktailDescription}"></span>
                     </p>
 
-                    <th:block th:each="items, i : ${cocktail.result.cocktailItems}">
+                    <th:block th:each="items, i : *{orderItems}">
                     <div class="product-quantity">
-                        <span>수량 선택:</span>
-                        <div th:text="${items.itemName}"></div>
-                        <div th:text="${i.index}"></div>
+                        <span><div th:text="${items.itemName}"></div></span>
 
-                        <input type="text" th:field="${requestOrderInfoDTO.orderItems[${#numbers.formatInteger(${i.index},1)}].itemId}">
-<!--                        <input type="text" th:field="${requestOrderInfoDTO.orderItems[0].price}">-->
-<!--                        <input id="product-quantity" type="number"  name="product-quantity"  onchange="eventKeyup(this.value)" th:field="${requestOrderInfoDTO.orderItems[0].amount}">-->
+<!--                        <input th:type="text" th:field="*{orderItems[__${i.index}__].itemId}">-->
+                        <span>가격<input type="text" th:field="*{orderItems[__${i.index}__].price}" readonly></span>
+
+                        <span></span>
+
+                        <span>수량
+                        <input id="product-quantity" th:myIdx="${i.index}" type="number"  name="product-quantity"  th:onchange="eventKeyup(this.value,this.getAttribute('myIdx'))" th:field="*{orderItems[__${i.index}__].amount}">
 <!--                        <script>-->
-<!--                            function eventKeyup(str)-->
+<!--                            function eventKeyup(str,)-->
 <!--                            {-->
 <!--                                $("#amount2").val(str);    // jQuery 이용-->
 <!--                            }-->
 <!--                        </script>-->
+                            <script th:inline="javascript">
+                                /*<![CDATA[*/
+                                function eventKeyup(str,idx)
+                                {
+                                    console.log(idx)
+                                    $("#amount"+idx).val(str);    // jQuery 이용
+                                }
+                                /*]]>*/
+                            </script>
+
+                        </span>
                     </div>
                     </th:block>
-                    <div class="product-category">
-                        <span>결재금액:</span>
-                        계산해서 넣어야됨
-                    </div>
+<!--                    <div class="product-category">-->
+<!--                        <span>결재금액:</span>-->
+<!--                        계산해서 넣어야됨-->
+<!--                    </div>-->
                     <div class="product-category">
                         <div><span>기본 주소:</span></div>
                         <label>주소</label>
@@ -67,42 +80,21 @@
                     <input type="submit" class="btn btn-main mt-20" value="바로 주문하기">
 
                     </form>
-<!--                    <form method="post" th:action="@{/items/cart}" th:object="${addCartItemRequestDTO}">-->
-<!--                        <input type="hidden" th:value="${item.result.itemId}" th:field="*{itemId}">-->
-<!--                        <input type="hidden"  id="amount2" class="form-control signin-input"  value="0" th:field="*{amount}" >-->
-<!--                        <input type="submit" class="btn btn-main mt-20" value="장바구니 추가">-->
-<!--                    </form>-->
+                    <form method="post" th:action="@{/items/cocktails/cart}" th:object="${addCartItemRequestDTO}">
+                        <th:block th:each="items, i : *{items}">
+
+                        <input type="hidden" th:value="${addCartItemRequestDTO.items[__${i.index}__].itemId}" th:field="*{items[__${i.index}__].itemId}">
+                            <input type="hidden" th:value="${addCartItemRequestDTO.items[__${i.index}__].price}" th:field="*{items[__${i.index}__].price}">
+                        <input type="hidden"  th:id="'amount'+${i.index}" class="form-control signin-input"  value="0" th:field="*{items[__${i.index}__].amount}" >
+                        </th:block>
+                        <input type="submit" class="btn btn-main mt-20" value="장바구니 추가">
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-
-
-<!--<div class="product-quantity">-->
-<!--                        <th:block th:each="items : ${cocktail.result.cocktailItems}">-->
-<!--                        <span th:text="${items.itemName}"></span>-->
-<!--                        <div class="product-quantity-slider">-->
-<!--                            <input id="product-quantity" type="text" value="0" name="product-quantity">-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                    <div class="product-category">-->
-<!--                        <span>결재금액:</span>-->
-<!--                        계산해서 넣어야됨-->
-<!--                    </div>-->
-<!--                    <div class="product-category">-->
-<!--                        <span>배송지:</span>-->
-<!--                        <a href="cart.html" class="btn btn-main mt-20">기존배송지</a>-->
-<!--                        <a href="cart.html" class="btn btn-main mt-20">배송지추가</a>-->
-<!--                    </div>-->
-<!--                    <a href="cart.html" class="btn btn-main mt-20">장바구니 추가</a>-->
-<!--                    <a href="cart.html" class="btn btn-main mt-20">주문하기</a>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</section>-->
 
 <footer class="footer section text-center">
     <div class="container">
@@ -139,6 +131,28 @@ Essential Scripts
 
 <!-- Login Js File -->
 <script th:src="@{/js/login-script.js}"></script>
+
+<!-- Kakao 우편번호 서비스 -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function searchAddr() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = ''; // 주소 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+                // 주소 정보를 해당 필드에 넣는다.
+                document.getElementById("addr").value = addr;
+                document.getElementById("sub-addr").focus();
+            }
+        }).open();
+    }
+</script>
 
 
 
