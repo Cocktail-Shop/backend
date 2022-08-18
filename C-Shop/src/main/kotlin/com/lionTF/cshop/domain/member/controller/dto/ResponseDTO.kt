@@ -62,7 +62,7 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
         }
 
         fun toMemberAccessDeniedResponseDTO():ResponseDTO{
-            return ResponseDTO(HttpStatus.FORBIDDEN.value(),"권한이 없는 사용자입니다.","/members")
+            return ResponseDTO(HttpStatus.FORBIDDEN.value(),"접근 권한이 없습니다.","/members")
         }
         fun toPreMemberAccessDeniedResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.FORBIDDEN.value(),"추가정보를 입력해주세요","/pre-members")

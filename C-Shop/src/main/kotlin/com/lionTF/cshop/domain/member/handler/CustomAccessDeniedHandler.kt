@@ -14,7 +14,6 @@ class CustomAccessDeniedHandler(private val redirectStrategy: RedirectStrategy =
         response: HttpServletResponse?,
         accessDeniedException: AccessDeniedException?
     ) {
-
         if(request?.isUserInRole("ROLE_${MemberRole.PREMEMBER.name}") == true){
             redirectStrategy.sendRedirect(request,response,"/pre-members/deny")//인증안된 사용자
         }else if(request?.isUserInRole("ROLE_${MemberRole.MEMBER.name}")==true) {
