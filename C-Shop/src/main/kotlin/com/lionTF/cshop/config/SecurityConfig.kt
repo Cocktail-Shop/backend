@@ -1,5 +1,6 @@
 package com.lionTF.cshop.config
 
+import com.lionTF.cshop.domain.member.handler.CustomAccessDeniedHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -22,14 +23,16 @@ class SecurityConfig {
         http.csrf().disable()//post 요청 허용
         http.sessionManagement().maximumSessions(1)//중복로그인 방지
 
-        http.oauth2Login()
-            .defaultSuccessUrl("/members")
-
         return http.authorizeRequests()
-            //.antMatchers("/user/**").authenticated()
-            //.antMatchers("/admins/**").hasRole("ADMIN")
-            .anyRequest()    // 모든 요청에 대해서 허용하라.
-            .permitAll()
+            .antMatchers("/admins/**").hasRole("ADMIN")
+            .antMatchers("/members/**").permitAll()
+            .antMatchers("/members").authenticated()
+            .antMatchers("/members/password").authenticated()
+            .antMatchers("/members/logout").authenticated()
+            .antMatchers("/items/**").hasRole("MEMBER")
+            .antMatchers("/items/**").hasRole("ADMIN")
+            .antMatchers("/orders/**").hasRole("MEMBER")
+            .antMatchers("/orders/**").hasRole("ADMIN")
             .and()
             .formLogin()
             .loginPage("/members/login")
@@ -37,11 +40,17 @@ class SecurityConfig {
             .defaultSuccessUrl("/members")
             .failureUrl("/members/login-fail")
             .and()
+            .oauth2Login()
+            .defaultSuccessUrl("/members")
+            .and()
             .logout()
             .logoutUrl("/members/logout") // 로그아웃 처리 URL
             .logoutSuccessUrl("/members/login") // 로그아웃 성공 후 이동페이지
             .invalidateHttpSession(true)
             .deleteCookies("JSESSIONID")
+            .and()
+            .exceptionHandling()
+            .accessDeniedHandler(CustomAccessDeniedHandler())
             .and()
             .build()
     }

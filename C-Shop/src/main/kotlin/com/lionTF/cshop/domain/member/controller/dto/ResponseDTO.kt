@@ -60,5 +60,16 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
         fun toDeleteMemberResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.NO_CONTENT.value(),"회원 탈퇴 요청 완료","/members/logout")
         }
+
+        fun toMemberAccessDeniedResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.FORBIDDEN.value(),"권한이 없는 사용자입니다.","/members")
+        }
+        fun toPreMemberAccessDeniedResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.FORBIDDEN.value(),"추가정보를 입력해주세요","/pre-members")
+        }
+
+        fun toSuccessSetPreMemberInfoResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.OK.value(),"추가정보 입력 완료했습니다. 다시 로그인해주세요!","/members/logout")
+        }
     }
 }

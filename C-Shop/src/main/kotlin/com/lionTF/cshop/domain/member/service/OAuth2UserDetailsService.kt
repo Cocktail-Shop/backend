@@ -3,7 +3,6 @@ package com.lionTF.cshop.domain.member.service
 import com.lionTF.cshop.domain.member.controller.dto.AuthMemberDTO
 import com.lionTF.cshop.domain.member.models.Member
 import com.lionTF.cshop.domain.member.repository.MemberAuthRepository
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -11,8 +10,7 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class OAuth2UserDetailsService(private val memberAuthRepository: MemberAuthRepository,
-                               private val passwordEncoder: PasswordEncoder)
+class OAuth2UserDetailsService(private val memberAuthRepository: MemberAuthRepository)
     : DefaultOAuth2UserService(){
 
 

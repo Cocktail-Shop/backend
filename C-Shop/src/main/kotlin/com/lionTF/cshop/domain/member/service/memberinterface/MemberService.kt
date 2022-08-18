@@ -12,4 +12,7 @@ interface MemberService {
     //비밀번호 찾기
     fun passwordInquiry(passwordInquiryDTO: RequestPasswordInquiryDTO):ResponseDTO
 
+    //추가정보 업데이트
+    fun setPreMemberInfo(memberId:Long,requestPreMemberInfoDTO: RequestPreMemberInfoDTO):ResponseDTO
+
 }

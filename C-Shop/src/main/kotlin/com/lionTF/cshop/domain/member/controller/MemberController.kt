@@ -132,4 +132,28 @@ class MemberController(
         return "global/message"
     }
 
+    @GetMapping("/pre-members/deny")
+    fun getPreMemberAccessDeniedPage(model: Model):String{
+        model.addAttribute("result",ResponseDTO.toPreMemberAccessDeniedResponseDTO())
+        return "global/message"
+    }
+
+    @GetMapping("/members/deny")
+    fun getMembersAccessDeniedPage(model: Model):String{
+        model.addAttribute("result",ResponseDTO.toMemberAccessDeniedResponseDTO())
+        return "global/message"
+    }
+
+    @GetMapping("/pre-members")
+    fun getPreMemberPage(model: Model):String{
+        model.addAttribute("requestPreMemberInfoDTO",RequestPreMemberInfoDTO.toFormDTO())
+        return "members/pre-member-page"
+    }
+
+    @PostMapping("/pre-members")
+    fun setPreMembersInfo(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO,requestPreMemberInfoDTO: RequestPreMemberInfoDTO,model:Model):String{
+        model.addAttribute("result",memberService.setPreMemberInfo(authMemberDTO.memberId!!,requestPreMemberInfoDTO))
+        return "global/message"
+    }
+
 }

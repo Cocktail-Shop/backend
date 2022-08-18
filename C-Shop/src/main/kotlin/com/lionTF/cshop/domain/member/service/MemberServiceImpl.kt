@@ -96,5 +96,13 @@ class MemberServiceImpl(val memberAuthRepository: MemberAuthRepository, val cart
         }
     }
 
+    //추가정보 입력받기
+    override fun setPreMemberInfo(memberId:Long,requestPreMemberInfoDTO: RequestPreMemberInfoDTO):ResponseDTO{
+        val existMember=memberAuthRepository.findByMemberId(memberId).orElseThrow()
+        existMember.setPreMemberInfo(requestPreMemberInfoDTO)
+        memberAuthRepository.save(existMember)
+
+        return ResponseDTO.toSuccessSetPreMemberInfoResponseDTO()
+    }
 
 }
