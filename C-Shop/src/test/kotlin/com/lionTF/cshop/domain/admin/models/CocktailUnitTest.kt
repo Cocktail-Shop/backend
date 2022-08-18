@@ -38,7 +38,7 @@ internal class CocktailUnitTest {
         )
 
         //when
-        cocktail.updateCocktail(requestCreateCocktailDTO)
+        cocktail.updateCocktail(requestCreateCocktailDTO, "test")
 
         //then
         assertThat(cocktail.cocktailName).isEqualTo(requestCreateCocktailDTO.cocktailName)

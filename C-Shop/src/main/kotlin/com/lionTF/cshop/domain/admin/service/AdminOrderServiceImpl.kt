@@ -81,7 +81,7 @@ class AdminOrderServiceImpl(
                 AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder()
             }
             else -> {
-                order.InDelieveryStatus()
+                order.inDeliveryStatus()
                 AdminResponseDTO.toSuccessUpdateDeliveryStatusInDelivery()
             }
         }
@@ -99,7 +99,7 @@ class AdminOrderServiceImpl(
                 AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder()
             }
             else -> {
-                order.CompleteDelivery()
+                order.completeDelivery()
                 return AdminResponseDTO.toSuccessUpdateDeliveryStatusComplete()
             }
         }

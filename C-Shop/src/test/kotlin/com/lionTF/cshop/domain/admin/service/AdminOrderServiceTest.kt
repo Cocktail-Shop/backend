@@ -31,7 +31,6 @@ import javax.transaction.Transactional
 @SpringBootTest
 @Transactional
 internal class AdminOrderServiceTest {
-
     @Autowired
     private lateinit var adminOrderService: AdminOrderService
 
@@ -86,7 +85,7 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item1 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO1))
+        item1 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO1,"test"))
 
         val itemDTO2 = RequestCreateItemDTO(
             itemName = "test1",
@@ -96,7 +95,7 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item2 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO2))
+        item2 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO2, "test"))
 
         val itemDTO3 = RequestCreateItemDTO(
             itemName = "test1",
@@ -106,7 +105,7 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item3 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO3))
+        item3 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO3, "test"))
 
 
         val member1 = Member(
@@ -144,7 +143,7 @@ internal class AdminOrderServiceTest {
             amount = item1!!.amount,
             price = item1!!.price
         )
-        var orderItems: MutableList<RequestOrderItemDTO> = mutableListOf()
+        val orderItems: MutableList<RequestOrderItemDTO> = mutableListOf()
         orderItems.add(requestOrderItemDTO1)
 
         val requestOrderDTO1 = RequestOrderDTO(
@@ -161,7 +160,7 @@ internal class AdminOrderServiceTest {
             amount = item2!!.amount,
             price = item2!!.price
         )
-        var orderItems2: MutableList<RequestOrderItemDTO> = mutableListOf()
+        val orderItems2: MutableList<RequestOrderItemDTO> = mutableListOf()
         orderItems2.add(requestOrderItemDTO2)
 
         val requestOrderDTO2 = RequestOrderDTO(
@@ -178,7 +177,7 @@ internal class AdminOrderServiceTest {
             amount = item3!!.amount,
             price = item3!!.price
         )
-        var orderItems3: MutableList<RequestOrderItemDTO> = mutableListOf()
+        val orderItems3: MutableList<RequestOrderItemDTO> = mutableListOf()
         orderItems3.add(requestOrderItemDTO3)
 
         val requestOrderDTO3 = RequestOrderDTO(
@@ -225,7 +224,7 @@ internal class AdminOrderServiceTest {
     @DisplayName("하나의 주문 취소 예외 test")
     fun cancelOneOrderExceptionTest() {
         //given
-        val orderId: Long = 98L
+        val orderId = 98L
 
         //when
         val cancelOneOrder = adminOrderService.cancelOneOrder(orderId)
@@ -273,9 +272,9 @@ internal class AdminOrderServiceTest {
         assertThat(allOrders.httpStatus).isEqualTo(HttpStatus.OK.value())
         assertThat(allOrders.message).isEqualTo("주문 조회를 성공했습니다.")
         assertThat(allOrders.keyword).isEqualTo("")
-        assertThat(allOrders.result!!.content[0].deliveryStatus).isEqualTo(DeliveryStatus.READY)
+        assertThat(allOrders.result!!.content[0].deliveryStatus).isEqualTo(DeliveryStatus.IN_DELIVERY)
         assertThat(allOrders.result!!.totalElements).isEqualTo(orderCount - 1)
-        assertThat(allOrders.result!!.totalPages).isEqualTo(2)
+        assertThat(allOrders.result!!.totalPages).isEqualTo(4)
 
     }
 
@@ -286,7 +285,7 @@ internal class AdminOrderServiceTest {
         val page = 0
         val pageSize = 2
         val pageable = generatePageable(page = page, pageSize = pageSize)
-        val keyword: String = "te"
+        val keyword = "te"
 
         //when
         val ordersByMemberId = adminOrderService.getOrdersByMemberId(keyword, pageable)
@@ -295,8 +294,8 @@ internal class AdminOrderServiceTest {
         assertThat(ordersByMemberId.httpStatus).isEqualTo(HttpStatus.OK.value())
         assertThat(ordersByMemberId.message).isEqualTo("주문 조회를 성공했습니다.")
         assertThat(ordersByMemberId.keyword).isEqualTo(keyword)
-        assertThat(ordersByMemberId.result!!.totalElements).isEqualTo(4)
-        assertThat(ordersByMemberId.result!!.totalPages).isEqualTo(2)
+        assertThat(ordersByMemberId.result!!.totalElements).isEqualTo(7)
+        assertThat(ordersByMemberId.result!!.totalPages).isEqualTo(4)
     }
 
 
