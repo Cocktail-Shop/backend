@@ -41,15 +41,15 @@
                         <div th:text="${items.itemName}"></div>
                         <div th:text="${i.index}"></div>
 
-                        <input type="text" th:field="${requestOrderInfoDTO.orderItems[0].itemId}">
-                        <input type="text" th:field="${requestOrderInfoDTO.orderItems[0].price}">
-                        <input id="product-quantity" type="number"  name="product-quantity"  onchange="eventKeyup(this.value)" th:field="${requestOrderInfoDTO.orderItems[0].amount}">
-                        <script>
-                            function eventKeyup(str)
-                            {
-                                $("#amount2").val(str);    // jQuery 이용
-                            }
-                        </script>
+                        <input type="text" th:field="${requestOrderInfoDTO.orderItems[${#numbers.formatInteger(${i.index},1)}].itemId}">
+<!--                        <input type="text" th:field="${requestOrderInfoDTO.orderItems[0].price}">-->
+<!--                        <input id="product-quantity" type="number"  name="product-quantity"  onchange="eventKeyup(this.value)" th:field="${requestOrderInfoDTO.orderItems[0].amount}">-->
+<!--                        <script>-->
+<!--                            function eventKeyup(str)-->
+<!--                            {-->
+<!--                                $("#amount2").val(str);    // jQuery 이용-->
+<!--                            }-->
+<!--                        </script>-->
                     </div>
                     </th:block>
                     <div class="product-category">
