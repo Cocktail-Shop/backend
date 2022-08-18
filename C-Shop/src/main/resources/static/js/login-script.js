@@ -18,7 +18,7 @@ function checkId(){
     return result
 }
 
-  
+
 function checkPw(){
     const pw = document.getElementById('pw').value;
     const pw_check = document.getElementById('pw-check').value;
@@ -129,8 +129,8 @@ function checkForgetPw(){
 
 function checkNewPw(){
     const result=checkPw()
-    
-     return result
+
+    return result
 }
 
 function checkMyPageChangePw(){
@@ -138,7 +138,7 @@ function checkMyPageChangePw(){
 }
 
 function checkMyPageInfo(){
-    return checkName()&&checkTel()&&checkAddr()
+    return checkAddr()
 }
 
 //각 페이지마다 입력조건 체크하는 함수 하나씩 할당

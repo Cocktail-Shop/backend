@@ -30,7 +30,8 @@ class Member(
     var detailAddress:String="",
     var memberStatus: Boolean = true,
 
-    var role:MemberRole?=null
+    var role:MemberRole?=null,
+    var fromSocial:Boolean=false
 ):BaseTimeEntity(){
 
     companion object{
@@ -44,6 +45,15 @@ class Member(
                 email=requestSignUpDTO.email,
                 detailAddress=requestSignUpDTO.detailAddress,
                 role = MemberRole.MEMBER
+            )
+        }
+
+        fun fromOAuth2User(email:String,memberName:String):Member{
+            return Member(
+                id=email,
+                memberName=memberName,
+                role = MemberRole.MEMBER,
+                fromSocial = true
             )
         }
     }
