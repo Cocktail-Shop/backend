@@ -5,11 +5,11 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners
-class CocktailItem (
+class CocktailItem(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var cocktailItemId: Long = 0,
+    val cocktailItemId: Long = 0,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "item_id")
