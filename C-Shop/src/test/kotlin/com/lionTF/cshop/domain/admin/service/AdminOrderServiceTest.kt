@@ -21,6 +21,7 @@ import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
@@ -296,6 +297,98 @@ internal class AdminOrderServiceTest {
         assertThat(ordersByMemberId.keyword).isEqualTo(keyword)
         assertThat(ordersByMemberId.result!!.totalElements).isEqualTo(7)
         assertThat(ordersByMemberId.result!!.totalPages).isEqualTo(4)
+    }
+
+    @Test
+    @DisplayName("배달 상태 : 준비 -> 배송 중으로 변경 test")
+    fun changeDeliveryReadyTest() {
+        //given
+        val orderId = order?.orderId
+
+        //when
+        orderId?.let { adminOrderService.changeDeliveryReady(it) }
+
+        //then
+        assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.IN_DELIVERY)
+    }
+
+    @Test
+    @DisplayName("배달 상태 : 준비 -> 배송 중으로 변경 중 없는 주문 번호로 할때 예외 test")
+    fun changeDeliveryReadyExceptionTest() {
+        //given
+        val orderId = 123123L
+
+        //when
+        val deliveryStatus = adminOrderService.changeDeliveryReady(orderId)
+
+        //then
+        assertThat(deliveryStatus.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().httpStatus)
+        assertThat(deliveryStatus.message).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().message)
+        assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.READY)
+        println("deliveryStatus = ${deliveryStatus.message}")
+    }
+
+    @Test
+    @DisplayName("배달 상태 : 준비 -> 배송 중으로 변경 중 이미 취소된 주문에 대한 상태를 변경 할때 예외 test")
+    fun changeDeliveryReadyExceptionByCancelOrderTest() {
+        //given
+        val orderId = order?.orderId
+        orderId?.let { adminOrderService.cancelOneOrder(it) }
+
+        //when
+        val deliveryStatus = orderId?.let { adminOrderService.changeDeliveryReady(it) }
+
+        //then
+        assertThat(deliveryStatus?.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder().httpStatus)
+        assertThat(deliveryStatus?.message).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder().message)
+        assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.REFUND)
+        println("deliveryStatus = ${deliveryStatus?.message}")
+    }
+
+    @Test
+    @DisplayName("배달 상태 : 배송 중 -> 배송 완료로 변경 test")
+    fun changeDeliveryComplete() {
+        //given
+        val orderId = order?.orderId
+
+        //when
+        orderId?.let { adminOrderService.changeDeliveryComplete(it) }
+
+        //then
+        assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.COMPLETE)
+    }
+
+    @Test
+    @DisplayName("배달 상태 : 배송 중 -> 배송 완료로 변경 중 없는 주문 번호로 할때 예외 test")
+    fun changeDeliveryCompleteExceptionTest() {
+        //given
+        val orderId = 123123L
+
+        //when
+        val deliveryStatus = adminOrderService.changeDeliveryComplete(orderId)
+
+        //then
+        assertThat(deliveryStatus.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().httpStatus)
+        assertThat(deliveryStatus.message).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().message)
+        assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.READY)
+        println("deliveryStatus = ${deliveryStatus.message}")
+    }
+
+    @Test
+    @DisplayName("배달 상태 : 배송 중 -> 배송 완료로 변경 중 이미 취소된 주문에 대한 상태를 변경 할때 예외 test")
+    fun changeDeliveryCompleteExceptionByCancelOrderTest() {
+        //given
+        val orderId = order?.orderId
+        orderId?.let { adminOrderService.cancelOneOrder(it) }
+
+        //when
+        val deliveryStatus = orderId?.let { adminOrderService.changeDeliveryComplete(it) }
+
+        //then
+        assertThat(deliveryStatus?.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder().httpStatus)
+        assertThat(deliveryStatus?.message).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder().message)
+        assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.REFUND)
+        println("deliveryStatus = ${deliveryStatus?.message}")
     }
 
 
