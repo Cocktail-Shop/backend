@@ -5,11 +5,12 @@ import org.springframework.data.domain.Pageable
 
 interface AdminMemberService {
 
-//    fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO
-
-    fun deleteOneMember(memberId: Long): AdminResponseDTO
 
     fun findMembers(keyword: String, pageable: Pageable): ResponseSearchMembersResultDTO
 
     fun getAllMembers(pageable: Pageable): ResponseSearchMembersResultDTO
+
+    fun deleteOneMember(memberId: Long): AdminResponseDTO
+
+    //    fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO
 }

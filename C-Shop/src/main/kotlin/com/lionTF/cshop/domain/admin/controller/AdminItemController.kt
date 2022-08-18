@@ -3,17 +3,20 @@ package com.lionTF.cshop.domain.admin.controller
 import com.lionTF.cshop.domain.admin.controller.dto.*
 import com.lionTF.cshop.domain.admin.models.Category
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminItemService
+import com.lionTF.cshop.domain.admin.service.admininterface.ImageService
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.ModelAttribute
+import java.time.LocalDateTime
 
 @Controller
 @RequestMapping("/admins")
 class AdminItemController(
     private val adminItemService: AdminItemService,
+    private val imageService: ImageService
 ) {
 
     // 전체 상품 조회
@@ -51,7 +54,8 @@ class AdminItemController(
         requestCreateItemDTO: RequestCreateItemDTO,
         model: Model
     ): String {
-        model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO))
+        val itemImgUrl = getImageUrl(requestCreateItemDTO)
+        model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO, itemImgUrl))
         return "global/message"
     }
 
@@ -75,7 +79,29 @@ class AdminItemController(
         requestCreateItemDTO: RequestCreateItemDTO,
         model: Model
     ): String {
-        model.addAttribute("result", adminItemService.updateItem(itemId, requestCreateItemDTO))
+        val item = adminItemService.findItemById(itemId)
+
+        when (requestCreateItemDTO.itemImgUrl?.isEmpty) {
+            true -> {
+                model.addAttribute(
+                    "result",
+                    adminItemService.updateItem(itemId, requestCreateItemDTO, item.itemImgUrl)
+                )
+            }
+            else -> {
+                val objectName: List<String> = item.itemImgUrl.split("/")
+
+                imageService.requestToken()
+
+                if (item.itemImgUrl.isNotEmpty()) {
+                    imageService.deleteObject(objectName[objectName.size - 1])
+                }
+
+                val itemImgUrl = getImageUrl(requestCreateItemDTO)
+                model.addAttribute("result", adminItemService.updateItem(itemId, requestCreateItemDTO, itemImgUrl))
+            }
+        }
+
         return "global/message"
     }
 
@@ -89,11 +115,22 @@ class AdminItemController(
         return "global/message"
     }
 
-
     // 라디오 박스에 카테고리 이넘타입의 내용을 배열로 반환
     @ModelAttribute("category")
     fun itemTypes(): Array<Category> {
         return Category.values()
+    }
+
+    // API를 통해 이미지 URL을 가져오는 함
+    private fun getImageUrl(requestCreateItemDTO: RequestCreateItemDTO): String? {
+        imageService.requestToken()
+        val itemImgUrl = requestCreateItemDTO.itemImgUrl?.let {
+            imageService.uploadObject(
+                requestCreateItemDTO.itemName + LocalDateTime.now().toString(),
+                it
+            )
+        }
+        return itemImgUrl
     }
 
 

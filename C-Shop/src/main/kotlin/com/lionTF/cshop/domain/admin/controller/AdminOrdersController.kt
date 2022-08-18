@@ -30,7 +30,7 @@ class AdminOrdersController(
         @RequestParam("keyword") keyword: String,
         @PageableDefault(size = 2) pageable: Pageable,
         model: Model
-    ) : String {
+    ): String {
         model.addAttribute("searchOrders", adminOrderService.getOrdersByMemberId(keyword, pageable))
         return "admins/order/getMemberOrder"
     }
