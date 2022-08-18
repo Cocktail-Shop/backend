@@ -11,14 +11,14 @@ data class RequestOrderDTO(
 )
 
 data class RequestOrderInfoDTO(
-    var orderItems: MutableList<RequestOrderItemDTO> = mutableListOf(RequestOrderItemDTO(0,0,0)),
+    var orderItems: MutableList<RequestOrderItemDTO> = mutableListOf(RequestOrderItemDTO(0,0,0,"")),
     var address: String = "",
     var addressDetail: String="",
 ){
     companion object{
         fun toFormRequestItemOrderInfoDTO(item:ItemDTO,addressDTO: AddressDTO):RequestOrderInfoDTO{
             return RequestOrderInfoDTO(
-                orderItems = mutableListOf( RequestOrderItemDTO(item.itemId,0,item.price)),
+                orderItems = mutableListOf( RequestOrderItemDTO(item.itemId,0,item.price,item.itemName)),
                 address=addressDTO.Address,
                 addressDetail = addressDTO.AddressDetail
             )
@@ -37,6 +37,7 @@ data class RequestOrderItemDTO(
     var itemId: Long,
     var amount: Int,
     var price: Int,
+    var itemName: String,
 ){
     companion object{
         fun fromCocktailItemDTO(cocktailItemDTO: CocktailItemDTO) : RequestOrderItemDTO{
@@ -44,6 +45,7 @@ data class RequestOrderItemDTO(
                 itemId = cocktailItemDTO.itemId,
                 amount = 0,
                 price = cocktailItemDTO.price,
+                itemName = cocktailItemDTO.itemName
             )
         }
     }
