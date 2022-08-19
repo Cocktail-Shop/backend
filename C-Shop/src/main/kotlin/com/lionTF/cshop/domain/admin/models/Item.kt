@@ -14,14 +14,14 @@ class Item(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val itemId: Long = 0,
 
-    @OneToMany(mappedBy = "item")
-    val cocktailItem: MutableList<CocktailItem>? = null,
-
-    @OneToMany(mappedBy = "item")
-    val cartItem: MutableList<CartItem>? = null,
-
-    @OneToMany(mappedBy = "item")
-    val orderItem: MutableList<OrderItem>? = null,
+//    @OneToMany(mappedBy = "item")
+//    val cocktailItem: MutableList<CocktailItem>? = null,
+//
+//    @OneToMany(mappedBy = "item")
+//    val cartItem: MutableList<CartItem>? = null,
+//
+//    @OneToMany(mappedBy = "item")
+//    val orderItem: MutableList<OrderItem>? = null,
 
     var itemName: String = "",
 

@@ -13,7 +13,7 @@ data class ResponseSearchCocktailSearchDTO(
     companion object {
         fun cocktailToResponseCocktailSearchPageDTO(
             findCocktailDTO: Page<FindCocktailsDTO>,
-            keyword: String?
+            keyword: String? = ""
         ): ResponseSearchCocktailSearchDTO {
             return ResponseSearchCocktailSearchDTO(
                 HttpStatus.OK.value(),

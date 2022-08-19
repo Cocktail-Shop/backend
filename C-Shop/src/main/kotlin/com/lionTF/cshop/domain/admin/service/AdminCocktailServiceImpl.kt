@@ -22,23 +22,23 @@ class AdminCocktailServiceImpl(
     ) : AdminCocktailService {
 
     override fun getAllCocktail(pageable: Pageable): ResponseSearchCocktailSearchDTO {
-        val findAllCocktails = adminCocktailRepository.findAllCocktails(pageable)
+        val cocktails = adminCocktailRepository.findAllCocktails(pageable)
 
-        return ResponseSearchCocktailSearchDTO.cocktailToResponseCocktailSearchPageDTO(findAllCocktails, "")
+        return ResponseSearchCocktailSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails)
     }
 
     override fun getCocktailsByName(keyword: String, pageable: Pageable): ResponseSearchCocktailSearchDTO {
-        val findCocktailsByName = adminCocktailRepository.findCocktailsByName(keyword, pageable)
+        val cocktails = adminCocktailRepository.findCocktailsByName(keyword, pageable)
 
-        return ResponseSearchCocktailSearchDTO.cocktailToResponseCocktailSearchPageDTO(findCocktailsByName, keyword)
+        return ResponseSearchCocktailSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails, keyword)
     }
 
 
     // 칵테일 단건 조회
     override fun findCocktail(cocktailId: Long, itemIds: MutableList<Long>): ResponseCocktailDTO {
-        val existsCocktail = adminCocktailRepository.existsById(cocktailId)
+        val cocktailExisted = adminCocktailRepository.existsById(cocktailId)
 
-        return if (!existsCocktail) {
+        return if (!cocktailExisted) {
             ResponseCocktailDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "존재하지 않는 칵테일입니다.",
@@ -90,9 +90,9 @@ class AdminCocktailServiceImpl(
 
     @Transactional
     override fun deleteOneCocktail(cocktailId: Long): AdminResponseDTO {
-        val existsCocktail = adminCocktailRepository.existsById(cocktailId)
+        val cocktailExisted = adminCocktailRepository.existsById(cocktailId)
 
-        return if (!existsCocktail) {
+        return if (!cocktailExisted) {
             AdminResponseDTO.toFailDeleteCocktailResponseDTO()
 
         } else {
@@ -115,11 +115,11 @@ class AdminCocktailServiceImpl(
         cocktailImgUrl: String?
     ): AdminResponseDTO {
 
-        val existsCocktail = adminCocktailRepository.existsById(cocktailId)
+        val cocktailExisted = adminCocktailRepository.existsById(cocktailId)
 
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
 
-        return if (!existsCocktail || !(formToExistedItems(itemIds))) {
+        return if (!cocktailExisted || !(formToExistedItems(itemIds))) {
             AdminResponseDTO.noContentItem()
 
         } else if (itemIds.isEmpty()) {
@@ -130,8 +130,8 @@ class AdminCocktailServiceImpl(
 
             cocktail.updateCocktail(requestCreateCocktailDTO, cocktailImgUrl)
 
-            val findAllByCocktailId = adminCocktailItemRepository.findAllByCocktailId(cocktailId)
-            adminCocktailItemRepository.deleteAll(findAllByCocktailId)
+            val cocktailItems = adminCocktailItemRepository.findAllByCocktailId(cocktailId)
+            adminCocktailItemRepository.deleteAll(cocktailItems)
 
             for (itemId in requestCreateCocktailDTO.itemIds) {
                 val item = adminItemRepository.getReferenceById(itemId)

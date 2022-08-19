@@ -39,7 +39,9 @@
                     <div class="product-quantity">
                         <span><div th:text="${items.itemName}"></div></span>
 
-<!--                        <input th:type="text" th:field="*{orderItems[__${i.index}__].itemId}">-->
+                        <input th:type="hidden" th:field="*{orderItems[__${i.index}__].itemName}">
+
+                        <input th:type="hidden" th:field="*{orderItems[__${i.index}__].itemId}">
                         <span>가격<input type="text" th:field="*{orderItems[__${i.index}__].price}" readonly></span>
 
                         <span></span>

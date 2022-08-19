@@ -14,7 +14,7 @@ data class ResponseSearchItemSearchDTO(
     companion object {
         fun itemToResponseItemSearchPageDTO(
             findItemDTO: Page<FindItemDTO>,
-            keyword: String?
+            keyword: String? = ""
         ): ResponseSearchItemSearchDTO {
             return ResponseSearchItemSearchDTO(
                 HttpStatus.OK.value(),

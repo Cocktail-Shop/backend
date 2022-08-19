@@ -40,9 +40,9 @@ class AdminItemServiceImpl(
         requestCreateItemDTO: RequestCreateItemDTO,
         itemImgUrl: String?
     ): AdminResponseDTO {
-        val existsItem = adminItemRepository.existsById(itemId)
+        val itemExisted = adminItemRepository.existsById(itemId)
 
-        return if (!existsItem) {
+        return if (!itemExisted) {
             AdminResponseDTO.toFailUpdateItemResponseDTO()
 
         } else if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) {
@@ -64,9 +64,9 @@ class AdminItemServiceImpl(
 
     @Transactional
     override fun deleteOneItem(itemId: Long): AdminResponseDTO {
-        val existsItem = adminItemRepository.existsById(itemId)
+        val itemExisted = adminItemRepository.existsById(itemId)
 
-        return if (!existsItem) {
+        return if (!itemExisted) {
             AdminResponseDTO.toFailDeleteItemResponseDTO()
         } else {
             val item = adminItemRepository.getReferenceById(itemId)
@@ -82,9 +82,9 @@ class AdminItemServiceImpl(
 
     // 상품 단건 조회
     override fun findItem(itemId: Long): ResponseItemDTO {
-        val existsItem = adminItemRepository.existsById(itemId)
+        val itemExisted = adminItemRepository.existsById(itemId)
 
-        return if (!existsItem) {
+        return if (!itemExisted) {
             ResponseItemDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "존재 하지 않는 상품입니다.",
@@ -99,16 +99,16 @@ class AdminItemServiceImpl(
 
     // 상품 전체 조회
     override fun getAllItems(pageable: Pageable): ResponseSearchItemSearchDTO {
-        val findAllItems = adminItemRepository.findAllItems(pageable)
+        val items = adminItemRepository.findAllItems(pageable)
 
-        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(findAllItems, "")
+        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(items)
     }
 
     // 상품 이름으로 조회
     override fun getItemsByName(keyword: String, pageable: Pageable): ResponseSearchItemSearchDTO {
-        val findItemsByItemName = adminItemRepository.findItemsByName(keyword, pageable)
+        val items = adminItemRepository.findItemsByName(keyword, pageable)
 
-        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(findItemsByItemName, keyword)
+        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(items, keyword)
     }
 
     // 상품 삭제
