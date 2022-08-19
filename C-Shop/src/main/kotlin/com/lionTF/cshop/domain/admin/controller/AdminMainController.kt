@@ -15,7 +15,7 @@ class AdminMainController(
 ) {
 
     @GetMapping("main")
-    fun mainPage(
+    fun getMainPage(
         @PageableDefault(size = 2) pageable: Pageable,
         model: Model
     ): String {

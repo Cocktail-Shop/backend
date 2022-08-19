@@ -21,7 +21,6 @@ import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertAll
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.data.domain.PageRequest
@@ -306,7 +305,7 @@ internal class AdminOrderServiceTest {
         val orderId = order?.orderId
 
         //when
-        orderId?.let { adminOrderService.changeDeliveryReady(it) }
+        orderId?.let { adminOrderService.updateDeliveryInDelivery(it) }
 
         //then
         assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.IN_DELIVERY)
@@ -319,7 +318,7 @@ internal class AdminOrderServiceTest {
         val orderId = 123123L
 
         //when
-        val deliveryStatus = adminOrderService.changeDeliveryReady(orderId)
+        val deliveryStatus = adminOrderService.updateDeliveryInDelivery(orderId)
 
         //then
         assertThat(deliveryStatus.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().httpStatus)
@@ -336,7 +335,7 @@ internal class AdminOrderServiceTest {
         orderId?.let { adminOrderService.cancelOneOrder(it) }
 
         //when
-        val deliveryStatus = orderId?.let { adminOrderService.changeDeliveryReady(it) }
+        val deliveryStatus = orderId?.let { adminOrderService.updateDeliveryInDelivery(it) }
 
         //then
         assertThat(deliveryStatus?.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder().httpStatus)
@@ -352,7 +351,7 @@ internal class AdminOrderServiceTest {
         val orderId = order?.orderId
 
         //when
-        orderId?.let { adminOrderService.changeDeliveryComplete(it) }
+        orderId?.let { adminOrderService.updateDeliveryComplete(it) }
 
         //then
         assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.COMPLETE)
@@ -365,7 +364,7 @@ internal class AdminOrderServiceTest {
         val orderId = 123123L
 
         //when
-        val deliveryStatus = adminOrderService.changeDeliveryComplete(orderId)
+        val deliveryStatus = adminOrderService.updateDeliveryComplete(orderId)
 
         //then
         assertThat(deliveryStatus.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().httpStatus)
@@ -382,7 +381,7 @@ internal class AdminOrderServiceTest {
         orderId?.let { adminOrderService.cancelOneOrder(it) }
 
         //when
-        val deliveryStatus = orderId?.let { adminOrderService.changeDeliveryComplete(it) }
+        val deliveryStatus = orderId?.let { adminOrderService.updateDeliveryComplete(it) }
 
         //then
         assertThat(deliveryStatus?.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder().httpStatus)

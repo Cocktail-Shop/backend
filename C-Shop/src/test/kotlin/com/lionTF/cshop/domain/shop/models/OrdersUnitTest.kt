@@ -35,7 +35,7 @@ internal class OrdersUnitTest {
         //given
 
         //when
-        order.inDeliveryStatus()
+        order.updateDeliveryStatusInDelivery()
 
         //then
         assertThat(order.deliveryStatus).isEqualTo(DeliveryStatus.IN_DELIVERY)
@@ -47,7 +47,7 @@ internal class OrdersUnitTest {
         //given
 
         //when
-        order.completeDelivery()
+        order.updateDeliveryStatusComplete()
 
         //then
         assertThat(order.deliveryStatus).isEqualTo(DeliveryStatus.COMPLETE)

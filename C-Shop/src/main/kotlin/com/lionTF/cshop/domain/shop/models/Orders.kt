@@ -35,11 +35,11 @@ class Orders(
         deliveryStatus = DeliveryStatus.REFUND
     }
 
-    fun inDeliveryStatus() {
+    fun updateDeliveryStatusInDelivery() {
         deliveryStatus = DeliveryStatus.IN_DELIVERY
     }
 
-    fun completeDelivery() {
+    fun updateDeliveryStatusComplete() {
         deliveryStatus = DeliveryStatus.COMPLETE
     }
 

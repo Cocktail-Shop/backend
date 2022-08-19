@@ -14,9 +14,9 @@ interface AdminOrderService {
 
     fun getAllSales(pageable: Pageable): ResponseSearchOrdersResultDTO
 
-    fun changeDeliveryReady(orderId: Long): AdminResponseDTO
+    fun updateDeliveryInDelivery(orderId: Long): AdminResponseDTO
 
-    fun changeDeliveryComplete(orderId: Long): AdminResponseDTO
+    fun updateDeliveryComplete(orderId: Long): AdminResponseDTO
 
     //    fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO
 }

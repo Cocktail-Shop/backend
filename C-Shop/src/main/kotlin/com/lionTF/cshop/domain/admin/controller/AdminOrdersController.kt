@@ -45,20 +45,20 @@ class AdminOrdersController(
     }
 
     @PutMapping("orders/{orderId}/in-delivery")
-    fun InDelivery(
+    fun updateDeliveryStatus(
         @PathVariable("orderId") orderId: Long,
         model: Model
     ): String {
-        model.addAttribute("result", adminOrderService.changeDeliveryReady(orderId))
+        model.addAttribute("result", adminOrderService.updateDeliveryInDelivery(orderId))
         return "global/message"
     }
 
     @PutMapping("orders/{orderId}/delivery/complete")
-    fun deliveryComplete(
+    fun updateDeliveryStatusComplete(
         @PathVariable("orderId") orderId: Long,
         model: Model
     ): String {
-        model.addAttribute("result", adminOrderService.changeDeliveryComplete(orderId))
+        model.addAttribute("result", adminOrderService.updateDeliveryComplete(orderId))
         return "global/message"
     }
 

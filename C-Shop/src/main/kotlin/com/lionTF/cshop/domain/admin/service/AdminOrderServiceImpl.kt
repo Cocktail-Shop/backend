@@ -70,7 +70,7 @@ class AdminOrderServiceImpl(
     }
 
     @Transactional
-    override fun changeDeliveryReady(orderId: Long): AdminResponseDTO {
+    override fun updateDeliveryInDelivery(orderId: Long): AdminResponseDTO {
         val order = existedOrder(orderId)
 
         return when {
@@ -81,14 +81,14 @@ class AdminOrderServiceImpl(
                 AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder()
             }
             else -> {
-                order.inDeliveryStatus()
+                order.updateDeliveryStatusInDelivery()
                 AdminResponseDTO.toSuccessUpdateDeliveryStatusInDelivery()
             }
         }
     }
 
     @Transactional
-    override fun changeDeliveryComplete(orderId: Long): AdminResponseDTO {
+    override fun updateDeliveryComplete(orderId: Long): AdminResponseDTO {
         val order = existedOrder(orderId)
 
         return when {
@@ -99,7 +99,7 @@ class AdminOrderServiceImpl(
                 AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder()
             }
             else -> {
-                order.completeDelivery()
+                order.updateDeliveryStatusComplete()
                 return AdminResponseDTO.toSuccessUpdateDeliveryStatusComplete()
             }
         }
