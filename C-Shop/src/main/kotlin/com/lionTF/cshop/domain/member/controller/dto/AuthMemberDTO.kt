@@ -4,6 +4,7 @@ import com.lionTF.cshop.domain.member.models.Member
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
+import org.springframework.security.oauth2.core.user.OAuth2User
 
 
 /*
@@ -13,8 +14,19 @@ import org.springframework.security.core.userdetails.User
 class AuthMemberDTO(
     username:String, password:String,
     authorities: MutableCollection<out GrantedAuthority>?,
-    var memberId: Long?=null,
-): User(username,password,authorities) {
+    var fromSocial:Boolean,
+    val attr:Map<String,Any>?=null,
+    val memberName:String,
+    val memberId: Long?=null,
+): User(username,password,authorities),OAuth2User {
+    override fun getName(): String {
+        return memberName
+    }
+
+    override fun getAttributes(): Map<String, Any>? {
+        return attr
+    }
+
 
     companion object{
         fun fromMember(member:Member) : AuthMemberDTO {
@@ -22,9 +34,12 @@ class AuthMemberDTO(
                 member.id,
                 member.password,
                 mutableSetOf(SimpleGrantedAuthority("ROLE_"+ member.role!!.name)),
-                member.memberId
+                member.fromSocial,
+                memberName=member.memberName,
+                memberId = member.memberId
             )
         }
+
 
     }
 

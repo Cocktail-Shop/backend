@@ -18,7 +18,7 @@ function checkId(){
     return result
 }
 
-  
+
 function checkPw(){
     const pw = document.getElementById('pw').value;
     const pw_check = document.getElementById('pw-check').value;
@@ -53,7 +53,7 @@ function checkTel() {
     const reg = /^01([0|1|6|7|8|9])([0-9]{7,8})$/;
     const result=reg.test(text)
     if (!result) {
-        alert('전화번호는 -를 빼고,숫자로 입력해주세요');
+        alert('전화번호는 -를 빼고,숫자로 입력해주세요(7~8글자)');
     }
     return result
 
@@ -120,7 +120,7 @@ function checkLogin(){
 }
 
 function checkForgetId(){
-    return checkName()&&checkAuthNum()
+    return checkAuthNum()
 }
 
 function checkForgetPw(){
@@ -129,8 +129,8 @@ function checkForgetPw(){
 
 function checkNewPw(){
     const result=checkPw()
-    
-     return result
+
+    return result
 }
 
 function checkMyPageChangePw(){
@@ -138,7 +138,7 @@ function checkMyPageChangePw(){
 }
 
 function checkMyPageInfo(){
-    return checkName()&&checkTel()&&checkAddr()
+    return checkTel()&&checkAddr()
 }
 
 //각 페이지마다 입력조건 체크하는 함수 하나씩 할당

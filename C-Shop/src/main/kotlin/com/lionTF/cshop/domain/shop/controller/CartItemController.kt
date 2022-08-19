@@ -24,8 +24,11 @@ class CartItemController(
     }
 
     @PostMapping("/items/cocktails/cart")
-    fun addCocktailItemToCart(@RequestBody addCartCocktailItemDTO: AddCartCocktailItemDTO) : AddCartCocktailItemResultDTO {
-        return cartItemService.addCartCocktailItem(addCartCocktailItemDTO)
+    fun addCocktailItemToCart(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @ModelAttribute("addCartCocktailItemDTO") addCartCocktailItemRequestDTO: AddCartCocktailItemRequestDTO, model: Model) : String {
+        val addCartCocktailItemDTO =
+            authMemberDTO?.memberId?.let { AddCartCocktailItemDTO(it, addCartCocktailItemRequestDTO.items) }
+        model.addAttribute("result", addCartCocktailItemDTO?.let { cartItemService.addCartCocktailItem(it) })
+        return "global/message"
     }
 
     // 장바구니 상품 삭제
@@ -43,3 +46,4 @@ class CartItemController(
         return "global/message"
     }
 }
+

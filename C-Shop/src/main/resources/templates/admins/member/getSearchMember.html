@@ -70,34 +70,16 @@
                     </li><!-- / Home -->
 
 
-                    <!-- Elements -->
+                    <!-- Blog -->
                     <li class="dropdown dropdown-slide">
                         <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="350"
                            role="button" aria-haspopup="true" aria-expanded="false">상품 등록 <span
                                 class="tf-ion-ios-arrow-down"></span></a>
-                        <div class="dropdown-menu">
-                            <div class="row">
-
-                                <!-- Basic -->
-                                <div class="col-lg-6 col-md-6 mb-sm-3">
-                                    <ul>
-                                        <li class="dropdown-header">Pages</li>
-                                        <li role="separator" class="divider"></li>
-                                        <li>
-                                            <form  th:method="get" th:action="@{/admins/items}" >
-                                                <button type="submit" class="btn btn-default btn-asd" >ALCOHOL</button>
-                                            </form>
-                                        </li>
-                                        <li>
-                                            <form  th:method="get" th:action="@{/admins/cocktails}" >
-                                                <button type="submit" class="btn btn-default btn-asd" >COCKTAIL</button>
-                                            </form>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div><!-- / .row -->
-                        </div><!-- / .dropdown-menu -->
-                    </li><!-- / Elements -->
+                        <ul class="dropdown-menu">
+                            <li><a href="/admins/items">칵테일 재료</a></li>
+                            <li><a href="/admins/cocktails">칵테일</a></li>
+                        </ul>
+                    </li><!-- / Blog -->
                 </ul><!-- / .nav .navbar-nav -->
             </div>
             <!--/.navbar-collapse -->
@@ -140,8 +122,8 @@
                                                     <th>주소</th>
                                                     <th>이름</th>
                                                     <th>핸드폰 번호</th>
-                                                    <th>회원 삭제</th>
                                                     <th>가입일</th>
+                                                    <th>회원 삭제</th>
                                                 </tr>
                                                 <tr th:each="member : ${searchMembers.result.content}">
                                                     <td th:text="${member.id}"></td>

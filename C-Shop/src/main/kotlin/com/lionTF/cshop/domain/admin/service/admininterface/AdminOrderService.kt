@@ -6,11 +6,17 @@ import org.springframework.data.domain.Pageable
 
 interface AdminOrderService {
 
-//    fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO
-
     fun cancelOneOrder(orderId: Long): AdminResponseDTO
 
     fun getAllOrders(pageable: Pageable): ResponseSearchOrdersResultDTO
 
     fun getOrdersByMemberId(keyword: String, pageable: Pageable): ResponseSearchOrdersResultDTO
+
+    fun getAllSales(pageable: Pageable): ResponseSearchOrdersResultDTO
+
+    fun updateDeliveryInDelivery(orderId: Long): AdminResponseDTO
+
+    fun updateDeliveryComplete(orderId: Long): AdminResponseDTO
+
+    //    fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO
 }

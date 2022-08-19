@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<!--
+ // WEBSITE: https://themefisher.com
+ // TWITTER: https://twitter.com/themefisher
+ // FACEBOOK: https://www.facebook.com/themefisher
+ // GITHUB: https://github.com/themefisher/
+-->
+
+<html lang="en">
+<th:block th:replace="~{global/headData:: headData}">
+</th:block>
+
+<body id="body">
+<section class="signin-page account">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="block text-center">
+                    <h2 class="text-center">추가 정보 입력</h2>
+                    <form class="text-left clearfix"  onsubmit="return checkMyPageInfo()" th:action="@{/pre-members}"  th:object="${requestPreMemberInfoDTO}" th:method="post" >
+                        <div class="form-group">
+                            <label>전화번호</label>
+                            <input type="tel" class="form-control signin-input" id="tel" th:field="*{phoneNumber}">
+                        </div>
+                        <div class="form-group">
+                            <label>주소</label>
+                            <div class="login-oneline-group">
+                                <input type="text" class="form-control signin-input" id="addr" th:field="*{address}" readonly>
+                                <input type="button" onclick="searchAddr()" class="btn btn-small btn-xsmall btn-round text-center ml-10 btn-login-page" value="주소검색">
+                            </div>
+                            <input type="text" class="form-control signin-input mt-10" id="sub-addr" th:field="*{detailAddress}">
+                        </div>
+                        <ul class="list-inline login-oneline-group">
+                            <li><button type="submit" class="btn btn-main text-center btn-round btn-mypage-change btn-subcolor">입력 완료</button></li>
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<th:block th:replace="~{global/scriptData:: scriptData}">
+</th:block>
+
+
+<!-- Kakao 우편번호 서비스 -->
+<script src="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+<script>
+    function searchAddr() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var addr = ''; // 주소 변수
+
+                //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+                    addr = data.roadAddress;
+                } else { // 사용자가 지번 주소를 선택했을 경우(J)
+                    addr = data.jibunAddress;
+                }
+                // 주소 정보를 해당 필드에 넣는다.
+                document.getElementById("addr").value = addr;
+                document.getElementById("sub-addr").focus();
+            }
+        }).open();
+    }
+</script>
+</body>
+</html>

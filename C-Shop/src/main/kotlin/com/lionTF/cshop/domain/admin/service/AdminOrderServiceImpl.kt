@@ -9,11 +9,9 @@ import com.lionTF.cshop.domain.shop.models.OrderStatus
 import com.lionTF.cshop.domain.shop.models.Orders
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.util.*
 import javax.transaction.Transactional
 
 @Service
-@Transactional
 class AdminOrderServiceImpl(
 
     private val adminOrderRepository: AdminOrderRepository,
@@ -21,7 +19,7 @@ class AdminOrderServiceImpl(
 
 ) : AdminOrderService {
 
-    // 하나의 주문 취소
+    @Transactional
     override fun cancelOneOrder(orderId: Long): AdminResponseDTO {
         val existsOrder = adminOrderRepository.existsById(orderId)
 
@@ -31,32 +29,33 @@ class AdminOrderServiceImpl(
         } else {
             val order = adminOrderRepository.getReferenceById(orderId)
 
-            if (order.orderStatus == OrderStatus.CANCEL) {
-                AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO()
+            when {
+                order.orderStatus == OrderStatus.CANCEL -> {
+                    AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO()
 
-            } else if (order.deliveryStatus == DeliveryStatus.COMPLETE) {
-                AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO()
+                }
+                order.deliveryStatus == DeliveryStatus.COMPLETE -> {
+                    AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO()
 
-            } else {
-                order.cancelOrder()
+                }
+                else -> {
+                    order.cancelOrder()
 
-                val orderItem = adminOrderItemRepository.getOrderItemByOrdersId(orderId)
-                orderItem.cancel()
+                    val orderItem = adminOrderItemRepository.getOrderItemByOrdersId(orderId)
+                    orderItem.cancel()
 
-                AdminResponseDTO.toSuccessCancelOrderResponseDTO()
+                    AdminResponseDTO.toSuccessCancelOrderResponseDTO()
+                }
             }
         }
     }
 
-
-    // 주문 전체 조회
     override fun getAllOrders(pageable: Pageable): ResponseSearchOrdersResultDTO {
         val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
 
         return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(findOrdersInfo, "")
     }
 
-    // 회원 ID로 주문 조회
     override fun getOrdersByMemberId(keyword: String, pageable: Pageable): ResponseSearchOrdersResultDTO {
         val findOrdersInfoByMemberId = adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
 
@@ -64,21 +63,58 @@ class AdminOrderServiceImpl(
     }
 
 
+    override fun getAllSales(pageable: Pageable): ResponseSearchOrdersResultDTO {
+        val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
+
+        return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(findOrdersInfo, "")
+    }
+
+    @Transactional
+    override fun updateDeliveryInDelivery(orderId: Long): AdminResponseDTO {
+        val order = existedOrder(orderId)
+
+        return when {
+            order == null -> {
+                AdminResponseDTO.toFailUpdateDeliveryStatus()
+            }
+            order.deliveryStatus == DeliveryStatus.REFUND -> {
+                AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder()
+            }
+            else -> {
+                order.updateDeliveryStatusInDelivery()
+                AdminResponseDTO.toSuccessUpdateDeliveryStatusInDelivery()
+            }
+        }
+    }
+
+    @Transactional
+    override fun updateDeliveryComplete(orderId: Long): AdminResponseDTO {
+        val order = existedOrder(orderId)
+
+        return when {
+            order == null -> {
+                AdminResponseDTO.toFailUpdateDeliveryStatus()
+            }
+            order.deliveryStatus == DeliveryStatus.REFUND -> {
+                AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder()
+            }
+            else -> {
+                order.updateDeliveryStatusComplete()
+                return AdminResponseDTO.toSuccessUpdateDeliveryStatusComplete()
+            }
+        }
+    }
+
+
     // 존재하는 주문인지 검사하는 함수
-    private fun existedOrder(orderId: Long): Optional<Orders> {
-        return adminOrderRepository.findById(orderId)
+    private fun existedOrder(orderId: Long): Orders? {
+        return adminOrderRepository.findOrders(orderId)
     }
 
     // Form으로부터 받아온 orderId들이 존재하는 주문인지 검사
     private fun formToExistedItems(orderList: MutableList<Long>): Boolean {
-        for (orderId in orderList) {
-            when (existedOrder(orderId).isEmpty) {
-                true -> {return false}
-            }
-        }
-        return true
+        return orderList.none { existedOrder(it) == null }
     }
-
 
 //    // 하나 이상의 주문 취소
 //    override fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO {

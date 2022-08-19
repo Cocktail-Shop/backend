@@ -1,5 +1,6 @@
 package com.lionTF.cshop.domain.member.models
 
+import com.lionTF.cshop.domain.member.controller.dto.RequestPreMemberInfoDTO
 import com.lionTF.cshop.domain.member.controller.dto.RequestSignUpDTO
 import com.lionTF.cshop.domain.member.controller.dto.RequestUpdateMyPageDTO
 import com.lionTF.cshop.domain.shop.models.Cart
@@ -30,7 +31,9 @@ class Member(
     var detailAddress:String="",
     var memberStatus: Boolean = true,
 
-    var role:MemberRole?=null
+    @Enumerated(EnumType.STRING)
+    var role:MemberRole?=null,
+    var fromSocial:Boolean=false
 ):BaseTimeEntity(){
 
     companion object{
@@ -46,6 +49,16 @@ class Member(
                 role = MemberRole.MEMBER
             )
         }
+
+        fun fromOAuth2User(email:String):Member{
+            return Member(
+                id=email,
+                memberName=email,
+                role = MemberRole.PREMEMBER,
+                email=email,
+                fromSocial = true
+            )
+        }
     }
 
     fun updateMember(requestUpdateMyPageDTO: RequestUpdateMyPageDTO){
@@ -59,6 +72,13 @@ class Member(
     }
     fun deleteMember(){
         memberStatus = false
+    }
+
+    fun setPreMemberInfo(requestPreMemberInfoDTO: RequestPreMemberInfoDTO){
+        this.phoneNumber=requestPreMemberInfoDTO.phoneNumber
+        this.address=requestPreMemberInfoDTO.address
+        this.detailAddress=requestPreMemberInfoDTO.detailAddress
+        this.role=MemberRole.MEMBER
     }
 
 }

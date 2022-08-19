@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort
 
 data class PageRequestDTO(
     var page: Int = 1,
-    var size: Int = 2,
+    var size: Int = 9,
     var sort: String? = null,
     var category: Category? = null,
     var keyword: String? = null
@@ -21,3 +21,4 @@ data class PageRequestDTO(
         return PageRequest.of(page-1,size,sort)
     }
 }
+

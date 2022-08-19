@@ -20,15 +20,10 @@ class AdminItemRepositoryImpl(
 
     // 칵테일 전체 조회
     override fun findAllItems(pageable: Pageable): Page<FindItemDTO> {
-        // 데이터 내용을 조회하는 로직입니다.
-        // TODO 회원 ID로 회원 검색하는 로직과 비슷하여 함수로 추출하고 전체 조회이기 떄문에 booleanBuilder를 null로 처리하였는데 이것이 옳은가에 대한 고민입니다.
-        val content: List<FindItemDTO> = contentInquire(pageable, null)
+        val content: List<FindItemDTO> = contentInquire(pageable)
 
-        // 카운트를 별도로 조회하는 로직입니다.
-        // TODO 회원 ID로 회원 검색하는 로직과 비슷하여 함수로 추출하고 전체 조회이기 떄문에 booleanBuilder를 null로 처리하였는데 이것이 옳은가에 대한 고민입니다.
-        val countQuery: JPAQuery<Item> = countInquire(null)
+        val countQuery: JPAQuery<Item> = countInquire()
 
-        // 위에서 반환된 데이터 내용과 카운트를 반환합니다.
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
@@ -45,7 +40,7 @@ class AdminItemRepositoryImpl(
     // 데이터 내용을 조회하는 함수입니다.
     private fun contentInquire(
         pageable: Pageable,
-        booleanBuilder: BooleanBuilder?
+        booleanBuilder: BooleanBuilder? = null
     ): List<FindItemDTO> {
         return queryFactory!!
             .select(
@@ -73,7 +68,9 @@ class AdminItemRepositoryImpl(
     }
 
     // 카운트를 별도로 조회하는 함수입니다.
-    private fun countInquire(booleanBuilder: BooleanBuilder?): JPAQuery<Item> {
+    private fun countInquire(
+        booleanBuilder: BooleanBuilder? = null
+    ): JPAQuery<Item> {
         return queryFactory!!
             .selectFrom(item)
             .where(
@@ -82,7 +79,6 @@ class AdminItemRepositoryImpl(
             )
     }
 
-    // BooleanBuilder를 생성하는 함수입니다.
     private fun booleanBuilder(keyword: String): BooleanBuilder? {
         return BooleanBuilder().and(item.itemName.contains(keyword))
     }

@@ -19,7 +19,6 @@ class AdminOrdersController(
         @PageableDefault(size = 2) pageable: Pageable,
         model: Model
     ): String {
-        val allOrders = adminOrderService.getAllOrders(pageable)
         model.addAttribute("orders", adminOrderService.getAllOrders(pageable))
         return "admins/order/getAllOrder"
     }
@@ -30,7 +29,7 @@ class AdminOrdersController(
         @RequestParam("keyword") keyword: String,
         @PageableDefault(size = 2) pageable: Pageable,
         model: Model
-    ) : String {
+    ): String {
         model.addAttribute("searchOrders", adminOrderService.getOrdersByMemberId(keyword, pageable))
         return "admins/order/getMemberOrder"
     }
@@ -42,6 +41,24 @@ class AdminOrdersController(
         model: Model
     ): String {
         model.addAttribute("result", adminOrderService.cancelOneOrder(orderId))
+        return "global/message"
+    }
+
+    @PutMapping("orders/{orderId}/in-delivery")
+    fun updateDeliveryStatus(
+        @PathVariable("orderId") orderId: Long,
+        model: Model
+    ): String {
+        model.addAttribute("result", adminOrderService.updateDeliveryInDelivery(orderId))
+        return "global/message"
+    }
+
+    @PutMapping("orders/{orderId}/delivery/complete")
+    fun updateDeliveryStatusComplete(
+        @PathVariable("orderId") orderId: Long,
+        model: Model
+    ): String {
+        model.addAttribute("result", adminOrderService.updateDeliveryComplete(orderId))
         return "global/message"
     }
 

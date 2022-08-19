@@ -94,7 +94,7 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val createItem = adminItemService.createItem(createItemDTO)
+        val createItem = adminItemService.createItem(createItemDTO, "test")
 
         //then
         assertThat(createItem.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCreateItemResponseDTO().httpStatus)
@@ -115,7 +115,7 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val createItemExceptionByPrice = adminItemService.createItem(createInvalidFormatPrice)
+        val createItemExceptionByPrice = adminItemService.createItem(createInvalidFormatPrice, "test")
 
         //then
         assertThat(createItemExceptionByPrice.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO().httpStatus)
@@ -137,7 +137,7 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val createItemExceptionByAmount = adminItemService.createItem(createInvalidFormatAmount)
+        val createItemExceptionByAmount = adminItemService.createItem(createInvalidFormatAmount, "test")
 
         //then
         assertThat(createItemExceptionByAmount.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO().httpStatus)
@@ -159,7 +159,7 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val createItemExceptionByAmountAndPrice = adminItemService.createItem(createInvalidFormatAmountAndPrice)
+        val createItemExceptionByAmountAndPrice = adminItemService.createItem(createInvalidFormatAmountAndPrice, "test")
 
         //then
         assertThat(createItemExceptionByAmountAndPrice.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO().httpStatus)
@@ -181,7 +181,7 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val updateItem = item1?.let { adminItemService.updateItem(it.itemId, updateItemDTO) }
+        val updateItem = item1?.let { adminItemService.updateItem(it.itemId, updateItemDTO, "test") }
 
         val getItem = item1?.let { adminItemRepository.findById(it.itemId).get() }
 
@@ -212,7 +212,7 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val invalidUpdateItem = adminItemService.updateItem(10L, invalidIpdateItemDTO)
+        val invalidUpdateItem = adminItemService.updateItem(12312312412L, invalidIpdateItemDTO, "test")
 
         //then
         assertThat(invalidUpdateItem.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateItemResponseDTO().httpStatus)
@@ -234,7 +234,7 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val invalidPriceUpdateItem = adminItemService.updateItem(item1!!.itemId, invalidPriceUpdateItemDTO)
+        val invalidPriceUpdateItem = adminItemService.updateItem(item1!!.itemId, invalidPriceUpdateItemDTO, "test")
 
         //then
         assertThat(invalidPriceUpdateItem.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO().httpStatus)
@@ -256,7 +256,7 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val invalidAmountUpdateItem = adminItemService.updateItem(item1!!.itemId, invalidAmountUpdateItemDTO)
+        val invalidAmountUpdateItem = adminItemService.updateItem(item1!!.itemId, invalidAmountUpdateItemDTO, "test")
 
         //then
         assertThat(invalidAmountUpdateItem.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO().httpStatus)
@@ -278,7 +278,7 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val invalidAmountAndPriceUpdateItem = adminItemService.updateItem(item1!!.itemId, invalidAmountAndPriceUpdateItemDTO)
+        val invalidAmountAndPriceUpdateItem = adminItemService.updateItem(item1!!.itemId, invalidAmountAndPriceUpdateItemDTO, "test")
 
         //then
         assertThat(invalidAmountAndPriceUpdateItem.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO().httpStatus)
@@ -306,7 +306,7 @@ internal class AdminItemServiceTest {
     @DisplayName("하나의 상품 삭제 예외중 없는 아이템일 case Test")
     fun deleteOneItemExceptionTest() {
         //given
-        var itemID: Long = 98L
+        val itemID = 98L
 
         //when
         val invalidItemIdDeleteOneItem = adminItemService.deleteOneItem(itemID)
@@ -390,8 +390,8 @@ internal class AdminItemServiceTest {
         assertThat(allItems.httpStatus).isEqualTo(HttpStatus.OK.value())
         assertThat(allItems.message).isEqualTo("상품 조회를 성공했습니다.")
         assertThat(allItems.keyword).isEqualTo(keyword)
-        assertThat(allItems.result!!.totalElements).isEqualTo(5)
-        assertThat(allItems.result!!.totalPages).isEqualTo(3)
+        assertThat(allItems.result!!.totalElements).isEqualTo(8)
+        assertThat(allItems.result!!.totalPages).isEqualTo(4)
     }
 
     //    @Test

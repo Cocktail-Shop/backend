@@ -35,7 +35,7 @@ internal class ItemUnitTest {
         )
 
         //when
-        item.update(requestCreateItemDTO)
+        item.update(requestCreateItemDTO, "test")
 
         //then
         assertThat(item.itemName).isEqualTo(requestCreateItemDTO.itemName)
@@ -69,5 +69,4 @@ internal class ItemUnitTest {
         //then
         assertThat(item.amount).isEqualTo(110)
     } 
-
 }

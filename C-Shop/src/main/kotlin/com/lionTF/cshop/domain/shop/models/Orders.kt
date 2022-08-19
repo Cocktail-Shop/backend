@@ -32,6 +32,15 @@ class Orders(
     // 주문 삭제
     fun cancelOrder(){
         orderStatus = OrderStatus.CANCEL
+        deliveryStatus = DeliveryStatus.REFUND
+    }
+
+    fun updateDeliveryStatusInDelivery() {
+        deliveryStatus = DeliveryStatus.IN_DELIVERY
+    }
+
+    fun updateDeliveryStatusComplete() {
+        deliveryStatus = DeliveryStatus.COMPLETE
     }
 
     companion object{
@@ -46,5 +55,6 @@ class Orders(
         }
     }
 }
+
 
 
