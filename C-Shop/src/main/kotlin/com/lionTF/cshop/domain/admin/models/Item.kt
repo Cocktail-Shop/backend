@@ -15,15 +15,15 @@ class Item(
     val itemId: Long = 0,
 
     @OneToMany(mappedBy = "item")
-    var cocktailItem: List<CocktailItem>? = null,
+    val cocktailItem: MutableList<CocktailItem>? = null,
 
     @OneToMany(mappedBy = "item")
-    var cartItem: List<CartItem>? = null,
+    val cartItem: MutableList<CartItem>? = null,
 
     @OneToMany(mappedBy = "item")
-    var orderItem: List<OrderItem>? = null,
+    val orderItem: MutableList<OrderItem>? = null,
 
-    var itemName: String,
+    var itemName: String = "",
 
     var price: Int = 0,
     var amount: Int = 0,
