@@ -5,10 +5,12 @@ import com.lionTF.cshop.domain.member.controller.dto.*
 import com.lionTF.cshop.domain.member.service.memberinterface.MailAuthService
 import com.lionTF.cshop.domain.member.service.memberinterface.MemberService
 import com.lionTF.cshop.domain.member.service.memberinterface.MyPageService
+import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpSession
 
 
 @Controller
@@ -18,6 +20,13 @@ class MemberController(
     private val mailAuthService: MailAuthService
 ) {
 
+
+    @GetMapping("/getSessionId")
+    fun getSessionId(session:HttpSession,model: Model):String{
+        model.addAttribute("result",
+            ResponseDTO(HttpStatus.OK.value(),session.id,"/members"))
+        return "global/message"
+    }
     //로그인 관련
     @GetMapping("/members/login")
     fun login(): String {
