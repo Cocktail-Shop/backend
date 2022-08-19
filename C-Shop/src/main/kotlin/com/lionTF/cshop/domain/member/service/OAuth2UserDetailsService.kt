@@ -14,11 +14,15 @@ class OAuth2UserDetailsService(private val memberAuthRepository: MemberAuthRepos
     : DefaultOAuth2UserService(){
 
 
-    override fun loadUser(userRequest: OAuth2UserRequest?): OAuth2User {
+    override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
         val oAuth2User = super.loadUser(userRequest)
-        
-        val email=oAuth2User.attributes["email"] as String
-        val name=oAuth2User.attributes["name"] as String
+
+        val account = oAuth2User.attributes["kakao_account"] as Map<*, *>
+        val properties = oAuth2User.attributes["properties"] as Map<*, *>
+
+        val email= account["email"] as String
+        val name = properties["nickname"] as String
+
         val existMember=memberAuthRepository.findById(email)
 
         return if(existMember.isPresent){
