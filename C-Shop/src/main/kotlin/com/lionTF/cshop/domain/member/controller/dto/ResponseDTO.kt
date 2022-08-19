@@ -21,6 +21,9 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
         fun toFailedIdInquiryResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"존재하지 않는 회원입니다.")
         }
+        fun toSocialIdInquiryResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"소셜 로그인 회원입니다.")
+        }
 
         fun toSuccessPasswordInquiryResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.OK.value(),"임시비밀번호를 발송했습니다.","/members/login")
@@ -32,6 +35,10 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
 
         fun toFailedPasswordInquiryResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"존재하지 않는 회원입니다.","/members/login")
+        }
+
+        fun toSocialPasswordInquiryResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"소셜 로그인 회원입니다.","/members/login")
         }
 
         fun toSuccessUpdateMyPageResponseDTO():ResponseDTO{
@@ -52,6 +59,17 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
 
         fun toDeleteMemberResponseDTO():ResponseDTO{
             return ResponseDTO(HttpStatus.NO_CONTENT.value(),"회원 탈퇴 요청 완료","/members/logout")
+        }
+
+        fun toMemberAccessDeniedResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.FORBIDDEN.value(),"접근 권한이 없습니다.","/members")
+        }
+        fun toPreMemberAccessDeniedResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.FORBIDDEN.value(),"추가정보를 입력해주세요","/pre-members")
+        }
+
+        fun toSuccessSetPreMemberInfoResponseDTO():ResponseDTO{
+            return ResponseDTO(HttpStatus.OK.value(),"추가정보 입력 완료했습니다. 다시 로그인해주세요!","/members/logout")
         }
     }
 }
