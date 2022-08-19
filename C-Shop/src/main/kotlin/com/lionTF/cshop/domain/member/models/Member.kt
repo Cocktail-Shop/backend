@@ -50,10 +50,10 @@ class Member(
             )
         }
 
-        fun fromOAuth2User(email:String):Member{
+        fun fromOAuth2User(name:String,email:String):Member{
             return Member(
                 id=email,
-                memberName=email,
+                memberName=name,
                 role = MemberRole.PREMEMBER,
                 email=email,
                 fromSocial = true
