@@ -165,11 +165,11 @@ class ImageServiceImpl(
         restTemplate.exchange(url, HttpMethod.DELETE, requestHttpEntity, String::class.java)
     }
 
-    companion object {
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val imageService = ImageServiceImpl()
-            imageService.requestToken()
-        }
-    }
+//    companion object {
+//        @JvmStatic
+//        fun main(args: Array<String>) {
+//            val imageService = ImageServiceImpl()
+//            imageService.requestToken()
+//        }
+//    }
 }
