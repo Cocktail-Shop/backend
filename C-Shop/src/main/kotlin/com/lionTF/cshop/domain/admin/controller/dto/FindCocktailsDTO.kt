@@ -7,18 +7,18 @@ import java.time.LocalDateTime
 data class ResponseSearchCocktailSearchDTO(
     val httpStatus: Int,
     val message: String,
-    val keyword: String? = null,
+    val cocktailName: String? = null,
     val result: Page<FindCocktailsDTO>? = null,
 ) {
     companion object {
         fun cocktailToResponseCocktailSearchPageDTO(
             findCocktailDTO: Page<FindCocktailsDTO>,
-            keyword: String? = ""
+            cocktailName: String? = ""
         ): ResponseSearchCocktailSearchDTO {
             return ResponseSearchCocktailSearchDTO(
                 HttpStatus.OK.value(),
                 "칵테일 조회를 성공했습니다.",
-                keyword,
+                cocktailName,
                 findCocktailDTO
             )
         }

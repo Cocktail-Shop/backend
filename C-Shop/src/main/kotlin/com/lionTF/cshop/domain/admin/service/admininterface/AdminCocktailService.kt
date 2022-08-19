@@ -16,7 +16,7 @@ interface AdminCocktailService {
 
     fun getAllCocktail(pageable: Pageable): ResponseSearchCocktailSearchDTO
 
-    fun getCocktailsByName(keyword: String, pageable: Pageable): ResponseSearchCocktailSearchDTO
+    fun getCocktailsByName(cocktailName: String, pageable: Pageable): ResponseSearchCocktailSearchDTO
 
     fun findCocktail(cocktailId: Long, itemIds: MutableList<Long>): ResponseCocktailDTO
 

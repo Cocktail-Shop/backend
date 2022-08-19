@@ -5,7 +5,6 @@ import com.lionTF.cshop.domain.admin.models.Category
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.cshop.domain.admin.service.admininterface.ImageService
 import org.springframework.data.domain.Pageable
-import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -22,7 +21,7 @@ class AdminItemController(
     // 전체 상품 조회
     @GetMapping("all-item")
     fun getAllItems(
-        @PageableDefault(size = 2) pageable: Pageable,
+        pageable: Pageable,
         model: Model
     ): String {
         model.addAttribute("items", adminItemService.getAllItems(pageable))
@@ -32,11 +31,11 @@ class AdminItemController(
     // 상품명으로 상품 조회
     @GetMapping("search/items")
     fun getItemsByName(
-        @RequestParam("keyword") keyword: String,
-        @PageableDefault(size = 2) pageable: Pageable,
+        @RequestParam("itemName") itemName: String,
+        pageable: Pageable,
         model: Model
     ): String {
-        model.addAttribute("items", adminItemService.getItemsByName(keyword, pageable))
+        model.addAttribute("items", adminItemService.getItemsByName(itemName, pageable))
         return "admins/item/getItemsByName"
     }
 

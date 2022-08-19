@@ -109,7 +109,7 @@ class AdminOrderRepositoryImpl(
     }
 
     private fun booleanBuilder(keyword: String): BooleanBuilder? {
-        return BooleanBuilder().and(member.id.contains(keyword))
+        return BooleanBuilder().or(member.id.contains(keyword)).or(item.itemName.contains(keyword))
     }
 
     private fun isEqualOrderId() = orders.orderId.eq(orderItem.orders.orderId)

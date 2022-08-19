@@ -6,7 +6,6 @@ import com.lionTF.cshop.domain.admin.service.admininterface.AdminCocktailService
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.cshop.domain.admin.service.admininterface.ImageService
 import org.springframework.data.domain.Pageable
-import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -27,7 +26,7 @@ class AdminCocktailController(
     // 전체 칵테일 조회
     @GetMapping("all-cocktails")
     fun getCocktails(
-        @PageableDefault(size = 2) pageable: Pageable,
+        pageable: Pageable,
         model: Model
     ): String {
         model.addAttribute("cocktails", adminCocktailService.getAllCocktail(pageable))
@@ -37,11 +36,11 @@ class AdminCocktailController(
     // 칵테일 이름 검색 페이지
     @GetMapping("search/cocktails")
     fun getCocktailByName(
-        @RequestParam("keyword") keyword: String,
-        @PageableDefault(size = 2) pageable: Pageable,
+        @RequestParam("cocktailName") cocktailName: String,
+        pageable: Pageable,
         model: Model
     ): String {
-        model.addAttribute("cocktails", adminCocktailService.getCocktailsByName(keyword, pageable))
+        model.addAttribute("cocktails", adminCocktailService.getCocktailsByName(cocktailName, pageable))
         return "admins/cocktail/getCocktailsByName"
     }
 

@@ -8,18 +8,18 @@ import java.time.LocalDateTime
 data class ResponseSearchItemSearchDTO(
     val httpStatus: Int,
     val message: String,
-    val keyword: String? = null,
+    val itemName: String? = null,
     val result: Page<FindItemDTO>? = null,
 ) {
     companion object {
         fun itemToResponseItemSearchPageDTO(
             findItemDTO: Page<FindItemDTO>,
-            keyword: String? = ""
+            itemName: String? = ""
         ): ResponseSearchItemSearchDTO {
             return ResponseSearchItemSearchDTO(
                 HttpStatus.OK.value(),
                 "상품 조회를 성공했습니다.",
-                keyword,
+                itemName,
                 findItemDTO
             )
         }

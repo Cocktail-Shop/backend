@@ -77,7 +77,7 @@ class AdminMemberRepositoryImpl(
     }
 
     private fun booleanBuilder(keyword: String): BooleanBuilder? {
-        return BooleanBuilder().and(member.id.contains(keyword))
+        return BooleanBuilder().or(member.id.contains(keyword)).or(member.memberName.contains(keyword))
     }
 
     private fun isEqualMemberStatus() = member.memberStatus.eq(true)

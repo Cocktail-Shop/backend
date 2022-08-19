@@ -8,5 +8,5 @@ interface AdminItemRepositoryCustom {
 
     fun findAllItems(pageable: Pageable): Page<FindItemDTO>
 
-    fun findItemsByName(keyword: String, pageable: Pageable): Page<FindItemDTO>
+    fun findItemsByName(itemName: String, pageable: Pageable): Page<FindItemDTO>
 }

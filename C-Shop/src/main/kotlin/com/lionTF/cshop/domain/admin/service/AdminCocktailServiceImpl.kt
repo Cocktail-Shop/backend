@@ -27,10 +27,10 @@ class AdminCocktailServiceImpl(
         return ResponseSearchCocktailSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails)
     }
 
-    override fun getCocktailsByName(keyword: String, pageable: Pageable): ResponseSearchCocktailSearchDTO {
-        val cocktails = adminCocktailRepository.findCocktailsByName(keyword, pageable)
+    override fun getCocktailsByName(cocktailName: String, pageable: Pageable): ResponseSearchCocktailSearchDTO {
+        val cocktails = adminCocktailRepository.findCocktailsByName(cocktailName, pageable)
 
-        return ResponseSearchCocktailSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails, keyword)
+        return ResponseSearchCocktailSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails, cocktailName)
     }
 
 

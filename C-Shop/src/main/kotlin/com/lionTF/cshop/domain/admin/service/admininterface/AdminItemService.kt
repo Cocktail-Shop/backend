@@ -12,7 +12,7 @@ interface AdminItemService {
 
     fun getAllItems(pageable: Pageable): ResponseSearchItemSearchDTO
 
-    fun getItemsByName(keyword: String, pageable: Pageable): ResponseSearchItemSearchDTO
+    fun getItemsByName(itemName: String, pageable: Pageable): ResponseSearchItemSearchDTO
 
     fun findItem(itemId: Long): ResponseItemDTO
 

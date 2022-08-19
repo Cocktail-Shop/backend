@@ -8,5 +8,5 @@ interface AdminCocktailRepositoryCustom {
 
     fun findAllCocktails(pageable: Pageable): Page<FindCocktailsDTO>
 
-    fun findCocktailsByName(keyword: String, pageable: Pageable): Page<FindCocktailsDTO>
+    fun findCocktailsByName(cocktailName: String, pageable: Pageable): Page<FindCocktailsDTO>
 }

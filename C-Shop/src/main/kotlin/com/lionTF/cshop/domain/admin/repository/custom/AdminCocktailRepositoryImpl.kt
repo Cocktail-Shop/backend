@@ -28,8 +28,8 @@ class AdminCocktailRepositoryImpl(
     }
 
     // 회원 ID로 회원 검색
-    override fun findCocktailsByName(keyword: String, pageable: Pageable): Page<FindCocktailsDTO> {
-        val booleanBuilder = booleanBuilder(keyword)
+    override fun findCocktailsByName(cocktailName: String, pageable: Pageable): Page<FindCocktailsDTO> {
+        val booleanBuilder = booleanBuilder(cocktailName)
 
         val content: List<FindCocktailsDTO> = contentInquire(pageable, booleanBuilder)
         val countQuery: JPAQuery<Cocktail> = countInquire(booleanBuilder)
@@ -75,8 +75,8 @@ class AdminCocktailRepositoryImpl(
             )
     }
 
-    private fun booleanBuilder(keyword: String): BooleanBuilder? {
-        return BooleanBuilder().and(cocktail.cocktailName.contains(keyword))
+    private fun booleanBuilder(cocktailName: String): BooleanBuilder? {
+        return BooleanBuilder().and(cocktail.cocktailName.contains(cocktailName))
     }
 
     private fun isEqualCocktailStatus() = cocktail.cocktailStatus.eq(true)

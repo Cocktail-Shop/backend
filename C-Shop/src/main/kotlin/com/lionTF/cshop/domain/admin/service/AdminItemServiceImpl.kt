@@ -105,10 +105,10 @@ class AdminItemServiceImpl(
     }
 
     // 상품 이름으로 조회
-    override fun getItemsByName(keyword: String, pageable: Pageable): ResponseSearchItemSearchDTO {
-        val items = adminItemRepository.findItemsByName(keyword, pageable)
+    override fun getItemsByName(itemName: String, pageable: Pageable): ResponseSearchItemSearchDTO {
+        val items = adminItemRepository.findItemsByName(itemName, pageable)
 
-        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(items, keyword)
+        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(items, itemName)
     }
 
     // 상품 삭제
