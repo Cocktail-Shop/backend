@@ -115,6 +115,7 @@ class OrderServiceImpl(
     }
 
     // 상품 삭제
+    @Transactional
     override fun cancelOrder(orderId: Long): OrderResponseDTO {
         val existsOrder = orderRepository.existsById(orderId)
 
