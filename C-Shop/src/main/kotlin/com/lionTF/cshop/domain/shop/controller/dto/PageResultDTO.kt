@@ -52,7 +52,6 @@ data class PageResultDTO<DTO,EN> (var data:List<DTO>?=null,
                                   var prev:Boolean?=null,
                                   var next:Boolean?=null,
                                   var pageList:MutableList<Int>? = null,
-                                  //var status:Int?= HttpStatus.OK.value()
 ){//DTO=dto 타입, EN=entity 타입
 constructor(result: Page<EN>,fn:Function<EN,DTO>):this(){
     data=result.map(fn).toList()
@@ -64,12 +63,9 @@ constructor(result: Page<EN>,fn:Function<EN,DTO>):this(){
     private fun makePageList(pageable:Pageable){
         this.page=pageable.pageNumber+1
         this.size=pageable.pageSize
-        println(page)
 
         val tempEnd:Int=((ceil(page/10.0))*10).toInt()
-        println(tempEnd)
         start=tempEnd-9
-        println(start)
         prev=start>1
 
         next=totalPage!!>tempEnd
