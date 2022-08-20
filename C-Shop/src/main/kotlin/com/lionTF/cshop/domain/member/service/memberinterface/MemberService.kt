@@ -14,5 +14,4 @@ interface MemberService {
 
     //추가정보 업데이트
     fun setPreMemberInfo(memberId:Long,requestPreMemberInfoDTO: RequestPreMemberInfoDTO):ResponseDTO
-
 }

@@ -6,25 +6,22 @@ import com.lionTF.cshop.domain.member.repository.MemberAuthRepository
 import com.lionTF.cshop.domain.member.service.memberinterface.MemberService
 import com.lionTF.cshop.domain.shop.models.Cart
 import com.lionTF.cshop.domain.shop.repository.CartRepository
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.util.*
+import javax.transaction.Transactional
 
 
 @Service
-class MemberServiceImpl(val memberAuthRepository: MemberAuthRepository, val cartRepository: CartRepository) :
-    MemberService {
+class MemberServiceImpl(
+    private val memberAuthRepository: MemberAuthRepository,
+    private val cartRepository: CartRepository,
+    private val passwordEncoder: PasswordEncoder,
+    private val javaMailSender: JavaMailSender
+) : MemberService {
 
-    @Autowired
-    private lateinit var passwordEncoder: PasswordEncoder
-
-    @Autowired
-    private lateinit var javaMailService: JavaMailSender
-
-
-    //회원가입 로직
+    @Transactional
     override fun registerMember(requestSignUpDTO: RequestSignUpDTO): ResponseDTO {
         requestSignUpDTO.encoding()
 
@@ -32,10 +29,8 @@ class MemberServiceImpl(val memberAuthRepository: MemberAuthRepository, val cart
         val existMember: Optional<Member> = memberAuthRepository.findById(newMember.id)
 
         return if (existMember.isPresent) {
-            //기존 아이디 존재하는 경우
             ResponseDTO.toFailedSignUpResponseDTO()
         } else {
-            //기존 아이디 존재하지 않는 경우
             memberAuthRepository.save(newMember)
             cartRepository.save(Cart(member = newMember))
             ResponseDTO.toSuccessSignUpResponseDTO()
@@ -44,7 +39,6 @@ class MemberServiceImpl(val memberAuthRepository: MemberAuthRepository, val cart
     }
 
 
-    //아이디 찾기
     override fun idInquiry(idInquiryDTO: RequestIdInquiryDTO): Any? {
         val existMember = memberAuthRepository.findByMemberNameAndEmail(idInquiryDTO.memberName, idInquiryDTO.email)
 
@@ -53,10 +47,8 @@ class MemberServiceImpl(val memberAuthRepository: MemberAuthRepository, val cart
             if (member.memberStatus) {
                 if (member.fromSocial) {
                     ResponseDTO.toSocialIdInquiryResponseDTO()
-                } else
-                    ResponseIdInquiryDTO.toSuccessResponseIdInquiryDTO(member)
+                } else ResponseIdInquiryDTO.toSuccessResponseIdInquiryDTO(member)
             } else {
-                //탈퇴회원인 경우
                 ResponseDTO.toDeletedIdInquiryResponseDTO()
             }
         } else {
@@ -65,7 +57,7 @@ class MemberServiceImpl(val memberAuthRepository: MemberAuthRepository, val cart
     }
 
 
-    //비밀번호 찾기
+    @Transactional
     override fun passwordInquiry(passwordInquiryDTO: RequestPasswordInquiryDTO): ResponseDTO {
         val member = memberAuthRepository.findByIdAndEmail(passwordInquiryDTO.id, passwordInquiryDTO.email)
 
@@ -74,18 +66,13 @@ class MemberServiceImpl(val memberAuthRepository: MemberAuthRepository, val cart
                 if (member.get().fromSocial) {
                     ResponseDTO.toSocialPasswordInquiryResponseDTO()
                 } else {
-                    //임시 비밀번호 생성
-                    var tempPw = UUID.randomUUID().toString().replace("-", "")
-                    tempPw = tempPw.substring(0, 8)
+                    val tempPw = UUID.randomUUID().toString().replace("-", "").substring(0, 8)
 
-                    //임시 비밀번호로 변경
                     val existMember = member.get()
                     existMember.password = passwordEncoder.encode(tempPw)
-                    memberAuthRepository.save(existMember)
 
-                    //메일보내고 return
                     val mail = MailDTO.toPasswordInquiryMailDTO(existMember.id, existMember.email, tempPw)
-                    mail.sendMail(javaMailService)
+                    mail.sendMail(javaMailSender)
                     ResponseDTO.toSuccessPasswordInquiryResponseDTO()
                 }
             } else {
@@ -96,11 +83,10 @@ class MemberServiceImpl(val memberAuthRepository: MemberAuthRepository, val cart
         }
     }
 
-    //추가정보 입력받기
-    override fun setPreMemberInfo(memberId:Long,requestPreMemberInfoDTO: RequestPreMemberInfoDTO):ResponseDTO{
-        val existMember=memberAuthRepository.findByMemberId(memberId).orElseThrow()
+    @Transactional
+    override fun setPreMemberInfo(memberId: Long, requestPreMemberInfoDTO: RequestPreMemberInfoDTO): ResponseDTO {
+        val existMember = memberAuthRepository.findByMemberId(memberId).orElseThrow()
         existMember.setPreMemberInfo(requestPreMemberInfoDTO)
-        memberAuthRepository.save(existMember)
 
         return ResponseDTO.toSuccessSetPreMemberInfoResponseDTO()
     }

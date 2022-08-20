@@ -34,6 +34,4 @@ class OAuth2UserDetailsService(private val memberAuthRepository: MemberAuthRepos
         }
 
     }
-
-
 }

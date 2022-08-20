@@ -95,8 +95,8 @@ class MemberController(
 
     //마이페이지
     @GetMapping("/members")
-    fun getMyPageInfo(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, model: Model): String {
-        val responseDTO = myPageService.getMyPageInfo(authMemberDTO?.memberId)
+    fun getMyPageInfo(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO, model: Model): String {
+        val responseDTO = myPageService.getMyPageInfo(authMemberDTO.memberId)
         model.addAttribute("myPageInfo", responseDTO)
         model.addAttribute("requestUpdateMyPageDTO", RequestUpdateMyPageDTO.toFormDTO(responseDTO))
 
@@ -108,11 +108,11 @@ class MemberController(
 
     @PutMapping("/members")
     fun updateMyPageInfo(
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         requestUpdateMyPageDTO: RequestUpdateMyPageDTO,
         model: Model
     ): String {
-        model.addAttribute("result", myPageService.updateMyPageInfo(authMemberDTO?.memberId, requestUpdateMyPageDTO))
+        model.addAttribute("result", myPageService.updateMyPageInfo(authMemberDTO.memberId, requestUpdateMyPageDTO))
         return "global/message"
     }
 
@@ -125,18 +125,18 @@ class MemberController(
 
     @PutMapping("/members/password")
     fun updatePassword(
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         requestUpdatePasswordDTO: RequestUpdatePasswordDTO,
         model: Model
     ): String {
-        model.addAttribute("result", myPageService.updatePassword(authMemberDTO?.memberId, requestUpdatePasswordDTO))
+        model.addAttribute("result", myPageService.updatePassword(authMemberDTO.memberId, requestUpdatePasswordDTO))
         return "global/message"
     }
 
 
     //회원 탈퇴
     @DeleteMapping("/members")
-    fun deleteMember(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, model: Model): String {
+    fun deleteMember(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO, model: Model): String {
         model.addAttribute("result", myPageService.deleteMember(authMemberDTO))
         return "global/message"
     }
@@ -161,7 +161,7 @@ class MemberController(
 
     @PostMapping("/pre-members")
     fun setPreMembersInfo(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO,requestPreMemberInfoDTO: RequestPreMemberInfoDTO,model:Model):String{
-        model.addAttribute("result",memberService.setPreMemberInfo(authMemberDTO.memberId!!,requestPreMemberInfoDTO))
+        model.addAttribute("result",memberService.setPreMemberInfo(authMemberDTO.memberId,requestPreMemberInfoDTO))
         return "global/message"
     }
 
