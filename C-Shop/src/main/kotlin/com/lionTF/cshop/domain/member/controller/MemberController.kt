@@ -5,12 +5,10 @@ import com.lionTF.cshop.domain.member.controller.dto.*
 import com.lionTF.cshop.domain.member.service.memberinterface.MailAuthService
 import com.lionTF.cshop.domain.member.service.memberinterface.MemberService
 import com.lionTF.cshop.domain.member.service.memberinterface.MyPageService
-import org.springframework.http.HttpStatus
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
-import javax.servlet.http.HttpSession
 
 
 @Controller
@@ -28,56 +26,56 @@ class MemberController(
 
     @GetMapping("/login-fail")
     fun getLoginFailPage(model: Model): String {
-        model.addAttribute("result", ResponseDTO.toFailedLoginResponseDTO())
+        model.addAttribute("result", MemberResponseDTO.toFailedLoginResponseDTO())
         return "global/message"
     }
 
     @PostMapping("/auth-number")
     @ResponseBody
-    fun sendAuthNumber(authNumberDTO: RequestAuthNumberDTO) {
+    fun sendAuthNumber(authNumberDTO: AuthNumberRequestDTO) {
         mailAuthService.sendAuthNumber(authNumberDTO)
     }
 
     @PostMapping("/auth-number/verify")
     @ResponseBody
-    fun verifyAuthNumber(authNumberDTO: RequestVerifyAuthNumberDTO): Boolean {
+    fun verifyAuthNumber(authNumberDTO: AuthNumberVerifyRequestDTO): Boolean {
         println(authNumberDTO)
         return mailAuthService.verifyAuthNumber(authNumberDTO)
     }
 
     @GetMapping("/id-inquiry")
     fun getIdInquiryPage(model: Model): String {
-        model.addAttribute("requestIdInquiryDTO", RequestIdInquiryDTO.toFormDTO())
+        model.addAttribute("requestIdInquiryDTO", IdInquiryRequestDTO.toFormDTO())
         return "members/forget-id"
     }
 
     @PostMapping("/id-inquiry")
-    fun requestIdInquiry(requestIdInquiryDTO: RequestIdInquiryDTO, model: Model): String {
+    fun requestIdInquiry(requestIdInquiryDTO: IdInquiryRequestDTO, model: Model): String {
         model.addAttribute("idInquiryResult", memberService.requestIdInquiry(requestIdInquiryDTO))
         return "members/forget-id-result"
     }
 
     @GetMapping("/password-inquiry")
     fun getPasswordInquiryPage(model: Model): String {
-        model.addAttribute("requestPasswordInquiryDTO", RequestPasswordInquiryDTO.toFormDTO())
+        model.addAttribute("requestPasswordInquiryDTO", PasswordInquiryRequestDTO.toFormDTO())
         return "members/forget-password"
     }
 
     @PostMapping("/password-inquiry")
-    fun requestPasswordInquiry(requestPasswordInquiryDTO: RequestPasswordInquiryDTO, model: Model): String {
-        model.addAttribute("result", memberService.requestPasswordInquiry(requestPasswordInquiryDTO))
+    fun requestPasswordInquiry(passwordInquiryRequestDTO: PasswordInquiryRequestDTO, model: Model): String {
+        model.addAttribute("result", memberService.requestPasswordInquiry(passwordInquiryRequestDTO))
         return "global/message"
     }
 
     @GetMapping("/signup")
     fun getSignUpPage(model: Model): String {
-        model.addAttribute("requestSignUpDTO", RequestSignUpDTO.toFormDTO())
+        model.addAttribute("requestSignUpDTO", SignUpRequestDTO.toFormDTO())
         return "members/signup"
     }
 
     @PostMapping("/signup")
-    fun requestSignUp(requestSignUpDTO: RequestSignUpDTO, model: Model): String {
-        model.addAttribute("result", memberService.registerMember(requestSignUpDTO))
+    fun requestSignUp(signUpRequestDTO: SignUpRequestDTO, model: Model): String {
+        model.addAttribute("result", memberService.registerMember(signUpRequestDTO))
         return "global/message"
     }
 
@@ -105,17 +103,17 @@ class MemberController(
 
     @GetMapping("/password")
     fun getPasswordUpdatePage(model: Model): String {
-        model.addAttribute("requestUpdatePasswordDTO", RequestUpdatePasswordDTO.toFormDTO())
+        model.addAttribute("requestUpdatePasswordDTO", PasswordUpdateRequestDTO.toFormDTO())
         return "members/reassign-forget-password"
     }
 
     @PutMapping("/password")
     fun requestUpdatePassword(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
-        requestUpdatePasswordDTO: RequestUpdatePasswordDTO,
+        passwordUpdateRequestDTO: PasswordUpdateRequestDTO,
         model: Model
     ): String {
-        model.addAttribute("result", myPageService.updatePassword(authMemberDTO.memberId, requestUpdatePasswordDTO))
+        model.addAttribute("result", myPageService.updatePassword(authMemberDTO.memberId, passwordUpdateRequestDTO))
         return "global/message"
     }
 
@@ -127,7 +125,7 @@ class MemberController(
 
     @GetMapping("/deny")
     fun getMembersAccessDeniedPage(model: Model): String {
-        model.addAttribute("result", ResponseDTO.toMemberAccessDeniedResponseDTO())
+        model.addAttribute("result", MemberResponseDTO.toMemberAccessDeniedResponseDTO())
         return "global/message"
     }
 }

@@ -3,12 +3,12 @@ package com.lionTF.cshop.domain.member.service.memberinterface
 import com.lionTF.cshop.domain.member.controller.dto.*
 
 interface MemberService {
-    fun registerMember(requestSignUpDTO: RequestSignUpDTO): ResponseDTO
+    fun registerMember(signUpRequestDTO: SignUpRequestDTO): MemberResponseDTO
 
-    fun requestIdInquiry(idInquiryDTO: RequestIdInquiryDTO):Any?
+    fun requestIdInquiry(idInquiryDTO: IdInquiryRequestDTO):Any?
 
-    fun requestPasswordInquiry(passwordInquiryDTO: RequestPasswordInquiryDTO):ResponseDTO
+    fun requestPasswordInquiry(passwordInquiryDTO: PasswordInquiryRequestDTO):MemberResponseDTO
 
-    fun setPreMemberInfo(memberId:Long,requestPreMemberInfoDTO: RequestPreMemberInfoDTO):ResponseDTO
+    fun setPreMemberInfo(memberId:Long, preMemberInfoRequestDTO: PreMemberInfoRequestDTO):MemberResponseDTO
 }
 

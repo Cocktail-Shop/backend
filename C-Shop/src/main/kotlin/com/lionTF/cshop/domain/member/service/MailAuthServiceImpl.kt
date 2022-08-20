@@ -1,8 +1,8 @@
 package com.lionTF.cshop.domain.member.service
 
+import com.lionTF.cshop.domain.member.controller.dto.AuthNumberRequestDTO
+import com.lionTF.cshop.domain.member.controller.dto.AuthNumberVerifyRequestDTO
 import com.lionTF.cshop.domain.member.controller.dto.MailDTO
-import com.lionTF.cshop.domain.member.controller.dto.RequestAuthNumberDTO
-import com.lionTF.cshop.domain.member.controller.dto.RequestVerifyAuthNumberDTO
 import com.lionTF.cshop.domain.member.service.memberinterface.MailAuthService
 import org.springframework.data.redis.core.RedisTemplate
 import org.springframework.mail.javamail.JavaMailSender
@@ -17,7 +17,7 @@ class MailAuthServiceImpl(
     private val javaMailSender: JavaMailSender
 ) : MailAuthService {
 
-    override fun sendAuthNumber(authNumberDTO: RequestAuthNumberDTO) {
+    override fun sendAuthNumber(authNumberDTO: AuthNumberRequestDTO) {
         val authNumber = UUID.randomUUID().toString().replace("-", "").substring(0, 6)
 
         val saveAuthNumberOperation = redisTemplate.opsForValue()
@@ -27,7 +27,7 @@ class MailAuthServiceImpl(
         mail.sendMail(javaMailSender)
     }
 
-    override fun verifyAuthNumber(authNumberDTO: RequestVerifyAuthNumberDTO): Boolean {
+    override fun verifyAuthNumber(authNumberDTO: AuthNumberVerifyRequestDTO): Boolean {
         val getAuthNumberOperation = redisTemplate.opsForValue()
         val existAuthNumber =
             getAuthNumberOperation.get(authNumberDTO.email) ?: throw NoSuchElementException("인증번호 찾을수 없음")

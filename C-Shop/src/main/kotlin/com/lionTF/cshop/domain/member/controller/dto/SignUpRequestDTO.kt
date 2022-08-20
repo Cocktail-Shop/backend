@@ -1,10 +1,9 @@
 package com.lionTF.cshop.domain.member.controller.dto
 
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
 
-data class RequestSignUpDTO(
+data class SignUpRequestDTO(
     var id: String = "",
     var password: String = "",
     var phoneNumber: String = "",
@@ -18,8 +17,8 @@ data class RequestSignUpDTO(
         this.password = passwordEncoder.encode(password)
     }
     companion object {
-        fun toFormDTO(): RequestSignUpDTO {
-            return RequestSignUpDTO()
+        fun toFormDTO(): SignUpRequestDTO {
+            return SignUpRequestDTO()
         }
     }
 }

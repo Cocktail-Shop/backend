@@ -1,8 +1,8 @@
 package com.lionTF.cshop.domain.member.controller
 
 import com.lionTF.cshop.domain.member.controller.dto.AuthMemberDTO
-import com.lionTF.cshop.domain.member.controller.dto.RequestPreMemberInfoDTO
-import com.lionTF.cshop.domain.member.controller.dto.ResponseDTO
+import com.lionTF.cshop.domain.member.controller.dto.PreMemberInfoRequestDTO
+import com.lionTF.cshop.domain.member.controller.dto.MemberResponseDTO
 import com.lionTF.cshop.domain.member.service.memberinterface.MemberService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
@@ -17,23 +17,23 @@ class PreMemberController(private val memberService: MemberService) {
 
     @GetMapping("/deny")
     fun getPreMemberAccessDeniedPage(model: Model): String {
-        model.addAttribute("result", ResponseDTO.toPreMemberAccessDeniedResponseDTO())
+        model.addAttribute("result", MemberResponseDTO.toPreMemberAccessDeniedResponseDTO())
         return "global/message"
     }
 
     @GetMapping
     fun getPreMemberPage(model: Model): String {
-        model.addAttribute("requestPreMemberInfoDTO", RequestPreMemberInfoDTO.toFormDTO())
+        model.addAttribute("requestPreMemberInfoDTO", PreMemberInfoRequestDTO.toFormDTO())
         return "members/pre-member-page"
     }
 
     @PostMapping
     fun setPreMembersInfo(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
-        requestPreMemberInfoDTO: RequestPreMemberInfoDTO,
+        preMemberInfoRequestDTO: PreMemberInfoRequestDTO,
         model: Model
     ): String {
-        model.addAttribute("result", memberService.setPreMemberInfo(authMemberDTO.memberId, requestPreMemberInfoDTO))
+        model.addAttribute("result", memberService.setPreMemberInfo(authMemberDTO.memberId, preMemberInfoRequestDTO))
         return "global/message"
     }
 }

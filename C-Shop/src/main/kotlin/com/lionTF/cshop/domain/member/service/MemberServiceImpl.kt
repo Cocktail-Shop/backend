@@ -23,43 +23,43 @@ class MemberServiceImpl(
 ) : MemberService {
 
     @Transactional
-    override fun registerMember(requestSignUpDTO: RequestSignUpDTO): ResponseDTO {
-        requestSignUpDTO.encoding(passwordEncoder)
+    override fun registerMember(signUpRequestDTO: SignUpRequestDTO): MemberResponseDTO {
+        signUpRequestDTO.encoding(passwordEncoder)
 
-        val newMember = Member.fromRequestSignUpDTO(requestSignUpDTO)
+        val newMember = Member.fromRequestSignUpDTO(signUpRequestDTO)
         val existMember = memberAuthRepository.findById(newMember.id)
 
         return if (existMember != null) {
-            ResponseDTO.toFailedSignUpResponseDTO()
+            MemberResponseDTO.toFailedSignUpResponseDTO()
         } else {
             memberAuthRepository.save(newMember)
             cartRepository.save(Cart.fromMember(newMember))
-            ResponseDTO.toSuccessSignUpResponseDTO()
+            MemberResponseDTO.toSuccessSignUpResponseDTO()
         }
 
     }
 
 
-    override fun requestIdInquiry(idInquiryDTO: RequestIdInquiryDTO): Any? {
+    override fun requestIdInquiry(idInquiryDTO: IdInquiryRequestDTO): Any? {
         return memberAuthRepository.findByMemberNameAndEmail(idInquiryDTO.memberName, idInquiryDTO.email)?.let {
             if (it.memberStatus) {
                 when (it.fromSocial) {
-                    true -> ResponseDTO.toSocialIdInquiryResponseDTO()
-                    else -> ResponseIdInquiryDTO.toSuccessResponseIdInquiryDTO(it)
+                    true -> MemberResponseDTO.toSocialIdInquiryResponseDTO()
+                    else -> IdInquiryResponseDTO.toSuccessIdInquiryResponseDTO(it)
                 }
             } else {
-                ResponseDTO.toDeletedIdInquiryResponseDTO()
+                MemberResponseDTO.toDeletedIdInquiryResponseDTO()
             }
-        } ?: ResponseDTO.toFailedIdInquiryResponseDTO()
+        } ?: MemberResponseDTO.toFailedIdInquiryResponseDTO()
     }
 
 
     @Transactional
-    override fun requestPasswordInquiry(passwordInquiryDTO: RequestPasswordInquiryDTO): ResponseDTO {
+    override fun requestPasswordInquiry(passwordInquiryDTO: PasswordInquiryRequestDTO): MemberResponseDTO {
         return memberAuthRepository.findByIdAndEmail(passwordInquiryDTO.id, passwordInquiryDTO.email)?.let {
             if (it.memberStatus) {
                 when (it.fromSocial) {
-                    true -> ResponseDTO.toSocialPasswordInquiryResponseDTO()
+                    true -> MemberResponseDTO.toSocialPasswordInquiryResponseDTO()
                     else -> {
                         val tempPw = UUID.randomUUID().toString().replace("-", "").substring(0, 8)
 
@@ -67,20 +67,20 @@ class MemberServiceImpl(
 
                         val mail = MailDTO.toPasswordInquiryMailDTO(it.id, it.email, tempPw)
                         mail.sendMail(javaMailSender)
-                        return ResponseDTO.toSuccessPasswordInquiryResponseDTO()
+                        return MemberResponseDTO.toSuccessPasswordInquiryResponseDTO()
                     }
                 }
             } else {
-                ResponseDTO.toDeletedPasswordInquiryResponseDTO()
+                MemberResponseDTO.toDeletedPasswordInquiryResponseDTO()
             }
-        } ?: ResponseDTO.toFailedPasswordInquiryResponseDTO()
+        } ?: MemberResponseDTO.toFailedPasswordInquiryResponseDTO()
     }
 
     @Transactional
-    override fun setPreMemberInfo(memberId: Long, requestPreMemberInfoDTO: RequestPreMemberInfoDTO): ResponseDTO {
+    override fun setPreMemberInfo(memberId: Long, preMemberInfoRequestDTO: PreMemberInfoRequestDTO): MemberResponseDTO {
         return memberAuthRepository.findByMemberId(memberId)?.let {
-            it.setPreMemberInfo(requestPreMemberInfoDTO)
-            return ResponseDTO.toSuccessSetPreMemberInfoResponseDTO()
+            it.setPreMemberInfo(preMemberInfoRequestDTO)
+            return MemberResponseDTO.toSuccessSetPreMemberInfoResponseDTO()
         } ?: throw NoSuchElementException("해당 회원 정보 찾을 수 없음")
     }
 }

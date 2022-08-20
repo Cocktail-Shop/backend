@@ -32,7 +32,7 @@ class AuthMemberDTO(
             return AuthMemberDTO(
                 member.id,
                 member.password,
-                mutableSetOf(SimpleGrantedAuthority("ROLE_"+ member.role!!.name)),
+                mutableSetOf(SimpleGrantedAuthority("ROLE_"+ member.role.name)),
                 member.fromSocial,
                 memberName=member.memberName,
                 memberId = member.memberId

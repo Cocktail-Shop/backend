@@ -1,7 +1,7 @@
 package com.lionTF.cshop.domain.member.models
 
-import com.lionTF.cshop.domain.member.controller.dto.RequestPreMemberInfoDTO
-import com.lionTF.cshop.domain.member.controller.dto.RequestSignUpDTO
+import com.lionTF.cshop.domain.member.controller.dto.PreMemberInfoRequestDTO
+import com.lionTF.cshop.domain.member.controller.dto.SignUpRequestDTO
 import com.lionTF.cshop.domain.member.controller.dto.RequestUpdateMyPageDTO
 import com.lionTF.cshop.global.model.BaseTimeEntity
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -42,23 +42,23 @@ class Member(
         memberStatus = false
     }
 
-    fun setPreMemberInfo(requestPreMemberInfoDTO: RequestPreMemberInfoDTO) {
-        this.phoneNumber = requestPreMemberInfoDTO.phoneNumber
-        this.address = requestPreMemberInfoDTO.address
-        this.detailAddress = requestPreMemberInfoDTO.detailAddress
+    fun setPreMemberInfo(preMemberInfoRequestDTO: PreMemberInfoRequestDTO) {
+        this.phoneNumber = preMemberInfoRequestDTO.phoneNumber
+        this.address = preMemberInfoRequestDTO.address
+        this.detailAddress = preMemberInfoRequestDTO.detailAddress
         this.role = MemberRole.MEMBER
     }
 
     companion object {
-        fun fromRequestSignUpDTO(requestSignUpDTO: RequestSignUpDTO): Member {
+        fun fromRequestSignUpDTO(signUpRequestDTO: SignUpRequestDTO): Member {
             return Member(
-                id = requestSignUpDTO.id,
-                password = requestSignUpDTO.password,
-                phoneNumber = requestSignUpDTO.phoneNumber,
-                memberName = requestSignUpDTO.memberName,
-                address = requestSignUpDTO.address,
-                email = requestSignUpDTO.email,
-                detailAddress = requestSignUpDTO.detailAddress,
+                id = signUpRequestDTO.id,
+                password = signUpRequestDTO.password,
+                phoneNumber = signUpRequestDTO.phoneNumber,
+                memberName = signUpRequestDTO.memberName,
+                address = signUpRequestDTO.address,
+                email = signUpRequestDTO.email,
+                detailAddress = signUpRequestDTO.detailAddress,
                 role = MemberRole.MEMBER
             )
         }
