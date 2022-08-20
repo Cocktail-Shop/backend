@@ -22,7 +22,6 @@ class OrderController(
     @PostMapping("/orders")
     fun createOrder(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, requestOrderInfoDTO: RequestOrderInfoDTO, model: Model) : String {
         val requestOrderDTO = RequestOrderDTO(authMemberDTO?.memberId,requestOrderInfoDTO.orderItems,requestOrderInfoDTO.address,requestOrderInfoDTO.addressDetail)
-        println("requestOrderDTO = ${requestOrderInfoDTO}")
         model.addAttribute("result",orderService.requestOrder(requestOrderDTO))
         return "global/message"
     }
