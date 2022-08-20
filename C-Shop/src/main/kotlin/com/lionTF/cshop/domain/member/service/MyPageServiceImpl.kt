@@ -15,20 +15,21 @@ class MyPageServiceImpl(
 ) : MyPageService {
 
     override fun getMyPageInfo(memberId: Long): ResponseMyPageDTO {
-        val member = memberAuthRepository.findByMemberId(memberId).orElseThrow()
-        return ResponseMyPageDTO.fromMember(member)
+        return memberAuthRepository.findByMemberId(memberId)?.let {
+            ResponseMyPageDTO.fromMember(it)
+        } ?: throw NoSuchElementException("해당 회원 정보 찾을 수 없음")
     }
 
     @Transactional
     override fun updateMyPageInfo(memberId: Long, requestUpdateMyPageDTO: RequestUpdateMyPageDTO): ResponseDTO {
-        val existMember = memberAuthRepository.findByMemberId(memberId).orElseThrow()
+        val requestMember = memberAuthRepository.findByMemberId(memberId) ?: throw NoSuchElementException("해당 회원정보를 찾을 수 없음")
 
         val existInfo = memberAuthRepository.findById(requestUpdateMyPageDTO.id)
         val canUpdate =
-            !(existInfo.isPresent && existInfo.get().memberId != memberId)
+            !(existInfo != null && existInfo.memberId != memberId)
 
         return if (canUpdate) {
-            existMember.updateMemberInfo(requestUpdateMyPageDTO)
+            requestMember.updateMemberInfo(requestUpdateMyPageDTO)
             ResponseDTO.toSuccessUpdateMyPageResponseDTO()
         } else {
             ResponseDTO.toFailedUpdateMyPageResponseDTO()
@@ -38,15 +39,14 @@ class MyPageServiceImpl(
 
     @Transactional
     override fun updatePassword(memberId: Long, requestUpdatePasswordDTO: RequestUpdatePasswordDTO): ResponseDTO {
-        val existMember = memberAuthRepository.findByMemberId(memberId).orElseThrow()
+        val existMember = memberAuthRepository.findByMemberId(memberId)?:throw NoSuchElementException("해당 회원 정보 없음")
 
-        val pastPassword = requestUpdatePasswordDTO.pastPassword
-        val newPassword = requestUpdatePasswordDTO.newPassword
+        val (pastPassword, newPassword)=requestUpdatePasswordDTO
 
-        val isMatchExistPassword = passwordEncoder.matches(pastPassword, existMember.password)
-        val isPastSameNewPassword = pastPassword == newPassword
+        val isMatchCurrentPassword = passwordEncoder.matches(pastPassword, existMember.password)
+        val isSamePastPassword = pastPassword == newPassword
 
-        val canUpdate = isMatchExistPassword && !isPastSameNewPassword
+        val canUpdate = isMatchCurrentPassword && !isSamePastPassword
 
         return if (canUpdate) {
             existMember.updatePassword(pastPassword, passwordEncoder)
@@ -58,9 +58,9 @@ class MyPageServiceImpl(
 
     @Transactional
     override fun deleteMember(authMemberDTO: AuthMemberDTO): ResponseDTO {
-        val existMember = memberAuthRepository.findByMemberId(authMemberDTO?.memberId).orElseThrow()
-        existMember.deleteMember()
-        memberAuthRepository.save(existMember)
-        return ResponseDTO.toDeleteMemberResponseDTO()
+        return memberAuthRepository.findByMemberId(authMemberDTO.memberId)?.let {
+            it.deleteMember()
+            ResponseDTO.toDeleteMemberResponseDTO()
+        } ?: throw NoSuchElementException("해당 회원 정보 찾을 수 없음")
     }
 }

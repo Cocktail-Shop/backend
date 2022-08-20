@@ -9,6 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.stereotype.Service
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.NoSuchElementException
 
 @Service
 class MailAuthServiceImpl(
@@ -17,7 +18,7 @@ class MailAuthServiceImpl(
 ) : MailAuthService {
 
     override fun sendAuthNumber(authNumberDTO: RequestAuthNumberDTO) {
-        var authNumber = UUID.randomUUID().toString().replace("-", "").substring(0, 6)
+        val authNumber = UUID.randomUUID().toString().replace("-", "").substring(0, 6)
 
         val saveAuthNumberOperation = redisTemplate.opsForValue()
         saveAuthNumberOperation.set(authNumberDTO.email, authNumber, 4, TimeUnit.MINUTES)
@@ -28,7 +29,8 @@ class MailAuthServiceImpl(
 
     override fun verifyAuthNumber(authNumberDTO: RequestVerifyAuthNumberDTO): Boolean {
         val getAuthNumberOperation = redisTemplate.opsForValue()
-        val existAuthNumber = getAuthNumberOperation.get(authNumberDTO.email)
+        val existAuthNumber =
+            getAuthNumberOperation.get(authNumberDTO.email) ?: throw NoSuchElementException("인증번호 찾을수 없음")
 
         return authNumberDTO.authNumber == existAuthNumber
     }

@@ -31,12 +31,12 @@ class OAuth2UserDetailsService(
 
         val existMember = memberAuthRepository.findById(email)
 
-        return if (existMember.isPresent) {
-            AuthMemberDTO.fromMember(existMember.get())
+        return if (existMember != null) {
+            AuthMemberDTO.fromMember(existMember)
         } else {
-            val newMember = Member.fromOAuth2User(name, email)
+            val newMember=Member.fromOAuth2User(name,email)
             memberAuthRepository.save(newMember)
-            cartRepository.save(Cart(member = newMember))
+            cartRepository.save(Cart.fromMember(newMember))
             AuthMemberDTO.fromMember(newMember)
         }
     }

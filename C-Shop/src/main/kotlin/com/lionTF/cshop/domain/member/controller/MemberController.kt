@@ -53,7 +53,7 @@ class MemberController(
 
     @PostMapping("/id-inquiry")
     fun requestIdInquiry(requestIdInquiryDTO: RequestIdInquiryDTO, model: Model): String {
-        model.addAttribute("idInquiryResult", memberService.idInquiry(requestIdInquiryDTO))
+        model.addAttribute("idInquiryResult", memberService.requestIdInquiry(requestIdInquiryDTO))
         return "members/forget-id-result"
     }
 
@@ -65,7 +65,7 @@ class MemberController(
 
     @PostMapping("/password-inquiry")
     fun requestPasswordInquiry(requestPasswordInquiryDTO: RequestPasswordInquiryDTO, model: Model): String {
-        model.addAttribute("result", memberService.passwordInquiry(requestPasswordInquiryDTO))
+        model.addAttribute("result", memberService.requestPasswordInquiry(requestPasswordInquiryDTO))
         return "global/message"
     }
 
@@ -130,5 +130,4 @@ class MemberController(
         model.addAttribute("result", ResponseDTO.toMemberAccessDeniedResponseDTO())
         return "global/message"
     }
-
 }
