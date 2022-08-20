@@ -17,7 +17,7 @@ class AdminItemServiceImpl(
     ) : AdminItemService {
 
     @Transactional
-    override fun createItem(requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?): AdminResponseDTO {
+    override fun createItem(requestCreateItemDTO: ItemCreateRequestDTO, itemImgUrl: String?): AdminResponseDTO {
 
         return if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO()
@@ -37,12 +37,12 @@ class AdminItemServiceImpl(
     @Transactional
     override fun updateItem(
         itemId: Long,
-        requestCreateItemDTO: RequestCreateItemDTO,
+        requestCreateItemDTO: ItemCreateRequestDTO,
         itemImgUrl: String?
     ): AdminResponseDTO {
-        val existsItem = adminItemRepository.existsById(itemId)
+        val itemExisted = adminItemRepository.existsById(itemId)
 
-        return if (!existsItem) {
+        return if (!itemExisted) {
             AdminResponseDTO.toFailUpdateItemResponseDTO()
 
         } else if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) {
@@ -64,9 +64,9 @@ class AdminItemServiceImpl(
 
     @Transactional
     override fun deleteOneItem(itemId: Long): AdminResponseDTO {
-        val existsItem = adminItemRepository.existsById(itemId)
+        val itemExisted = adminItemRepository.existsById(itemId)
 
-        return if (!existsItem) {
+        return if (!itemExisted) {
             AdminResponseDTO.toFailDeleteItemResponseDTO()
         } else {
             val item = adminItemRepository.getReferenceById(itemId)
@@ -81,34 +81,33 @@ class AdminItemServiceImpl(
     }
 
     // 상품 단건 조회
-    override fun findItem(itemId: Long): ResponseItemDTO {
-        val existsItem = adminItemRepository.existsById(itemId)
+    override fun findItem(itemId: Long): ItemResponseDTO {
+        val itemExisted = adminItemRepository.existsById(itemId)
 
-        return if (!existsItem) {
-            ResponseItemDTO(
+        return if (!itemExisted) {
+            ItemResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "존재 하지 않는 상품입니다.",
-                null
+                "존재 하지 않는 상품입니다."
             )
         } else {
             val itemResultDTO = adminItemRepository.findItemById(itemId)
-            return ResponseItemDTO.itemToResponseItemPageDTO(itemResultDTO)
+            return ItemResponseDTO.itemToResponseItemPageDTO(itemResultDTO)
         }
 
     }
 
     // 상품 전체 조회
-    override fun getAllItems(pageable: Pageable): ResponseSearchItemSearchDTO {
-        val findAllItems = adminItemRepository.findAllItems(pageable)
+    override fun getAllItems(pageable: Pageable): ItemsSearchDTO {
+        val items = adminItemRepository.findAllItems(pageable)
 
-        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(findAllItems, "")
+        return ItemsSearchDTO.itemToResponseItemSearchPageDTO(items)
     }
 
     // 상품 이름으로 조회
-    override fun getItemsByName(keyword: String, pageable: Pageable): ResponseSearchItemSearchDTO {
-        val findItemsByItemName = adminItemRepository.findItemsByName(keyword, pageable)
+    override fun getItemsByName(itemName: String, pageable: Pageable): ItemsSearchDTO {
+        val items = adminItemRepository.findItemsByName(itemName, pageable)
 
-        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(findItemsByItemName, keyword)
+        return ItemsSearchDTO.itemToResponseItemSearchPageDTO(items, itemName)
     }
 
     // 상품 삭제

@@ -2,7 +2,6 @@ package com.lionTF.cshop.domain.admin.controller
 
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminOrderService
 import org.springframework.data.domain.Pageable
-import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -16,7 +15,7 @@ class AdminMainController(
 
     @GetMapping("main")
     fun getMainPage(
-        @PageableDefault(size = 2) pageable: Pageable,
+        pageable: Pageable,
         model: Model
     ): String {
         model.addAttribute("sales", adminOrderService.getAllSales(pageable))

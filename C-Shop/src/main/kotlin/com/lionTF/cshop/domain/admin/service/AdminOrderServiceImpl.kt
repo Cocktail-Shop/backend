@@ -21,28 +21,31 @@ class AdminOrderServiceImpl(
 
     @Transactional
     override fun cancelOneOrder(orderId: Long): AdminResponseDTO {
-        val existsOrder = adminOrderRepository.existsById(orderId)
+        val ordersExisted = adminOrderRepository.existsById(orderId)
 
-        return if (!existsOrder) {
+        return if (!ordersExisted) {
             AdminResponseDTO.toFailCancelOrderResponseDTO()
 
         } else {
-            val order = adminOrderRepository.getReferenceById(orderId)
+            val orders = adminOrderRepository.getReferenceById(orderId)
 
             when {
-                order.orderStatus == OrderStatus.CANCEL -> {
+                orders.orderStatus == OrderStatus.CANCEL -> {
                     AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO()
 
                 }
-                order.deliveryStatus == DeliveryStatus.COMPLETE -> {
+                orders.deliveryStatus == DeliveryStatus.COMPLETE -> {
                     AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO()
 
                 }
                 else -> {
-                    order.cancelOrder()
+                    orders.cancelOrder()
 
-                    val orderItem = adminOrderItemRepository.getOrderItemByOrdersId(orderId)
-                    orderItem.cancel()
+                    val orderItems = adminOrderItemRepository.getOrderItemByOrdersId(orderId)
+
+                    orderItems.forEach { orderItem ->
+                        orderItem.cancel()
+                    }
 
                     AdminResponseDTO.toSuccessCancelOrderResponseDTO()
                 }
@@ -50,38 +53,38 @@ class AdminOrderServiceImpl(
         }
     }
 
-    override fun getAllOrders(pageable: Pageable): ResponseSearchOrdersResultDTO {
-        val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
+    override fun getAllOrders(pageable: Pageable): OrdersSearchDTO {
+        val ordersInfo = adminOrderRepository.findOrdersInfo(pageable)
 
-        return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(findOrdersInfo, "")
+        return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(ordersInfo)
     }
 
-    override fun getOrdersByMemberId(keyword: String, pageable: Pageable): ResponseSearchOrdersResultDTO {
-        val findOrdersInfoByMemberId = adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
+    override fun getOrdersByMemberId(keyword: String, pageable: Pageable): OrdersSearchDTO {
+        val orders = adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
 
-        return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(findOrdersInfoByMemberId, keyword)
+        return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(orders, keyword)
     }
 
 
-    override fun getAllSales(pageable: Pageable): ResponseSearchOrdersResultDTO {
-        val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
+    override fun getAllSales(pageable: Pageable): OrdersSearchDTO {
+        val ordersInfo = adminOrderRepository.findOrdersInfo(pageable)
 
-        return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(findOrdersInfo, "")
+        return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(ordersInfo, "")
     }
 
     @Transactional
     override fun updateDeliveryInDelivery(orderId: Long): AdminResponseDTO {
-        val order = existedOrder(orderId)
+        val orders = existedOrder(orderId)
 
         return when {
-            order == null -> {
+            orders == null -> {
                 AdminResponseDTO.toFailUpdateDeliveryStatus()
             }
-            order.deliveryStatus == DeliveryStatus.REFUND -> {
+            orders.deliveryStatus == DeliveryStatus.REFUND -> {
                 AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder()
             }
             else -> {
-                order.updateDeliveryStatusInDelivery()
+                orders.updateDeliveryStatusInDelivery()
                 AdminResponseDTO.toSuccessUpdateDeliveryStatusInDelivery()
             }
         }
@@ -89,17 +92,17 @@ class AdminOrderServiceImpl(
 
     @Transactional
     override fun updateDeliveryComplete(orderId: Long): AdminResponseDTO {
-        val order = existedOrder(orderId)
+        val orders = existedOrder(orderId)
 
         return when {
-            order == null -> {
+            orders == null -> {
                 AdminResponseDTO.toFailUpdateDeliveryStatus()
             }
-            order.deliveryStatus == DeliveryStatus.REFUND -> {
+            orders.deliveryStatus == DeliveryStatus.REFUND -> {
                 AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder()
             }
             else -> {
-                order.updateDeliveryStatusComplete()
+                orders.updateDeliveryStatusComplete()
                 return AdminResponseDTO.toSuccessUpdateDeliveryStatusComplete()
             }
         }
@@ -111,7 +114,7 @@ class AdminOrderServiceImpl(
         return adminOrderRepository.findOrders(orderId)
     }
 
-    // Form으로부터 받아온 orderId들이 존재하는 주문인지 검사
+    // Form 으로부터 받아온 orderId 들이 존재하는 주문인지 검사
     private fun formToExistedItems(orderList: MutableList<Long>): Boolean {
         return orderList.none { existedOrder(it) == null }
     }

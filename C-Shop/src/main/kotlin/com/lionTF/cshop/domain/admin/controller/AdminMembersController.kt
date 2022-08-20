@@ -4,7 +4,6 @@ import com.lionTF.cshop.domain.admin.service.admininterface.AdminMemberService
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 import org.springframework.data.domain.Pageable
-import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 
 @Controller
@@ -16,7 +15,7 @@ class AdminMembersController(
     // 회원 전체 조회
     @GetMapping("members")
     fun getAllMembers(
-        @PageableDefault(size = 2) pageable: Pageable,
+        pageable: Pageable,
         model: Model
     ): String {
         model.addAttribute("members", adminMemberService.getAllMembers(pageable))
@@ -24,11 +23,11 @@ class AdminMembersController(
     }
 
 
-    // 회원 ID로 회원 검색
+    // 회원 ID or 회원 이름으로 회원 검색
     @GetMapping("search/members")
     fun findMembers(
         @RequestParam("keyword") keyword: String,
-        @PageableDefault(size = 2) pageable: Pageable,
+        pageable: Pageable,
         model: Model
     ): String {
         model.addAttribute("searchMembers", adminMemberService.findMembers(keyword, pageable))

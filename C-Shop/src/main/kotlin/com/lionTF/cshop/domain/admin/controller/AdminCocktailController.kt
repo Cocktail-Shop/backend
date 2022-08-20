@@ -6,7 +6,6 @@ import com.lionTF.cshop.domain.admin.service.admininterface.AdminCocktailService
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.cshop.domain.admin.service.admininterface.ImageService
 import org.springframework.data.domain.Pageable
-import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -27,7 +26,7 @@ class AdminCocktailController(
     // 전체 칵테일 조회
     @GetMapping("all-cocktails")
     fun getCocktails(
-        @PageableDefault(size = 2) pageable: Pageable,
+        pageable: Pageable,
         model: Model
     ): String {
         model.addAttribute("cocktails", adminCocktailService.getAllCocktail(pageable))
@@ -37,25 +36,25 @@ class AdminCocktailController(
     // 칵테일 이름 검색 페이지
     @GetMapping("search/cocktails")
     fun getCocktailByName(
-        @RequestParam("keyword") keyword: String,
-        @PageableDefault(size = 2) pageable: Pageable,
+        @RequestParam("cocktailName") cocktailName: String,
+        pageable: Pageable,
         model: Model
     ): String {
-        model.addAttribute("cocktails", adminCocktailService.getCocktailsByName(keyword, pageable))
+        model.addAttribute("cocktails", adminCocktailService.getCocktailsByName(cocktailName, pageable))
         return "admins/cocktail/getCocktailsByName"
     }
 
     // 칵테일 상품 등록 페이지
     @GetMapping("cocktails")
     fun getCreateCocktailForm(model: Model): String {
-        model.addAttribute("createCocktailDTO", RequestCreateCocktailDTO.toFormDTO())
+        model.addAttribute("createCocktailDTO", CocktailCreateRequestDTO.toFormDTO())
         return "admins/cocktail/createCocktailForm"
     }
 
     // 칵테일 상품 등록
     @PostMapping("cocktails")
     fun createCocktail(
-        requestCreateCocktailDTO: RequestCreateCocktailDTO,
+        requestCreateCocktailDTO: CocktailCreateRequestDTO,
         model: Model
     ): String {
         val cocktailImgUrl = getImageUrl(requestCreateCocktailDTO)
@@ -73,7 +72,7 @@ class AdminCocktailController(
         val itemIds = adminCocktailItemService.getItemIds(cocktailId)
         val cocktail = adminCocktailService.findCocktail(cocktailId, itemIds)
         model.addAttribute("cocktails", cocktail)
-        model.addAttribute("cocktails", RequestUpdateCocktailDTO.formDTOFromResponseCocktailDTO(cocktail, itemIds))
+        model.addAttribute("cocktails", CocktailUpdateRequestDTO.formDTOFromResponseCocktailDTO(cocktail, itemIds))
 
         return "admins/cocktail/updateCocktailForm"
     }
@@ -82,7 +81,7 @@ class AdminCocktailController(
     @PutMapping("cocktails/{cocktailId}")
     fun updateCocktail(
         @PathVariable("cocktailId") cocktailId: Long,
-        requestCreateCocktailDTO: RequestCreateCocktailDTO,
+        requestCreateCocktailDTO: CocktailCreateRequestDTO,
         model: Model
     ): String {
         val cocktail = adminCocktailService.findCocktailById(cocktailId)
@@ -149,7 +148,7 @@ class AdminCocktailController(
     }
 
     // API를 통해 이미지 URL을 가져오는 함
-    private fun getImageUrl(requestCreateCocktailDTO: RequestCreateCocktailDTO): String? {
+    private fun getImageUrl(requestCreateCocktailDTO: CocktailCreateRequestDTO): String? {
         imageService.requestToken()
         val cocktailImgUrl = requestCreateCocktailDTO.cocktailImgUrl?.let {
             imageService.uploadObject(

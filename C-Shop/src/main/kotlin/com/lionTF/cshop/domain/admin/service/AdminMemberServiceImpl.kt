@@ -18,9 +18,9 @@ class AdminMemberServiceImpl(
     // 한명의 회원 삭제
     @Transactional
     override fun deleteOneMember(memberId: Long): AdminResponseDTO {
-        val existsMember = adminMemberRepository.existsById(memberId)
+        val memberExisted = adminMemberRepository.existsById(memberId)
 
-        return if (!existsMember) {
+        return if (!memberExisted) {
             AdminResponseDTO.toFailDeleteMemberResponseDTO()
         } else {
             val member = adminMemberRepository.getReferenceById(memberId)
@@ -31,17 +31,17 @@ class AdminMemberServiceImpl(
     }
 
     // 회원 ID로 회원 검색
-    override fun findMembers(keyword: String, pageable: Pageable): ResponseSearchMembersResultDTO {
-        val findMembersInfo = adminMemberRepository.findMembersInfo(keyword, pageable)
+    override fun findMembers(keyword: String, pageable: Pageable): MembersSearchDTO {
+        val membersInfo = adminMemberRepository.findMembersInfo(keyword, pageable)
 
-        return ResponseSearchMembersResultDTO.memberToResponseMemberSearchPageDTO(findMembersInfo, keyword)
+        return MembersSearchDTO.memberToResponseMemberSearchPageDTO(membersInfo, keyword)
     }
 
     // 회원 전체 조회
-    override fun getAllMembers(pageable: Pageable): ResponseSearchMembersResultDTO {
-        val findAllMember = adminMemberRepository.findAllByMemberStatus(pageable)
+    override fun getAllMembers(pageable: Pageable): MembersSearchDTO {
+        val members = adminMemberRepository.findAllByMemberStatus(pageable)
 
-        return ResponseSearchMembersResultDTO.memberToResponseMemberSearchPageDTO(findAllMember, "")
+        return MembersSearchDTO.memberToResponseMemberSearchPageDTO(members)
     }
 
     // 존재하는 사용자인지 검사하는 함수
@@ -49,7 +49,7 @@ class AdminMemberServiceImpl(
         return adminMemberRepository.findMember(memberId)
     }
 
-    // Form으로부터 받아온 memberId들이 존재하는지 검사
+    // Form 으로부터 받아온 memberId 들이 존재하는지 검사
     private fun formToExistedMembers(memberIdList: MutableList<Long>): Boolean {
         return memberIdList.none { existedMember(it) == null }
     }

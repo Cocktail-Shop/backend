@@ -1,6 +1,6 @@
 package com.lionTF.cshop.domain.admin.models
 
-import com.lionTF.cshop.domain.admin.controller.dto.RequestCreateItemDTO
+import com.lionTF.cshop.domain.admin.controller.dto.ItemCreateRequestDTO
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -25,7 +25,7 @@ internal class ItemUnitTest {
     @Test
     @DisplayName("상품 수정 test")
     fun updateTest() {
-        val requestCreateItemDTO = RequestCreateItemDTO(
+        val requestCreateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.NONALCOHOL,
             price = 20000,

@@ -77,7 +77,7 @@ internal class AdminOrderServiceTest {
         orderItem = adminOrderItemRepository.save(orderItemDTO)
 
 
-        val itemDTO1 = RequestCreateItemDTO(
+        val itemDTO1 = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 1,
@@ -87,7 +87,7 @@ internal class AdminOrderServiceTest {
         )
         item1 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO1,"test"))
 
-        val itemDTO2 = RequestCreateItemDTO(
+        val itemDTO2 = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 1,
@@ -97,7 +97,7 @@ internal class AdminOrderServiceTest {
         )
         item2 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO2, "test"))
 
-        val itemDTO3 = RequestCreateItemDTO(
+        val itemDTO3 = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 1,
@@ -253,15 +253,13 @@ internal class AdminOrderServiceTest {
         println("cancelOneOrder = ${cancelOneOrder.message}")
     }
 
-    private fun generatePageable(page: Int, pageSize: Int): PageRequest = PageRequest.of(page, pageSize)
+    private fun generatePageable(page: Int = 0, pageSize: Int = 2): PageRequest = PageRequest.of(page, pageSize)
 
     @Test
     @DisplayName("주문 전체 조회 test")
     fun getAllOrdersTest() {
         //given
-        val page = 0
-        val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize)
+        val pageable = generatePageable()
 
         val orderCount = orderRepository.count()
 
@@ -282,9 +280,7 @@ internal class AdminOrderServiceTest {
     @DisplayName("회원 ID로 주문 조회 test")
     fun getOrdersByMemberIdTest() {
         //given
-        val page = 0
-        val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize)
+        val pageable = generatePageable()
         val keyword = "te"
 
         //when
