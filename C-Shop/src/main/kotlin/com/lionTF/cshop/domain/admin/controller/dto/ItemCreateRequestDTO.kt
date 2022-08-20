@@ -3,7 +3,7 @@ package com.lionTF.cshop.domain.admin.controller.dto
 import com.lionTF.cshop.domain.admin.models.Category
 import org.springframework.web.multipart.MultipartFile
 
-data class RequestCreateItemDTO(
+data class ItemCreateRequestDTO(
     val itemName: String = "",
     val category: Category = Category.ALCOHOL,
     val price: Int = 0,
@@ -14,8 +14,8 @@ data class RequestCreateItemDTO(
 
 ) {
     companion object {
-        fun toFormDTO(): RequestCreateItemDTO {
-            return RequestCreateItemDTO()
+        fun toFormDTO(): ItemCreateRequestDTO {
+            return ItemCreateRequestDTO()
         }
     }
 }

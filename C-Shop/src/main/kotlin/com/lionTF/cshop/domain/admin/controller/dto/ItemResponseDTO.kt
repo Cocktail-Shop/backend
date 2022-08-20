@@ -3,14 +3,14 @@ package com.lionTF.cshop.domain.admin.controller.dto
 import com.lionTF.cshop.domain.admin.models.Category
 import org.springframework.http.HttpStatus
 
-data class ResponseItemDTO(
+data class ItemResponseDTO(
     val httpStatus: Int,
     val message: String,
     val result: ItemResultDTO? = null,
 ) {
     companion object {
-        fun itemToResponseItemPageDTO(itemResultDTO: ItemResultDTO): ResponseItemDTO {
-            return ResponseItemDTO(
+        fun itemToResponseItemPageDTO(itemResultDTO: ItemResultDTO): ItemResponseDTO {
+            return ItemResponseDTO(
                 HttpStatus.OK.value(),
                 "상품 조회를 성공했습니다.",
                 itemResultDTO
@@ -29,7 +29,7 @@ data class ItemResultDTO(
     val itemImgUrl: String,
 )
 
-data class RequestUpdateItemDTO(
+data class ItemUpdateRequestDTO(
     val itemName: String = "",
     val category: Category,
     val price: Int = 0,
@@ -39,9 +39,9 @@ data class RequestUpdateItemDTO(
     val itemImgUrl: String = "",
 ) {
     companion object {
-        fun formDTOFromResponseItemDTO(responseItemDTO: ResponseItemDTO): RequestUpdateItemDTO? {
+        fun formDTOFromResponseItemDTO(responseItemDTO: ItemResponseDTO): ItemUpdateRequestDTO? {
             return responseItemDTO.result?.let {
-                RequestUpdateItemDTO(
+                ItemUpdateRequestDTO(
                     itemName = it.itemName,
                     category = responseItemDTO.result.category,
                     price = responseItemDTO.result.price,

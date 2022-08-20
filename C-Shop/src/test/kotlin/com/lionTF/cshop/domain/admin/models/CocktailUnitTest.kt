@@ -1,6 +1,6 @@
 package com.lionTF.cshop.domain.admin.models
 
-import com.lionTF.cshop.domain.admin.controller.dto.RequestCreateCocktailDTO
+import com.lionTF.cshop.domain.admin.controller.dto.CocktailCreateRequestDTO
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -31,7 +31,7 @@ internal class CocktailUnitTest {
     @DisplayName("칵테일 상품 수정 test")
     fun updateCocktailTest() {
         //given
-        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
+        val requestCreateCocktailDTO = CocktailCreateRequestDTO(
             cocktailName = "cocktailName-update",
             cocktailDescription = "cocktailDescription-update",
             category = Category.COCKTAIL

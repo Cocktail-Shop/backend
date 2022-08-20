@@ -42,7 +42,7 @@ class AdminItemController(
     // 상품 등록 페이지
     @GetMapping("items")
     fun getCreateItemForm(model: Model): String {
-        model.addAttribute("createItemDTO", RequestCreateItemDTO.toFormDTO())
+        model.addAttribute("createItemDTO", ItemCreateRequestDTO.toFormDTO())
         return "admins/item/createItemForm"
     }
 
@@ -50,7 +50,7 @@ class AdminItemController(
     // 상품 등록
     @PostMapping("items")
     fun createItem(
-        requestCreateItemDTO: RequestCreateItemDTO,
+        requestCreateItemDTO: ItemCreateRequestDTO,
         model: Model
     ): String {
         val itemImgUrl = getImageUrl(requestCreateItemDTO)
@@ -66,7 +66,7 @@ class AdminItemController(
     ): String {
         val item = adminItemService.findItem(itemId)
         model.addAttribute("items", item)
-        model.addAttribute("items", RequestUpdateItemDTO.formDTOFromResponseItemDTO(item))
+        model.addAttribute("items", ItemUpdateRequestDTO.formDTOFromResponseItemDTO(item))
 
         return "admins/item/updateItemForm"
     }
@@ -75,7 +75,7 @@ class AdminItemController(
     @PutMapping("items/{itemId}")
     fun updateItem(
         @PathVariable("itemId") itemId: Long,
-        requestCreateItemDTO: RequestCreateItemDTO,
+        requestCreateItemDTO: ItemCreateRequestDTO,
         model: Model
     ): String {
         val item = adminItemService.findItemById(itemId)
@@ -121,7 +121,7 @@ class AdminItemController(
     }
 
     // API를 통해 이미지 URL을 가져오는 함
-    private fun getImageUrl(requestCreateItemDTO: RequestCreateItemDTO): String? {
+    private fun getImageUrl(requestCreateItemDTO: ItemCreateRequestDTO): String? {
         imageService.requestToken()
         val itemImgUrl = requestCreateItemDTO.itemImgUrl?.let {
             imageService.uploadObject(

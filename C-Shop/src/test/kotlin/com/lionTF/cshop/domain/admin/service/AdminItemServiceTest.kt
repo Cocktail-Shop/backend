@@ -84,7 +84,7 @@ internal class AdminItemServiceTest {
     @DisplayName("Item 생성 test")
     fun createItemTest() {
         //given
-        var createItemDTO = RequestCreateItemDTO(
+        var createItemDTO = ItemCreateRequestDTO(
             itemName = "test",
             category = Category.ALCOHOL,
             price = 10000,
@@ -105,7 +105,7 @@ internal class AdminItemServiceTest {
     @DisplayName("Item 생성 예외 중 가격이 0이하인 case test")
     fun createItemExceptionByPriceTest() {
         //given
-        var createInvalidFormatPrice = RequestCreateItemDTO(
+        var createInvalidFormatPrice = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 0,
@@ -127,7 +127,7 @@ internal class AdminItemServiceTest {
     @DisplayName("Item 생성 예외 중 수량이 0이하인 case test")
     fun createItemExceptionByAmountTest() {
         //given
-        var createInvalidFormatAmount = RequestCreateItemDTO(
+        var createInvalidFormatAmount = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 10,
@@ -149,7 +149,7 @@ internal class AdminItemServiceTest {
     @DisplayName("Item 생성 예외 중 수량과 가격이 0이하인 case test")
     fun createItemExceptionByAmountAndPriceTest() {
         //given
-        var createInvalidFormatAmountAndPrice = RequestCreateItemDTO(
+        var createInvalidFormatAmountAndPrice = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 0,
@@ -171,7 +171,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 test")
     fun updateItemTest() {
         //given
-        var updateItemDTO = RequestCreateItemDTO(
+        var updateItemDTO = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 40000,
@@ -202,7 +202,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 예외 중 없는 상품 case test")
     fun updateItemExceptionTest() {
         //given
-        var invalidIpdateItemDTO = RequestCreateItemDTO(
+        var invalidIpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 40000,
@@ -224,7 +224,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 예외 중 가격이 0이하인 case test")
     fun updateItemExceptionByPriceTest() {
         //given
-        var invalidPriceUpdateItemDTO = RequestCreateItemDTO(
+        var invalidPriceUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 0,
@@ -246,7 +246,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 예외 중 수량이 0이하인 case test")
     fun updateItemExceptionByAmountTest() {
         //given
-        var invalidAmountUpdateItemDTO = RequestCreateItemDTO(
+        var invalidAmountUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 10,
@@ -268,7 +268,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 예외 중 수량과 가격 0이하인 case test")
     fun updateItemExceptionByAmountAndPriceTest() {
         //given
-        var invalidAmountAndPriceUpdateItemDTO = RequestCreateItemDTO(
+        var invalidAmountAndPriceUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 0,

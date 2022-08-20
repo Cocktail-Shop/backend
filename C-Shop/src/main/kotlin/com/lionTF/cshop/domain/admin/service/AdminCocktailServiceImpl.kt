@@ -21,32 +21,32 @@ class AdminCocktailServiceImpl(
 
     ) : AdminCocktailService {
 
-    override fun getAllCocktail(pageable: Pageable): ResponseSearchCocktailSearchDTO {
+    override fun getAllCocktail(pageable: Pageable): CocktailsSearchDTO {
         val cocktails = adminCocktailRepository.findAllCocktails(pageable)
 
-        return ResponseSearchCocktailSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails)
+        return CocktailsSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails)
     }
 
-    override fun getCocktailsByName(cocktailName: String, pageable: Pageable): ResponseSearchCocktailSearchDTO {
+    override fun getCocktailsByName(cocktailName: String, pageable: Pageable): CocktailsSearchDTO {
         val cocktails = adminCocktailRepository.findCocktailsByName(cocktailName, pageable)
 
-        return ResponseSearchCocktailSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails, cocktailName)
+        return CocktailsSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails, cocktailName)
     }
 
 
     // 칵테일 단건 조회
-    override fun findCocktail(cocktailId: Long, itemIds: MutableList<Long>): ResponseCocktailDTO {
+    override fun findCocktail(cocktailId: Long, itemIds: MutableList<Long>): CocktailResponseDTO {
         val cocktailExisted = adminCocktailRepository.existsById(cocktailId)
 
         return if (!cocktailExisted) {
-            ResponseCocktailDTO(
+            CocktailResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "존재하지 않는 칵테일입니다.",
                 null
             )
         } else {
             val cocktailResultDTO = adminCocktailRepository.findCocktailById(cocktailId)
-            return ResponseCocktailDTO.cocktailToResponseCocktailPageDTO(
+            return CocktailResponseDTO.cocktailToResponseCocktailPageDTO(
                 CocktailResultDTOAddItemIds.addItemIds(
                     cocktailResultDTO,
                     itemIds
@@ -58,7 +58,7 @@ class AdminCocktailServiceImpl(
 
     @Transactional
     override fun createCocktail(
-        requestCreateCocktailDTO: RequestCreateCocktailDTO,
+        requestCreateCocktailDTO: CocktailCreateRequestDTO,
         cocktailImgUrl: String?
     ): AdminResponseDTO {
         val cocktailItemList: MutableList<CocktailItem> = mutableListOf()
@@ -109,7 +109,7 @@ class AdminCocktailServiceImpl(
 
     @Transactional
     override fun updateCocktail(
-        requestCreateCocktailDTO: RequestCreateCocktailDTO,
+        requestCreateCocktailDTO: CocktailCreateRequestDTO,
         cocktailId: Long,
         itemIds: MutableList<Long>,
         cocktailImgUrl: String?

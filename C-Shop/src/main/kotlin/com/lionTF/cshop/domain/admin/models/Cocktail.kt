@@ -1,6 +1,6 @@
 package com.lionTF.cshop.domain.admin.models
 
-import com.lionTF.cshop.domain.admin.controller.dto.RequestCreateCocktailDTO
+import com.lionTF.cshop.domain.admin.controller.dto.CocktailCreateRequestDTO
 import javax.persistence.*
 
 import com.lionTF.cshop.global.model.BaseTimeEntity
@@ -31,7 +31,7 @@ class Cocktail(
     }
 
     // 칵테일 상품 수정
-    fun updateCocktail(requestCreateCocktailDTO: RequestCreateCocktailDTO, cocktailImgUrl: String?) {
+    fun updateCocktail(requestCreateCocktailDTO: CocktailCreateRequestDTO, cocktailImgUrl: String?) {
         cocktailName = requestCreateCocktailDTO.cocktailName
         cocktailDescription = requestCreateCocktailDTO.cocktailDescription
         category = Category.COCKTAIL
@@ -40,7 +40,7 @@ class Cocktail(
 
     companion object {
         fun requestCreateCocktailDTOtoCocktail(
-            requestCreateCocktailDTO: RequestCreateCocktailDTO,
+            requestCreateCocktailDTO: CocktailCreateRequestDTO,
             cocktailImgUrl: String?
         ): Cocktail {
             return Cocktail(

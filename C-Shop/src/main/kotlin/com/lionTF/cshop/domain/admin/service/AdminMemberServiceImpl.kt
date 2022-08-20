@@ -31,17 +31,17 @@ class AdminMemberServiceImpl(
     }
 
     // 회원 ID로 회원 검색
-    override fun findMembers(keyword: String, pageable: Pageable): ResponseSearchMembersResultDTO {
+    override fun findMembers(keyword: String, pageable: Pageable): MembersSearchDTO {
         val membersInfo = adminMemberRepository.findMembersInfo(keyword, pageable)
 
-        return ResponseSearchMembersResultDTO.memberToResponseMemberSearchPageDTO(membersInfo, keyword)
+        return MembersSearchDTO.memberToResponseMemberSearchPageDTO(membersInfo, keyword)
     }
 
     // 회원 전체 조회
-    override fun getAllMembers(pageable: Pageable): ResponseSearchMembersResultDTO {
+    override fun getAllMembers(pageable: Pageable): MembersSearchDTO {
         val members = adminMemberRepository.findAllByMemberStatus(pageable)
 
-        return ResponseSearchMembersResultDTO.memberToResponseMemberSearchPageDTO(members, "")
+        return MembersSearchDTO.memberToResponseMemberSearchPageDTO(members, "")
     }
 
     // 존재하는 사용자인지 검사하는 함수

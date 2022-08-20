@@ -6,9 +6,9 @@ import org.springframework.data.domain.Pageable
 interface AdminMemberService {
 
 
-    fun findMembers(keyword: String, pageable: Pageable): ResponseSearchMembersResultDTO
+    fun findMembers(keyword: String, pageable: Pageable): MembersSearchDTO
 
-    fun getAllMembers(pageable: Pageable): ResponseSearchMembersResultDTO
+    fun getAllMembers(pageable: Pageable): MembersSearchDTO
 
     fun deleteOneMember(memberId: Long): AdminResponseDTO
 

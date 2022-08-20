@@ -6,18 +6,18 @@ import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import java.time.LocalDateTime
 
-data class ResponseSearchOrdersResultDTO(
+data class OrdersSearchDTO(
     val httpStatus: Int,
     val message: String,
     val keyword: String? = null,
-    val result: Page<FindOrdersDTO>? = null
+    val result: Page<OrdersDTO>? = null
 ) {
     companion object {
         fun orderToResponseOrderSearchPageDTO(
-            findOrdersDTO: Page<FindOrdersDTO>,
+            findOrdersDTO: Page<OrdersDTO>,
             keyword: String?
-        ): ResponseSearchOrdersResultDTO {
-            return ResponseSearchOrdersResultDTO(
+        ): OrdersSearchDTO {
+            return OrdersSearchDTO(
                 HttpStatus.OK.value(),
                 "주문 조회를 성공했습니다.",
                 keyword,
@@ -28,7 +28,7 @@ data class ResponseSearchOrdersResultDTO(
 
 }
 
-data class FindOrdersDTO(
+data class OrdersDTO(
     val orderId: Long,
     val orderStatus: OrderStatus,
     val deliveryStatus: DeliveryStatus,

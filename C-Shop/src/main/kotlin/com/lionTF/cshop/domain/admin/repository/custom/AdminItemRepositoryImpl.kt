@@ -1,6 +1,6 @@
 package com.lionTF.cshop.domain.admin.repository.custom
 
-import com.lionTF.cshop.domain.admin.controller.dto.FindItemDTO
+import com.lionTF.cshop.domain.admin.controller.dto.ItemsDTO
 import com.lionTF.cshop.domain.admin.models.Item
 import com.lionTF.cshop.domain.admin.models.QItem.item
 import com.querydsl.core.BooleanBuilder
@@ -19,8 +19,8 @@ class AdminItemRepositoryImpl(
 ) : AdminItemRepositoryCustom {
 
     // 칵테일 전체 조회
-    override fun findAllItems(pageable: Pageable): Page<FindItemDTO> {
-        val content: List<FindItemDTO> = contentInquire(pageable)
+    override fun findAllItems(pageable: Pageable): Page<ItemsDTO> {
+        val content: List<ItemsDTO> = contentInquire(pageable)
 
         val countQuery: JPAQuery<Item> = countInquire()
 
@@ -28,10 +28,10 @@ class AdminItemRepositoryImpl(
     }
 
     // 회원 ID로 회원 검색
-    override fun findItemsByName(itemName: String, pageable: Pageable): Page<FindItemDTO> {
+    override fun findItemsByName(itemName: String, pageable: Pageable): Page<ItemsDTO> {
         val booleanBuilder = booleanBuilder(itemName)
 
-        val content: List<FindItemDTO> = contentInquire(pageable, booleanBuilder)
+        val content: List<ItemsDTO> = contentInquire(pageable, booleanBuilder)
         val countQuery: JPAQuery<Item> = countInquire(booleanBuilder)
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
@@ -41,11 +41,11 @@ class AdminItemRepositoryImpl(
     private fun contentInquire(
         pageable: Pageable,
         booleanBuilder: BooleanBuilder? = null
-    ): List<FindItemDTO> {
+    ): List<ItemsDTO> {
         return queryFactory!!
             .select(
                 Projections.constructor(
-                    FindItemDTO::class.java,
+                    ItemsDTO::class.java,
                     item.itemId,
                     item.itemName,
                     item.price,
@@ -62,6 +62,7 @@ class AdminItemRepositoryImpl(
                 booleanBuilder,
                 isEqualCocktailStatus()
             )
+            .orderBy(item.createdAt.desc())
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .fetch()

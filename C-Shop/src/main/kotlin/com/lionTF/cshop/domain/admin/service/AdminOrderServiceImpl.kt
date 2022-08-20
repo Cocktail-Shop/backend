@@ -53,23 +53,23 @@ class AdminOrderServiceImpl(
         }
     }
 
-    override fun getAllOrders(pageable: Pageable): ResponseSearchOrdersResultDTO {
+    override fun getAllOrders(pageable: Pageable): OrdersSearchDTO {
         val ordersInfo = adminOrderRepository.findOrdersInfo(pageable)
 
-        return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(ordersInfo, "")
+        return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(ordersInfo, "")
     }
 
-    override fun getOrdersByMemberId(keyword: String, pageable: Pageable): ResponseSearchOrdersResultDTO {
+    override fun getOrdersByMemberId(keyword: String, pageable: Pageable): OrdersSearchDTO {
         val orders = adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
 
-        return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(orders, keyword)
+        return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(orders, keyword)
     }
 
 
-    override fun getAllSales(pageable: Pageable): ResponseSearchOrdersResultDTO {
+    override fun getAllSales(pageable: Pageable): OrdersSearchDTO {
         val ordersInfo = adminOrderRepository.findOrdersInfo(pageable)
 
-        return ResponseSearchOrdersResultDTO.orderToResponseOrderSearchPageDTO(ordersInfo, "")
+        return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(ordersInfo, "")
     }
 
     @Transactional

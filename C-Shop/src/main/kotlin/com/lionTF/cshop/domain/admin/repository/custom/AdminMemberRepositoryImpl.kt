@@ -1,6 +1,6 @@
 package com.lionTF.cshop.domain.admin.repository.custom
 
-import com.lionTF.cshop.domain.admin.controller.dto.FindMembersDTO
+import com.lionTF.cshop.domain.admin.controller.dto.MembersDTO
 import com.lionTF.cshop.domain.member.models.Member
 import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.Projections
@@ -19,8 +19,8 @@ class AdminMemberRepositoryImpl(
 ) : AdminMemberRepositoryCustom {
 
     // 회원 전체 조회
-    override fun findAllByMemberStatus(pageable: Pageable): Page<FindMembersDTO> {
-        val content: List<FindMembersDTO> = contentInquire(pageable)
+    override fun findAllByMemberStatus(pageable: Pageable): Page<MembersDTO> {
+        val content: List<MembersDTO> = contentInquire(pageable)
 
         val countQuery: JPAQuery<Member> = countInquire()
 
@@ -28,10 +28,10 @@ class AdminMemberRepositoryImpl(
     }
 
     // 회원 ID로 회원 검색
-    override fun findMembersInfo(keyword: String, pageable: Pageable): Page<FindMembersDTO> {
+    override fun findMembersInfo(keyword: String, pageable: Pageable): Page<MembersDTO> {
         val booleanBuilder = booleanBuilder(keyword)
 
-        val content: List<FindMembersDTO> = contentInquire(pageable, booleanBuilder)
+        val content: List<MembersDTO> = contentInquire(pageable, booleanBuilder)
         val countQuery: JPAQuery<Member> = countInquire(booleanBuilder)
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
@@ -41,11 +41,11 @@ class AdminMemberRepositoryImpl(
     private fun contentInquire(
         pageable: Pageable,
         booleanBuilder: BooleanBuilder? = null
-    ): List<FindMembersDTO> {
+    ): List<MembersDTO> {
         return queryFactory!!
             .select(
                 Projections.constructor(
-                    FindMembersDTO::class.java,
+                    MembersDTO::class.java,
                     member.memberId,
                     member.id,
                     member.address,
@@ -55,12 +55,13 @@ class AdminMemberRepositoryImpl(
                 )
             )
             .from(member)
-            .offset(pageable.offset)
-            .limit(pageable.pageSize.toLong())
             .where(
                 booleanBuilder,
                 isEqualMemberStatus()
             )
+            .orderBy(member.createdAt.desc())
+            .offset(pageable.offset)
+            .limit(pageable.pageSize.toLong())
             .fetch()
     }
 

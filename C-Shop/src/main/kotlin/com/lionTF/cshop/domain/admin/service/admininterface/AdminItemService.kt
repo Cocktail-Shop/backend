@@ -6,15 +6,15 @@ import org.springframework.data.domain.Pageable
 
 interface AdminItemService {
 
-    fun createItem(requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?): AdminResponseDTO
+    fun createItem(requestCreateItemDTO: ItemCreateRequestDTO, itemImgUrl: String?): AdminResponseDTO
 
-    fun updateItem(itemId: Long, requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?): AdminResponseDTO
+    fun updateItem(itemId: Long, requestCreateItemDTO: ItemCreateRequestDTO, itemImgUrl: String?): AdminResponseDTO
 
-    fun getAllItems(pageable: Pageable): ResponseSearchItemSearchDTO
+    fun getAllItems(pageable: Pageable): ItemsSearchDTO
 
-    fun getItemsByName(itemName: String, pageable: Pageable): ResponseSearchItemSearchDTO
+    fun getItemsByName(itemName: String, pageable: Pageable): ItemsSearchDTO
 
-    fun findItem(itemId: Long): ResponseItemDTO
+    fun findItem(itemId: Long): ItemResponseDTO
 
     fun deleteOneItem(itemId: Long): AdminResponseDTO
 

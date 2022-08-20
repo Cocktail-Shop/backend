@@ -1,6 +1,6 @@
 package com.lionTF.cshop.domain.admin.repository.custom
 
-import com.lionTF.cshop.domain.admin.controller.dto.FindOrdersDTO
+import com.lionTF.cshop.domain.admin.controller.dto.OrdersDTO
 import com.lionTF.cshop.domain.admin.models.QItem.item
 import com.lionTF.cshop.domain.member.models.QMember.member
 import com.lionTF.cshop.domain.shop.models.QOrderItem.orderItem
@@ -19,20 +19,20 @@ class AdminOrderRepositoryImpl(
 
 ):AdminOrderRepositoryCustom {
 
-    override fun findOrdersInfo(pageable: Pageable): Page<FindOrdersDTO> {
-        val content: List<FindOrdersDTO> = contentInquire(pageable)
+    override fun findOrdersInfo(pageable: Pageable): Page<OrdersDTO> {
+        val content: List<OrdersDTO> = contentInquire(pageable)
 
-        val countQuery: JPAQuery<FindOrdersDTO> = countInquire()
+        val countQuery: JPAQuery<OrdersDTO> = countInquire()
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
     // 회원의 ID로 주문 조회
-    override fun findOrdersInfoByMemberId(keyword: String, pageable: Pageable): Page<FindOrdersDTO> {
+    override fun findOrdersInfoByMemberId(keyword: String, pageable: Pageable): Page<OrdersDTO> {
         val booleanBuilder = booleanBuilder(keyword)
 
-        val content: List<FindOrdersDTO> = contentInquire(pageable, booleanBuilder)
-        val countQuery: JPAQuery<FindOrdersDTO> = countInquire(booleanBuilder)
+        val content: List<OrdersDTO> = contentInquire(pageable, booleanBuilder)
+        val countQuery: JPAQuery<OrdersDTO> = countInquire(booleanBuilder)
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
@@ -41,11 +41,11 @@ class AdminOrderRepositoryImpl(
     private fun contentInquire(
         pageable: Pageable,
         booleanBuilder: BooleanBuilder? = null
-    ): List<FindOrdersDTO> {
+    ): List<OrdersDTO> {
         return queryFactory!!
             .select(
                 Projections.constructor(
-                    FindOrdersDTO::class.java,
+                    OrdersDTO::class.java,
                     orders.orderId,
                     orders.orderStatus,
                     orders.deliveryStatus,
@@ -64,24 +64,25 @@ class AdminOrderRepositoryImpl(
             ).from(orders, member)
             .leftJoin(orderItem).on(isEqualOrderId()).fetchJoin()
             .leftJoin(item).on(isEqualItemId()).fetchJoin()
-            .offset(pageable.offset)
-            .limit(pageable.pageSize.toLong())
             .where(
                 isEqualMemberId(),
                 booleanBuilder,
                 isExistedMember()
             )
+            .orderBy(orderItem.createdAt.desc())
+            .offset(pageable.offset)
+            .limit(pageable.pageSize.toLong())
             .fetch()
     }
 
     // 카운트를 별도로 조회하는 함수입니다.
     private fun countInquire(
         booleanBuilder: BooleanBuilder? = null
-    ): JPAQuery<FindOrdersDTO> {
+    ): JPAQuery<OrdersDTO> {
         return queryFactory!!
             .select(
                 Projections.constructor(
-                    FindOrdersDTO::class.java,
+                    OrdersDTO::class.java,
                     orders.orderId,
                     orders.orderStatus,
                     orders.deliveryStatus,

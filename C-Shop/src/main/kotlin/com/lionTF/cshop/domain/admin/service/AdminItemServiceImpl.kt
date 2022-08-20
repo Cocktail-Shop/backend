@@ -17,7 +17,7 @@ class AdminItemServiceImpl(
     ) : AdminItemService {
 
     @Transactional
-    override fun createItem(requestCreateItemDTO: RequestCreateItemDTO, itemImgUrl: String?): AdminResponseDTO {
+    override fun createItem(requestCreateItemDTO: ItemCreateRequestDTO, itemImgUrl: String?): AdminResponseDTO {
 
         return if (requestCreateItemDTO.amount <= 0 && requestCreateItemDTO.price <= 0) {
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO()
@@ -37,7 +37,7 @@ class AdminItemServiceImpl(
     @Transactional
     override fun updateItem(
         itemId: Long,
-        requestCreateItemDTO: RequestCreateItemDTO,
+        requestCreateItemDTO: ItemCreateRequestDTO,
         itemImgUrl: String?
     ): AdminResponseDTO {
         val itemExisted = adminItemRepository.existsById(itemId)
@@ -81,34 +81,34 @@ class AdminItemServiceImpl(
     }
 
     // 상품 단건 조회
-    override fun findItem(itemId: Long): ResponseItemDTO {
+    override fun findItem(itemId: Long): ItemResponseDTO {
         val itemExisted = adminItemRepository.existsById(itemId)
 
         return if (!itemExisted) {
-            ResponseItemDTO(
+            ItemResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 "존재 하지 않는 상품입니다.",
                 null
             )
         } else {
             val itemResultDTO = adminItemRepository.findItemById(itemId)
-            return ResponseItemDTO.itemToResponseItemPageDTO(itemResultDTO)
+            return ItemResponseDTO.itemToResponseItemPageDTO(itemResultDTO)
         }
 
     }
 
     // 상품 전체 조회
-    override fun getAllItems(pageable: Pageable): ResponseSearchItemSearchDTO {
+    override fun getAllItems(pageable: Pageable): ItemsSearchDTO {
         val items = adminItemRepository.findAllItems(pageable)
 
-        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(items)
+        return ItemsSearchDTO.itemToResponseItemSearchPageDTO(items)
     }
 
     // 상품 이름으로 조회
-    override fun getItemsByName(itemName: String, pageable: Pageable): ResponseSearchItemSearchDTO {
+    override fun getItemsByName(itemName: String, pageable: Pageable): ItemsSearchDTO {
         val items = adminItemRepository.findItemsByName(itemName, pageable)
 
-        return ResponseSearchItemSearchDTO.itemToResponseItemSearchPageDTO(items, itemName)
+        return ItemsSearchDTO.itemToResponseItemSearchPageDTO(items, itemName)
     }
 
     // 상품 삭제

@@ -47,14 +47,14 @@ class AdminCocktailController(
     // 칵테일 상품 등록 페이지
     @GetMapping("cocktails")
     fun getCreateCocktailForm(model: Model): String {
-        model.addAttribute("createCocktailDTO", RequestCreateCocktailDTO.toFormDTO())
+        model.addAttribute("createCocktailDTO", CocktailCreateRequestDTO.toFormDTO())
         return "admins/cocktail/createCocktailForm"
     }
 
     // 칵테일 상품 등록
     @PostMapping("cocktails")
     fun createCocktail(
-        requestCreateCocktailDTO: RequestCreateCocktailDTO,
+        requestCreateCocktailDTO: CocktailCreateRequestDTO,
         model: Model
     ): String {
         val cocktailImgUrl = getImageUrl(requestCreateCocktailDTO)
@@ -72,7 +72,7 @@ class AdminCocktailController(
         val itemIds = adminCocktailItemService.getItemIds(cocktailId)
         val cocktail = adminCocktailService.findCocktail(cocktailId, itemIds)
         model.addAttribute("cocktails", cocktail)
-        model.addAttribute("cocktails", RequestUpdateCocktailDTO.formDTOFromResponseCocktailDTO(cocktail, itemIds))
+        model.addAttribute("cocktails", CocktailUpdateRequestDTO.formDTOFromResponseCocktailDTO(cocktail, itemIds))
 
         return "admins/cocktail/updateCocktailForm"
     }
@@ -81,7 +81,7 @@ class AdminCocktailController(
     @PutMapping("cocktails/{cocktailId}")
     fun updateCocktail(
         @PathVariable("cocktailId") cocktailId: Long,
-        requestCreateCocktailDTO: RequestCreateCocktailDTO,
+        requestCreateCocktailDTO: CocktailCreateRequestDTO,
         model: Model
     ): String {
         val cocktail = adminCocktailService.findCocktailById(cocktailId)
@@ -148,7 +148,7 @@ class AdminCocktailController(
     }
 
     // API를 통해 이미지 URL을 가져오는 함
-    private fun getImageUrl(requestCreateCocktailDTO: RequestCreateCocktailDTO): String? {
+    private fun getImageUrl(requestCreateCocktailDTO: CocktailCreateRequestDTO): String? {
         imageService.requestToken()
         val cocktailImgUrl = requestCreateCocktailDTO.cocktailImgUrl?.let {
             imageService.uploadObject(

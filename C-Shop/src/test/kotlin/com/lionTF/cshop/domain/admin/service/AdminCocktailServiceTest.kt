@@ -45,7 +45,7 @@ internal class AdminCocktailServiceTest {
 
     @BeforeEach
     fun init(){
-        val itemDTO1 = RequestCreateItemDTO(
+        val itemDTO1 = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 1,
@@ -55,7 +55,7 @@ internal class AdminCocktailServiceTest {
         )
         item1 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO1, "test"))
 
-        val itemDTO2 = RequestCreateItemDTO(
+        val itemDTO2 = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 1,
@@ -65,7 +65,7 @@ internal class AdminCocktailServiceTest {
         )
         item2 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO2, "test"))
 
-        val itemDTO3 = RequestCreateItemDTO(
+        val itemDTO3 = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 1,
@@ -82,7 +82,7 @@ internal class AdminCocktailServiceTest {
         item1?.let { itemIdList.add(it.itemId) }
         item2?.let { itemIdList.add(it.itemId) }
 
-        var requestCreateCocktailDTO1 = RequestCreateCocktailDTO(
+        var requestCreateCocktailDTO1 = CocktailCreateRequestDTO(
             cocktailName = "cocktail1",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
@@ -126,7 +126,7 @@ internal class AdminCocktailServiceTest {
         item2?.let { itemIdList.add(it.itemId) }
         item3?.let { itemIdList.add(it.itemId) }
 
-        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
+        val requestCreateCocktailDTO = CocktailCreateRequestDTO(
             cocktailName = "cocktail2",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
@@ -146,7 +146,7 @@ internal class AdminCocktailServiceTest {
         //given
         val itemIdList: MutableList<Long> = mutableListOf()
 
-        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
+        val requestCreateCocktailDTO = CocktailCreateRequestDTO(
             cocktailName = "cocktail2",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
@@ -170,7 +170,7 @@ internal class AdminCocktailServiceTest {
         item2?.let { itemIdList.add(it.itemId) }
         itemIdList.add(310L)
 
-        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
+        val requestCreateCocktailDTO = CocktailCreateRequestDTO(
             cocktailName = "cocktail10",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
@@ -226,7 +226,7 @@ internal class AdminCocktailServiceTest {
 
         item3?.let { itemIdList.add(it.itemId) }
 
-        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
+        val requestCreateCocktailDTO = CocktailCreateRequestDTO(
             cocktailName = "cocktail1123",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
@@ -254,7 +254,7 @@ internal class AdminCocktailServiceTest {
         itemIdList.add(100L)
 
 
-        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
+        val requestCreateCocktailDTO = CocktailCreateRequestDTO(
             cocktailName = "cocktail1",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
@@ -278,7 +278,7 @@ internal class AdminCocktailServiceTest {
 
         val cocktailId = cocktail!!.cocktailId
 
-        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
+        val requestCreateCocktailDTO = CocktailCreateRequestDTO(
             cocktailName = "cocktail1",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList
@@ -298,7 +298,7 @@ internal class AdminCocktailServiceTest {
         //given
         val itemIdList: MutableList<Long> = mutableListOf()
 
-        val requestCreateCocktailDTO = RequestCreateCocktailDTO(
+        val requestCreateCocktailDTO = CocktailCreateRequestDTO(
             cocktailName = "cocktail1",
             cocktailDescription = "cocktail-description",
             itemIds = itemIdList

@@ -2,14 +2,14 @@ package com.lionTF.cshop.domain.admin.controller.dto
 
 import org.springframework.http.HttpStatus
 
-data class ResponseCocktailDTO(
+data class CocktailResponseDTO(
     val httpStatus: Int,
     val message: String,
     val result: CocktailResultDTOAddItemIds? = null,
 ) {
     companion object {
-        fun cocktailToResponseCocktailPageDTO(cocktailResultDTOAddItemIds: CocktailResultDTOAddItemIds): ResponseCocktailDTO {
-            return ResponseCocktailDTO(
+        fun cocktailToResponseCocktailPageDTO(cocktailResultDTOAddItemIds: CocktailResultDTOAddItemIds): CocktailResponseDTO {
+            return CocktailResponseDTO(
                 HttpStatus.OK.value(),
                 "칵테일 조회를 성공했습니다.",
                 cocktailResultDTOAddItemIds
@@ -42,7 +42,7 @@ data class CocktailResultDTOAddItemIds(
     }
 }
 
-data class RequestUpdateCocktailDTO(
+data class CocktailUpdateRequestDTO(
     val cocktailName: String,
     val cocktailDescription: String,
     val cocktailImgUrl: String,
@@ -50,11 +50,11 @@ data class RequestUpdateCocktailDTO(
 ) {
     companion object {
         fun formDTOFromResponseCocktailDTO(
-            responseCocktailDTO: ResponseCocktailDTO,
+            responseCocktailDTO: CocktailResponseDTO,
             itemIds: MutableList<Long>
-        ): RequestUpdateCocktailDTO? {
+        ): CocktailUpdateRequestDTO? {
             return responseCocktailDTO.result?.let {
-                RequestUpdateCocktailDTO(
+                CocktailUpdateRequestDTO(
                     cocktailName = it.cocktailName,
                     cocktailDescription = responseCocktailDTO.result.cocktailDescription,
                     cocktailImgUrl = responseCocktailDTO.result.cocktailImgUrl,
