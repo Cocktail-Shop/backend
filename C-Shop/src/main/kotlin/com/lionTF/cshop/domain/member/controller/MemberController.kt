@@ -30,6 +30,12 @@ class MemberController(
         return "global/message"
     }
 
+    @GetMapping("/social/login-fail")
+    fun getSocialLoginFailPage(model: Model): String {
+        model.addAttribute("result", MemberResponseDTO.toFailedSocialLoginResponseDTO())
+        return "global/message"
+    }
+
     @PostMapping("/auth-number")
     @ResponseBody
     fun sendAuthNumber(authNumberDTO: AuthNumberRequestDTO) {
@@ -39,7 +45,6 @@ class MemberController(
     @PostMapping("/auth-number/verify")
     @ResponseBody
     fun verifyAuthNumber(authNumberDTO: AuthNumberVerifyRequestDTO): Boolean {
-        println(authNumberDTO)
         return mailAuthService.verifyAuthNumber(authNumberDTO)
     }
 

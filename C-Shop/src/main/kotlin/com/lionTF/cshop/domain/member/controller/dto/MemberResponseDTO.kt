@@ -8,6 +8,9 @@ data class MemberResponseDTO(val status:Int, val message:String, var href:String
         fun toFailedLoginResponseDTO():MemberResponseDTO{
             return MemberResponseDTO(HttpStatus.UNAUTHORIZED.value(),"아이디 혹은 비밀번호를 확인해주세요. 또는 탈퇴한 회원입니다.","/members/login")
         }
+        fun toFailedSocialLoginResponseDTO():MemberResponseDTO{
+            return MemberResponseDTO(HttpStatus.UNAUTHORIZED.value(),"이메일 약관을 동의하지 않았거나 탈퇴한 회원입니다.","/members/login")
+        }
         fun toSuccessSignUpResponseDTO():MemberResponseDTO{
             return MemberResponseDTO(HttpStatus.CREATED.value(),"아이디 생성 성공입니다.","/members/login")
         }

@@ -49,7 +49,7 @@ class MyPageServiceImpl(
         val canUpdate = isMatchCurrentPassword && !isSamePastPassword
 
         return if (canUpdate) {
-            existMember.updatePassword(pastPassword, passwordEncoder)
+            existMember.updatePassword(newPassword, passwordEncoder)
             MemberResponseDTO.toSuccessPasswordUpdateResponseDTO()
         } else {
             MemberResponseDTO.toFailedPasswordUpdateResponseDTO()

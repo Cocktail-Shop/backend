@@ -5,6 +5,7 @@ import com.lionTF.cshop.domain.member.models.Member
 import com.lionTF.cshop.domain.member.repository.MemberAuthRepository
 import com.lionTF.cshop.domain.shop.models.Cart
 import com.lionTF.cshop.domain.shop.repository.CartRepository
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest
 import org.springframework.security.oauth2.core.user.OAuth2User
@@ -26,13 +27,16 @@ class OAuth2UserDetailsService(
         val account = oAuth2User.attributes["kakao_account"] as Map<*, *>
         val properties = oAuth2User.attributes["properties"] as Map<*, *>
 
-        val email = account["email"] as String
+        val email = account["email"] as String? ?:throw UsernameNotFoundException("이메일 동의 필요")
         val name = properties["nickname"] as String
 
         val existMember = memberAuthRepository.findById(email)
 
         return if (existMember != null) {
-            AuthMemberDTO.fromMember(existMember)
+            when(existMember.memberStatus){
+                true -> AuthMemberDTO.fromMember(existMember)
+                false -> throw UsernameNotFoundException("탈퇴한 회원")
+            }
         } else {
             val newMember=Member.fromOAuth2User(name,email)
             memberAuthRepository.save(newMember)

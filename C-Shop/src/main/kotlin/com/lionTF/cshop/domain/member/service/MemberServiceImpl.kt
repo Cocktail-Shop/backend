@@ -63,7 +63,7 @@ class MemberServiceImpl(
                     else -> {
                         val tempPw = UUID.randomUUID().toString().replace("-", "").substring(0, 8)
 
-                        it.password = passwordEncoder.encode(tempPw)
+                        it.updatePassword(tempPw,passwordEncoder)
 
                         val mail = MailDTO.toPasswordInquiryMailDTO(it, tempPw)
                         mail.sendMail(javaMailSender)
