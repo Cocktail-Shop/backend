@@ -87,8 +87,7 @@ class AdminItemServiceImpl(
         return if (!itemExisted) {
             ItemResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "존재 하지 않는 상품입니다.",
-                null
+                "존재 하지 않는 상품입니다."
             )
         } else {
             val itemResultDTO = adminItemRepository.findItemById(itemId)

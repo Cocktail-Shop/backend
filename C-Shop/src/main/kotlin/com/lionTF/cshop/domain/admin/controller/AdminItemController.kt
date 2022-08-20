@@ -120,7 +120,7 @@ class AdminItemController(
         return Category.values()
     }
 
-    // API를 통해 이미지 URL을 가져오는 함
+    // API 를 통해 이미지 URL 을 가져오는 함
     private fun getImageUrl(requestCreateItemDTO: ItemCreateRequestDTO): String? {
         imageService.requestToken()
         val itemImgUrl = requestCreateItemDTO.itemImgUrl?.let {

@@ -30,7 +30,7 @@ internal class AdminItemServiceTest {
 
     @BeforeEach
     fun init() {
-        var itemTest1 = Item(
+        val itemTest1 = Item(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 10000,
@@ -42,7 +42,7 @@ internal class AdminItemServiceTest {
 
         item1 = adminItemRepository.save(itemTest1)
 
-        var itemTest2 = Item(
+        val itemTest2 = Item(
             itemName = "test2",
             category = Category.ALCOHOL,
             price = 10000,
@@ -54,7 +54,7 @@ internal class AdminItemServiceTest {
 
         item2 = adminItemRepository.save(itemTest2)
 
-        var itemTest3 = Item(
+        val itemTest3 = Item(
             itemName = "test3",
             category = Category.ALCOHOL,
             price = 10000,
@@ -67,7 +67,7 @@ internal class AdminItemServiceTest {
         item3 = adminItemRepository.save(itemTest3)
 
 
-        var itemTest4 = Item(
+        val itemTest4 = Item(
             itemName = "test4",
             category = Category.ALCOHOL,
             price = 10000,
@@ -84,7 +84,7 @@ internal class AdminItemServiceTest {
     @DisplayName("Item 생성 test")
     fun createItemTest() {
         //given
-        var createItemDTO = ItemCreateRequestDTO(
+        val createItemDTO = ItemCreateRequestDTO(
             itemName = "test",
             category = Category.ALCOHOL,
             price = 10000,
@@ -105,7 +105,7 @@ internal class AdminItemServiceTest {
     @DisplayName("Item 생성 예외 중 가격이 0이하인 case test")
     fun createItemExceptionByPriceTest() {
         //given
-        var createInvalidFormatPrice = ItemCreateRequestDTO(
+        val createInvalidFormatPrice = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 0,
@@ -127,7 +127,7 @@ internal class AdminItemServiceTest {
     @DisplayName("Item 생성 예외 중 수량이 0이하인 case test")
     fun createItemExceptionByAmountTest() {
         //given
-        var createInvalidFormatAmount = ItemCreateRequestDTO(
+        val createInvalidFormatAmount = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 10,
@@ -149,7 +149,7 @@ internal class AdminItemServiceTest {
     @DisplayName("Item 생성 예외 중 수량과 가격이 0이하인 case test")
     fun createItemExceptionByAmountAndPriceTest() {
         //given
-        var createInvalidFormatAmountAndPrice = ItemCreateRequestDTO(
+        val createInvalidFormatAmountAndPrice = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 0,
@@ -171,7 +171,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 test")
     fun updateItemTest() {
         //given
-        var updateItemDTO = ItemCreateRequestDTO(
+        val updateItemDTO = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 40000,
@@ -202,7 +202,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 예외 중 없는 상품 case test")
     fun updateItemExceptionTest() {
         //given
-        var invalidIpdateItemDTO = ItemCreateRequestDTO(
+        val invalidUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 40000,
@@ -212,7 +212,7 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val invalidUpdateItem = adminItemService.updateItem(12312312412L, invalidIpdateItemDTO, "test")
+        val invalidUpdateItem = adminItemService.updateItem(12312312412L, invalidUpdateItemDTO, "test")
 
         //then
         assertThat(invalidUpdateItem.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateItemResponseDTO().httpStatus)
@@ -224,7 +224,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 예외 중 가격이 0이하인 case test")
     fun updateItemExceptionByPriceTest() {
         //given
-        var invalidPriceUpdateItemDTO = ItemCreateRequestDTO(
+        val invalidPriceUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 0,
@@ -246,7 +246,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 예외 중 수량이 0이하인 case test")
     fun updateItemExceptionByAmountTest() {
         //given
-        var invalidAmountUpdateItemDTO = ItemCreateRequestDTO(
+        val invalidAmountUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 10,
@@ -268,7 +268,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 예외 중 수량과 가격 0이하인 case test")
     fun updateItemExceptionByAmountAndPriceTest() {
         //given
-        var invalidAmountAndPriceUpdateItemDTO = ItemCreateRequestDTO(
+        val invalidAmountAndPriceUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 0,
@@ -351,15 +351,13 @@ internal class AdminItemServiceTest {
         assertThat(findItem.message).isEqualTo("존재 하지 않는 상품입니다.")
     }
 
-    private fun generatePageable(page: Int, pageSize: Int): PageRequest = PageRequest.of(page, pageSize)
+    private fun generatePageable(page: Int = 0, pageSize: Int = 2): PageRequest = PageRequest.of(page, pageSize)
 
     @Test
     @DisplayName("상품 전체 조회 test")
     fun getAllItemsTest() {
         //given
-        val page = 0
-        val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize)
+        val pageable = generatePageable()
 
         //when
         val allItems = adminItemService.getAllItems(pageable)
@@ -369,19 +367,17 @@ internal class AdminItemServiceTest {
         //then
         assertThat(allItems.httpStatus).isEqualTo(HttpStatus.OK.value())
         assertThat(allItems.message).isEqualTo("상품 조회를 성공했습니다.")
-        assertThat(allItems.keyword).isEqualTo("")
+        assertThat(allItems.itemName).isEqualTo("")
         assertThat(allItems.result!!.totalElements).isEqualTo(count)
-        assertThat(allItems.result!!.totalPages).isEqualTo((count / pageSize) + 1)
+        assertThat(allItems.result!!.totalPages).isEqualTo((count / 2) + 1)
     }
 
     @Test
     @DisplayName("상품명으로 상품 조회 test")
     fun getItemsByNameTest() {
         //given
-        val page = 0
-        val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize)
-        val keyword: String = "te"
+        val pageable = generatePageable()
+        val keyword = "te"
 
         //when
         val allItems = adminItemService.getItemsByName(keyword, pageable)
@@ -389,7 +385,7 @@ internal class AdminItemServiceTest {
         //then
         assertThat(allItems.httpStatus).isEqualTo(HttpStatus.OK.value())
         assertThat(allItems.message).isEqualTo("상품 조회를 성공했습니다.")
-        assertThat(allItems.keyword).isEqualTo(keyword)
+        assertThat(allItems.itemName).isEqualTo(keyword)
         assertThat(allItems.result!!.totalElements).isEqualTo(8)
         assertThat(allItems.result!!.totalPages).isEqualTo(4)
     }

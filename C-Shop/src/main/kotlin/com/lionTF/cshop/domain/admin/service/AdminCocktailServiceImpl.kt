@@ -41,8 +41,7 @@ class AdminCocktailServiceImpl(
         return if (!cocktailExisted) {
             CocktailResponseDTO(
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "존재하지 않는 칵테일입니다.",
-                null
+                "존재하지 않는 칵테일입니다."
             )
         } else {
             val cocktailResultDTO = adminCocktailRepository.findCocktailById(cocktailId)
@@ -150,7 +149,7 @@ class AdminCocktailServiceImpl(
         return adminItemRepository.findItem(itemId)
     }
 
-    // Form으로부터 받아온 itemId들이 존재하는 상품인지 검사
+    // Form 으로부터 받아온 itemId 들이 존재하는 상품인지 검사
     private fun formToExistedItems(itemList: MutableList<Long>): Boolean {
         return itemList.none { existedItem(it) == null}
     }
@@ -162,7 +161,7 @@ class AdminCocktailServiceImpl(
     }
 
 
-    // Form으로부터 받아온 cocktailId들이 존재하는 상품인지 검사
+    // Form 으로부터 받아온 cocktailId 들이 존재하는 상품인지 검사
     private fun formToExistedCocktails(cocktailList: MutableList<Long>): Boolean {
         return cocktailList.none { existedCocktail(it) == null }
     }

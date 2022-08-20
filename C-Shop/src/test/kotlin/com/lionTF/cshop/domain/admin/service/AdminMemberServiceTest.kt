@@ -16,7 +16,7 @@ import javax.transaction.Transactional
 
 @SpringBootTest
 @Transactional
-internal class AdminMemberServiceTest{
+internal class AdminMemberServiceTest {
 
     @Autowired
     private lateinit var adminMemberService: AdminMemberService
@@ -30,7 +30,7 @@ internal class AdminMemberServiceTest{
 
     @BeforeEach
     fun init() {
-        var member1 = Member(
+        val member1 = Member(
             memberName = "test1",
             address = "address-test1",
             phoneNumber = "phone-test1",
@@ -38,7 +38,7 @@ internal class AdminMemberServiceTest{
         )
         memberTest1 = memberRepository.save(member1)
 
-        var member2 = Member(
+        val member2 = Member(
             memberName = "test2",
             address = "address-test2",
             phoneNumber = "phone-test2",
@@ -46,7 +46,7 @@ internal class AdminMemberServiceTest{
         )
         memberTest2 = memberRepository.save(member2)
 
-        var member3 = Member(
+        val member3 = Member(
             memberName = "test3",
             address = "address-test3",
             phoneNumber = "phone-test3",
@@ -76,7 +76,7 @@ internal class AdminMemberServiceTest{
     @DisplayName("한명의 회원 삭제 예외 test")
     fun deleteOneMemberExceptionTest() {
         //given
-        val memberId: Long = 98L
+        val memberId = 98L
 
         //when
         val deleteOneMember = adminMemberService.deleteOneMember(memberId)
@@ -88,17 +88,14 @@ internal class AdminMemberServiceTest{
         println("deleteOneMember = ${deleteOneMember.message}")
     }
 
-    private fun generatePageable(page: Int, pageSize: Int): PageRequest = PageRequest.of(page, pageSize)
-
+    private fun generatePageable(page: Int = 0, pageSize: Int = 2): PageRequest = PageRequest.of(page, pageSize)
 
 
     @Test
     @DisplayName("회원 전체 조회 test")
     fun getAllMembersTest() {
         //given
-        val page = 0
-        val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize)
+        val pageable = generatePageable()
 
         //when
         val allMembers = adminMemberService.getAllMembers(pageable)
@@ -117,10 +114,8 @@ internal class AdminMemberServiceTest{
     @DisplayName("회원 ID로 회원 검색 test")
     fun findMembers() {
         //given
-        val page = 0
-        val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize)
-        val keyword: String = "test"
+        val pageable = generatePageable()
+        val keyword = "test"
 
         //when
         val findMembers = adminMemberService.findMembers(keyword, pageable)
@@ -132,7 +127,6 @@ internal class AdminMemberServiceTest{
         assertThat(findMembers.result!!.totalElements).isEqualTo(4)
         assertThat(findMembers.result!!.totalPages).isEqualTo(2)
     }
-
 
 
 //    @Test

@@ -15,7 +15,7 @@ data class OrdersSearchDTO(
     companion object {
         fun orderToResponseOrderSearchPageDTO(
             findOrdersDTO: Page<OrdersDTO>,
-            keyword: String?
+            keyword: String? = ""
         ): OrdersSearchDTO {
             return OrdersSearchDTO(
                 HttpStatus.OK.value(),

@@ -13,7 +13,7 @@ data class MembersSearchDTO(
     companion object {
         fun memberToResponseMemberSearchPageDTO(
             findMemberDTO: Page<MembersDTO>,
-            keyword: String?
+            keyword: String? = ""
         ): MembersSearchDTO {
             return MembersSearchDTO(
                 HttpStatus.OK.value(),

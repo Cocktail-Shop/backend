@@ -56,7 +56,7 @@ class AdminOrderServiceImpl(
     override fun getAllOrders(pageable: Pageable): OrdersSearchDTO {
         val ordersInfo = adminOrderRepository.findOrdersInfo(pageable)
 
-        return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(ordersInfo, "")
+        return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(ordersInfo)
     }
 
     override fun getOrdersByMemberId(keyword: String, pageable: Pageable): OrdersSearchDTO {
@@ -114,7 +114,7 @@ class AdminOrderServiceImpl(
         return adminOrderRepository.findOrders(orderId)
     }
 
-    // Form으로부터 받아온 orderId들이 존재하는 주문인지 검사
+    // Form 으로부터 받아온 orderId 들이 존재하는 주문인지 검사
     private fun formToExistedItems(orderList: MutableList<Long>): Boolean {
         return orderList.none { existedOrder(it) == null }
     }

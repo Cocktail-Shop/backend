@@ -41,7 +41,7 @@ class AdminMemberServiceImpl(
     override fun getAllMembers(pageable: Pageable): MembersSearchDTO {
         val members = adminMemberRepository.findAllByMemberStatus(pageable)
 
-        return MembersSearchDTO.memberToResponseMemberSearchPageDTO(members, "")
+        return MembersSearchDTO.memberToResponseMemberSearchPageDTO(members)
     }
 
     // 존재하는 사용자인지 검사하는 함수
@@ -49,7 +49,7 @@ class AdminMemberServiceImpl(
         return adminMemberRepository.findMember(memberId)
     }
 
-    // Form으로부터 받아온 memberId들이 존재하는지 검사
+    // Form 으로부터 받아온 memberId 들이 존재하는지 검사
     private fun formToExistedMembers(memberIdList: MutableList<Long>): Boolean {
         return memberIdList.none { existedMember(it) == null }
     }
