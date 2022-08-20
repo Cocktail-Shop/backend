@@ -28,7 +28,7 @@ class MyPageServiceImpl(
             !(existInfo.isPresent && existInfo.get().memberId != memberId)
 
         return if (canUpdate) {
-            existMember.updateMember(requestUpdateMyPageDTO)
+            existMember.updateMemberInfo(requestUpdateMyPageDTO)
             ResponseDTO.toSuccessUpdateMyPageResponseDTO()
         } else {
             ResponseDTO.toFailedUpdateMyPageResponseDTO()
@@ -49,7 +49,7 @@ class MyPageServiceImpl(
         val canUpdate = isMatchExistPassword && !isPastSameNewPassword
 
         return if (canUpdate) {
-            existMember.updateMemberPassword(pastPassword, passwordEncoder)
+            existMember.updatePassword(pastPassword, passwordEncoder)
             ResponseDTO.toSuccessUpdatePasswordDTO()
         } else {
             ResponseDTO.toFailedUpdatePasswordDTO()

@@ -21,7 +21,8 @@
         <div class="block text-center">
           <h2 class="text-center">마이페이지</h2>
           <form class="text-left clearfix"  onsubmit="return checkMyPageInfo()" th:action="@{/members}"  th:object="${requestUpdateMyPageDTO}" th:method="put" th:each="info : ${myPageInfo}" >
-			  <div class="form-group">
+              <input type="hidden"  class="form-control signin-input" id="user-id" th:field="*{id}">
+              <div class="form-group">
               <label>이름 </label>
               <input type="text"  class="form-control signin-input" id="name" th:value="${info.result.memberName}" disabled>
             </div>

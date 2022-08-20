@@ -13,7 +13,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User
  */
 class AuthMemberDTO(
     username:String, password:String,
-    authorities: MutableCollection<out GrantedAuthority>?,
+    authorities: MutableCollection<out GrantedAuthority>,
     var fromSocial:Boolean,
     val attr:Map<String,Any>?=null,
     val memberName:String,
@@ -27,7 +27,6 @@ class AuthMemberDTO(
         return attr
     }
 
-
     companion object{
         fun fromMember(member:Member) : AuthMemberDTO {
             return AuthMemberDTO(
@@ -39,8 +38,5 @@ class AuthMemberDTO(
                 memberId = member.memberId
             )
         }
-
-
     }
-
 }

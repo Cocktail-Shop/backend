@@ -23,9 +23,9 @@ class MemberServiceImpl(
 
     @Transactional
     override fun registerMember(requestSignUpDTO: RequestSignUpDTO): ResponseDTO {
-        requestSignUpDTO.encoding()
+        requestSignUpDTO.encoding(passwordEncoder)
 
-        val newMember = Member.requestSignUpDTOToMember(requestSignUpDTO)
+        val newMember = Member.fromRequestSignUpDTO(requestSignUpDTO)
         val existMember: Optional<Member> = memberAuthRepository.findById(newMember.id)
 
         return if (existMember.isPresent) {
@@ -90,5 +90,4 @@ class MemberServiceImpl(
 
         return ResponseDTO.toSuccessSetPreMemberInfoResponseDTO()
     }
-
 }

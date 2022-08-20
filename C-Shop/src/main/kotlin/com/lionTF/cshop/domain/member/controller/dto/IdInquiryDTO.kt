@@ -6,11 +6,10 @@ import org.springframework.http.HttpStatus
 
 data class IdInquiryResultDTO(val id:String)
 
-data class RequestIdInquiryDTO(var memberName:String,var email:String){
-
+data class RequestIdInquiryDTO(var memberName:String="",var email:String=""){
     companion object{
         fun toFormDTO():RequestIdInquiryDTO{
-            return RequestIdInquiryDTO("","")
+            return RequestIdInquiryDTO()
         }
     }
 }

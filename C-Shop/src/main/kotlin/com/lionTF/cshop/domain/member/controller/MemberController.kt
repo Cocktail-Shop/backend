@@ -19,15 +19,13 @@ class MemberController(
     private val myPageService: MyPageService,
     private val mailAuthService: MailAuthService
 ) {
-
-
     @GetMapping("/getSessionId")
     fun getSessionId(session:HttpSession,model: Model):String{
         model.addAttribute("result",
             ResponseDTO(HttpStatus.OK.value(),session.id,"/members"))
         return "global/message"
     }
-    //로그인 관련
+
     @GetMapping("/members/login")
     fun login(): String {
         return "members/login"
@@ -39,20 +37,19 @@ class MemberController(
         return "global/message"
     }
 
-    //인증번호 관련
     @PostMapping("/members/auth-number")
-    @ResponseBody//AJAX 사용시 필요
+    @ResponseBody
     fun sendAuthNumber(authNumberDTO: RequestAuthNumberDTO) {
         mailAuthService.sendAuthNumber(authNumberDTO)
     }
 
     @PostMapping("/members/auth-number/verify")
-    @ResponseBody//AJAX 사용시 필요
+    @ResponseBody
     fun verifyAuthNumber(authNumberDTO: RequestVerifyAuthNumberDTO): Boolean {
+        println(authNumberDTO)
         return mailAuthService.verifyAuthNumber(authNumberDTO)
     }
 
-    // 아이디 찾기
     @GetMapping("/members/id-inquiry")
     fun idInquiryPage(model: Model): String {
         model.addAttribute("requestIdInquiryDTO", RequestIdInquiryDTO.toFormDTO())
@@ -65,7 +62,6 @@ class MemberController(
         return "members/forget-id-result"
     }
 
-    // 비밀번호 찾기
     @GetMapping("/members/password-inquiry")
     fun pwInquiryPage(model: Model): String {
         model.addAttribute("requestPasswordInquiryDTO", RequestPasswordInquiryDTO.toFormDTO())
@@ -78,7 +74,6 @@ class MemberController(
         return "global/message"
     }
 
-    //회원가입
     @GetMapping("/members/signup")
     fun signUpPage(model: Model): String {
         model.addAttribute("requestSignUpDTO", RequestSignUpDTO.toFormDTO())
@@ -92,15 +87,13 @@ class MemberController(
         return "global/message"
     }
 
-
-    //마이페이지
     @GetMapping("/members")
     fun getMyPageInfo(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO, model: Model): String {
         val responseDTO = myPageService.getMyPageInfo(authMemberDTO.memberId)
         model.addAttribute("myPageInfo", responseDTO)
         model.addAttribute("requestUpdateMyPageDTO", RequestUpdateMyPageDTO.toFormDTO(responseDTO))
 
-        return when (authMemberDTO?.fromSocial) {
+        return when (authMemberDTO.fromSocial) {
             true -> "members/social-my-page"
             else -> "members/my-page"
         }
@@ -116,7 +109,6 @@ class MemberController(
         return "global/message"
     }
 
-    //마이페이지 비밀번호 수정
     @GetMapping("/members/password")
     fun getUpdatePasswordPage(model: Model): String {
         model.addAttribute("requestUpdatePasswordDTO", RequestUpdatePasswordDTO.toFormDTO())
@@ -133,8 +125,6 @@ class MemberController(
         return "global/message"
     }
 
-
-    //회원 탈퇴
     @DeleteMapping("/members")
     fun deleteMember(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO, model: Model): String {
         model.addAttribute("result", myPageService.deleteMember(authMemberDTO))
@@ -164,5 +154,4 @@ class MemberController(
         model.addAttribute("result",memberService.setPreMemberInfo(authMemberDTO.memberId,requestPreMemberInfoDTO))
         return "global/message"
     }
-
 }

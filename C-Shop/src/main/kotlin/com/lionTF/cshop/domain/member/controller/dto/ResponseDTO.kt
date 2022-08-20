@@ -12,7 +12,7 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
             return ResponseDTO(HttpStatus.CREATED.value(),"아이디 생성 성공입니다.","/members/login")
         }
         fun toFailedSignUpResponseDTO():ResponseDTO{
-            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"이미 존재하는 아이디입니다.")
+            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"이미 존재하는 아이디입니다.","/members/login")
         }
 
         fun toDeletedIdInquiryResponseDTO():ResponseDTO{
@@ -30,7 +30,7 @@ data class ResponseDTO(val status:Int,val message:String,var href:String="") {
         }
 
         fun toDeletedPasswordInquiryResponseDTO():ResponseDTO{
-            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"탈퇴한 회원입니다.")
+            return ResponseDTO(HttpStatus.UNAUTHORIZED.value(),"탈퇴한 회원입니다.","/members/login")
         }
 
         fun toFailedPasswordInquiryResponseDTO():ResponseDTO{

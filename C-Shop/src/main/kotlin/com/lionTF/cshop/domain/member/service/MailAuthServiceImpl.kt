@@ -16,10 +16,8 @@ class MailAuthServiceImpl(
     private val javaMailSender: JavaMailSender
 ) : MailAuthService {
 
-
     override fun sendAuthNumber(authNumberDTO: RequestAuthNumberDTO) {
-        var authNumber = UUID.randomUUID().toString().replace("-", "")
-        authNumber = authNumber.substring(0, 6)
+        var authNumber = UUID.randomUUID().toString().replace("-", "").substring(0, 6)
 
         val saveAuthNumberOperation = redisTemplate.opsForValue()
         saveAuthNumberOperation.set(authNumberDTO.email, authNumber, 4, TimeUnit.MINUTES)
@@ -34,5 +32,4 @@ class MailAuthServiceImpl(
 
         return authNumberDTO.authNumber == existAuthNumber
     }
-
 }
