@@ -41,46 +41,49 @@ class MemberServiceImpl(
 
 
     override fun requestIdInquiry(idInquiryDTO: IdInquiryRequestDTO): Any? {
-        return memberAuthRepository.findByMemberNameAndEmail(idInquiryDTO.memberName, idInquiryDTO.email)?.let {
-            if (it.memberStatus) {
-                when (it.fromSocial) {
-                    true -> MemberResponseDTO.toSocialIdInquiryResponseDTO()
-                    else -> IdInquiryResponseDTO.toSuccessIdInquiryResponseDTO(it)
+        return memberAuthRepository.findByMemberNameAndEmail(idInquiryDTO.memberName, idInquiryDTO.email)
+            ?.let { existMember ->
+                if (existMember.memberStatus) {
+                    when (existMember.fromSocial) {
+                        true -> MemberResponseDTO.toSocialIdInquiryResponseDTO()
+                        else -> IdInquiryResponseDTO.toSuccessIdInquiryResponseDTO(existMember)
+                    }
+                } else {
+                    MemberResponseDTO.toDeletedIdInquiryResponseDTO()
                 }
-            } else {
-                MemberResponseDTO.toDeletedIdInquiryResponseDTO()
-            }
-        } ?: MemberResponseDTO.toFailedIdInquiryResponseDTO()
+            } ?: MemberResponseDTO.toFailedIdInquiryResponseDTO()
     }
 
 
     @Transactional
     override fun requestPasswordInquiry(passwordInquiryDTO: PasswordInquiryRequestDTO): MemberResponseDTO {
-        return memberAuthRepository.findByIdAndEmail(passwordInquiryDTO.id, passwordInquiryDTO.email)?.let {
-            if (it.memberStatus) {
-                when (it.fromSocial) {
-                    true -> MemberResponseDTO.toSocialPasswordInquiryResponseDTO()
-                    else -> {
-                        val tempPw = UUID.randomUUID().toString().replace("-", "").substring(0, 8)
+        return memberAuthRepository.findByIdAndEmail(passwordInquiryDTO.id, passwordInquiryDTO.email)
+            ?.let { existMember ->
+                if (existMember.memberStatus) {
+                    when (existMember.fromSocial) {
+                        true -> MemberResponseDTO.toSocialPasswordInquiryResponseDTO()
+                        else -> {
+                            val tempPw = UUID.randomUUID().toString().replace("-", "").substring(0, 8)
 
-                        it.updatePassword(tempPw,passwordEncoder)
+                            existMember.updatePassword(tempPw, passwordEncoder)
 
-                        val mail = MailDTO.toPasswordInquiryMailDTO(it, tempPw)
-                        mail.sendMail(javaMailSender)
-                        return MemberResponseDTO.toSuccessPasswordInquiryResponseDTO()
+                            val mail = MailDTO.toPasswordInquiryMailDTO(existMember, tempPw)
+                            mail.sendMail(javaMailSender)
+
+                            MemberResponseDTO.toSuccessPasswordInquiryResponseDTO()
+                        }
                     }
+                } else {
+                    MemberResponseDTO.toDeletedPasswordInquiryResponseDTO()
                 }
-            } else {
-                MemberResponseDTO.toDeletedPasswordInquiryResponseDTO()
-            }
-        } ?: MemberResponseDTO.toFailedPasswordInquiryResponseDTO()
+            } ?: MemberResponseDTO.toFailedPasswordInquiryResponseDTO()
     }
 
     @Transactional
     override fun setPreMemberInfo(memberId: Long, preMemberInfoRequestDTO: PreMemberInfoRequestDTO): MemberResponseDTO {
-        return memberAuthRepository.findByMemberId(memberId)?.let {
-            it.setPreMemberInfo(preMemberInfoRequestDTO)
-            return MemberResponseDTO.toSuccessSetPreMemberInfoResponseDTO()
+        return memberAuthRepository.findByMemberId(memberId)?.let { existMember ->
+            existMember.setPreMemberInfo(preMemberInfoRequestDTO)
+            MemberResponseDTO.toSuccessSetPreMemberInfoResponseDTO()
         } ?: throw NoSuchElementException("해당 회원 정보 찾을 수 없음")
     }
 }

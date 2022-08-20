@@ -15,14 +15,15 @@ class MyPageServiceImpl(
 ) : MyPageService {
 
     override fun getMyPageInfo(memberId: Long): MyPageResponseDTO {
-        return memberAuthRepository.findByMemberId(memberId)?.let {
-            MyPageResponseDTO.fromMember(it)
+        return memberAuthRepository.findByMemberId(memberId)?.let { member ->
+            MyPageResponseDTO.fromMember(member)
         } ?: throw NoSuchElementException("해당 회원 정보 찾을 수 없음")
     }
 
     @Transactional
     override fun updateMyPageInfo(memberId: Long, requestUpdateMyPageDTO: RequestUpdateMyPageDTO): MemberResponseDTO {
-        val requestMember = memberAuthRepository.findByMemberId(memberId) ?: throw NoSuchElementException("해당 회원정보를 찾을 수 없음")
+        val requestMember =
+            memberAuthRepository.findByMemberId(memberId) ?: throw NoSuchElementException("해당 회원정보를 찾을 수 없음")
 
         val existInfo = memberAuthRepository.findById(requestUpdateMyPageDTO.id)
         val canUpdate =
@@ -39,9 +40,9 @@ class MyPageServiceImpl(
 
     @Transactional
     override fun updatePassword(memberId: Long, passwordUpdateRequestDTO: PasswordUpdateRequestDTO): MemberResponseDTO {
-        val existMember = memberAuthRepository.findByMemberId(memberId)?:throw NoSuchElementException("해당 회원 정보 없음")
+        val existMember = memberAuthRepository.findByMemberId(memberId) ?: throw NoSuchElementException("해당 회원 정보 없음")
 
-        val (pastPassword, newPassword)=passwordUpdateRequestDTO
+        val (pastPassword, newPassword) = passwordUpdateRequestDTO
 
         val isMatchCurrentPassword = passwordEncoder.matches(pastPassword, existMember.password)
         val isSamePastPassword = pastPassword == newPassword
@@ -58,8 +59,8 @@ class MyPageServiceImpl(
 
     @Transactional
     override fun deleteMember(authMemberDTO: AuthMemberDTO): MemberResponseDTO {
-        return memberAuthRepository.findByMemberId(authMemberDTO.memberId)?.let {
-            it.deleteMember()
+        return memberAuthRepository.findByMemberId(authMemberDTO.memberId)?.let { member ->
+            member.deleteMember()
             MemberResponseDTO.toDeleteMemberResponseDTO()
         } ?: throw NoSuchElementException("해당 회원 정보 찾을 수 없음")
     }

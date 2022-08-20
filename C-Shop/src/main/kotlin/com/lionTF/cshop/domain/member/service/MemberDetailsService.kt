@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service
 class MemberDetailsService(private val memberAuthRepository: MemberAuthRepository) : UserDetailsService {
 
     override fun loadUserByUsername(username: String): UserDetails {
-        return memberAuthRepository.findById(username)?.let {
-            when (it.memberStatus) {
-                true -> AuthMemberDTO.fromMember(it)
+        return memberAuthRepository.findById(username)?.let {member->
+            when (member.memberStatus) {
+                true -> AuthMemberDTO.fromMember(member)
                 false -> throw UsernameNotFoundException("탈퇴한 회원")
             }
         } ?: throw UsernameNotFoundException("아이디 비밀번호를 확인")
