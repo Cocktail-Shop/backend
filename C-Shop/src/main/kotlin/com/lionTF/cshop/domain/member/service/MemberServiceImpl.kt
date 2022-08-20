@@ -65,7 +65,7 @@ class MemberServiceImpl(
 
                         it.password = passwordEncoder.encode(tempPw)
 
-                        val mail = MailDTO.toPasswordInquiryMailDTO(it.id, it.email, tempPw)
+                        val mail = MailDTO.toPasswordInquiryMailDTO(it, tempPw)
                         mail.sendMail(javaMailSender)
                         return MemberResponseDTO.toSuccessPasswordInquiryResponseDTO()
                     }

@@ -23,7 +23,7 @@ class MailAuthServiceImpl(
         val saveAuthNumberOperation = redisTemplate.opsForValue()
         saveAuthNumberOperation.set(authNumberDTO.email, authNumber, 4, TimeUnit.MINUTES)
 
-        val mail = MailDTO.toAuthNumberMailDTO(authNumberDTO.email, authNumber)
+        val mail = MailDTO.toAuthNumberMailDTO(authNumberDTO, authNumber)
         mail.sendMail(javaMailSender)
     }
 
