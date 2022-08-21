@@ -66,11 +66,7 @@ class OrderServiceImpl(
 
                 orderItemRepository.save(
                     OrderItem.fromOrderItemDTO(
-                        OrderItemDTO(
-                            orders,
-                            item,
-                            info.amount
-                        )
+                        OrderItemDTO.fromOrderRequestInfo(orders, item, info.amount)
                     )
                 )
             }
