@@ -113,7 +113,8 @@
                                                     <ul class="dropdown-menu search-dropdown">
                                                         <li>
                                                             <form th:action="@{/admins/search/items}" th:method="get">
-                                                                <input name="itemName" type="search" class="form-control"
+                                                                <input name="itemName" type="search"
+                                                                       class="form-control"
                                                                        placeholder="상품 검색(to상품명)...">
                                                             </form>
                                                         </li>
@@ -122,6 +123,7 @@
                                             </div>
                                             <table class="table">
                                                 <tr>
+                                                    <th>상품 이미지</th>
                                                     <th>상품명</th>
                                                     <th>가격</th>
                                                     <th>수량</th>
@@ -132,6 +134,10 @@
                                                     <th>상품 삭제</th>
                                                 </tr>
                                                 <tr th:each="item : ${items.result.content}">
+                                                    <td>
+                                                        <img th:src="${item.itemImgUrl}"
+                                                             style="width: 3vw; height: 7vw">
+                                                    </td>
                                                     <td th:text="${item.itemName}"></td>
                                                     <td th:text="${item.price}"></td>
                                                     <td th:text="${item.amount}"></td>

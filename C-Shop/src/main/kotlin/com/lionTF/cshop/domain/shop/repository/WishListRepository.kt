@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param
 interface WishListRepository : JpaRepository<WishList, Long> {
 
     @Query(
-        value = "SELECT new com.lionTF.cshop.domain.shop.controller.dto.WishListDTO(w.wishListId, w.memberId, w.itemId, w.category, w.itemName, w.itemImgUrl)" +
+        value = "SELECT new com.lionTF.cshop.domain.shop.controller.dto.WishListDTO(w.wishListId, w.memberId, w.itemId, w.category, w.itemName, w.itemImgUrl, w.price)" +
                 " from WishList w where w.memberId = :memberId and w.wishListStatus = :wishListStatus",
         countQuery = "select count(w) from WishList w where w.memberId = :memberId and w.wishListStatus = :wishListStatus"
     )

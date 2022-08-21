@@ -123,6 +123,7 @@
                                             </div>
                                             <table class="table">
                                                 <tr>
+                                                    <th>상품 이미지</th>
                                                     <th>상품명</th>
                                                     <th>설명</th>
                                                     <th>생성일</th>
@@ -130,6 +131,10 @@
                                                     <th>칵테일 삭제</th>
                                                 </tr>
                                                 <tr th:each="cocktail : ${cocktails.result.content}">
+                                                    <td>
+                                                        <img th:src="${cocktail.cocktailImgUrl}"
+                                                             style="width: 3vw; height: 7vw">
+                                                    </td>
                                                     <td th:text="${cocktail.cocktailName}"></td>
                                                     <td th:text="${cocktail.cocktailDescription}"></td>
                                                     <td th:text="${#temporals.format(cocktail.createdAt, 'yyyy-MM-dd')}"></td>
@@ -160,7 +165,7 @@
                                                     <li th:classappend="${cocktails.result.first} ? 'disabled'"
                                                         class="page-item">
                                                         <a class="page-link"
-                                                           th:href="${cocktails.result.first} ? '#' : @{/admins/search/cocktails/(page=${pageNumber - 1},keyword=${cocktails.keyword})}"
+                                                           th:href="${cocktails.result.first} ? '#' : @{/admins/search/cocktails/(page=${pageNumber - 1},cocktailName=${cocktails.cocktailName})}"
                                                            aria-label="Previous">
                                                             <span aria-hidden="true">&lt;</span>
                                                             <span class="sr-only">Previous</span>
@@ -172,14 +177,14 @@
                                                         th:classappend="${page == pageNumber + 1} ? 'active'"
                                                         class="page-item">
                                                         <a th:text="${page}" class="page-link"
-                                                           th:href="@{/admins/search/cocktails/(page=${page - 1},keyword=${cocktails.keyword})}"></a>
+                                                           th:href="@{/admins/search/cocktails/(page=${page - 1},cocktailName=${cocktails.cocktailName})}"></a>
                                                     </li>
 
                                                     <!-- 다음으로 이동 -->
                                                     <li th:classappend="${cocktails.result.last} ? 'disabled'"
                                                         class="page-item">
                                                         <a class="page-link"
-                                                           th:href="${cocktails.result.last} ? '#' : @{/admins/search/cocktails/(page=${pageNumber + 1},keyword=${cocktails.keyword})}"
+                                                           th:href="${cocktails.result.last} ? '#' : @{/admins/search/cocktails/(page=${pageNumber + 1},cocktailName=${cocktails.cocktailName})}"
                                                            aria-label="Next">
                                                             <span aria-hidden="true">&gt;</span>
                                                             <span class="sr-only">Next</span>

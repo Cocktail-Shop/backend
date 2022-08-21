@@ -3,86 +3,11 @@
 <th:block th:replace="~{global/headData:: headData}"></th:block>
 
 <body id="body">
-<section class="top-header">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 col-xs-12 col-sm-4">
-                <!-- Site Logo -->
-                <div class="logo text-center">
-                    <a href="#" th:href="@{/admins/main}">
-                        <!-- replace logo here -->
-                        <svg width="135px" height="29px" viewBox="0 0 155 29" version="1.1"
-                             xmlns="http://www.w3.org/2000/svg"
-                             xmlns:xlink="http://www.w3.org/1999/xlink">
-                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" font-size="40"
-                               font-family="AustinBold, Austin" font-weight="bold">
-                                <g id="Group" transform="translate(-108.000000, -297.000000)" fill="#000000">
-                                    <text id="AVIATO">
-                                        <tspan x="108.94" y="325">C-Shop</tspan>
-                                    </text>
-                                </g>
-                            </g>
-                        </svg>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section><!-- End Top Header Bar -->
-
-
-<!-- Main Menu Section -->
-<section class="menu">
-    <nav class="navbar navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <h2 class="menu-title">Main Menu</h2>
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
-                        aria-expanded="false" aria-controls="navbar">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-
-            </div><!-- / .navbar-header -->
-
-            <!-- Navbar Links -->
-            <div id="navbar" class="navbar-collapse collapse text-center">
-                <ul class="nav navbar-nav">
-
-                    <!-- Home -->
-                    <li class="dropdown ">
-                        <a href="#" th:href="@{/admins/main}">Home</a>
-                    </li><!-- / Home -->
-
-                    <!-- Blog -->
-                    <li class="dropdown dropdown-slide">
-                        <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
-                           data-delay="350"
-                           role="button" aria-haspopup="true" aria-expanded="false">상품 등록 <span
-                                class="tf-ion-ios-arrow-down"></span></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/admins/items">칵테일 재료</a></li>
-                            <li><a href="/admins/cocktails">칵테일</a></li>
-                        </ul>
-                    </li><!-- / Blog -->
-                </ul><!-- / .nav .navbar-nav -->
-            </div>
-            <!--/.navbar-collapse -->
-        </div><!-- / .container -->
-    </nav>
-</section>
+<th:block th:replace="~{global/AlcoholHeader :: header}"></th:block>
 <section class="user-dashboard page-wrapper">
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <ul class="list-inline dashboard-menu text-center">
-                    <li><a href="profile-details.html">Profile Details</a></li>
-                    <li><a href="#" th:href="@{/admins/orders}">Orders</a></li>
-                    <li><a href="#" th:href="@{/admins/members}">Members</a></li>
-                    <li><a href="#" th:href="@{/admins/all-item}">Items</a></li>
-                    <li><a href="#" th:href="@{/admins/all-cocktails}">Cocktails</a></li>
                 </ul>
                 <div class="dashboard-wrapper dashboard-user-profile">
                     <div class="media">
@@ -91,42 +16,25 @@
                                 <div class="col-md-12">
                                     <div class="dashboard-wrapper user-dashboard">
                                         <div class="table-responsive">
-                                            <div class="col-md-4 col-xs-12 col-sm-4" style="float: right">
-                                                <li class="dropdown search dropdown-slide">
-                                                    <a href="#!" class="dropdown-toggle" data-toggle="dropdown"
-                                                       data-hover="dropdown"><i
-                                                            class="tf-ion-ios-search-strong"></i> Search</a>
-                                                    <ul class="dropdown-menu search-dropdown">
-                                                        <li>
-                                                            <form th:action="@{/admins/search/items}" th:method="get">
-                                                                <input name="itemName" type="search" class="form-control"
-                                                                       placeholder="상품 검색(to상품명)...">
-                                                            </form>
-                                                        </li>
-                                                    </ul>
-                                                </li><!-- / Search -->
-                                            </div>
                                             <table class="table">
                                                 <tr>
+                                                    <th>상품 이미지</th>
                                                     <th>상품명</th>
-                                                    <th>가격</th>
-                                                    <th>수량</th>
-                                                    <th>도수</th>
                                                     <th>카테고리</th>
-                                                    <th>생성일</th>
-                                                    <th>수정</th>
-                                                    <th>상품 삭제</th>
+                                                    <th>가격</th>
+                                                    <th>바로 구매하기</th>
+                                                    <th>찜하기 취소</th>
                                                 </tr>
-                                                <tr th:each="item : ${items.result.content}">
+                                                <tr th:each="item : ${wishList.content}">
+                                                    <td>
+                                                        <img th:src="${item.itemImgUrl}" style="width: 3vw; height: 7vw">
+                                                    </td>
                                                     <td th:text="${item.itemName}"></td>
-                                                    <td th:text="${item.price}"></td>
-                                                    <td th:text="${item.amount}"></td>
-                                                    <td th:text="${item.degree}"></td>
                                                     <td th:text="${item.category}"></td>
-                                                    <td th:text="${#temporals.format(item.createdAt, 'yyyy-MM-dd')}"></td>
+                                                    <td th:text="${item.price}"></td>
                                                     <td><a href="#"
-                                                           th:href="@{/admins/items/{itemId} (itemId=${item.itemId})}"
-                                                           class="btn btn-default btn-asd">상세 보기</a></td>
+                                                           th:href="@{/items/{itemId} (itemId=${item.itemId})}"
+                                                           class="btn btn-default btn-asd">바로가기</a></td>
                                                     <td>
                                                         <form th:method="delete"
                                                               th:action="@{/admins/items/{itemId} (itemId=${item.itemId})}">
@@ -137,11 +45,11 @@
                                                 </tr>
                                             </table>
                                         </div>
-                                        <div th:if="${items}">
+                                        <div th:if="${wishList}">
                                             <!-- 전역 변수 선언 -->
-                                            <nav th:with=" pageNumber = ${items.result.pageable.pageNumber},
-                                                pageSize = ${items.result.pageable.pageSize},
-                                                totalPages = ${items.result.totalPages},
+                                            <nav th:with=" pageNumber = ${wishList.pageable.pageNumber},
+                                                pageSize = ${wishList.pageable.pageSize},
+                                                totalPages = ${wishList.totalPages},
                                                 startPage = ${T(java.lang.Math).floor(pageNumber / pageSize) * pageSize + 1},
                                                 tempEndPage = ${startPage + pageSize - 1},
                                                 endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})"
@@ -150,17 +58,17 @@
                                                     <!-- 처음으로 이동 -->
                                                     <li th:classappend="${pageNumber < pageSize} ? 'disabled'"
                                                         class="page-item">
-                                                        <a class="page-link" th:href="@{/admins/all-item/(page=0)}">
+                                                        <a class="page-link" th:href="@{/wish-list/(page=0)}">
                                                             <span>&laquo;</span>
                                                             <span class="sr-only">First</span>
                                                         </a>
                                                     </li>
 
                                                     <!-- 이전으로 이동 -->
-                                                    <li th:classappend="${items.result.first} ? 'disabled'"
+                                                    <li th:classappend="${wishList.first} ? 'disabled'"
                                                         class="page-item">
                                                         <a class="page-link"
-                                                           th:href="${items.result.first} ? '#' : @{/admins/all-item/(page=${pageNumber - 1})}"
+                                                           th:href="${wishList.first} ? '#' : @{/wish-list/(page=${pageNumber - 1})}"
                                                            aria-label="Previous">
                                                             <span aria-hidden="true">&lt;</span>
                                                             <span class="sr-only">Previous</span>
@@ -172,14 +80,14 @@
                                                         th:classappend="${page == pageNumber + 1} ? 'active'"
                                                         class="page-item">
                                                         <a th:text="${page}" class="page-link"
-                                                           th:href="@{/admins/all-item/(page=${page - 1})}"></a>
+                                                           th:href="@{/wish-list/(page=${page - 1})}"></a>
                                                     </li>
 
                                                     <!-- 다음으로 이동 -->
-                                                    <li th:classappend="${items.result.last} ? 'disabled'"
+                                                    <li th:classappend="${wishList.last} ? 'disabled'"
                                                         class="page-item">
                                                         <a class="page-link"
-                                                           th:href="${items.result.last} ? '#' : @{/admins/all-item/(page=${pageNumber + 1})}"
+                                                           th:href="${wishList.last} ? '#' : @{/wish-list/(page=${pageNumber + 1})}"
                                                            aria-label="Next">
                                                             <span aria-hidden="true">&gt;</span>
                                                             <span class="sr-only">Next</span>
@@ -190,7 +98,7 @@
                                                     <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 <= startPage} ? 'disabled'"
                                                         class="page-item">
                                                         <a class="page-link"
-                                                           th:href="@{/admins/all-item/(page=${totalPages - 1})}">
+                                                           th:href="@{/wish-list/(page=${totalPages - 1})}">
                                                             <span>&raquo;</span>
                                                             <span class="sr-only">Last</span>
                                                         </a>

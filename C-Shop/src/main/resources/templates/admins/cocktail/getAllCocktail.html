@@ -123,6 +123,7 @@
                                             </div>
                                             <table class="table">
                                                 <tr>
+                                                    <th>상품 이미지</th>
                                                     <th>상품명</th>
                                                     <th>설명</th>
                                                     <th>생성일</th>
@@ -130,6 +131,10 @@
                                                     <th>칵테일 삭제</th>
                                                 </tr>
                                                 <tr th:each="cocktail : ${cocktails.result.content}">
+                                                    <td>
+                                                        <img th:src="${cocktail.cocktailImgUrl}"
+                                                             style="width: 3vw; height: 7vw">
+                                                    </td>
                                                     <td th:text="${cocktail.cocktailName}"></td>
                                                     <td th:text="${cocktail.cocktailDescription}"></td>
                                                     <td th:text="${#temporals.format(cocktail.createdAt, 'yyyy-MM-dd')}"></td>

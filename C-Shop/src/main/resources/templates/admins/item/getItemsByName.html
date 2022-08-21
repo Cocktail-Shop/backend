@@ -123,6 +123,7 @@
                                             </div>
                                             <table class="table">
                                                 <tr>
+                                                    <th>상품 이미지</th>
                                                     <th>상품명</th>
                                                     <th>가격</th>
                                                     <th>수량</th>
@@ -133,6 +134,10 @@
                                                     <th>상품 삭제</th>
                                                 </tr>
                                                 <tr th:each="item : ${items.result.content}">
+                                                    <td>
+                                                        <img th:src="${item.itemImgUrl}"
+                                                             style="width: 3vw; height: 7vw">
+                                                    </td>
                                                     <td th:text="${item.itemName}"></td>
                                                     <td th:text="${item.price}"></td>
                                                     <td th:text="${item.amount}"></td>
@@ -162,19 +167,10 @@
                                                 endPage = (${tempEndPage < totalPages ? tempEndPage : totalPages})"
                                                  aria-label="Page navigation">
                                                 <ul class="pagination ">
-                                                    <!--                                                    &lt;!&ndash; 처음으로 이동 &ndash;&gt;-->
-                                                    <!--                                                    <li th:classappend="${pageNumber < pageSize} ? 'disabled'" class="page-item">-->
-                                                    <!--                                                        <a class="page-link" th:href="@{/admins/search/items/(page=0,keyword=${items.keyword})}">-->
-                                                    <!--                                                            <span>&laquo;</span>-->
-                                                    <!--                                                            <span class="sr-only">First</span>-->
-                                                    <!--                                                        </a>-->
-                                                    <!--                                                    </li>-->
-
-                                                    <!-- 이전으로 이동 -->
                                                     <li th:classappend="${items.result.first} ? 'disabled'"
                                                         class="page-item">
                                                         <a class="page-link"
-                                                           th:href="${items.result.first} ? '#' : @{/admins/search/items/(page=${pageNumber - 1},keyword=${items.keyword})}"
+                                                           th:href="${items.result.first} ? '#' : @{/admins/search/items/(page=${pageNumber - 1},itemName=${items.itemName})}"
                                                            aria-label="Previous">
                                                             <span aria-hidden="true">&lt;</span>
                                                             <span class="sr-only">Previous</span>
@@ -186,14 +182,14 @@
                                                         th:classappend="${page == pageNumber + 1} ? 'active'"
                                                         class="page-item">
                                                         <a th:text="${page}" class="page-link"
-                                                           th:href="@{/admins/search/items/(page=${page - 1},keyword=${items.keyword})}"></a>
+                                                           th:href="@{/admins/search/items/(page=${page - 1},itemName=${items.itemName})}"></a>
                                                     </li>
 
                                                     <!-- 다음으로 이동 -->
                                                     <li th:classappend="${items.result.last} ? 'disabled'"
                                                         class="page-item">
                                                         <a class="page-link"
-                                                           th:href="${items.result.last} ? '#' : @{/admins/search/items/(page=${pageNumber + 1},keyword=${items.keyword})}"
+                                                           th:href="${items.result.last} ? '#' : @{/admins/search/items/(page=${pageNumber + 1},itemName=${items.itemName})}"
                                                            aria-label="Next">
                                                             <span aria-hidden="true">&gt;</span>
                                                             <span class="sr-only">Next</span>
@@ -204,7 +200,7 @@
                                                     <li th:classappend=" ${T(java.lang.Math).floor(totalPages / pageSize) * pageSize - 1 <= startPage} ? 'disabled'"
                                                         class="page-item">
                                                         <a class="page-link"
-                                                           th:href="@{/admins/search/items/(page=${totalPages - 1},keyword=${items.keyword})">
+                                                           th:href="@{/admins/search/items/(page=${totalPages - 1},keyword=${items.itemName})">
                                                             <span>&raquo;</span>
                                                             <span class="sr-only">Last</span>
                                                         </a>

@@ -8,7 +8,6 @@ class WishListDTO(
     val itemId: Long = 0,
     val category: Category = Category.ALCOHOL,
     val itemName: String = "",
-    val itemImgUrl: String = ""
-) {
-
-}
+    val itemImgUrl: String = "",
+    val price: Int = 0
+)
