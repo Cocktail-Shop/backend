@@ -109,7 +109,7 @@ class MemberController(
     @GetMapping("/password")
     fun getPasswordUpdatePage(model: Model): String {
         model.addAttribute("requestUpdatePasswordDTO", PasswordUpdateRequestDTO.toFormDTO())
-        return "members/reassign-forget-password"
+        return "members/reassign-password"
     }
 
     @PutMapping("/password")
