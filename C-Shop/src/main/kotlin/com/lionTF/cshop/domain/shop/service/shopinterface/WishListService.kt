@@ -4,5 +4,5 @@ import com.lionTF.cshop.domain.admin.controller.dto.AdminResponseDTO
 
 interface WishListService {
 
-    fun createWishList(memberId: Long?): AdminResponseDTO
+    fun createWishList(memberId: Long?, itemId: Long): AdminResponseDTO
 }
