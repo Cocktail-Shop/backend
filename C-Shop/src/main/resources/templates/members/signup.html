@@ -18,8 +18,10 @@
     <div class="row">
       <div class="col-md-8 col-md-offset-2">
         <div class="block text-center">
-          <a class="logo" href="index.html">
-            <img src="images/logo.png" alt="">
+          <a class="logo" th:href="@{/members/login}">
+            <text id="AVIATO">
+              <h2>C-SHOP</h2>
+            </text>
           </a>
           <h2 class="text-center">회원가입</h2>
           <form class="text-left clearfix" th:action="@{/members/signup}" onsubmit="return checkSignUp()" th:object="${requestSignUpDTO}" th:method="post">
@@ -154,5 +156,5 @@
         }).open();
     }
     </script>
-  </body>
-  </html>
+</body>
+</html>

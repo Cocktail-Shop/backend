@@ -10,7 +10,7 @@ function checkName(){
 
 function checkId(){
     const text = document.getElementById('user-id').value;
-    const reg =  /^[a-zA-Z0-9{1,20}]+$/;
+    const reg =  /^[a-zA-Z0-9{8,20}]+$/;
     const result=reg.test(text)
     if (!result) {
         alert('아이디는 영문, 숫자로 최대 20글자까지 입니다.');
@@ -59,7 +59,7 @@ function checkTel() {
 
 }
 function checkLoginPw(){
-    const pw = document.getElementById('pw').value;
+    const pw = document.getElementById('password').value;
     const reg =  /^[a-zA-z0-9]{8,16}$/;
     const result=reg.test(pw)
     if(!result){
@@ -81,16 +81,6 @@ function checkAuthNum(){
     }
 }
 
-function checkPrePw(){
-    const pw = document.getElementById('pre-pw').value;
-    const reg =  /^[a-zA-z0-9]{8,16}$/;
-    const result=reg.test(pw)
-    if(!result){
-        alert('비밀번호가 잘못되었습니다.');
-    }
-    return result
-}
-
 function checkAddr(){
     const addr=document.getElementById('addr').value;
     const subAddr = document.getElementById('sub-addr').value;
@@ -106,38 +96,20 @@ function checkAddr(){
 }
 
 
-//각 text input마다 정규표현식 조건 모듈화
-
-
-
 function checkSignUp(){
     return checkName()&&checkId()&&checkTel()&&checkAddr()&&checkAuthNum()
         &&checkPw()&&checkChbox()
-}
-
-function checkLogin(){
-    return checkId()&&checkLoginPw()
 }
 
 function checkForgetId(){
     return checkAuthNum()
 }
 
-function checkForgetPw(){
-    return checkId()&&checkAuthNum()
-}
-
-function checkNewPw(){
-    const result=checkPw()
-
-    return result
-}
-
-function checkMyPageChangePw(){
-    return checkPrePw()&&checkPw()
-}
-
 function checkMyPageInfo(){
+    return checkId()&&checkTel()&&checkAddr()
+}
+
+function checkSocialMyPageInfo(){
     return checkTel()&&checkAddr()
 }
 

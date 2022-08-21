@@ -1,10 +1,8 @@
 package com.lionTF.cshop.domain.member.models
 
-import com.lionTF.cshop.domain.member.controller.dto.RequestPreMemberInfoDTO
-import com.lionTF.cshop.domain.member.controller.dto.RequestSignUpDTO
+import com.lionTF.cshop.domain.member.controller.dto.PreMemberInfoRequestDTO
+import com.lionTF.cshop.domain.member.controller.dto.SignUpRequestDTO
 import com.lionTF.cshop.domain.member.controller.dto.RequestUpdateMyPageDTO
-import com.lionTF.cshop.domain.shop.models.Cart
-import com.lionTF.cshop.domain.shop.models.Orders
 import com.lionTF.cshop.global.model.BaseTimeEntity
 import org.springframework.security.crypto.password.PasswordEncoder
 import javax.persistence.*
@@ -16,69 +14,63 @@ class Member(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val memberId: Long = 0,
 
-    @OneToMany(mappedBy = "member")
-    private var orders: MutableList<Orders>? = null,
-
-    @OneToOne(mappedBy = "member", fetch = FetchType.LAZY,cascade = [CascadeType.ALL])
-    private var cart: Cart? = null,
-
     var id: String = "",
     var password: String = "",
     var phoneNumber: String = "",
-    var memberName: String = "",
+    val memberName: String = "",
     var address: String = "",
-    var email:String="",
-    var detailAddress:String="",
+    var email: String = "",
+    var detailAddress: String = "",
     var memberStatus: Boolean = true,
 
     @Enumerated(EnumType.STRING)
-    var role:MemberRole?=null,
-    var fromSocial:Boolean=false
-):BaseTimeEntity(){
+    var role: MemberRole,
+    var fromSocial: Boolean = false
+) : BaseTimeEntity() {
 
-    companion object{
-        fun requestSignUpDTOToMember(requestSignUpDTO: RequestSignUpDTO):Member{
+    fun updateMemberInfo(requestUpdateMyPageDTO: RequestUpdateMyPageDTO) {
+        this.id = requestUpdateMyPageDTO.id
+        this.address = requestUpdateMyPageDTO.address
+        this.detailAddress = requestUpdateMyPageDTO.detailAddress
+    }
+
+    fun updatePassword(newPassword: String, passwordEncoder: PasswordEncoder) {
+        this.password = passwordEncoder.encode(newPassword)
+    }
+
+    fun deleteMember() {
+        memberStatus = false
+    }
+
+    fun setPreMemberInfo(preMemberInfoRequestDTO: PreMemberInfoRequestDTO) {
+        this.phoneNumber = preMemberInfoRequestDTO.phoneNumber
+        this.address = preMemberInfoRequestDTO.address
+        this.detailAddress = preMemberInfoRequestDTO.detailAddress
+        this.role = MemberRole.MEMBER
+    }
+
+    companion object {
+        fun fromRequestSignUpDTO(signUpRequestDTO: SignUpRequestDTO): Member {
             return Member(
-                id=requestSignUpDTO.id,
-                password=requestSignUpDTO.password,
-                phoneNumber=requestSignUpDTO.phoneNumber,
-                memberName=requestSignUpDTO.memberName,
-                address=requestSignUpDTO.address,
-                email=requestSignUpDTO.email,
-                detailAddress=requestSignUpDTO.detailAddress,
+                id = signUpRequestDTO.id,
+                password = signUpRequestDTO.password,
+                phoneNumber = signUpRequestDTO.phoneNumber,
+                memberName = signUpRequestDTO.memberName,
+                address = signUpRequestDTO.address,
+                email = signUpRequestDTO.email,
+                detailAddress = signUpRequestDTO.detailAddress,
                 role = MemberRole.MEMBER
             )
         }
 
-        fun fromOAuth2User(email:String):Member{
+        fun fromOAuth2User(name: String, email: String): Member {
             return Member(
-                id=email,
-                memberName=email,
+                id = email,
+                memberName = name,
                 role = MemberRole.PREMEMBER,
-                email=email,
+                email = email,
                 fromSocial = true
             )
         }
     }
-
-    fun updateMember(requestUpdateMyPageDTO: RequestUpdateMyPageDTO){
-        this.id=requestUpdateMyPageDTO.id
-        this.address=requestUpdateMyPageDTO.address
-        this.detailAddress=requestUpdateMyPageDTO.detailAddress
-    }
-
-    fun updateMemberPassword(newPassword:String,passwordEncoder:PasswordEncoder){
-        this.password=passwordEncoder.encode(newPassword)
-    }
-    fun deleteMember(){
-        memberStatus = false
-    }
-
-    fun setPreMemberInfo(requestPreMemberInfoDTO: RequestPreMemberInfoDTO){
-        this.phoneNumber=requestPreMemberInfoDTO.phoneNumber
-        this.address=requestPreMemberInfoDTO.address
-        this.detailAddress=requestPreMemberInfoDTO.detailAddress
-        this.role=MemberRole.MEMBER
-    }
-
 }

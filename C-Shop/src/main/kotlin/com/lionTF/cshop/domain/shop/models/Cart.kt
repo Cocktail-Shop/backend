@@ -22,5 +22,9 @@ class Cart(
     fun deleteCartItem(itemId: Long) {
         // TODO : cartItem list에서 삭제
     }
+    companion object{
+        fun fromMember(member: Member):Cart{
+            return Cart(member=member)
+        }
+    }
 }
-

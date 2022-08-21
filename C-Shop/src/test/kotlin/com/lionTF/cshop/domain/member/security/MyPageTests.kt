@@ -2,8 +2,8 @@ package com.lionTF.cshop.domain.member.security
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.lionTF.cshop.domain.member.controller.dto.RequestUpdateMyPageDTO
-import com.lionTF.cshop.domain.member.controller.dto.RequestUpdatePasswordDTO
-import com.lionTF.cshop.domain.member.controller.dto.ResponseDTO
+import com.lionTF.cshop.domain.member.controller.dto.PasswordUpdateRequestDTO
+import com.lionTF.cshop.domain.member.controller.dto.MemberResponseDTO
 import com.lionTF.cshop.domain.member.models.Member
 import com.lionTF.cshop.domain.member.models.MemberRole
 import com.lionTF.cshop.domain.member.repository.MemberAuthRepository
@@ -67,7 +67,7 @@ class MyPageTests {
                 .content(content)
                 .flashAttr("requestUpdateMyPageDTO",requestBody))
             .andDo { println() }
-            .andExpect(model().attribute("result",ResponseDTO.toSuccessUpdateMyPageResponseDTO()))
+            .andExpect(model().attribute("result",MemberResponseDTO.toSuccessMyPageUpdateResponseDTO()))
     }
 
     @Test
@@ -88,14 +88,14 @@ class MyPageTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content)
                 .flashAttr("requestUpdateMyPageDTO",requestBody))
-            .andExpect(model().attribute("result",ResponseDTO.toFailedUpdateMyPageResponseDTO()))
+            .andExpect(model().attribute("result",MemberResponseDTO.toFailedMyPageUpdateResponseDTO()))
     }
 
     @Test
     @DisplayName("MyPage Password Update Success Test")
     @WithMockCustomUser
     fun updatePasswordSuccessTest(){
-        val requestBody:RequestUpdatePasswordDTO=RequestUpdatePasswordDTO(pastPassword = "test123", newPassword = "1234")
+        val requestBody:PasswordUpdateRequestDTO=PasswordUpdateRequestDTO(pastPassword = "test123", newPassword = "1234")
 
         val content: String = objectMapper.writeValueAsString(requestBody)
         mockMvc.perform(
@@ -103,13 +103,13 @@ class MyPageTests {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(content)
                 .flashAttr("requestUpdatePasswordDTO",requestBody))
-            .andExpect(model().attribute("result",ResponseDTO.toSuccessUpdatePasswordDTO()))
+            .andExpect(model().attribute("result",MemberResponseDTO.toSuccessPasswordUpdateResponseDTO()))
     }
     @Test
     @DisplayName("MyPage Password Update Failed when wrong Password Test")
     @WithMockCustomUser
     fun updatePasswordFailWhenWrongPasswordTest(){
-        val requestBody=RequestUpdatePasswordDTO("wrongPassword","1234")
+        val requestBody=PasswordUpdateRequestDTO("wrongPassword","1234")
 
         val content: String = objectMapper.writeValueAsString(requestBody)
         mockMvc.perform(
@@ -118,14 +118,14 @@ class MyPageTests {
                 .content(content)
                 .flashAttr("requestUpdatePasswordDTO",requestBody))
             .andDo { println() }
-            .andExpect(model().attribute("result",ResponseDTO.toFailedUpdatePasswordDTO()))
+            .andExpect(model().attribute("result",MemberResponseDTO.toFailedPasswordUpdateResponseDTO()))
     }
 
     @Test
     @DisplayName("MyPage Password Update Failed Test")
     @WithMockCustomUser
     fun updatePasswordFailWhenSamePasswordTest(){
-        val requestBody=RequestUpdatePasswordDTO("test123","test123")
+        val requestBody=PasswordUpdateRequestDTO("test123","test123")
 
         val content: String = objectMapper.writeValueAsString(requestBody)
         mockMvc.perform(
@@ -134,7 +134,7 @@ class MyPageTests {
                 .content(content)
                 .flashAttr("requestUpdatePasswordDTO",requestBody))
             .andDo { println() }
-            .andExpect(model().attribute("result",ResponseDTO.toFailedUpdatePasswordDTO()))
+            .andExpect(model().attribute("result",MemberResponseDTO.toFailedPasswordUpdateResponseDTO()))
     }
 
     fun insertUser(){
