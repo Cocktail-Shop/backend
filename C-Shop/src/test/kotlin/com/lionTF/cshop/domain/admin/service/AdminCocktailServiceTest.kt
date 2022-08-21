@@ -26,16 +26,16 @@ import javax.transaction.Transactional
 internal class AdminCocktailServiceTest {
 
     @Autowired
-    private lateinit var adminCocktailService: AdminCocktailService
+    private val adminCocktailService: AdminCocktailService? = null
 
     @Autowired
-    private lateinit var adminItemRepository: AdminItemRepository
+    private val adminItemRepository: AdminItemRepository? = null
 
     @Autowired
-    private lateinit var adminCocktailRepository: AdminCocktailRepository
+    private val adminCocktailRepository: AdminCocktailRepository? = null
 
     @Autowired
-    private lateinit var adminCocktailItemRepository: AdminCocktailItemRepository
+    private val adminCocktailItemRepository: AdminCocktailItemRepository? = null
 
     private var item1: Item? = null
     private var item2: Item? = null
@@ -53,7 +53,7 @@ internal class AdminCocktailServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item1 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO1, "test"))
+        item1 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO1, "test"))
 
         val itemDTO2 = ItemCreateRequestDTO(
             itemName = "test1",
@@ -63,7 +63,7 @@ internal class AdminCocktailServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item2 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO2, "test"))
+        item2 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO2, "test"))
 
         val itemDTO3 = ItemCreateRequestDTO(
             itemName = "test1",
@@ -73,7 +73,7 @@ internal class AdminCocktailServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item3 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO3, "test"))
+        item3 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO3, "test"))
 
 
         // 칵테일 생성
@@ -88,7 +88,7 @@ internal class AdminCocktailServiceTest {
             itemIds = itemIdList
         )
 
-        cocktail = adminCocktailRepository.save(Cocktail.requestCreateCocktailDTOtoCocktail(requestCreateCocktailDTO1, "test"))
+        cocktail = adminCocktailRepository?.save(Cocktail.requestCreateCocktailDTOtoCocktail(requestCreateCocktailDTO1, "test"))
 
 
         // 칵테일 아이템 생성
@@ -113,7 +113,7 @@ internal class AdminCocktailServiceTest {
         cocktailItemList.add(cocktailItem2)
         cocktailItemList.add(cocktailItem3)
 
-        cocktailItem = adminCocktailItemRepository.saveAll(cocktailItemList)
+        cocktailItem = adminCocktailItemRepository?.saveAll(cocktailItemList)
     }
 
     @Test
@@ -133,11 +133,11 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val cocktailTest = adminCocktailService.createCocktail(requestCreateCocktailDTO, "test")
+        val cocktailTest = adminCocktailService?.createCocktail(requestCreateCocktailDTO, "test")
 
         //then
-        assertThat(cocktailTest.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCreateCocktailResponseDTO().httpStatus)
-        assertThat(cocktailTest.message).isEqualTo(AdminResponseDTO.toSuccessCreateCocktailResponseDTO().message)
+        assertThat(cocktailTest?.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCreateCocktailResponseDTO().httpStatus)
+        assertThat(cocktailTest?.message).isEqualTo(AdminResponseDTO.toSuccessCreateCocktailResponseDTO().message)
     }
 
     @Test
@@ -153,11 +153,11 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val cocktailTest = adminCocktailService.createCocktail(requestCreateCocktailDTO, "test")
+        val cocktailTest = adminCocktailService?.createCocktail(requestCreateCocktailDTO, "test")
 
         //then
-        assertThat(cocktailTest.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().httpStatus)
-        assertThat(cocktailTest.message).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().message)
+        assertThat(cocktailTest?.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().httpStatus)
+        assertThat(cocktailTest?.message).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().message)
     }
 
     @Test
@@ -177,11 +177,11 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val cocktailException = adminCocktailService.createCocktail(requestCreateCocktailDTO, "test")
+        val cocktailException = adminCocktailService?.createCocktail(requestCreateCocktailDTO, "test")
 
         //then
-        assertThat(cocktailException.httpStatus).isEqualTo(AdminResponseDTO.noContentItem().httpStatus)
-        assertThat(cocktailException.message).isEqualTo(AdminResponseDTO.noContentItem().message)
+        assertThat(cocktailException?.httpStatus).isEqualTo(AdminResponseDTO.noContentItem().httpStatus)
+        assertThat(cocktailException?.message).isEqualTo(AdminResponseDTO.noContentItem().message)
     }
 
 
@@ -189,15 +189,15 @@ internal class AdminCocktailServiceTest {
     @DisplayName("한개의 칵테일 삭제 test")
     fun deleteOneCocktailTest() {
         //when
-        val deleteOneCocktail = adminCocktailService.deleteOneCocktail(cocktail!!.cocktailId)
+        val deleteOneCocktail = cocktail?.let { adminCocktailService?.deleteOneCocktail(it.cocktailId) }
 
-        val optionalCocktail = adminCocktailRepository.findById(cocktail!!.cocktailId)
+        val optionalCocktail = cocktail?.let { adminCocktailRepository?.findById(it.cocktailId) }
 
         //then
-        assertThat(deleteOneCocktail.httpStatus).isEqualTo(AdminResponseDTO.toSuccessDeleteCocktailResponseDTO().httpStatus)
-        assertThat(deleteOneCocktail.message).isEqualTo(AdminResponseDTO.toSuccessDeleteCocktailResponseDTO().message)
+        assertThat(deleteOneCocktail?.httpStatus).isEqualTo(AdminResponseDTO.toSuccessDeleteCocktailResponseDTO().httpStatus)
+        assertThat(deleteOneCocktail?.message).isEqualTo(AdminResponseDTO.toSuccessDeleteCocktailResponseDTO().message)
 
-        assertThat(optionalCocktail.orElseThrow().cocktailStatus).isEqualTo(false)
+        assertThat(optionalCocktail?.orElseThrow()?.cocktailStatus).isEqualTo(false)
     }
 
     @Test
@@ -207,14 +207,14 @@ internal class AdminCocktailServiceTest {
         val cocktailId = 98L
 
         //when
-        val deleteOneCocktail = adminCocktailService.deleteOneCocktail(cocktailId)
-        val optionalCocktail = adminCocktailRepository.findById(cocktail!!.cocktailId)
+        val deleteOneCocktail = adminCocktailService?.deleteOneCocktail(cocktailId)
+        val optionalCocktail = cocktail?.let { adminCocktailRepository?.findById(it.cocktailId) }
 
         //then
-        assertThat(deleteOneCocktail.httpStatus).isEqualTo(AdminResponseDTO.toFailDeleteCocktailResponseDTO().httpStatus)
-        assertThat(deleteOneCocktail.message).isEqualTo(AdminResponseDTO.toFailDeleteCocktailResponseDTO().message)
+        assertThat(deleteOneCocktail?.httpStatus).isEqualTo(AdminResponseDTO.toFailDeleteCocktailResponseDTO().httpStatus)
+        assertThat(deleteOneCocktail?.message).isEqualTo(AdminResponseDTO.toFailDeleteCocktailResponseDTO().message)
 
-        assertThat(optionalCocktail.orElseThrow().cocktailStatus).isEqualTo(true)
+        assertThat(optionalCocktail?.orElseThrow()?.cocktailStatus).isEqualTo(true)
     }
 
 
@@ -234,13 +234,13 @@ internal class AdminCocktailServiceTest {
 
         //when
         val updateCocktail =
-            adminCocktailService.updateCocktail(requestCreateCocktailDTO, cocktail!!.cocktailId, itemIdList, "test")
+            cocktail?.let { adminCocktailService?.updateCocktail(requestCreateCocktailDTO, it.cocktailId, itemIdList, "test") }
 
-        val countCocktailItem = adminCocktailItemRepository.countAllByCocktailId(cocktail!!.cocktailId)
+        val countCocktailItem = cocktail?.let { adminCocktailItemRepository?.countAllByCocktailId(it.cocktailId) }
 
         //then
-        assertThat(updateCocktail.httpStatus).isEqualTo(AdminResponseDTO.toSuccessUpdateCocktailResponseDTO().httpStatus)
-        assertThat(updateCocktail.message).isEqualTo(AdminResponseDTO.toSuccessUpdateCocktailResponseDTO().message)
+        assertThat(updateCocktail?.httpStatus).isEqualTo(AdminResponseDTO.toSuccessUpdateCocktailResponseDTO().httpStatus)
+        assertThat(updateCocktail?.message).isEqualTo(AdminResponseDTO.toSuccessUpdateCocktailResponseDTO().message)
         assertThat(countCocktailItem).isEqualTo(itemIdList.size.toLong())
     }
 
@@ -261,11 +261,11 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val updateCocktail = adminCocktailService.updateCocktail(requestCreateCocktailDTO, 10L, itemIdList, "test")
+        val updateCocktail = adminCocktailService?.updateCocktail(requestCreateCocktailDTO, 10L, itemIdList, "test")
 
         //then
-        assertThat(updateCocktail.httpStatus).isEqualTo(AdminResponseDTO.noContentItem().httpStatus)
-        assertThat(updateCocktail.message).isEqualTo(AdminResponseDTO.noContentItem().message)
+        assertThat(updateCocktail?.httpStatus).isEqualTo(AdminResponseDTO.noContentItem().httpStatus)
+        assertThat(updateCocktail?.message).isEqualTo(AdminResponseDTO.noContentItem().message)
     }
 
     @Test
@@ -276,7 +276,7 @@ internal class AdminCocktailServiceTest {
 
         itemIdList.add(100L)
 
-        val cocktailId = cocktail!!.cocktailId
+        val cocktailId = cocktail?.cocktailId
 
         val requestCreateCocktailDTO = CocktailCreateRequestDTO(
             cocktailName = "cocktail1",
@@ -285,11 +285,12 @@ internal class AdminCocktailServiceTest {
         )
 
         //when
-        val updateCocktail = adminCocktailService.updateCocktail(requestCreateCocktailDTO, cocktailId, itemIdList, "test")
+        val updateCocktail =
+            cocktailId?.let { adminCocktailService?.updateCocktail(requestCreateCocktailDTO, it, itemIdList, "test") }
 
         //then
-        assertThat(updateCocktail.httpStatus).isEqualTo(AdminResponseDTO.noContentItem().httpStatus)
-        assertThat(updateCocktail.message).isEqualTo(AdminResponseDTO.noContentItem().message)
+        assertThat(updateCocktail?.httpStatus).isEqualTo(AdminResponseDTO.noContentItem().httpStatus)
+        assertThat(updateCocktail?.message).isEqualTo(AdminResponseDTO.noContentItem().message)
     }
 
     @Test
@@ -304,14 +305,15 @@ internal class AdminCocktailServiceTest {
             itemIds = itemIdList
         )
 
-        val cocktailId = cocktail!!.cocktailId
+        val cocktailId = cocktail?.cocktailId
 
         //when
-        val updateCocktail = adminCocktailService.updateCocktail(requestCreateCocktailDTO, cocktailId, itemIdList, "test")
+        val updateCocktail =
+            cocktailId?.let { adminCocktailService?.updateCocktail(requestCreateCocktailDTO, it, itemIdList, "test") }
 
         //then
-        assertThat(updateCocktail.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().httpStatus)
-        assertThat(updateCocktail.message).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().message)
+        assertThat(updateCocktail?.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().httpStatus)
+        assertThat(updateCocktail?.message).isEqualTo(AdminResponseDTO.toFailCreateCocktailByNoContentResponseDTO().message)
     }
 
 
@@ -319,7 +321,7 @@ internal class AdminCocktailServiceTest {
     @DisplayName("칵테일 단건 조회 test")
     fun findCocktailTest() {
         //given
-        val cocktailId: Long = cocktail!!.cocktailId
+        val cocktailId: Long? = cocktail?.cocktailId
 
         val itemIdList: MutableList<Long> = mutableListOf()
 
@@ -328,14 +330,14 @@ internal class AdminCocktailServiceTest {
         item3?.let { itemIdList.add(it.itemId) }
 
         //when
-        val findCocktail = adminCocktailService.findCocktail(cocktailId, itemIdList)
+        val findCocktail = cocktailId?.let { adminCocktailService?.findCocktail(it, itemIdList) }
 
         //then
-        assertThat(findCocktail.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(findCocktail.message).isEqualTo("칵테일 조회를 성공했습니다.")
-        assertThat(findCocktail.result!!.cocktailName).isEqualTo(cocktail!!.cocktailName)
-        assertThat(findCocktail.result!!.cocktailDescription).isEqualTo(cocktail!!.cocktailDescription)
-        assertThat(findCocktail.result!!.itemIds).isEqualTo(itemIdList)
+        assertThat(findCocktail?.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(findCocktail?.message).isEqualTo("칵테일 조회를 성공했습니다.")
+        assertThat(findCocktail?.result?.cocktailName).isEqualTo(cocktail?.cocktailName)
+        assertThat(findCocktail?.result?.cocktailDescription).isEqualTo(cocktail?.cocktailDescription)
+        assertThat(findCocktail?.result?.itemIds).isEqualTo(itemIdList)
     }
 
 
@@ -352,11 +354,11 @@ internal class AdminCocktailServiceTest {
         item3?.let { itemIdList.add(it.itemId) }
 
         //when
-        val findCocktail = adminCocktailService.findCocktail(cocktailId, itemIdList)
+        val findCocktail = adminCocktailService?.findCocktail(cocktailId, itemIdList)
 
         //then
-        assertThat(findCocktail.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
-        assertThat(findCocktail.message).isEqualTo("존재하지 않는 칵테일입니다.")
+        assertThat(findCocktail?.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        assertThat(findCocktail?.message).isEqualTo("존재하지 않는 칵테일입니다.")
     }
 
 
@@ -370,16 +372,16 @@ internal class AdminCocktailServiceTest {
         val pageable = generatePageable()
 
         //when
-        val allCocktail = adminCocktailService.getAllCocktail(pageable)
+        val allCocktail = adminCocktailService?.getAllCocktail(pageable)
 
-        adminCocktailRepository.countAllByCocktailStatusIsTrue()
+        adminCocktailRepository?.countAllByCocktailStatusIsTrue()
 
         //then
-        assertThat(allCocktail.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(allCocktail.message).isEqualTo("칵테일 조회를 성공했습니다.")
-        assertThat(allCocktail.cocktailName).isEqualTo("")
-        assertThat(allCocktail.result!!.totalElements).isEqualTo(15)
-        assertThat(allCocktail.result!!.totalPages).isEqualTo(8)
+        assertThat(allCocktail?.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(allCocktail?.message).isEqualTo("칵테일 조회를 성공했습니다.")
+        assertThat(allCocktail?.cocktailName).isEqualTo("")
+        assertThat(allCocktail?.result?.totalElements).isEqualTo(15)
+        assertThat(allCocktail?.result?.totalPages).isEqualTo(8)
     }
 
 
@@ -391,65 +393,13 @@ internal class AdminCocktailServiceTest {
         val keyword = "1"
 
         //when
-        val allCocktail = adminCocktailService.getCocktailsByName(keyword, pageable)
+        val allCocktail = adminCocktailService?.getCocktailsByName(keyword, pageable)
 
         //then
-        assertThat(allCocktail.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(allCocktail.message).isEqualTo("칵테일 조회를 성공했습니다.")
-        assertThat(allCocktail.cocktailName).isEqualTo(keyword)
-        assertThat(allCocktail.result!!.totalElements).isEqualTo(6)
-        assertThat(allCocktail.result!!.totalPages).isEqualTo(3)
+        assertThat(allCocktail?.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(allCocktail?.message).isEqualTo("칵테일 조회를 성공했습니다.")
+        assertThat(allCocktail?.cocktailName).isEqualTo(keyword)
+        assertThat(allCocktail?.result?.totalElements).isEqualTo(6)
+        assertThat(allCocktail?.result?.totalPages).isEqualTo(3)
     }
-
-
-//    @Test
-//    @DisplayName("칵테일 상품 삭제 test")
-//    fun deleteItemsTest() {
-//        //given
-//        val cocktailItemList: MutableList<Long> = mutableListOf()
-//
-//        cocktailItemList.add(cocktail!!.cocktailId)
-//
-//        val deleteCocktailDTO =  DeleteCocktailDTO(
-//            cocktailItemList
-//        )
-//
-//        //when
-//        val deleteCocktail = adminCocktailService!!.deleteCocktail(deleteCocktailDTO)
-//
-//        println("deleteCocktail = ${deleteCocktail.message}")
-//
-//        //then
-//        assertThat(deleteCocktail.status).isEqualTo(setDeleteSuccessCocktailResultDTO().status)
-//        assertThat(deleteCocktail.message).isEqualTo(setDeleteSuccessCocktailResultDTO().message)
-//
-//        val referenceById = cocktail?.let { adminCocktailRepository!!.getReferenceById(it.cocktailId) }
-//
-//        referenceById?.let { assertThat(it.cocktailStatus).isEqualTo(false) }
-//    }
-//
-//    @Test
-//    @DisplayName("존재하지 않는 칵테일을 삭제할 예외 test")
-//    fun deleteItemsExceptionTest() {
-//        //given
-//        val cocktailItemList: MutableList<Long> = mutableListOf()
-//
-//        cocktail?.let { cocktailItemList.add(it.cocktailId) }
-//        cocktailItemList.add(1231L)
-//
-//        val deleteCocktailDTO =  DeleteCocktailDTO(
-//            cocktailItemList
-//        )
-//
-//        //when
-//        val deleteCocktail = adminCocktailService.deleteCocktail(deleteCocktailDTO)
-//
-//        //then
-//        assertThat(deleteCocktail.status).isEqualTo(setDeleteFailCocktailResultDTO().status)
-//        assertThat(deleteCocktail.message).isEqualTo(setDeleteFailCocktailResultDTO().message)
-//
-//        val referenceById = cocktail?.let { adminCocktailRepository.getReferenceById(it.cocktailId) }
-//
-//        referenceById?.let { assertThat(it.cocktailStatus).isEqualTo(true) }
-//    }
 }
