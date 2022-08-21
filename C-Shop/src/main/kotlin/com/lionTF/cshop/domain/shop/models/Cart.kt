@@ -17,4 +17,10 @@ class Cart(
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     var member: Member?=null,
-) : BaseTimeEntity()
+) : BaseTimeEntity() {
+    companion object{
+        fun fromMember(member: Member):Cart{
+            return Cart(member=member)
+        }
+    }
+}
