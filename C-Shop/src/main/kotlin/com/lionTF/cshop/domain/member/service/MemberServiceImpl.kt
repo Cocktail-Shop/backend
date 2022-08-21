@@ -43,13 +43,10 @@ class MemberServiceImpl(
     override fun requestIdInquiry(idInquiryDTO: IdInquiryRequestDTO): Any? {
         return memberAuthRepository.findByMemberNameAndEmail(idInquiryDTO.memberName, idInquiryDTO.email)
             ?.let { existMember ->
-                if (existMember.memberStatus) {
-                    when (existMember.fromSocial) {
-                        true -> MemberResponseDTO.toSocialIdInquiryResponseDTO()
-                        else -> IdInquiryResponseDTO.toSuccessIdInquiryResponseDTO(existMember)
-                    }
-                } else {
-                    MemberResponseDTO.toDeletedIdInquiryResponseDTO()
+                when {
+                    !existMember.memberStatus -> MemberResponseDTO.toDeletedIdInquiryResponseDTO()
+                    existMember.fromSocial -> MemberResponseDTO.toSocialIdInquiryResponseDTO()
+                    else -> IdInquiryResponseDTO.toSuccessIdInquiryResponseDTO(existMember)
                 }
             } ?: MemberResponseDTO.toFailedIdInquiryResponseDTO()
     }
@@ -59,19 +56,17 @@ class MemberServiceImpl(
     override fun requestPasswordInquiry(passwordInquiryDTO: PasswordInquiryRequestDTO): MemberResponseDTO {
         return memberAuthRepository.findByIdAndEmail(passwordInquiryDTO.id, passwordInquiryDTO.email)
             ?.let { existMember ->
-                if (existMember.memberStatus) {
-                    when (existMember.fromSocial) {
-                        true -> MemberResponseDTO.toSocialPasswordInquiryResponseDTO()
-                        else -> {
-                            sendMail(existMember)
-                            MemberResponseDTO.toSuccessPasswordInquiryResponseDTO()
-                        }
+                when {
+                    !existMember.memberStatus -> MemberResponseDTO.toDeletedPasswordInquiryResponseDTO()
+                    existMember.fromSocial -> MemberResponseDTO.toSocialPasswordInquiryResponseDTO()
+                    else -> {
+                        sendMail(existMember)
+                        MemberResponseDTO.toSuccessPasswordInquiryResponseDTO()
                     }
-                } else {
-                    MemberResponseDTO.toDeletedPasswordInquiryResponseDTO()
                 }
             } ?: MemberResponseDTO.toFailedPasswordInquiryResponseDTO()
     }
+
 
     private fun sendMail(member: Member) {
         val tempPw = UUID.randomUUID().toString().replace("-", "").substring(0, 8)
