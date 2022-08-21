@@ -12,11 +12,7 @@ interface AdminOrderService {
 
     fun getOrdersByMemberId(keyword: String, pageable: Pageable): OrdersSearchDTO
 
-    fun getAllSales(pageable: Pageable): OrdersSearchDTO
-
     fun updateDeliveryInDelivery(orderId: Long): AdminResponseDTO
 
     fun updateDeliveryComplete(orderId: Long): AdminResponseDTO
-
-    //    fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO
 }

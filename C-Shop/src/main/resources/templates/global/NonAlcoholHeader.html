@@ -43,6 +43,7 @@
                 <!-- Cart Item -->
                 <div><a href="my-page.html" th:href="@{/members}" >마이페이지 </a></div>
                 <div>---------</div>
+                <div><a href="/wish-list">찜 목록</a></div>
                 <div><a href="#">주문조회 </a></div>
               </div>
             </li>
@@ -65,7 +66,7 @@
                       class="tf-ion-ios-search-strong"></i> Search</a>
               <ul class="dropdown-menu search-dropdown">
                 <li>
-                  <form th:action="@{/items/search/NONALCOHOL}" th:method="get"><input name="keyword" type="search" class="form-control" placeholder="주류 검색..."></form>
+                  <form th:action="@{/items/search/NONALCOHOL}" th:method="get"><input name="keyword" type="search" class="form-control" placeholder="비주류 검색..."></form>
                 </li>
               </ul>
             </li><!-- / Search -->

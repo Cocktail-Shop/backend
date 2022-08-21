@@ -11,6 +11,4 @@ interface AdminMemberService {
     fun getAllMembers(pageable: Pageable): MembersSearchDTO
 
     fun deleteOneMember(memberId: Long): AdminResponseDTO
-
-    //    fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO
 }

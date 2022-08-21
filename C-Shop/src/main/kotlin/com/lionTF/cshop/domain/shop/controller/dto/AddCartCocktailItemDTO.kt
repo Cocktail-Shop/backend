@@ -78,6 +78,14 @@ data class AddCartCocktailItemResultDTO(
             )
         }
 
+        fun setAllZeroFailAddCartCocktailItemResultDTO() : AddCartCocktailItemResultDTO{
+            return AddCartCocktailItemResultDTO(
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                message = "적어도 하나 이상의 상품을 담으셔야 합니다.",
+                href = "/items"
+            )
+        }
+
     }
 }
 

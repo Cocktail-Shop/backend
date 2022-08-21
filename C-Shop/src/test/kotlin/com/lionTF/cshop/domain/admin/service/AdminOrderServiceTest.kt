@@ -32,25 +32,25 @@ import javax.transaction.Transactional
 @Transactional
 internal class AdminOrderServiceTest {
     @Autowired
-    private lateinit var adminOrderService: AdminOrderService
+    private val adminOrderService: AdminOrderService? = null
 
     @Autowired
-    private lateinit var orderRepository: OrderRepository
+    private val orderRepository: OrderRepository? = null
 
     @Autowired
-    private lateinit var adminItemRepository: AdminItemRepository
+    private val adminItemRepository: AdminItemRepository? = null
 
     @Autowired
-    private lateinit var memberAuthRepository: MemberAuthRepository
+    private val memberAuthRepository: MemberAuthRepository? = null
 
     @Autowired
-    private lateinit var passwordEncoder: PasswordEncoder
+    private val passwordEncoder: PasswordEncoder? = null
 
     @Autowired
-    private lateinit var orderService: OrderService
+    private val orderService: OrderService? = null
 
     @Autowired
-    private lateinit var adminOrderItemRepository: AdminOrderItemRepository
+    private val adminOrderItemRepository: AdminOrderItemRepository? = null
 
     private var order: Orders? = null
     private var orderItem: OrderItem? = null
@@ -67,14 +67,14 @@ internal class AdminOrderServiceTest {
             orderAddress = "test",
             orderStatus = OrderStatus.COMPLETE
         )
-        order = orderRepository.save(orderDTO)
+        order = orderRepository?.save(orderDTO)
 
         val orderItemDTO = OrderItem(
             amount = 5,
             orders = order
         )
 
-        orderItem = adminOrderItemRepository.save(orderItemDTO)
+        orderItem = adminOrderItemRepository?.save(orderItemDTO)
 
 
         val itemDTO1 = ItemCreateRequestDTO(
@@ -85,7 +85,7 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item1 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO1,"test"))
+        item1 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO1,"test"))
 
         val itemDTO2 = ItemCreateRequestDTO(
             itemName = "test1",
@@ -95,7 +95,7 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item2 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO2, "test"))
+        item2 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO2, "test"))
 
         val itemDTO3 = ItemCreateRequestDTO(
             itemName = "test1",
@@ -105,38 +105,44 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item3 = adminItemRepository.save(Item.requestCreateItemDTOtoItem(itemDTO3, "test"))
+        item3 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO3, "test"))
 
 
-        val member1 = Member(
-            id = "test1",
-            password= passwordEncoder.encode("test1"),
-            phoneNumber = "01012341234",
-            memberName = "사용자",
-            address = "서울시 동작구 상도동 XX빌딩 103호"
-        )
-        member1.role= MemberRole.MEMBER
-        memberTest1 = memberAuthRepository.save(member1)
+        val member1 = passwordEncoder?.encode("test1")?.let {
+            Member(
+                id = "test1",
+                password= it,
+                phoneNumber = "01012341234",
+                memberName = "사용자",
+                address = "서울시 동작구 상도동 XX빌딩 103호"
+            )
+        }
+        member1?.role= MemberRole.MEMBER
+        memberTest1 = memberAuthRepository?.save(member1!!)
 
-        val member2 = Member(
-            id = "test2",
-            password= passwordEncoder.encode("test1"),
-            phoneNumber = "01012341234",
-            memberName = "사용자",
-            address = "서울시 동작구 상도동 XX빌딩 103호"
-        )
-        member2.role= MemberRole.MEMBER
-        memberTest2 = memberAuthRepository.save(member2)
+        val member2 = passwordEncoder?.encode("test1")?.let {
+            Member(
+                id = "test2",
+                password= it,
+                phoneNumber = "01012341234",
+                memberName = "사용자",
+                address = "서울시 동작구 상도동 XX빌딩 103호"
+            )
+        }
+        member2?.role= MemberRole.MEMBER
+        memberTest2 = memberAuthRepository?.save(member2!!)
 
-        val member3 = Member(
-            id = "lee",
-            password= passwordEncoder.encode("test1"),
-            phoneNumber = "01012341234",
-            memberName = "사용자",
-            address = "서울시 동작구 상도동 XX빌딩 103호"
-        )
-        member3.role= MemberRole.MEMBER
-        memberTest3 = memberAuthRepository.save(member3)
+        val member3 = passwordEncoder?.encode("test1")?.let {
+            Member(
+                id = "lee",
+                password= it,
+                phoneNumber = "01012341234",
+                memberName = "사용자",
+                address = "서울시 동작구 상도동 XX빌딩 103호"
+            )
+        }
+        member3?.role= MemberRole.MEMBER
+        memberTest3 = memberAuthRepository?.save(member3!!)
 
         val requestOrderItemDTO1 = RequestOrderItemDTO(
             itemId = item1!!.itemId,
@@ -152,7 +158,7 @@ internal class AdminOrderServiceTest {
             address = "test1",
             addressDetail = "test1"
         )
-        orderService.requestOrder(requestOrderDTO1)
+        orderService?.requestOrder(requestOrderDTO1)
 
 
         val requestOrderItemDTO2 = RequestOrderItemDTO(
@@ -169,7 +175,7 @@ internal class AdminOrderServiceTest {
             address = "test2",
             addressDetail = "test2"
         )
-        orderService.requestOrder(requestOrderDTO2)
+        orderService?.requestOrder(requestOrderDTO2)
 
 
         val requestOrderItemDTO3 = RequestOrderItemDTO(
@@ -186,7 +192,7 @@ internal class AdminOrderServiceTest {
             address = "test3",
             addressDetail = "test3"
         )
-        orderService.requestOrder(requestOrderDTO3)
+        orderService?.requestOrder(requestOrderDTO3)
     }
 
 
@@ -196,28 +202,28 @@ internal class AdminOrderServiceTest {
         //given
 
         //when
-        val cancelOneOrder = adminOrderService.cancelOneOrder(order!!.orderId)
+        val cancelOneOrder = order?.let { adminOrderService?.cancelOneOrder(it.orderId) }
 
         //then
-        assertThat(cancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCancelOrderResponseDTO().httpStatus)
-        assertThat(cancelOneOrder.message).isEqualTo(AdminResponseDTO.toSuccessCancelOrderResponseDTO().message)
-        assertThat(order!!.orderStatus).isEqualTo(OrderStatus.CANCEL)
-        println("cancelOneOrder = ${cancelOneOrder.message}")
+        assertThat(cancelOneOrder?.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCancelOrderResponseDTO().httpStatus)
+        assertThat(cancelOneOrder?.message).isEqualTo(AdminResponseDTO.toSuccessCancelOrderResponseDTO().message)
+        assertThat(order?.orderStatus).isEqualTo(OrderStatus.CANCEL)
+        println("cancelOneOrder = ${cancelOneOrder?.message}")
     }
 
     @Test
     @DisplayName("하나의 주문 취소 예외 중 이미 취소된 주문을 취소할 case test")
     fun duplicatedCancelOneOrderExceptionTest() {
         //given
-        adminOrderService.cancelOneOrder(order!!.orderId)
+        order?.let { adminOrderService?.cancelOneOrder(it.orderId) }
 
         //when
-        val duplicatedCancelOneOrder = adminOrderService.cancelOneOrder(order!!.orderId)
+        val duplicatedCancelOneOrder = order?.let { adminOrderService?.cancelOneOrder(it.orderId) }
 
         //then
-        assertThat(duplicatedCancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO().httpStatus)
-        assertThat(duplicatedCancelOneOrder.message).isEqualTo(AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO().message)
-        println("duplicatedCancelOneOrder = ${duplicatedCancelOneOrder.message}")
+        assertThat(duplicatedCancelOneOrder?.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO().httpStatus)
+        assertThat(duplicatedCancelOneOrder?.message).isEqualTo(AdminResponseDTO.toFailCancelOrderByDuplicatedResponseDTO().message)
+        println("duplicatedCancelOneOrder = ${duplicatedCancelOneOrder?.message}")
     }
 
     @Test
@@ -227,12 +233,12 @@ internal class AdminOrderServiceTest {
         val orderId = 98L
 
         //when
-        val cancelOneOrder = adminOrderService.cancelOneOrder(orderId)
+        val cancelOneOrder = adminOrderService?.cancelOneOrder(orderId)
 
         //then
-        assertThat(cancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderResponseDTO().httpStatus)
-        assertThat(cancelOneOrder.message).isEqualTo(AdminResponseDTO.toFailCancelOrderResponseDTO().message)
-        println("cancelOneOrder = ${cancelOneOrder.message}")
+        assertThat(cancelOneOrder?.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderResponseDTO().httpStatus)
+        assertThat(cancelOneOrder?.message).isEqualTo(AdminResponseDTO.toFailCancelOrderResponseDTO().message)
+        println("cancelOneOrder = ${cancelOneOrder?.message}")
     }
 
 
@@ -240,17 +246,17 @@ internal class AdminOrderServiceTest {
     @DisplayName("주문 취소 시 이미 배달이 완료된 주문은 취소가 불가능한 test")
     fun cancelOneOrderExceptionByDeliveryStatusTest() {
         //given
-        val orderId: Long = order!!.orderId
-        order!!.deliveryStatus = DeliveryStatus.COMPLETE
+        val orderId: Long? = order?.orderId
+        order?.deliveryStatus = DeliveryStatus.COMPLETE
 
         //when
-        val cancelOneOrder = adminOrderService.cancelOneOrder(orderId)
+        val cancelOneOrder = orderId?.let { adminOrderService?.cancelOneOrder(it) }
 
 
         //then
-        assertThat(cancelOneOrder.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO().httpStatus)
-        assertThat(cancelOneOrder.message).isEqualTo(AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO().message)
-        println("cancelOneOrder = ${cancelOneOrder.message}")
+        assertThat(cancelOneOrder?.httpStatus).isEqualTo(AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO().httpStatus)
+        assertThat(cancelOneOrder?.message).isEqualTo(AdminResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO().message)
+        println("cancelOneOrder = ${cancelOneOrder?.message}")
     }
 
     private fun generatePageable(page: Int = 0, pageSize: Int = 2): PageRequest = PageRequest.of(page, pageSize)
@@ -261,18 +267,18 @@ internal class AdminOrderServiceTest {
         //given
         val pageable = generatePageable()
 
-        val orderCount = orderRepository.count()
+        val orderCount = orderRepository?.count()
 
         //when
-        val allOrders = adminOrderService.getAllOrders(pageable)
+        val allOrders = adminOrderService?.getAllOrders(pageable)
 
         //then
-        assertThat(allOrders.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(allOrders.message).isEqualTo("주문 조회를 성공했습니다.")
-        assertThat(allOrders.keyword).isEqualTo("")
-        assertThat(allOrders.result!!.content[0].deliveryStatus).isEqualTo(DeliveryStatus.IN_DELIVERY)
-        assertThat(allOrders.result!!.totalElements).isEqualTo(orderCount - 1)
-        assertThat(allOrders.result!!.totalPages).isEqualTo(4)
+        assertThat(allOrders?.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(allOrders?.message).isEqualTo("주문 조회를 성공했습니다.")
+        assertThat(allOrders?.keyword).isEqualTo("")
+        assertThat(allOrders?.result?.content?.get(0)?.deliveryStatus).isEqualTo(DeliveryStatus.IN_DELIVERY)
+        assertThat(allOrders?.result?.totalElements).isEqualTo(orderCount?.minus(1))
+        assertThat(allOrders?.result?.totalPages).isEqualTo(4)
 
     }
 
@@ -284,14 +290,14 @@ internal class AdminOrderServiceTest {
         val keyword = "te"
 
         //when
-        val ordersByMemberId = adminOrderService.getOrdersByMemberId(keyword, pageable)
+        val ordersByMemberId = adminOrderService?.getOrdersByMemberId(keyword, pageable)
 
         //then
-        assertThat(ordersByMemberId.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(ordersByMemberId.message).isEqualTo("주문 조회를 성공했습니다.")
-        assertThat(ordersByMemberId.keyword).isEqualTo(keyword)
-        assertThat(ordersByMemberId.result!!.totalElements).isEqualTo(7)
-        assertThat(ordersByMemberId.result!!.totalPages).isEqualTo(4)
+        assertThat(ordersByMemberId?.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(ordersByMemberId?.message).isEqualTo("주문 조회를 성공했습니다.")
+        assertThat(ordersByMemberId?.keyword).isEqualTo(keyword)
+        assertThat(ordersByMemberId?.result?.totalElements).isEqualTo(7)
+        assertThat(ordersByMemberId?.result?.totalPages).isEqualTo(4)
     }
 
     @Test
@@ -301,7 +307,7 @@ internal class AdminOrderServiceTest {
         val orderId = order?.orderId
 
         //when
-        orderId?.let { adminOrderService.updateDeliveryInDelivery(it) }
+        orderId?.let { adminOrderService?.updateDeliveryInDelivery(it) }
 
         //then
         assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.IN_DELIVERY)
@@ -314,13 +320,13 @@ internal class AdminOrderServiceTest {
         val orderId = 123123L
 
         //when
-        val deliveryStatus = adminOrderService.updateDeliveryInDelivery(orderId)
+        val deliveryStatus = adminOrderService?.updateDeliveryInDelivery(orderId)
 
         //then
-        assertThat(deliveryStatus.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().httpStatus)
-        assertThat(deliveryStatus.message).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().message)
+        assertThat(deliveryStatus?.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().httpStatus)
+        assertThat(deliveryStatus?.message).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().message)
         assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.READY)
-        println("deliveryStatus = ${deliveryStatus.message}")
+        println("deliveryStatus = ${deliveryStatus?.message}")
     }
 
     @Test
@@ -328,10 +334,10 @@ internal class AdminOrderServiceTest {
     fun changeDeliveryReadyExceptionByCancelOrderTest() {
         //given
         val orderId = order?.orderId
-        orderId?.let { adminOrderService.cancelOneOrder(it) }
+        orderId?.let { adminOrderService?.cancelOneOrder(it) }
 
         //when
-        val deliveryStatus = orderId?.let { adminOrderService.updateDeliveryInDelivery(it) }
+        val deliveryStatus = orderId?.let { adminOrderService?.updateDeliveryInDelivery(it) }
 
         //then
         assertThat(deliveryStatus?.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder().httpStatus)
@@ -347,7 +353,7 @@ internal class AdminOrderServiceTest {
         val orderId = order?.orderId
 
         //when
-        orderId?.let { adminOrderService.updateDeliveryComplete(it) }
+        orderId?.let { adminOrderService?.updateDeliveryComplete(it) }
 
         //then
         assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.COMPLETE)
@@ -360,13 +366,13 @@ internal class AdminOrderServiceTest {
         val orderId = 123123L
 
         //when
-        val deliveryStatus = adminOrderService.updateDeliveryComplete(orderId)
+        val deliveryStatus = adminOrderService?.updateDeliveryComplete(orderId)
 
         //then
-        assertThat(deliveryStatus.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().httpStatus)
-        assertThat(deliveryStatus.message).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().message)
+        assertThat(deliveryStatus?.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().httpStatus)
+        assertThat(deliveryStatus?.message).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatus().message)
         assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.READY)
-        println("deliveryStatus = ${deliveryStatus.message}")
+        println("deliveryStatus = ${deliveryStatus?.message}")
     }
 
     @Test
@@ -374,10 +380,10 @@ internal class AdminOrderServiceTest {
     fun changeDeliveryCompleteExceptionByCancelOrderTest() {
         //given
         val orderId = order?.orderId
-        orderId?.let { adminOrderService.cancelOneOrder(it) }
+        orderId?.let { adminOrderService?.cancelOneOrder(it) }
 
         //when
-        val deliveryStatus = orderId?.let { adminOrderService.updateDeliveryComplete(it) }
+        val deliveryStatus = orderId?.let { adminOrderService?.updateDeliveryComplete(it) }
 
         //then
         assertThat(deliveryStatus?.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateDeliveryStatusByCancelOrder().httpStatus)
@@ -385,48 +391,4 @@ internal class AdminOrderServiceTest {
         assertThat(order?.deliveryStatus).isEqualTo(DeliveryStatus.REFUND)
         println("deliveryStatus = ${deliveryStatus?.message}")
     }
-
-
-//    @Test
-//    @DisplayName("주문 취소 test")
-//    fun deleteOrdersTest() {
-//        //given
-//        var orderIds: MutableList<Long> = mutableListOf()
-//
-//        order?.let { orderIds.add(it.orderId) }
-//
-//        var deleteOrdersDTO = DeleteOrdersDTO(
-//            orderIds
-//        )
-//
-//        //when
-//        val deleteOrders = adminOrderService.deleteOrders(deleteOrdersDTO)
-//
-//        //then
-//        assertThat(deleteOrders.status).isEqualTo(setDeleteSuccessOrdersResultDTO().status)
-//        assertThat(deleteOrders.message).isEqualTo(setDeleteSuccessOrdersResultDTO().message)
-//        assertThat(order?.orderStatus).isEqualTo(OrderStatus.CANCEL)
-//    }
-//
-//
-//    @Test
-//    @DisplayName("없는 주문을 취소할 예외 test")
-//    fun deleteOrdersExceptionTest() {
-//        //given
-//        var orderIds: MutableList<Long> = mutableListOf()
-//
-//        orderIds.add(10L)
-//
-//        var deleteOrdersDTO = DeleteOrdersDTO(
-//            orderIds
-//        )
-//
-//        //when
-//        val deleteOrders = adminOrderService.deleteOrders(deleteOrdersDTO)
-//
-//        //then
-//        assertThat(deleteOrders.status).isEqualTo(setDeleteFailOrdersResultDTO().status)
-//        assertThat(deleteOrders.message).isEqualTo(setDeleteFailOrdersResultDTO().message)
-//        assertThat(order?.orderStatus).isEqualTo(OrderStatus.COMPLETE)
-//    }
 }

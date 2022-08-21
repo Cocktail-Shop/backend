@@ -60,10 +60,4 @@ class AdminOrdersController(
         model.addAttribute("result", adminOrderService.updateDeliveryComplete(orderId))
         return "global/message"
     }
-
-    // 하나 이상의 주문 취소
-//    @DeleteMapping("orders")
-//    fun deleteOrders(@RequestBody deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO {
-//        return adminOrderService.deleteOrders(deleteOrdersDTO)
-//    }
 }

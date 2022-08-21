@@ -18,4 +18,3 @@ class Cart(
     @JoinColumn(name = "member_id")
     var member: Member?=null,
 ) : BaseTimeEntity()
-

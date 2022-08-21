@@ -1,6 +1,7 @@
 package com.lionTF.cshop.config
 
 import com.lionTF.cshop.domain.member.handler.CustomAccessDeniedHandler
+import com.lionTF.cshop.domain.member.handler.OAuthFailureHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -8,9 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.web.cors.CorsConfiguration
-import org.springframework.web.cors.CorsConfigurationSource
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+
 
 @Configuration
 @EnableWebSecurity
@@ -47,6 +46,7 @@ class SecurityConfig {
             .and()
             .oauth2Login()
             .defaultSuccessUrl("/members")
+            .failureHandler(OAuthFailureHandler())
             .and()
             .logout()
             .logoutUrl("/members/logout")
@@ -58,17 +58,5 @@ class SecurityConfig {
             .accessDeniedHandler(CustomAccessDeniedHandler())
             .and()
             .build()
-    }
-
-    @Bean
-    fun corsConfigurationSource(): CorsConfigurationSource {
-        val configuration = CorsConfiguration().apply {
-            addAllowedOriginPattern("*")
-            addAllowedHeader("*")
-            addAllowedMethod("*")
-        }
-        return UrlBasedCorsConfigurationSource().apply {
-            registerCorsConfiguration("/**", configuration)
-        }
     }
 }

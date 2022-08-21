@@ -1,12 +1,5 @@
 <!DOCTYPE html>
 
-<!--
- // WEBSITE: https://themefisher.com
- // TWITTER: https://twitter.com/themefisher
- // FACEBOOK: https://www.facebook.com/themefisher
- // GITHUB: https://github.com/themefisher/
--->
-
 <html lang="en">
 <th:block th:replace="~{global/headData:: headData}">
 </th:block>
@@ -20,8 +13,9 @@
       <div class="col-md-6 col-md-offset-3">
         <div class="block text-center">
           <h2 class="text-center">마이페이지</h2>
-          <form class="text-left clearfix"  onsubmit="return checkMyPageInfo()" th:action="@{/members}"  th:object="${requestUpdateMyPageDTO}" th:method="put" th:each="info : ${myPageInfo}" >
-			  <div class="form-group">
+          <form class="text-left clearfix"  onsubmit="return checkSocialMyPageInfo()" th:action="@{/members}"  th:object="${requestUpdateMyPageDTO}" th:method="put" th:each="info : ${myPageInfo}" >
+              <input type="hidden"  class="form-control signin-input" id="user-id" th:field="*{id}">
+              <div class="form-group">
               <label>이름 </label>
               <input type="text"  class="form-control signin-input" id="name" th:value="${info.result.memberName}" disabled>
             </div>
@@ -75,5 +69,5 @@
 	   }).open();
    }
    </script>
-  </body>
-  </html>
+</body>
+</html>

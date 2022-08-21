@@ -23,7 +23,7 @@
             <div class="col-md-4 col-xs-12 col-sm-4">
                 <!-- Site Logo -->
                 <div class="logo text-center">
-                    <a href="#" th:href="@{/admins/main}">
+                    <a href="#" th:href="@{/admins/orders}">
                         <!-- replace logo here -->
                         <svg width="135px" height="29px" viewBox="0 0 155 29" version="1.1" xmlns="http://www.w3.org/2000/svg"
                              xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -63,13 +63,6 @@
             <!-- Navbar Links -->
             <div id="navbar" class="navbar-collapse collapse text-center">
                 <ul class="nav navbar-nav">
-
-                    <!-- Home -->
-                    <li class="dropdown ">
-                        <a href="#" th:href="@{/admins/main}">Home</a>
-                    </li><!-- / Home -->
-
-
                     <!-- Blog -->
                     <li class="dropdown dropdown-slide">
                         <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-delay="350"
@@ -91,7 +84,6 @@
         <div class="row">
             <div class="col-md-12">
                 <ul class="list-inline dashboard-menu text-center">
-                    <li><a href="profile-details.html">Profile Details</a></li>
                     <li><a href="#" th:href="@{/admins/orders}">Orders</a></li>
                     <li><a href="#" th:href="@{/admins/members}">Members</a></li>
                     <li><a href="#" th:href="@{/admins/all-item}">Items</a></li>

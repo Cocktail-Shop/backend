@@ -109,24 +109,4 @@ class AdminItemServiceImpl(
 
         return ItemsSearchDTO.itemToResponseItemSearchPageDTO(items, itemName)
     }
-
-    // 상품 삭제
-//    override fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
-//        deleteItemDTO.itemIds.forEach{
-//            val findItemStatusById = adminItemRepository.findItemStatusById(it)
-//
-//            if (findItemStatusById == null) {
-//                return setDeleteFailItemResultDTO()
-//            }
-//            else if (findItemStatusById) {
-//                val item = adminItemRepository.findById(it).orElseThrow()
-//                item.delete()
-//            }
-//            else {
-//                return setDeleteFailItemResultDTO()
-//            }
-//        }
-//
-//        return setDeleteSuccessItemResultDTO()
-//    }
 }

@@ -43,11 +43,4 @@ class AdminMembersController(
         model.addAttribute("result", adminMemberService.deleteOneMember(memberId))
         return "global/message"
     }
-
-
-    // 한명 이상의 회원 삭제
-//    @DeleteMapping("members")
-//    fun deleteMembers(@RequestBody deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
-//        return adminMemberService.deleteMembers(deleteMembersDTO)
-//    }
 }

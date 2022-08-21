@@ -48,26 +48,4 @@ class AdminMemberServiceImpl(
     private fun existedMember(memberId: Long): Member? {
         return adminMemberRepository.findMember(memberId)
     }
-
-    // Form 으로부터 받아온 memberId 들이 존재하는지 검사
-    private fun formToExistedMembers(memberIdList: MutableList<Long>): Boolean {
-        return memberIdList.none { existedMember(it) == null }
-    }
-
-
-    // 한명 이상의 회원 삭제
-//    override fun deleteMembers(deleteMembersDTO: DeleteMembersDTO): DeleteMembersResultDTO {
-//
-//        if (formToExistedMembers(deleteMembersDTO.memberIds)) {
-//            for (memberId in deleteMembersDTO.memberIds) {
-//                val member = adminMemberRepository.getReferenceById(memberId)
-//
-//                member.deleteMember()
-//            }
-//
-//            return setDeleteSuccessMembersResultDTO()
-//        } else {
-//            return setDeleteFailMembersResultDTO()
-//        }
-//    }
 }

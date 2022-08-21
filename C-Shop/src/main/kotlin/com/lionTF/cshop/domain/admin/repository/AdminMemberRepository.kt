@@ -10,5 +10,4 @@ interface AdminMemberRepository : JpaRepository<Member, Long>, AdminMemberReposi
 
     @Query("select m from Member m where m.id = :memberId")
     fun findMember(@Param("memberId") memberId: Long): Member?
-
 }

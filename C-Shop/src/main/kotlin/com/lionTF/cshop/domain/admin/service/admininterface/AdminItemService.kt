@@ -19,6 +19,4 @@ interface AdminItemService {
     fun deleteOneItem(itemId: Long): AdminResponseDTO
 
     fun findItemById(itemId: Long): Item
-
-    //    fun deleteItems(deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO
 }
