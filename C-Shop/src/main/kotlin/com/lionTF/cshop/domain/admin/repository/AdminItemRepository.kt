@@ -17,6 +17,6 @@ interface AdminItemRepository : JpaRepository<Item, Long>, AdminItemRepositoryCu
 
     fun countAllByItemStatusIsTrue(): Long
 
-    @Query("select i from Item i where i.itemId = :itemId")
-    fun findItem(@Param("itemId") itemId: Long): Item?
+    @Query("select i from Item i where i.itemId = :itemId and i.itemStatus = :itemStatus")
+    fun findItem(@Param("itemId") itemId: Long, @Param("itemStatus") itemStatus: Boolean): Item?
 }

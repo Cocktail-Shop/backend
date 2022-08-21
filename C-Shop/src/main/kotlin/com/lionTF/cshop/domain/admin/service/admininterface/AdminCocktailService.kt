@@ -23,6 +23,4 @@ interface AdminCocktailService {
     fun deleteOneCocktail(cocktailId: Long): AdminResponseDTO
 
     fun findCocktailById(cocktailId: Long): Cocktail
-
-//    fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO
 }

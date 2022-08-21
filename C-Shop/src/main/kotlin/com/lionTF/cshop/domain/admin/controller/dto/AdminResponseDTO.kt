@@ -100,5 +100,21 @@ data class AdminResponseDTO(val httpStatus: Int, val message: String, var href: 
         fun toFailUpdateDeliveryStatusByCancelOrder(): AdminResponseDTO {
             return AdminResponseDTO(HttpStatus.BAD_REQUEST.value(), "취소된 주문은 배달 상태를 변경할 수 없습니다.", "/admins/orders")
         }
+
+        fun toFailCreateWishListByNoContentItemId(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 상품입니다..", "/items")
+        }
+
+        fun toSuccessCreateWishList(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.CREATED.value(), "찜 목록에 추가되었습니다.", "/wish-list")
+        }
+
+        fun toFailDeleteWishListByNoContentWishListId(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 찜하기 목록입니다..", "/wish-list")
+        }
+
+        fun toSuccessDeleteWishList(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.NO_CONTENT.value(), "찜 목록에서 삭제되었습니다.", "/wish-list")
+        }
     }
 }

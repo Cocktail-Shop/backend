@@ -23,7 +23,7 @@
             <div class="col-md-4 col-xs-12 col-sm-4">
                 <!-- Site Logo -->
                 <div class="logo text-center">
-                    <a href="#" th:href="@{/admins/main}">
+                    <a href="#" th:href="@{/admins/orders}">
                         <!-- replace logo here -->
                         <svg width="135px" height="29px" viewBox="0 0 155 29" version="1.1"
                              xmlns="http://www.w3.org/2000/svg"
@@ -64,12 +64,6 @@
             <!-- Navbar Links -->
             <div id="navbar" class="navbar-collapse collapse text-center">
                 <ul class="nav navbar-nav">
-
-                    <!-- Home -->
-                    <li class="dropdown ">
-                        <a href="#" th:href="@{/admins/main}">Home</a>
-                    </li><!-- / Home -->
-
                     <!-- Blog -->
                     <li class="dropdown dropdown-slide">
                         <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
@@ -92,7 +86,6 @@
         <div class="row">
             <div class="col-md-12">
                 <ul class="list-inline dashboard-menu text-center">
-                    <li><a href="profile-details.html">Profile Details</a></li>
                     <li><a href="#" th:href="@{/admins/orders}">Orders</a></li>
                     <li><a href="#" th:href="@{/admins/members}">Members</a></li>
                     <li><a href="#" th:href="@{/admins/all-item}">Items</a></li>
@@ -113,7 +106,8 @@
                                                     <ul class="dropdown-menu search-dropdown">
                                                         <li>
                                                             <form th:action="@{/admins/search/items}" th:method="get">
-                                                                <input name="itemName" type="search" class="form-control"
+                                                                <input name="itemName" type="search"
+                                                                       class="form-control"
                                                                        placeholder="상품 검색(to상품명)...">
                                                             </form>
                                                         </li>
@@ -122,6 +116,7 @@
                                             </div>
                                             <table class="table">
                                                 <tr>
+                                                    <th>상품 이미지</th>
                                                     <th>상품명</th>
                                                     <th>가격</th>
                                                     <th>수량</th>
@@ -132,6 +127,10 @@
                                                     <th>상품 삭제</th>
                                                 </tr>
                                                 <tr th:each="item : ${items.result.content}">
+                                                    <td>
+                                                        <img th:src="${item.itemImgUrl}"
+                                                             style="width: 3vw; height: 7vw">
+                                                    </td>
                                                     <td th:text="${item.itemName}"></td>
                                                     <td th:text="${item.price}"></td>
                                                     <td th:text="${item.amount}"></td>

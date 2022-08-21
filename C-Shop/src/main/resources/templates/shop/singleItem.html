@@ -68,6 +68,9 @@
                         <input type="hidden"  id="amount2" class="form-control signin-input"  value="0" th:field="*{amount}" >
                         <input type="submit" class="btn btn-main mt-20" value="장바구니 추가">
                     </form>
+                    <form method="post" th:action="@{/wish-list/{itemId} (itemId=${item.result.itemId})}" th:object="${addCartItemRequestDTO}">
+                        <input type="submit" class="btn btn-main mt-20" value="찜하기">
+                    </form>
                 </div>
             </div>
         </div>

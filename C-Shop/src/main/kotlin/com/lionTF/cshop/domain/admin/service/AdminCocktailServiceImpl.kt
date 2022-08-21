@@ -146,7 +146,7 @@ class AdminCocktailServiceImpl(
 
     // 존재하는 단일 상품인지 검사하는 함수
     private fun existedItem(itemId: Long): Item? {
-        return adminItemRepository.findItem(itemId)
+        return adminItemRepository.findItem(itemId, true)
     }
 
     // Form 으로부터 받아온 itemId 들이 존재하는 상품인지 검사
@@ -165,18 +165,4 @@ class AdminCocktailServiceImpl(
     private fun formToExistedCocktails(cocktailList: MutableList<Long>): Boolean {
         return cocktailList.none { existedCocktail(it) == null }
     }
-
-    // 한개 이상의 칵테일 상품 삭제
-//    override fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO {
-//        return if (!formToExistedCocktails(deleteCocktailDTO.cocktailIds)) {
-//            setDeleteFailCocktailResultDTO()
-//        } else {
-//            for (cocktailId in deleteCocktailDTO.cocktailIds) {
-//                val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
-//                cocktail.deleteCocktail()
-//            }
-//
-//            setDeleteSuccessCocktailResultDTO()
-//        }
-//    }
 }
