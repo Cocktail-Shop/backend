@@ -65,13 +65,6 @@ class AdminOrderServiceImpl(
         return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(orders, keyword)
     }
 
-
-    override fun getAllSales(pageable: Pageable): OrdersSearchDTO {
-        val ordersInfo = adminOrderRepository.findOrdersInfo(pageable)
-
-        return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(ordersInfo, "")
-    }
-
     @Transactional
     override fun updateDeliveryInDelivery(orderId: Long): AdminResponseDTO {
         val orders = existedOrder(orderId)
