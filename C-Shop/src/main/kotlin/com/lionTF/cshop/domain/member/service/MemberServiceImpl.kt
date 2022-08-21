@@ -63,13 +63,7 @@ class MemberServiceImpl(
                     when (existMember.fromSocial) {
                         true -> MemberResponseDTO.toSocialPasswordInquiryResponseDTO()
                         else -> {
-                            val tempPw = UUID.randomUUID().toString().replace("-", "").substring(0, 8)
-
-                            existMember.updatePassword(tempPw, passwordEncoder)
-
-                            val mail = MailDTO.toPasswordInquiryMailDTO(existMember, tempPw)
-                            mail.sendMail(javaMailSender)
-
+                            sendMail(existMember)
                             MemberResponseDTO.toSuccessPasswordInquiryResponseDTO()
                         }
                     }
@@ -79,6 +73,15 @@ class MemberServiceImpl(
             } ?: MemberResponseDTO.toFailedPasswordInquiryResponseDTO()
     }
 
+    private fun sendMail(member: Member) {
+        val tempPw = UUID.randomUUID().toString().replace("-", "").substring(0, 8)
+        member.updatePassword(tempPw, passwordEncoder)
+
+        val mail = MailDTO.toPasswordInquiryMailDTO(member, tempPw)
+        mail.sendMail(javaMailSender)
+    }
+
+
     @Transactional
     override fun setPreMemberInfo(memberId: Long, preMemberInfoRequestDTO: PreMemberInfoRequestDTO): MemberResponseDTO {
         return memberAuthRepository.findByMemberId(memberId)?.let { existMember ->
@@ -86,4 +89,5 @@ class MemberServiceImpl(
             MemberResponseDTO.toSuccessSetPreMemberInfoResponseDTO()
         } ?: throw NoSuchElementException("해당 회원 정보 찾을 수 없음")
     }
+
 }

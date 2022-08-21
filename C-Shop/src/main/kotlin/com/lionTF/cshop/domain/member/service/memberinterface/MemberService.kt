@@ -11,4 +11,3 @@ interface MemberService {
 
     fun setPreMemberInfo(memberId:Long, preMemberInfoRequestDTO: PreMemberInfoRequestDTO):MemberResponseDTO
 }
-
