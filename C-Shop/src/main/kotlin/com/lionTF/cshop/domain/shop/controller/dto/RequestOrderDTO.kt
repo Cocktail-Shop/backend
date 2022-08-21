@@ -87,6 +87,14 @@ data class RequestOrderResultDTO(
                 href = "items"
             )
         }
+
+        fun setRequestOrderAllZeroFailResultDTO() : RequestOrderResultDTO{
+            return RequestOrderResultDTO(
+                status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                message = "적어도 한 개 이상의 상품은 주문하셔야 합니다.",
+                href = "items"
+            )
+        }
     }
 }
 

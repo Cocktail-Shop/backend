@@ -26,13 +26,14 @@ class OrderServiceImpl(
     //상품 주문 메소드
     @Transactional
     override fun requestOrder(requestOrderDTO: RequestOrderDTO) : RequestOrderResultDTO {
-
+        var zeroAmountCount = 0
          requestOrderDTO.orderItems.map{
             val requestAmount = it.amount
             val existAmount = itemRepository.getReferenceById(it.itemId).amount
 
+             if(requestAmount == 0) zeroAmountCount++
 
-            if(requestAmount <= 0){
+            if(requestAmount < 0){
                 return RequestOrderResultDTO.setNotPositiveError()
             }
 
@@ -42,6 +43,7 @@ class OrderServiceImpl(
             else return RequestOrderResultDTO.setRequestOrderStatusFailResultDTO()
         }
 
+        if(zeroAmountCount == requestOrderDTO.orderItems.size) return RequestOrderResultDTO.setRequestOrderAllZeroFailResultDTO()
 
         val member = requestOrderDTO.memberId?.let { memberRepository.getReferenceById(it) }
 
@@ -58,18 +60,16 @@ class OrderServiceImpl(
 
         for(info in requestOrderDTO.orderItems){
             val item = itemRepository.getReferenceById(info.itemId)
-            item.amount -= info.amount
-            itemRepository.save(item)
+            if(info.amount > 0){
+                item.amount -= info.amount
+                itemRepository.save(item)
 
-            orderItemRepository.save(
-                OrderItem.fromOrderItemDTO(
-                    OrderItemDTO(
-                        orders,
-                        item,
-                        info.amount
+                orderItemRepository.save(
+                    OrderItem.fromOrderItemDTO(
+                        OrderItemDTO.fromOrderRequestInfo(orders, item, info.amount)
                     )
                 )
-            )
+            }
         }
         return RequestOrderResultDTO.setRequestOrderSuccessResultDTO()
     }
