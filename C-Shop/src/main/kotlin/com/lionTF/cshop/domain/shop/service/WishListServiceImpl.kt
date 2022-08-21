@@ -17,7 +17,7 @@ class WishListServiceImpl(
 ) : WishListService {
 
     override fun createWishList(memberId: Long?, itemId: Long): AdminResponseDTO {
-        val item = adminItemRepository.findItem(itemId)
+        val item = adminItemRepository.findItem(itemId, true)
 
         return if (item == null) {
             AdminResponseDTO.toFailCreateWishListByNoContentItemId()

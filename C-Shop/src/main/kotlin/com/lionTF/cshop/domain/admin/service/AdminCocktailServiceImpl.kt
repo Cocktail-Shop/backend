@@ -146,7 +146,7 @@ class AdminCocktailServiceImpl(
 
     // 존재하는 단일 상품인지 검사하는 함수
     private fun existedItem(itemId: Long): Item? {
-        return adminItemRepository.findItem(itemId)
+        return adminItemRepository.findItem(itemId, true)
     }
 
     // Form 으로부터 받아온 itemId 들이 존재하는 상품인지 검사
