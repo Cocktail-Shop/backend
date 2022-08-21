@@ -4,6 +4,7 @@ import com.lionTF.cshop.domain.admin.controller.dto.DeleteCartItemDTO
 import com.lionTF.cshop.domain.member.controller.dto.AuthMemberDTO
 import com.lionTF.cshop.domain.shop.controller.dto.*
 import com.lionTF.cshop.domain.shop.service.shopinterface.CartItemService
+import com.lionTF.cshop.domain.admin.controller.dto.DeleteCartItemRequestDTO
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -32,9 +33,9 @@ class CartItemController(
     }
 
     // 장바구니 상품 삭제
-    @DeleteMapping("/cart/items/{itemId}")
-    fun deleteCartItem(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PathVariable("itemId") itemId: Long, model: Model): String {
-        val deleteCartItemDTO = DeleteCartItemDTO(authMemberDTO?.memberId, itemId)
+    @DeleteMapping("/cart/items")
+    fun deleteCartItem(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @RequestBody deleteCartItemRequestDTO: DeleteCartItemRequestDTO, model: Model): String {
+        val deleteCartItemDTO = DeleteCartItemDTO(authMemberDTO?.memberId, deleteCartItemRequestDTO.cartItemID, deleteCartItemRequestDTO.itemIds)
         model.addAttribute("result", cartItemService.deleteCartItem(deleteCartItemDTO))
         return "global/message"
     }

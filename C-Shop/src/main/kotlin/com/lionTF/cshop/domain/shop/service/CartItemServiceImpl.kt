@@ -75,18 +75,18 @@ class CartItemServiceImpl(
     }
 
     // 장바구니 상품 삭제
+    @Transactional
     override fun deleteCartItem(deleteCartDTO: DeleteCartItemDTO): CartResponseDTO {
-        val existsCart = cartItemRepository.existsById(deleteCartDTO.cartItemId)
+        val cartId = deleteCartDTO.memberId?.let { cartRepository.getCartId(it) }
 
-        return if (!existsCart) {
-            CartResponseDTO.toFailDeleteItemResponseDTO()
-
-        } else {
-            val cart = cartRepository.getCart(deleteCartDTO.memberId)
-            cart.deleteCartItem(deleteCartDTO.cartItemId)
-
-            CartResponseDTO.toSuccessDeleteItemResponseDTO()
+        for (deleteItemId in deleteCartDTO.itemIds) {
+            if (cartId != null) {
+                cartItemRepository.deleteCartItem(deleteCartDTO.cartItemId, cartId, deleteItemId)
+            } else
+                return CartResponseDTO.toFailFindCartIdResponseDTO()
         }
+
+        return CartResponseDTO.toSuccessDeleteItemResponseDTO()
     }
 
     // 장바구니 상품 조회

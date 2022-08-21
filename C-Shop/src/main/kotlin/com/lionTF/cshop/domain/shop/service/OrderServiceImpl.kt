@@ -1,5 +1,6 @@
 package com.lionTF.cshop.domain.shop.service
 
+import com.lionTF.cshop.domain.admin.controller.dto.OrdersSearchDTO
 import com.lionTF.cshop.domain.admin.repository.AdminOrderRepository
 import com.lionTF.cshop.domain.member.controller.dto.AddressDTO
 import com.lionTF.cshop.domain.shop.controller.dto.*
@@ -99,13 +100,9 @@ class OrderServiceImpl(
     }
 
     // 주문 조회
-    override fun getShopOrders(pageable: Pageable): OrderResponseDTO {
+    override fun getShopOrders(pageable: Pageable): OrdersSearchDTO {
         val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
 
-        return if (findOrdersInfo.isEmpty) {
-            OrderResponseDTO.toFailSearchShopOrdersDTO()
-        } else {
-            OrderResponseDTO.toSuccessSearchShopOrdersDTO()
-        }
+        return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(findOrdersInfo, "")
     }
 }
