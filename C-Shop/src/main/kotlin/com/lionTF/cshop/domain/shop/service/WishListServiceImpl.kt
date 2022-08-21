@@ -6,6 +6,8 @@ import com.lionTF.cshop.domain.shop.controller.dto.WishListDTO
 import com.lionTF.cshop.domain.shop.models.WishList
 import com.lionTF.cshop.domain.shop.repository.WishListRepository
 import com.lionTF.cshop.domain.shop.service.shopinterface.WishListService
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 
 @Service
@@ -28,8 +30,8 @@ class WishListServiceImpl(
         }
     }
 
-    override fun getWishList(memberId: Long?): List<WishListDTO> {
-        return wishListRepository.findWishListByMemberId(memberId, true)
+    override fun getWishList(memberId: Long?, pageable: Pageable): Page<WishListDTO> {
+        return wishListRepository.findWishListByMemberId(memberId, true, pageable)
     }
 
     override fun deleteWishList(memberId: Long?, wishListId: Long): AdminResponseDTO {

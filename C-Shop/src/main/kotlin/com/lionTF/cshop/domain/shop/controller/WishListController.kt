@@ -2,6 +2,7 @@ package com.lionTF.cshop.domain.shop.controller
 
 import com.lionTF.cshop.domain.member.controller.dto.AuthMemberDTO
 import com.lionTF.cshop.domain.shop.service.shopinterface.WishListService
+import org.springframework.data.domain.Pageable
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -18,10 +19,11 @@ class WishListController(
     @GetMapping("wish-list")
     fun getWishList(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        pageable: Pageable,
         model: Model
     ): String {
         val memberId = authMemberDTO?.memberId
-        model.addAttribute("wishList", wishListService.getWishList(memberId))
+        model.addAttribute("wishList", wishListService.getWishList(memberId, pageable))
         return "shop/wishList"
     }
 

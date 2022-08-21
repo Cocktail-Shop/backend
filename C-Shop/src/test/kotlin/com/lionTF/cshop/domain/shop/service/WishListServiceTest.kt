@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.data.domain.PageRequest
 import javax.transaction.Transactional
 
 @SpringBootTest
@@ -107,6 +108,8 @@ class WishListServiceTest {
         assertThat(wishList.message).isEqualTo(AdminResponseDTO.toFailCreateWishListByNoContentItemId().message)
     }
 
+    private fun generatePageable(page: Int = 0, pageSize: Int = 2): PageRequest = PageRequest.of(page, pageSize)
+
     @Test
     @DisplayName("찜 목록 가져오는 test")
     fun getWishListTest() {
@@ -114,13 +117,15 @@ class WishListServiceTest {
         item1?.itemId?.let { wishListService?.createWishList(memberTest1?.memberId, it) }
         item2?.itemId?.let { wishListService?.createWishList(memberTest1?.memberId, it) }
 
+        val pageable = generatePageable()
+
         //when
-        val wishList = wishListService?.getWishList(memberTest1?.memberId)
+        val wishList = wishListService?.getWishList(memberTest1?.memberId, pageable)
 
         //then
         assertThat(wishList?.size).isEqualTo(2)
-        assertThat(wishList?.get(0)?.itemId).isEqualTo(item1?.itemId)
-        assertThat(wishList?.get(1)?.itemId).isEqualTo(item2?.itemId)
+        assertThat(wishList?.content?.get(0)?.itemId).isEqualTo(item1?.itemId)
+        assertThat(wishList?.content?.get(1)?.itemId).isEqualTo(item2?.itemId)
     }
 
     @Test
