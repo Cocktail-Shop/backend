@@ -29,6 +29,19 @@ class WishListServiceImpl(
     }
 
     override fun getWishList(memberId: Long?): List<WishListDTO> {
-        return wishListRepository.findWishListByMemberId(memberId)
+        return wishListRepository.findWishListByMemberId(memberId, true)
+    }
+
+    override fun deleteWishList(memberId: Long?, wishListId: Long): AdminResponseDTO {
+        val isWishList = wishListRepository.existsById(wishListId)
+
+        return if (isWishList) {
+            val wishList = wishListRepository.getReferenceById(wishListId)
+            wishList.delete()
+
+            AdminResponseDTO.toSuccessDeleteWishList()
+        } else {
+            AdminResponseDTO.toFailDeleteWishListByNoContentWishListId()
+        }
     }
 }

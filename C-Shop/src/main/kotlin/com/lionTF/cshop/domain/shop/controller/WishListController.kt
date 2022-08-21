@@ -5,6 +5,7 @@ import com.lionTF.cshop.domain.shop.service.shopinterface.WishListService
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -33,6 +34,18 @@ class WishListController(
         val memberId = authMemberDTO?.memberId
 
         model.addAttribute("result", wishListService.createWishList(memberId, itemId))
+        return "global/message"
+    }
+
+    @DeleteMapping("wish-list/{wishListId}")
+    fun deleteWishList(
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @PathVariable("wishListId") wishListId: Long,
+        model: Model
+    ): String {
+        val memberId = authMemberDTO?.memberId
+
+        model.addAttribute("result", wishListService.deleteWishList(memberId, wishListId))
         return "global/message"
     }
 }

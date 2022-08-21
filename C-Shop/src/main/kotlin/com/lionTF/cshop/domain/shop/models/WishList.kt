@@ -18,9 +18,13 @@ class WishList(
     val category: Category = Category.ALCOHOL,
 
     val itemName: String = "",
-    val itemImgUrl: String = ""
+    val itemImgUrl: String = "",
+    var wishListStatus: Boolean = true
+) {
 
-    ) {
+    fun delete() {
+        wishListStatus = false
+    }
 
     companion object {
         fun toWishListEntity(item: Item, memberId: Long?): WishList {
@@ -29,7 +33,7 @@ class WishList(
                 itemId = item.itemId,
                 category = item.category,
                 itemName = item.itemName,
-                itemImgUrl = item.itemImgUrl
+                itemImgUrl = item.itemImgUrl,
             )
         }
     }

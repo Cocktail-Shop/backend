@@ -8,4 +8,6 @@ interface WishListService {
     fun createWishList(memberId: Long?, itemId: Long): AdminResponseDTO
 
     fun getWishList(memberId: Long?): List<WishListDTO>
+
+    fun deleteWishList(memberId: Long?, wishListId: Long): AdminResponseDTO
 }

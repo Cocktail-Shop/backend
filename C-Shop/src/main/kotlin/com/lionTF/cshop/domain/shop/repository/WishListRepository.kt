@@ -8,7 +8,12 @@ import org.springframework.data.repository.query.Param
 
 interface WishListRepository : JpaRepository<WishList, Long> {
 
-    @Query("SELECT new com.lionTF.cshop.domain.shop.controller.dto.WishListDTO(w.wishListId, w.memberId, w.itemId, w.category, w.itemName, w.itemImgUrl)" +
-            " from WishList w where w.memberId = :memberId")
-    fun findWishListByMemberId(@Param("memberId")memberId: Long?): List<WishListDTO>
+    @Query(
+        "SELECT new com.lionTF.cshop.domain.shop.controller.dto.WishListDTO(w.wishListId, w.memberId, w.itemId, w.category, w.itemName, w.itemImgUrl)" +
+                " from WishList w where w.memberId = :memberId and w.wishListStatus = :wishListStatus"
+    )
+    fun findWishListByMemberId(
+        @Param("memberId") memberId: Long?,
+        @Param("wishListStatus") wishListStatus: Boolean
+    ): List<WishListDTO>
 }
