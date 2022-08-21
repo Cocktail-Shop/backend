@@ -9,6 +9,7 @@ import com.lionTF.cshop.domain.shop.service.shopinterface.WishListService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 @Service
 class WishListServiceImpl(
@@ -18,6 +19,7 @@ class WishListServiceImpl(
 
 ) : WishListService {
 
+    @Transactional
     override fun createWishList(memberId: Long?, itemId: Long): AdminResponseDTO {
         val item = adminItemRepository.findItem(itemId, true)
 
@@ -34,6 +36,7 @@ class WishListServiceImpl(
         return wishListRepository.findWishListByMemberId(memberId, true, pageable)
     }
 
+    @Transactional
     override fun deleteWishList(memberId: Long?, wishListId: Long): AdminResponseDTO {
         val isWishList = wishListRepository.existsById(wishListId)
 
