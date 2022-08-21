@@ -2,6 +2,7 @@ package com.lionTF.cshop.domain.shop.service
 
 import com.lionTF.cshop.domain.admin.controller.dto.AdminResponseDTO
 import com.lionTF.cshop.domain.admin.repository.AdminItemRepository
+import com.lionTF.cshop.domain.shop.controller.dto.WishListDTO
 import com.lionTF.cshop.domain.shop.models.WishList
 import com.lionTF.cshop.domain.shop.repository.WishListRepository
 import com.lionTF.cshop.domain.shop.service.shopinterface.WishListService
@@ -25,5 +26,9 @@ class WishListServiceImpl(
 
             AdminResponseDTO.toSuccessCreateWishList()
         }
+    }
+
+    override fun getWishList(memberId: Long?): List<WishListDTO> {
+        return wishListRepository.findWishListByMemberId(memberId)
     }
 }

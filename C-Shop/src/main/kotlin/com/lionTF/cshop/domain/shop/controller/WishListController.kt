@@ -19,7 +19,8 @@ class WishListController(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
         model: Model
     ): String {
-
+        val memberId = authMemberDTO?.memberId
+        model.addAttribute("wishList", wishListService.getWishList(memberId))
         return "shop/wishList"
     }
 
