@@ -113,24 +113,4 @@ class AdminOrderServiceImpl(
     private fun existedOrder(orderId: Long): Orders? {
         return adminOrderRepository.findOrders(orderId)
     }
-
-    // Form 으로부터 받아온 orderId 들이 존재하는 주문인지 검사
-    private fun formToExistedItems(orderList: MutableList<Long>): Boolean {
-        return orderList.none { existedOrder(it) == null }
-    }
-
-//    // 하나 이상의 주문 취소
-//    override fun deleteOrders(deleteOrdersDTO: DeleteOrdersDTO): DeleteOrdersResultDTO {
-//
-//        if (formToExistedItems(deleteOrdersDTO.orderIds)) {
-//            for (orderId in deleteOrdersDTO.orderIds) {
-//                val orders = adminOrderRepository.getReferenceById(orderId)
-//                orders.deleteOrder()
-//            }
-//
-//            return setDeleteSuccessOrdersResultDTO()
-//        } else {
-//            return setDeleteFailOrdersResultDTO()
-//        }
-//    }
 }

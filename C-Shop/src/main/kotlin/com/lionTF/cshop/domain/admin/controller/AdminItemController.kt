@@ -131,23 +131,4 @@ class AdminItemController(
         }
         return itemImgUrl
     }
-
-
-//    @ModelAttribute("itemIds")
-//    fun favorite(pageable: Pageable): Map<Long, String> {
-//        var map: MutableMap<Long, String> = LinkedHashMap()
-//        var items = adminItemService.getAllItems(pageable)
-//
-//        for (item in items.result!!.content) {
-//            map[item.itemId] = ""
-//        }
-//
-//        return map
-//    }
-
-    //    복수 상품 삭제
-//    @DeleteMapping("items")
-//    fun deleteItem(@RequestBody deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
-//        return adminItemService.deleteItems(deleteItemDTO)
-//    }
 }

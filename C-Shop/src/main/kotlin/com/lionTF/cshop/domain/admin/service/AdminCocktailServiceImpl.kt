@@ -165,18 +165,4 @@ class AdminCocktailServiceImpl(
     private fun formToExistedCocktails(cocktailList: MutableList<Long>): Boolean {
         return cocktailList.none { existedCocktail(it) == null }
     }
-
-    // 한개 이상의 칵테일 상품 삭제
-//    override fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO {
-//        return if (!formToExistedCocktails(deleteCocktailDTO.cocktailIds)) {
-//            setDeleteFailCocktailResultDTO()
-//        } else {
-//            for (cocktailId in deleteCocktailDTO.cocktailIds) {
-//                val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
-//                cocktail.deleteCocktail()
-//            }
-//
-//            setDeleteSuccessCocktailResultDTO()
-//        }
-//    }
 }

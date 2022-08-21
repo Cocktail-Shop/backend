@@ -158,10 +158,4 @@ class AdminCocktailController(
         }
         return cocktailImgUrl
     }
-
-    // 한개 이상의 칵테일 삭제
-//    @DeleteMapping("cocktails")
-//    fun deleteCocktail(@RequestBody deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO {
-//        return adminCocktailService.deleteCocktail(deleteCocktailDTO)
-//    }
 }
