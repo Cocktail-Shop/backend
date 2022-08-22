@@ -24,7 +24,7 @@ data class MyPageResponseDTO(
 }
 
 data class RequestUpdateMyPageDTO(
-    var id: String = "",
+    val id: String = "",
     var address: String = "",
     var detailAddress: String = ""
 ) {
