@@ -10,7 +10,7 @@ data class AddCartItemDTO(
 
 data class AddCartItemRequestDTO(
     val itemId: Long,
-    var amount: Int = 1,
+    var amount: Int = 0,
 )
 
 data class AddCartItemResultDTO(
