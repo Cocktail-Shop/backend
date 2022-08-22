@@ -85,5 +85,9 @@ data class MemberResponseDTO(
         fun toSuccessSetPreMemberInfoResponseDTO(): MemberResponseDTO {
             return MemberResponseDTO(HttpStatus.OK.value(), "추가정보 입력 완료했습니다. 다시 로그인해주세요!", "/members/logout")
         }
+
+        fun toSessionExpireResponseDTO(): MemberResponseDTO {
+            return MemberResponseDTO(HttpStatus.UNAUTHORIZED.value(), "세션이 만료되었습니다. 다시 로그인 해주세요", "/members/login")
+        }
     }
 }
