@@ -11,14 +11,14 @@ data class PageRequestDTO(
     var sort: String? = null,
     var category: Category? = null,
     var keyword: String? = null
-){
-    fun getPageable(sort: Sort): Pageable{
-        return PageRequest.of(page-1,size,sort)
+) {
+
+    fun getPageable(sort: Sort): Pageable {
+        return PageRequest.of(page - 1, size, sort)
     }
 
-    fun getPageable(sort: Sort, keyword: String?) : Pageable{
+    fun getPageable(sort: Sort, keyword: String?): Pageable {
         this.keyword = keyword
-        return PageRequest.of(page-1,size,sort)
+        return PageRequest.of(page - 1, size, sort)
     }
 }
-

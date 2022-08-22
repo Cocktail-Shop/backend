@@ -19,7 +19,6 @@ class OAuth2UserDetailsService(
     private val cartRepository: CartRepository
 ) : DefaultOAuth2UserService() {
 
-
     @Transactional
     override fun loadUser(userRequest: OAuth2UserRequest): OAuth2User {
         val oAuth2User = super.loadUser(userRequest)
@@ -27,18 +26,18 @@ class OAuth2UserDetailsService(
         val account = oAuth2User.attributes["kakao_account"] as Map<*, *>
         val properties = oAuth2User.attributes["properties"] as Map<*, *>
 
-        val email = account["email"] as String? ?:throw UsernameNotFoundException("이메일 동의 필요")
+        val email = account["email"] as String? ?: throw UsernameNotFoundException("이메일 동의 필요")
         val name = properties["nickname"] as String
 
         val existMember = memberAuthRepository.findById(email)
 
         return if (existMember != null) {
-            when(existMember.memberStatus){
+            when (existMember.memberStatus) {
                 true -> AuthMemberDTO.fromMember(existMember)
                 false -> throw UsernameNotFoundException("탈퇴한 회원")
             }
         } else {
-            val newMember=Member.fromOAuth2User(name,email)
+            val newMember = Member.fromOAuth2User(name, email)
             memberAuthRepository.save(newMember)
             cartRepository.save(Cart.fromMember(newMember))
             AuthMemberDTO.fromMember(newMember)

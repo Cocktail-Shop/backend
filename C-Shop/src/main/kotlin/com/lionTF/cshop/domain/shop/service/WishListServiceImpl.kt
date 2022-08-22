@@ -33,7 +33,7 @@ class WishListServiceImpl(
     }
 
     override fun getWishList(memberId: Long?, pageable: Pageable): Page<WishListDTO> {
-        return wishListRepository.findWishListByMemberId(memberId, true, pageable)
+        return wishListRepository.findWishListByMemberId(true, memberId, pageable)
     }
 
     @Transactional

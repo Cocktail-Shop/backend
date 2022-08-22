@@ -6,6 +6,7 @@ import com.lionTF.cshop.global.model.BaseTimeEntity
 import javax.persistence.*
 
 @Entity
+@EntityListeners
 class Orders(
 
     @Id
@@ -13,7 +14,7 @@ class Orders(
     val orderId: Long = 0,
 
     @OneToMany(mappedBy = "orders")
-    var orderItem: List<OrderItem>?=null,
+    var orderItem: List<OrderItem>? = null,
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
@@ -27,10 +28,9 @@ class Orders(
 
     var orderAddress: String = "",
     var orderAddressDetail: String = "",
-) : BaseTimeEntity(){
+) : BaseTimeEntity() {
 
-    // 주문 삭제
-    fun cancelOrder(){
+    fun cancelOrder() {
         orderStatus = OrderStatus.CANCEL
         deliveryStatus = DeliveryStatus.REFUND
     }
@@ -43,10 +43,9 @@ class Orders(
         deliveryStatus = DeliveryStatus.COMPLETE
     }
 
-    companion object{
-        fun fromOrdersDTO(ordersDTO: OrdersDTO) : Orders {
+    companion object {
+        fun fromOrdersDTO(ordersDTO: OrdersDTO): Orders {
             return Orders(
-                //orderItem = ordersDTO.orderItem,
                 member = ordersDTO.member,
                 orderStatus = ordersDTO.orderStatus,
                 orderAddress = ordersDTO.Address,
@@ -55,6 +54,3 @@ class Orders(
         }
     }
 }
-
-
-

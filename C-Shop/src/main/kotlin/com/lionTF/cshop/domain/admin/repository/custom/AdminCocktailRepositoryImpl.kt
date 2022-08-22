@@ -18,7 +18,6 @@ class AdminCocktailRepositoryImpl(
 
 ) : AdminCocktailRepositoryCustom {
 
-    // 칵테일 전체 조회
     override fun findAllCocktails(pageable: Pageable): Page<CocktailsDTO> {
         val content: List<CocktailsDTO> = contentInquire(pageable)
 
@@ -27,7 +26,6 @@ class AdminCocktailRepositoryImpl(
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
-    // 회원 ID로 회원 검색
     override fun findCocktailsByName(cocktailName: String, pageable: Pageable): Page<CocktailsDTO> {
         val booleanBuilder = booleanBuilder(cocktailName)
 

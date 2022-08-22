@@ -11,7 +11,6 @@ data class ItemCreateRequestDTO(
     val degree: Int = 0,
     val itemDescription: String = "",
     val itemImgUrl: MultipartFile? = null,
-
 ) {
     companion object {
         fun toFormDTO(): ItemCreateRequestDTO {

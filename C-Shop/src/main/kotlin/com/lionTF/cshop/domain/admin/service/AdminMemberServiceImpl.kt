@@ -10,12 +10,9 @@ import javax.transaction.Transactional
 
 @Service
 class AdminMemberServiceImpl(
-
     private val adminMemberRepository: AdminMemberRepository,
-
 ) : AdminMemberService {
 
-    // 한명의 회원 삭제
     @Transactional
     override fun deleteOneMember(memberId: Long): AdminResponseDTO {
         val memberExisted = adminMemberRepository.existsById(memberId)
@@ -30,22 +27,15 @@ class AdminMemberServiceImpl(
         }
     }
 
-    // 회원 ID로 회원 검색
     override fun findMembers(keyword: String, pageable: Pageable): MembersSearchDTO {
         val membersInfo = adminMemberRepository.findMembersInfo(keyword, pageable)
 
         return MembersSearchDTO.memberToResponseMemberSearchPageDTO(membersInfo, keyword)
     }
 
-    // 회원 전체 조회
     override fun getAllMembers(pageable: Pageable): MembersSearchDTO {
         val members = adminMemberRepository.findAllByMemberStatus(pageable)
 
         return MembersSearchDTO.memberToResponseMemberSearchPageDTO(members)
-    }
-
-    // 존재하는 사용자인지 검사하는 함수
-    private fun existedMember(memberId: Long): Member? {
-        return adminMemberRepository.findMember(memberId)
     }
 }

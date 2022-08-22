@@ -16,8 +16,8 @@ interface WishListRepository : JpaRepository<WishList, Long> {
         countQuery = "select count(w) from WishList w where w.memberId = :memberId and w.wishListStatus = :wishListStatus"
     )
     fun findWishListByMemberId(
-        @Param("memberId") memberId: Long?,
         @Param("wishListStatus") wishListStatus: Boolean,
+        @Param("memberId") memberId: Long?,
         pageable: Pageable
     ): Page<WishListDTO>
 }

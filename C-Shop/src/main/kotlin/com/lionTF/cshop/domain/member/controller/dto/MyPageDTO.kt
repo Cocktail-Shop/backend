@@ -24,8 +24,11 @@ data class MyPageResponseDTO(
 }
 
 data class RequestUpdateMyPageDTO(
-    var id: String = "", var address: String = "", var detailAddress: String = ""
+    var id: String = "",
+    var address: String = "",
+    var detailAddress: String = ""
 ) {
+
     companion object {
         fun toFormDTO(myPageResponseDTO: MyPageResponseDTO): RequestUpdateMyPageDTO {
             return RequestUpdateMyPageDTO(
@@ -45,7 +48,11 @@ data class MyPageResultDTO(
     val detailAddress: String
 )
 
-data class PasswordUpdateRequestDTO(var pastPassword: String = "", var newPassword: String = "") {
+data class PasswordUpdateRequestDTO(
+    var pastPassword: String = "",
+    var newPassword: String = ""
+) {
+
     companion object {
         fun toFormDTO(): PasswordUpdateRequestDTO {
             return PasswordUpdateRequestDTO()

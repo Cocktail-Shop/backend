@@ -23,7 +23,6 @@ class WishList(
     val itemImgUrl: String = "",
     val price: Int = 0,
     var wishListStatus: Boolean = true
-
 ) : BaseTimeEntity() {
 
     fun delete() {

@@ -20,10 +20,7 @@ class AdminItemController(
 
     // 전체 상품 조회
     @GetMapping("all-item")
-    fun getAllItems(
-        pageable: Pageable,
-        model: Model
-    ): String {
+    fun getAllItems(pageable: Pageable, model: Model): String {
         model.addAttribute("items", adminItemService.getAllItems(pageable))
         return "admins/item/getAllItem"
     }
@@ -49,10 +46,7 @@ class AdminItemController(
 
     // 상품 등록
     @PostMapping("items")
-    fun createItem(
-        requestCreateItemDTO: ItemCreateRequestDTO,
-        model: Model
-    ): String {
+    fun createItem(requestCreateItemDTO: ItemCreateRequestDTO, model: Model): String {
         val itemImgUrl = getImageUrl(requestCreateItemDTO)
         model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO, itemImgUrl))
         return "global/message"
@@ -60,10 +54,7 @@ class AdminItemController(
 
     // 상품 상세보기(수정) 페이지
     @GetMapping("items/{itemId}")
-    fun getItem(
-        @PathVariable("itemId") itemId: Long,
-        model: Model
-    ): String {
+    fun getItem(@PathVariable("itemId") itemId: Long, model: Model): String {
         val item = adminItemService.findItem(itemId)
         model.addAttribute("items", item)
         model.addAttribute("items", ItemUpdateRequestDTO.formDTOFromResponseItemDTO(item))
@@ -106,10 +97,7 @@ class AdminItemController(
 
     // 한개 상품 삭제
     @DeleteMapping("items/{itemId}")
-    fun deleteOneItem(
-        @PathVariable("itemId") itemId: Long,
-        model: Model
-    ): String {
+    fun deleteOneItem(@PathVariable("itemId") itemId: Long, model: Model): String {
         model.addAttribute("result", adminItemService.deleteOneItem(itemId))
         return "global/message"
     }
@@ -124,10 +112,7 @@ class AdminItemController(
     private fun getImageUrl(requestCreateItemDTO: ItemCreateRequestDTO): String? {
         imageService.requestToken()
         val itemImgUrl = requestCreateItemDTO.itemImgUrl?.let {
-            imageService.uploadObject(
-                requestCreateItemDTO.itemName + LocalDateTime.now().toString(),
-                it
-            )
+            imageService.uploadObject(requestCreateItemDTO.itemName + LocalDateTime.now().toString(), it)
         }
         return itemImgUrl
     }

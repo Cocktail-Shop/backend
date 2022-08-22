@@ -18,7 +18,6 @@ class AdminMemberRepositoryImpl(
 
 ) : AdminMemberRepositoryCustom {
 
-    // 회원 전체 조회
     override fun findAllByMemberStatus(pageable: Pageable): Page<MembersDTO> {
         val content: List<MembersDTO> = contentInquire(pageable)
 
@@ -27,7 +26,6 @@ class AdminMemberRepositoryImpl(
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
-    // 회원 ID로 회원 검색
     override fun findMembersInfo(keyword: String, pageable: Pageable): Page<MembersDTO> {
         val booleanBuilder = booleanBuilder(keyword)
 

@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 
 @Controller
 @RequestMapping("/pre-members")
-class PreMemberController(private val memberService: MemberService) {
+class PreMemberController(
+    private val memberService: MemberService
+) {
 
     @GetMapping("/deny")
     fun getPreMemberAccessDeniedPage(model: Model): String {

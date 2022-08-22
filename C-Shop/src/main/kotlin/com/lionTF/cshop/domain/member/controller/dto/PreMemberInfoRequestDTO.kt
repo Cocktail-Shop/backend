@@ -5,6 +5,7 @@ data class PreMemberInfoRequestDTO(
     var address: String = "",
     var detailAddress: String = ""
 ) {
+
     companion object {
         fun toFormDTO(): PreMemberInfoRequestDTO {
             return PreMemberInfoRequestDTO()

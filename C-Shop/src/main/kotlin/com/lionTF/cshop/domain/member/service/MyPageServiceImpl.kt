@@ -35,7 +35,6 @@ class MyPageServiceImpl(
         } else {
             MemberResponseDTO.toFailedMyPageUpdateResponseDTO()
         }
-
     }
 
     @Transactional

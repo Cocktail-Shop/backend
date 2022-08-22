@@ -2,7 +2,11 @@ package com.lionTF.cshop.domain.admin.controller.dto
 
 import org.springframework.http.HttpStatus
 
-data class AdminResponseDTO(val httpStatus: Int, val message: String, var href: String = "") {
+data class AdminResponseDTO(
+    val httpStatus: Int,
+    val message: String,
+    var href: String = ""
+) {
 
     companion object {
         fun toSuccessCreateItemResponseDTO(): AdminResponseDTO {

@@ -23,28 +23,26 @@ class OrderServiceImpl(
     private val itemRepository: ItemRepository,
     private val memberRepository: MemberRepository,
     private val orderItemRepository: OrderItemRepository
-) : OrderService{
-    //상품 주문 메소드
+) : OrderService {
     @Transactional
-    override fun requestOrder(requestOrderDTO: RequestOrderDTO) : RequestOrderResultDTO {
+    override fun requestOrder(requestOrderDTO: RequestOrderDTO): RequestOrderResultDTO {
         var zeroAmountCount = 0
-        requestOrderDTO.orderItems.map{
+        requestOrderDTO.orderItems.map {
             val requestAmount = it.amount
             val existAmount = itemRepository.getReferenceById(it.itemId).amount
 
-            if(requestAmount == 0) zeroAmountCount++
+            if (requestAmount == 0) zeroAmountCount++
 
-            if(requestAmount < 0){
+            if (requestAmount < 0) {
                 return RequestOrderResultDTO.setNotPositiveError()
             }
 
-            if(itemRepository.getReferenceById(it.itemId).itemStatus){
-                if(requestAmount > existAmount) return RequestOrderResultDTO.setRequestOrderAmountFailResultDTO()
-            }
-            else return RequestOrderResultDTO.setRequestOrderStatusFailResultDTO()
+            if (itemRepository.getReferenceById(it.itemId).itemStatus) {
+                if (requestAmount > existAmount) return RequestOrderResultDTO.setRequestOrderAmountFailResultDTO()
+            } else return RequestOrderResultDTO.setRequestOrderStatusFailResultDTO()
         }
 
-        if(zeroAmountCount == requestOrderDTO.orderItems.size) return RequestOrderResultDTO.setRequestOrderAllZeroFailResultDTO()
+        if (zeroAmountCount == requestOrderDTO.orderItems.size) return RequestOrderResultDTO.setRequestOrderAllZeroFailResultDTO()
 
         val member = requestOrderDTO.memberId?.let { memberRepository.getReferenceById(it) }
 
@@ -59,9 +57,9 @@ class OrderServiceImpl(
             )
         )
 
-        for(info in requestOrderDTO.orderItems){
+        for (info in requestOrderDTO.orderItems) {
             val item = itemRepository.getReferenceById(info.itemId)
-            if(info.amount > 0){
+            if (info.amount > 0) {
                 item.amount -= info.amount
                 itemRepository.save(item)
 
@@ -76,7 +74,7 @@ class OrderServiceImpl(
     }
 
     //주소 가져오기
-    override fun getAddress(memberId: Long) : AddressDTO {
+    override fun getAddress(memberId: Long): AddressDTO {
         return AddressDTO.fromMember(memberRepository.getReferenceById(memberId))
     }
 

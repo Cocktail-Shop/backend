@@ -19,22 +19,43 @@ class OrderController(
 ) {
     //상품 주문
     @PostMapping("/orders")
-    fun createOrder(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, requestOrderInfoDTO: RequestOrderInfoDTO, model: Model) : String {
-        val requestOrderDTO = RequestOrderDTO(authMemberDTO?.memberId,requestOrderInfoDTO.orderItems,requestOrderInfoDTO.address,requestOrderInfoDTO.addressDetail)
-        model.addAttribute("result",orderService.requestOrder(requestOrderDTO))
+    fun createOrder(
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        requestOrderInfoDTO: RequestOrderInfoDTO,
+        model: Model
+    ): String {
+
+        val requestOrderDTO = RequestOrderDTO(
+            authMemberDTO?.memberId,
+            requestOrderInfoDTO.orderItems,
+            requestOrderInfoDTO.address,
+            requestOrderInfoDTO.addressDetail
+        )
+        model.addAttribute("result", orderService.requestOrder(requestOrderDTO))
         return "global/message"
     }
 
     //기존 배송지 가져오기
     @GetMapping("/getAddress")
-    fun getAddress(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, model: Model): String{
+    fun getAddress(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, model: Model): String {
         model.addAttribute("address", authMemberDTO?.memberId?.let { orderService.getAddress(it) })
         return "redirect:/shop/singleItem"
     }
 
     @PostMapping("/orders/cart/items")
-    fun createCartOrder(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @ModelAttribute("requestOrderInfoDTO") requestOrderInfoDTO: RequestOrderInfoDTO, model: Model) : String {
-        val requestCartOrderDTO = RequestOrderDTO(authMemberDTO?.memberId, requestOrderInfoDTO.orderItems,requestOrderInfoDTO.address,requestOrderInfoDTO.addressDetail)
+    fun createCartOrder(
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @ModelAttribute("requestOrderInfoDTO") requestOrderInfoDTO: RequestOrderInfoDTO,
+        model: Model
+    ): String {
+
+        // TODO 정적 팩토리 패턴으로 리펙토링 예정
+        val requestCartOrderDTO = RequestOrderDTO(
+            authMemberDTO?.memberId,
+            requestOrderInfoDTO.orderItems,
+            requestOrderInfoDTO.address,
+            requestOrderInfoDTO.addressDetail
+        )
         model.addAttribute("result", orderService.requestOrder(requestCartOrderDTO))
         return "global/message"
     }

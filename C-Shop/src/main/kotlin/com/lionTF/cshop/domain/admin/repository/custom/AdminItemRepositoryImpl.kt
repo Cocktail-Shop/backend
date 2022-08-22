@@ -18,7 +18,6 @@ class AdminItemRepositoryImpl(
 
 ) : AdminItemRepositoryCustom {
 
-    // 칵테일 전체 조회
     override fun findAllItems(pageable: Pageable): Page<ItemsDTO> {
         val content: List<ItemsDTO> = contentInquire(pageable)
 
@@ -27,7 +26,6 @@ class AdminItemRepositoryImpl(
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
-    // 회원 ID로 회원 검색
     override fun findItemsByName(itemName: String, pageable: Pageable): Page<ItemsDTO> {
         val booleanBuilder = booleanBuilder(itemName)
 

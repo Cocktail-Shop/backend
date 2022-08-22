@@ -3,14 +3,10 @@ package com.lionTF.cshop.domain.shop.models
 import com.lionTF.cshop.domain.admin.models.Item
 import com.lionTF.cshop.domain.shop.controller.dto.CartItemDTO
 import com.lionTF.cshop.global.model.BaseTimeEntity
-import lombok.*
 import javax.persistence.*
 
 @Entity
-@Builder
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@EntityListeners
 class CartItem(
 
     @Id
@@ -26,10 +22,10 @@ class CartItem(
     var cart: Cart,
 
     var amount: Int,
+) : BaseTimeEntity() {
 
-    ) : BaseTimeEntity() {
-    companion object{
-        fun fromCartItemDTO(cartItemDTO: CartItemDTO) : CartItem {
+    companion object {
+        fun fromCartItemDTO(cartItemDTO: CartItemDTO): CartItem {
             return CartItem(
                 item = cartItemDTO.item,
                 cart = cartItemDTO.cart,
@@ -37,8 +33,4 @@ class CartItem(
             )
         }
     }
-    }
-
-
-
-
+}

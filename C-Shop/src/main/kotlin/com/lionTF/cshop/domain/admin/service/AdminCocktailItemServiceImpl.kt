@@ -7,10 +7,8 @@ import org.springframework.stereotype.Service
 @Service
 class AdminCocktailItemServiceImpl(
     private val adminCocktailItemRepository: AdminCocktailItemRepository,
+) : AdminCocktailItemService {
 
-    ) : AdminCocktailItemService {
-
-    // itemId 가져오기
     override fun getItemIds(cocktailId: Long): MutableList<Long> {
         return adminCocktailItemRepository.findItemIdByCocktailId(cocktailId)
     }

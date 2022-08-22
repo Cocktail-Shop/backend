@@ -16,6 +16,7 @@ data class SignUpRequestDTO(
     fun encoding(passwordEncoder: PasswordEncoder) {
         this.password = passwordEncoder.encode(password)
     }
+
     companion object {
         fun toFormDTO(): SignUpRequestDTO {
             return SignUpRequestDTO()

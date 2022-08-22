@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable
 
 interface AdminMemberService {
 
-
     fun findMembers(keyword: String, pageable: Pageable): MembersSearchDTO
 
     fun getAllMembers(pageable: Pageable): MembersSearchDTO

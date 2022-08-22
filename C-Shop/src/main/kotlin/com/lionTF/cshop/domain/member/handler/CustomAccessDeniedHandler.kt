@@ -8,8 +8,10 @@ import org.springframework.security.web.access.AccessDeniedHandler
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-class CustomAccessDeniedHandler(private val redirectStrategy: RedirectStrategy = DefaultRedirectStrategy()) :
-    AccessDeniedHandler {
+class CustomAccessDeniedHandler(
+    private val redirectStrategy: RedirectStrategy = DefaultRedirectStrategy()
+) : AccessDeniedHandler {
+
     override fun handle(
         request: HttpServletRequest?,
         response: HttpServletResponse?,
@@ -28,6 +30,5 @@ class CustomAccessDeniedHandler(private val redirectStrategy: RedirectStrategy =
             )
             else -> redirectStrategy.sendRedirect(request, response, "/members/login")
         }
-
     }
 }

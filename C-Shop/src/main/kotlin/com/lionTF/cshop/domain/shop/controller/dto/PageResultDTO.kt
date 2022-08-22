@@ -10,14 +10,14 @@ import java.util.stream.IntStream
 import kotlin.math.ceil
 import kotlin.streams.toList
 
-
 data class ItemPageResponseDTO(
     val status: Int,
     val message: String,
     val result: PageResultDTO<SearchItemInfoDTO, Item>
-){
-    companion object{
-        fun setItemPageResponseDTO(pageResult: PageResultDTO<SearchItemInfoDTO, Item>) : ItemPageResponseDTO {
+) {
+
+    companion object {
+        fun setItemPageResponseDTO(pageResult: PageResultDTO<SearchItemInfoDTO, Item>): ItemPageResponseDTO {
             return ItemPageResponseDTO(
                 status = HttpStatus.OK.value(),
                 message = "상품 조회 성공",
@@ -31,9 +31,10 @@ data class CocktailPageResponseDTO(
     val status: Int,
     val message: String,
     val result: PageResultDTO<SearchCocktailInfoDTO, Cocktail>
-){
-    companion object{
-        fun setCocktailPageResponseDTO(pageResult: PageResultDTO<SearchCocktailInfoDTO, Cocktail>) : CocktailPageResponseDTO {
+) {
+
+    companion object {
+        fun setCocktailPageResponseDTO(pageResult: PageResultDTO<SearchCocktailInfoDTO, Cocktail>): CocktailPageResponseDTO {
             return CocktailPageResponseDTO(
                 status = HttpStatus.OK.value(),
                 message = "칵테일 상품 조회 성공",
@@ -43,41 +44,38 @@ data class CocktailPageResponseDTO(
     }
 }
 
-data class PageResultDTO<DTO,EN> (var data:List<DTO>?=null,
-                                  var totalPage:Int?=null,
-                                  var page:Int=0,
-                                  var size:Int=0,
-                                  var start:Int=0,
-                                  var end:Int=0,
-                                  var prev:Boolean?=null,
-                                  var next:Boolean?=null,
-                                  var pageList:MutableList<Int>? = null,
-){//DTO=dto 타입, EN=entity 타입
-constructor(result: Page<EN>,fn:Function<EN,DTO>):this(){
-    data=result.map(fn).toList()
-    totalPage=result.totalPages
-    makePageList(result.pageable)
+data class PageResultDTO<DTO, EN>(
+    var data: List<DTO>? = null,
+    var totalPage: Int? = null,
+    var page: Int = 0,
+    var size: Int = 0,
+    var start: Int = 0,
+    var end: Int = 0,
+    var prev: Boolean? = null,
+    var next: Boolean? = null,
+    var pageList: MutableList<Int>? = null,
+) {
 
-}
-
-    private fun makePageList(pageable:Pageable){
-        this.page=pageable.pageNumber+1
-        this.size=pageable.pageSize
-
-        val tempEnd:Int=((ceil(page/10.0))*10).toInt()
-        start=tempEnd-9
-        prev=start>1
-
-        next=totalPage!!>tempEnd
-
-        if(totalPage!! >tempEnd) end=tempEnd
-        else end=totalPage!!
-
-        pageList= IntStream.rangeClosed(start,end).boxed().toList() as MutableList<Int>
+    constructor(result: Page<EN>, fn: Function<EN, DTO>) : this() {
+        data = result.map(fn).toList()
+        totalPage = result.totalPages
+        makePageList(result.pageable)
 
     }
+
+    private fun makePageList(pageable: Pageable) {
+        this.page = pageable.pageNumber + 1
+        this.size = pageable.pageSize
+
+        val tempEnd: Int = ((ceil(page / 10.0)) * 10).toInt()
+        start = tempEnd - 9
+        prev = start > 1
+
+        next = totalPage!! > tempEnd
+
+        if (totalPage!! > tempEnd) end = tempEnd
+        else end = totalPage!!
+
+        pageList = IntStream.rangeClosed(start, end).boxed().toList() as MutableList<Int>
+    }
 }
-
-
-
-

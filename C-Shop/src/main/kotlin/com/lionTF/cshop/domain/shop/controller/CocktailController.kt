@@ -19,19 +19,38 @@ class CocktailController(
     private val cocktailService: CocktailService,
     private val orderService: OrderService,
 ) {
-    //칵테일 단건 조회 메소드
-    @GetMapping(path=["/items/cocktails/{cocktailId}"])
-    fun getCocktailById(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PathVariable("cocktailId") cocktailId: Long, model: Model): String {
+
+    @GetMapping(path = ["/items/cocktails/{cocktailId}"])
+    fun getCocktailById(
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @PathVariable("cocktailId") cocktailId: Long,
+        model: Model
+    ): String {
+
         val cocktail = cocktailService.findByCocktailId(cocktailId)
-        val address = authMemberDTO?.memberId?.let { orderService.getAddress(it) }
-        val cocktailOrderInfoDTO = cocktail.result.cocktailItems.map{RequestOrderItemDTO.fromCocktailItemDTO(it)}
-        val cocktailCartInfoDTO = cocktail.result.cocktailItems.map{AddCartCocktailItemInfoDTO.fromCocktailItemDTO(it)}
-        val requestOrderInfoDTO = RequestOrderInfoDTO.toFormRequestCocktailOrderInfoDTO(cocktailOrderInfoDTO as MutableList<RequestOrderItemDTO>,address!!)
+
+        val address = authMemberDTO?.memberId?.let {
+            orderService.getAddress(it)
+        }
+
+        val cocktailOrderInfoDTO = cocktail.result.cocktailItems.map {
+            RequestOrderItemDTO.fromCocktailItemDTO(it)
+        }
+
+        val cocktailCartInfoDTO = cocktail.result.cocktailItems.map {
+            AddCartCocktailItemInfoDTO.fromCocktailItemDTO(it)
+        }
+
+        val requestOrderInfoDTO = RequestOrderInfoDTO.toFormRequestCocktailOrderInfoDTO(
+            cocktailOrderInfoDTO as MutableList<RequestOrderItemDTO>,
+            address!!
+        )
+
         val addCartCocktailItemDTO = AddCartCocktailItemRequestDTO.toFormRequestCocktailCartInfoDTO(cocktailCartInfoDTO as MutableList<AddCartCocktailItemInfoDTO>)
 
-        model.addAttribute("cocktail",cocktail)
-        model.addAttribute("addCartItemRequestDTO",addCartCocktailItemDTO)
-        model.addAttribute("requestOrderInfoDTO",requestOrderInfoDTO)
+        model.addAttribute("cocktail", cocktail)
+        model.addAttribute("addCartItemRequestDTO", addCartCocktailItemDTO)
+        model.addAttribute("requestOrderInfoDTO", requestOrderInfoDTO)
 
         return "shop/singleCocktail"
     }

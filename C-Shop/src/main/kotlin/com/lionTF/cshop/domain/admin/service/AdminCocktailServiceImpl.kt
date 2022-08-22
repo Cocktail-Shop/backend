@@ -18,8 +18,7 @@ class AdminCocktailServiceImpl(
     private val adminCocktailRepository: AdminCocktailRepository,
     private val adminCocktailItemRepository: AdminCocktailItemRepository,
     private val adminItemRepository: AdminItemRepository,
-
-    ) : AdminCocktailService {
+) : AdminCocktailService {
 
     override fun getAllCocktail(pageable: Pageable): CocktailsSearchDTO {
         val cocktails = adminCocktailRepository.findAllCocktails(pageable)
@@ -34,7 +33,6 @@ class AdminCocktailServiceImpl(
     }
 
 
-    // 칵테일 단건 조회
     override fun findCocktail(cocktailId: Long, itemIds: MutableList<Long>): CocktailResponseDTO {
         val cocktailExisted = adminCocktailRepository.existsById(cocktailId)
 
@@ -151,18 +149,20 @@ class AdminCocktailServiceImpl(
 
     // Form 으로부터 받아온 itemId 들이 존재하는 상품인지 검사
     private fun formToExistedItems(itemList: MutableList<Long>): Boolean {
-        return itemList.none { existedItem(it) == null}
+        return itemList.none {
+            existedItem(it) == null
+        }
     }
-
 
     // 존재하는 단일 상품인지 검사하는 함수
     private fun existedCocktail(cocktailId: Long): Cocktail? {
         return adminCocktailRepository.findCocktail(cocktailId)
     }
 
-
     // Form 으로부터 받아온 cocktailId 들이 존재하는 상품인지 검사
     private fun formToExistedCocktails(cocktailList: MutableList<Long>): Boolean {
-        return cocktailList.none { existedCocktail(it) == null }
+        return cocktailList.none {
+            existedCocktail(it) == null
+        }
     }
 }

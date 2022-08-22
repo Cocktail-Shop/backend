@@ -36,7 +36,6 @@ class MemberServiceImpl(
             cartRepository.save(Cart.fromMember(newMember))
             MemberResponseDTO.toSuccessSignUpResponseDTO()
         }
-
     }
 
 
@@ -84,5 +83,4 @@ class MemberServiceImpl(
             MemberResponseDTO.toSuccessSetPreMemberInfoResponseDTO()
         } ?: throw NoSuchElementException("해당 회원 정보 찾을 수 없음")
     }
-
 }

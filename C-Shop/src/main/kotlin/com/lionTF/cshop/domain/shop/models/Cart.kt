@@ -5,22 +5,24 @@ import com.lionTF.cshop.global.model.BaseTimeEntity
 import javax.persistence.*
 
 @Entity
+@EntityListeners
 class Cart(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val cartId: Long?=null,
+    val cartId: Long? = null,
 
     @OneToMany(mappedBy = "cart")
-    var cartItem: List<CartItem>?=null,
+    var cartItem: List<CartItem>? = null,
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
-    var member: Member?=null,
+    var member: Member? = null,
 ) : BaseTimeEntity() {
-    companion object{
-        fun fromMember(member: Member):Cart{
-            return Cart(member=member)
+
+    companion object {
+        fun fromMember(member: Member): Cart {
+            return Cart(member = member)
         }
     }
 }

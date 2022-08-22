@@ -10,6 +10,7 @@ data class MailDTO(
     val message: String,
     val fromAddress: String
 ) {
+
     fun sendMail(javaMailService: JavaMailSender) {
         val mailMessage = SimpleMailMessage()
         mailMessage.setTo(this.toAddress)

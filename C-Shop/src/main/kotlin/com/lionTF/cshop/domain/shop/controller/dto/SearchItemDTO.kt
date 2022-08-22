@@ -19,9 +19,9 @@ data class SearchItemInfoDTO(
     val price: Int,
     val degree: Int,
     val itemImgUrl: String
-){
-    companion object{
-        fun fromItem(item: Item) : SearchItemInfoDTO{
+) {
+    companion object {
+        fun fromItem(item: Item): SearchItemInfoDTO {
             return SearchItemInfoDTO(
                 itemId = item.itemId,
                 itemName = item.itemName,
@@ -32,5 +32,3 @@ data class SearchItemInfoDTO(
         }
     }
 }
-
-

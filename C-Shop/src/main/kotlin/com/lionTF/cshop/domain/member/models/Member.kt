@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import javax.persistence.*
 
 @Entity
+@EntityListeners
 class Member(
 
     @Id
@@ -26,16 +27,17 @@ class Member(
     @Enumerated(EnumType.STRING)
     var role: MemberRole,
     var fromSocial: Boolean = false
+
 ) : BaseTimeEntity() {
 
     fun updateMemberInfo(requestUpdateMyPageDTO: RequestUpdateMyPageDTO) {
-        this.id = requestUpdateMyPageDTO.id
-        this.address = requestUpdateMyPageDTO.address
-        this.detailAddress = requestUpdateMyPageDTO.detailAddress
+        id = requestUpdateMyPageDTO.id
+        address = requestUpdateMyPageDTO.address
+        detailAddress = requestUpdateMyPageDTO.detailAddress
     }
 
     fun updatePassword(newPassword: String, passwordEncoder: PasswordEncoder) {
-        this.password = passwordEncoder.encode(newPassword)
+        password = passwordEncoder.encode(newPassword)
     }
 
     fun deleteMember() {
@@ -43,10 +45,10 @@ class Member(
     }
 
     fun setPreMemberInfo(preMemberInfoRequestDTO: PreMemberInfoRequestDTO) {
-        this.phoneNumber = preMemberInfoRequestDTO.phoneNumber
-        this.address = preMemberInfoRequestDTO.address
-        this.detailAddress = preMemberInfoRequestDTO.detailAddress
-        this.role = MemberRole.MEMBER
+        phoneNumber = preMemberInfoRequestDTO.phoneNumber
+        address = preMemberInfoRequestDTO.address
+        detailAddress = preMemberInfoRequestDTO.detailAddress
+        role = MemberRole.MEMBER
     }
 
     companion object {

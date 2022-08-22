@@ -11,10 +11,8 @@ import javax.transaction.Transactional
 
 @Service
 class AdminItemServiceImpl(
-
     private val adminItemRepository: AdminItemRepository,
-
-    ) : AdminItemService {
+) : AdminItemService {
 
     @Transactional
     override fun createItem(requestCreateItemDTO: ItemCreateRequestDTO, itemImgUrl: String?): AdminResponseDTO {

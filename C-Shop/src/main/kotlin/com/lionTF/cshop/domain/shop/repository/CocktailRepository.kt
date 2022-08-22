@@ -8,7 +8,6 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.querydsl.QuerydslPredicateExecutor
 
 interface CocktailRepository : JpaRepository<Cocktail, Long>, QuerydslPredicateExecutor<Cocktail> {
-    fun findCocktailByCategoryAndCocktailStatus(category: Category,status: Boolean, pageable: Pageable): Page<Cocktail>
+
+    fun findCocktailByCategoryAndCocktailStatus(category: Category, status: Boolean, pageable: Pageable): Page<Cocktail>
 }
-
-

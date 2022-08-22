@@ -4,13 +4,13 @@ import com.lionTF.cshop.domain.admin.models.Item
 import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 
-
 data class ResponseSearchCartResultDTO(
     var httpStatus: Int,
     var message: String,
     var result: Page<FindCartDTO>? = null
-){
-    companion object{
+) {
+
+    companion object {
         fun cartToResponseCartSearchPageDTO(findCartDTO: Page<FindCartDTO>): ResponseSearchCartResultDTO {
             return ResponseSearchCartResultDTO(
                 HttpStatus.OK.value(),
@@ -19,7 +19,6 @@ data class ResponseSearchCartResultDTO(
             )
         }
     }
-
 }
 
 data class FindCartDTO(

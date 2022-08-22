@@ -14,10 +14,7 @@ class AdminMembersController(
 
     // 회원 전체 조회
     @GetMapping("members")
-    fun getAllMembers(
-        pageable: Pageable,
-        model: Model
-    ): String {
+    fun getAllMembers(pageable: Pageable, model: Model): String {
         model.addAttribute("members", adminMemberService.getAllMembers(pageable))
         return "admins/member/getAllMember"
     }
@@ -36,10 +33,7 @@ class AdminMembersController(
 
     // 한명의 회원 삭제
     @DeleteMapping("members/{memberId}")
-    fun deleteOneMember(
-        @PathVariable("memberId") memberId: Long,
-        model: Model
-    ): String {
+    fun deleteOneMember(@PathVariable("memberId") memberId: Long, model: Model): String {
         model.addAttribute("result", adminMemberService.deleteOneMember(memberId))
         return "global/message"
     }

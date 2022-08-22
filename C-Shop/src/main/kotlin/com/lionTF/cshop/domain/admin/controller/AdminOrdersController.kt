@@ -14,10 +14,7 @@ class AdminOrdersController(
 
     // 전체 주문 조회
     @GetMapping("orders")
-    fun getAllOrders(
-        pageable: Pageable,
-        model: Model
-    ): String {
+    fun getAllOrders(pageable: Pageable, model: Model): String {
         model.addAttribute("orders", adminOrderService.getAllOrders(pageable))
         return "admins/order/getAllOrder"
     }
@@ -35,28 +32,19 @@ class AdminOrdersController(
 
     // 하나의 주문 취소
     @DeleteMapping("orders/{orderId}")
-    fun deleteOneOrder(
-        @PathVariable("orderId") orderId: Long,
-        model: Model
-    ): String {
+    fun deleteOneOrder(@PathVariable("orderId") orderId: Long, model: Model): String {
         model.addAttribute("result", adminOrderService.cancelOneOrder(orderId))
         return "global/message"
     }
 
     @PutMapping("orders/{orderId}/in-delivery")
-    fun updateDeliveryStatus(
-        @PathVariable("orderId") orderId: Long,
-        model: Model
-    ): String {
+    fun updateDeliveryStatus(@PathVariable("orderId") orderId: Long, model: Model): String {
         model.addAttribute("result", adminOrderService.updateDeliveryInDelivery(orderId))
         return "global/message"
     }
 
     @PutMapping("orders/{orderId}/delivery/complete")
-    fun updateDeliveryStatusComplete(
-        @PathVariable("orderId") orderId: Long,
-        model: Model
-    ): String {
+    fun updateDeliveryStatusComplete(@PathVariable("orderId") orderId: Long, model: Model): String {
         model.addAttribute("result", adminOrderService.updateDeliveryComplete(orderId))
         return "global/message"
     }

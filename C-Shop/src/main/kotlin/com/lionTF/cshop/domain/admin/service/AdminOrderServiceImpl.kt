@@ -13,10 +13,8 @@ import javax.transaction.Transactional
 
 @Service
 class AdminOrderServiceImpl(
-
     private val adminOrderRepository: AdminOrderRepository,
     private val adminOrderItemRepository: AdminOrderItemRepository
-
 ) : AdminOrderService {
 
     @Transactional

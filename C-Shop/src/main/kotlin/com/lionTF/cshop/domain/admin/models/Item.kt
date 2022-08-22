@@ -26,7 +26,6 @@ class Item(
     var itemStatus: Boolean,
 ) : BaseTimeEntity() {
 
-    // 상품 수정
     fun update(requestCreateItemDTO: ItemCreateRequestDTO, itemImgUrl: String?) {
         itemName = requestCreateItemDTO.itemName
         category = requestCreateItemDTO.category
@@ -37,13 +36,11 @@ class Item(
         this.itemImgUrl = itemImgUrl!!
     }
 
-    // 상품 삭제
     fun delete() {
         itemStatus = false
     }
 
 
-    // 주문 취소 후 수량 복귀
     fun addAmount(quantity: Int) {
         amount += quantity
     }

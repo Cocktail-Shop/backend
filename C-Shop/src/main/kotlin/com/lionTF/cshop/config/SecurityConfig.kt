@@ -21,21 +21,21 @@ class SecurityConfig {
     }
 
     @Bean
-    fun defaultSecurityFilterChain(http:HttpSecurity): SecurityFilterChain{
+    fun defaultSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf().disable()//post 요청 허용
         http.sessionManagement().maximumSessions(1)//중복로그인 방지
 
         return http.authorizeRequests()
             .antMatchers("/admins/**").hasRole("ADMIN")
-            .antMatchers("/members").hasAnyRole("MEMBER","ADMIN")
+            .antMatchers("/members").hasAnyRole("MEMBER", "ADMIN")
             .antMatchers("/members/deny").hasRole("MEMBER")
             .antMatchers("/members/login").anonymous()
             .antMatchers("/members/password").authenticated()
             .antMatchers("/members/logout").authenticated()
             .antMatchers("/items").permitAll()
-            .antMatchers("/items/**").hasAnyRole("ADMIN","MEMBER")
-            .antMatchers("/orders/**").hasAnyRole("ADMIN","MEMBER")
-            .antMatchers("/cart/**").hasAnyRole("ADMIN","MEMBER")
+            .antMatchers("/items/**").hasAnyRole("ADMIN", "MEMBER")
+            .antMatchers("/orders/**").hasAnyRole("ADMIN", "MEMBER")
+            .antMatchers("/cart/**").hasAnyRole("ADMIN", "MEMBER")
             .antMatchers("/pre-members/**").hasRole("PREMEMBER")
             .and()
             .formLogin()

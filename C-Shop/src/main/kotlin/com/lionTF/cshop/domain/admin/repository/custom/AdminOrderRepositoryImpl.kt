@@ -17,7 +17,7 @@ class AdminOrderRepositoryImpl(
 
     private val queryFactory: JPAQueryFactory? = null
 
-):AdminOrderRepositoryCustom {
+) : AdminOrderRepositoryCustom {
 
     override fun findOrdersInfo(pageable: Pageable): Page<OrdersDTO> {
         val content: List<OrdersDTO> = contentInquire(pageable)
@@ -27,7 +27,6 @@ class AdminOrderRepositoryImpl(
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
-    // 회원의 ID로 주문 조회
     override fun findOrdersInfoByMemberId(keyword: String, pageable: Pageable): Page<OrdersDTO> {
         val booleanBuilder = booleanBuilder(keyword)
 
