@@ -28,11 +28,11 @@ class OrderServiceImpl(
     @Transactional
     override fun requestOrder(requestOrderDTO: RequestOrderDTO) : RequestOrderResultDTO {
         var zeroAmountCount = 0
-         requestOrderDTO.orderItems.map{
+        requestOrderDTO.orderItems.map{
             val requestAmount = it.amount
             val existAmount = itemRepository.getReferenceById(it.itemId).amount
 
-             if(requestAmount == 0) zeroAmountCount++
+            if(requestAmount == 0) zeroAmountCount++
 
             if(requestAmount < 0){
                 return RequestOrderResultDTO.setNotPositiveError()
@@ -78,25 +78,6 @@ class OrderServiceImpl(
     //주소 가져오기
     override fun getAddress(memberId: Long) : AddressDTO {
         return AddressDTO.fromMember(memberRepository.getReferenceById(memberId))
-    }
-
-    // 상품 삭제
-    @Transactional
-    override fun cancelOrder(orderId: Long): OrderResponseDTO {
-        val existsOrder = orderRepository.existsById(orderId)
-
-        return if (!existsOrder) {
-            OrderResponseDTO.toFailDeleteItemResponseDTO()
-
-        } else {
-            val order = orderRepository.getReferenceById(orderId)
-            order.cancelOrder()
-
-            val orderItem = orderItemRepository.getOrderItemByOrdersId(orderId)
-            orderItem.cancel()
-
-            OrderResponseDTO.toSuccessDeleteItemResponseDTO()
-        }
     }
 
     // 주문 조회
