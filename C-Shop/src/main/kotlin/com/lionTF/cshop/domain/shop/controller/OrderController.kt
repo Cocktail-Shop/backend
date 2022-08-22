@@ -1,5 +1,6 @@
 package com.lionTF.cshop.domain.shop.controller
 
+import com.lionTF.cshop.domain.admin.service.admininterface.AdminOrderService
 import com.lionTF.cshop.domain.member.controller.dto.AuthMemberDTO
 import com.lionTF.cshop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.cshop.domain.shop.controller.dto.RequestOrderInfoDTO
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*
 @Controller
 class OrderController(
     private val orderService: OrderService,
+    private val adminOrderService: AdminOrderService,
 ) {
     //상품 주문
     @PostMapping("/orders")
@@ -39,7 +41,7 @@ class OrderController(
 
     @DeleteMapping("/orders/{orderId}")
     fun cancelOrder(@PathVariable("orderId") orderId: Long, model: Model): String {
-        model.addAttribute("result", orderService.cancelOrder(orderId))
+        model.addAttribute("result", adminOrderService.cancelOneOrder(orderId))
         return "global/message"
     }
 

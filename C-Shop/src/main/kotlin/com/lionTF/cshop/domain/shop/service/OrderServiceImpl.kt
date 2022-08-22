@@ -80,27 +80,6 @@ class OrderServiceImpl(
         return AddressDTO.fromMember(memberRepository.getReferenceById(memberId))
     }
 
-    // 상품 삭제
-    @Transactional
-    override fun cancelOrder(orderId: Long): OrderResponseDTO {
-        val existsOrder = orderRepository.existsById(orderId)
-
-        return if (!existsOrder) {
-            OrderResponseDTO.toFailDeleteItemResponseDTO()
-
-        } else {
-            val order = orderRepository.getReferenceById(orderId)
-            order.cancelOrder()
-
-            val orderItems = orderItemRepository.getOrderItemByOrdersId(orderId)
-            orderItems.forEach { orderItem ->
-                orderItem.cancel()
-            }
-
-            OrderResponseDTO.toSuccessDeleteItemResponseDTO()
-        }
-    }
-
     // 주문 조회
     override fun getShopOrders(pageable: Pageable): OrdersSearchDTO {
         val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
