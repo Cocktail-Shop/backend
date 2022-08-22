@@ -6,7 +6,6 @@ import com.lionTF.cshop.domain.shop.controller.dto.*
 import com.lionTF.cshop.domain.shop.service.shopinterface.CartItemService
 import com.lionTF.cshop.domain.admin.controller.dto.DeleteCartItemRequestDTO
 import org.springframework.data.domain.Pageable
-import org.springframework.data.web.PageableDefault
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -34,7 +33,7 @@ class CartItemController(
 
     // 장바구니 상품 삭제
     @DeleteMapping("/cart/items")
-    fun deleteCartItem(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @RequestBody deleteCartItemRequestDTO: DeleteCartItemRequestDTO, model: Model): String {
+    fun deleteCartItem(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @ModelAttribute("deleteCartItemRequestDTO") deleteCartItemRequestDTO: DeleteCartItemRequestDTO, model: Model): String {
         val deleteCartItemDTO = DeleteCartItemDTO(authMemberDTO?.memberId, deleteCartItemRequestDTO.cartItemID, deleteCartItemRequestDTO.itemIds)
         model.addAttribute("result", cartItemService.deleteCartItem(deleteCartItemDTO))
         return "global/message"
@@ -42,9 +41,8 @@ class CartItemController(
 
     // 장바구니 상품 조회
     @GetMapping("/items/cart")
-    fun getCartItem(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PageableDefault(size = 2) pageable: Pageable, model: Model): String {
-        model.addAttribute("searchCart", cartItemService.getCart(pageable))
-        return "global/message"
+    fun getCartItem(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, pageable: Pageable, model: Model): String {
+        model.addAttribute("carts", cartItemService.getCart(pageable))
+        return "shop/cart"
     }
 }
-

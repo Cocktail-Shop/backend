@@ -28,11 +28,11 @@ class OrderServiceImpl(
     @Transactional
     override fun requestOrder(requestOrderDTO: RequestOrderDTO) : RequestOrderResultDTO {
         var zeroAmountCount = 0
-         requestOrderDTO.orderItems.map{
+        requestOrderDTO.orderItems.map{
             val requestAmount = it.amount
             val existAmount = itemRepository.getReferenceById(it.itemId).amount
 
-             if(requestAmount == 0) zeroAmountCount++
+            if(requestAmount == 0) zeroAmountCount++
 
             if(requestAmount < 0){
                 return RequestOrderResultDTO.setNotPositiveError()
@@ -92,8 +92,10 @@ class OrderServiceImpl(
             val order = orderRepository.getReferenceById(orderId)
             order.cancelOrder()
 
-            val orderItem = orderItemRepository.getOrderItemByOrdersId(orderId)
-            orderItem.cancel()
+            val orderItems = orderItemRepository.getOrderItemByOrdersId(orderId)
+            orderItems.forEach { orderItem ->
+                orderItem.cancel()
+            }
 
             OrderResponseDTO.toSuccessDeleteItemResponseDTO()
         }

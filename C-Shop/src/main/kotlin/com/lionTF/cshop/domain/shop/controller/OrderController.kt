@@ -5,12 +5,9 @@ import com.lionTF.cshop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.cshop.domain.shop.controller.dto.RequestOrderInfoDTO
 import com.lionTF.cshop.domain.shop.service.shopinterface.OrderService
 import org.springframework.data.domain.Pageable
-import org.springframework.data.web.PageableDefault
-import org.springframework.http.MediaType
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.util.MultiValueMap
 import org.springframework.web.bind.annotation.*
 
 
@@ -33,9 +30,6 @@ class OrderController(
         return "redirect:/shop/singleItem"
     }
 
-    // 장바구니 상품 주문
-    // cartItem을 통해 cart에 있는 Item을 지우는 것 외에 동일
-    // TODO : cartItem을 통해 cart에 있는 Item을 지우는 것 -> 장바구니 상품 삭제 활용
     @PostMapping("/orders/cart/items")
     fun createCartOrder(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @ModelAttribute("requestOrderInfoDTO") requestOrderInfoDTO: RequestOrderInfoDTO, model: Model) : String {
         val requestCartOrderDTO = RequestOrderDTO(authMemberDTO?.memberId, requestOrderInfoDTO.orderItems,requestOrderInfoDTO.address,requestOrderInfoDTO.addressDetail)
@@ -43,17 +37,15 @@ class OrderController(
         return "global/message"
     }
 
-    // 주문 취소
     @DeleteMapping("/orders/{orderId}")
     fun cancelOrder(@PathVariable("orderId") orderId: Long, model: Model): String {
         model.addAttribute("result", orderService.cancelOrder(orderId))
         return "global/message"
     }
 
-    // 주문 조회
     @GetMapping("/orders")
-    fun getOrders(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, @PageableDefault(size = 2) pageable: Pageable, model: Model): String {
-        model.addAttribute("searchOrders", orderService.getShopOrders(pageable))
-        return "global/message"
+    fun getOrders(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, pageable: Pageable, model: Model): String {
+        model.addAttribute("orders", orderService.getShopOrders(pageable))
+        return "shop/orderList"
     }
 }
