@@ -37,9 +37,10 @@
 
                     <th:block th:each="items, i : *{orderItems}">
                     <div class="product-quantity">
-                        <span><div th:text="${items.itemName}"></div></span>
+                        <span><a th:href="'/items/'+${items.itemId}"><div th:text="${items.itemName}"></div></a></span>
 
-<!--                        <input th:type="text" th:field="*{orderItems[__${i.index}__].itemId}">-->
+                        <input th:type="hidden" th:field="*{orderItems[__${i.index}__].itemId}">
+                        <input th:type="hidden" th:field="*{orderItems[__${i.index}__].itemName}">
                         <span>가격<input type="text" th:field="*{orderItems[__${i.index}__].price}" readonly></span>
 
                         <span></span>

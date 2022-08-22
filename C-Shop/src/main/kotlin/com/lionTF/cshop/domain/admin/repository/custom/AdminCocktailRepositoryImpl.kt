@@ -1,6 +1,6 @@
 package com.lionTF.cshop.domain.admin.repository.custom
 
-import com.lionTF.cshop.domain.admin.controller.dto.FindCocktailsDTO
+import com.lionTF.cshop.domain.admin.controller.dto.CocktailsDTO
 import com.lionTF.cshop.domain.admin.models.Cocktail
 import com.lionTF.cshop.domain.admin.models.QCocktail.cocktail
 import com.querydsl.core.BooleanBuilder
@@ -18,20 +18,18 @@ class AdminCocktailRepositoryImpl(
 
 ) : AdminCocktailRepositoryCustom {
 
-    // 칵테일 전체 조회
-    override fun findAllCocktails(pageable: Pageable): Page<FindCocktailsDTO> {
-        val content: List<FindCocktailsDTO> = contentInquire(pageable)
+    override fun findAllCocktails(pageable: Pageable): Page<CocktailsDTO> {
+        val content: List<CocktailsDTO> = contentInquire(pageable)
 
         val countQuery: JPAQuery<Cocktail> = countInquire()
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
-    // 회원 ID로 회원 검색
-    override fun findCocktailsByName(keyword: String, pageable: Pageable): Page<FindCocktailsDTO> {
-        val booleanBuilder = booleanBuilder(keyword)
+    override fun findCocktailsByName(cocktailName: String, pageable: Pageable): Page<CocktailsDTO> {
+        val booleanBuilder = booleanBuilder(cocktailName)
 
-        val content: List<FindCocktailsDTO> = contentInquire(pageable, booleanBuilder)
+        val content: List<CocktailsDTO> = contentInquire(pageable, booleanBuilder)
         val countQuery: JPAQuery<Cocktail> = countInquire(booleanBuilder)
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
@@ -41,11 +39,11 @@ class AdminCocktailRepositoryImpl(
     private fun contentInquire(
         pageable: Pageable,
         booleanBuilder: BooleanBuilder? = null
-    ): List<FindCocktailsDTO> {
+    ): List<CocktailsDTO> {
         return queryFactory!!
             .select(
                 Projections.constructor(
-                    FindCocktailsDTO::class.java,
+                    CocktailsDTO::class.java,
                     cocktail.cocktailId,
                     cocktail.cocktailName,
                     cocktail.cocktailDescription,
@@ -58,6 +56,7 @@ class AdminCocktailRepositoryImpl(
                 booleanBuilder,
                 isEqualCocktailStatus()
             )
+            .orderBy(cocktail.createdAt.desc())
             .offset(pageable.offset)
             .limit(pageable.pageSize.toLong())
             .fetch()
@@ -75,8 +74,8 @@ class AdminCocktailRepositoryImpl(
             )
     }
 
-    private fun booleanBuilder(keyword: String): BooleanBuilder? {
-        return BooleanBuilder().and(cocktail.cocktailName.contains(keyword))
+    private fun booleanBuilder(cocktailName: String): BooleanBuilder? {
+        return BooleanBuilder().and(cocktail.cocktailName.contains(cocktailName))
     }
 
     private fun isEqualCocktailStatus() = cocktail.cocktailStatus.eq(true)

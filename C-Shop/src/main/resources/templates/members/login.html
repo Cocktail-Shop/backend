@@ -13,13 +13,10 @@
     <div class="row">
       <div class="col-md-6 col-md-offset-3">
         <div class="block text-center">
-          <a class="logo" href="index.html">
-            <img src="images/logo.png" alt="">
-          </a>
           <h4 class="text-center mt-30">로그인</h4>
-          <form class="text-left clearfix" th:action="@{/members/login}" method="post">
+          <form class="text-left clearfix" th:action="@{/members/login}" method="post" onsubmit="return checkLoginPw()" >
             <div class="form-group">
-              <input type="text" id="username" name="username" class="form-control login-input"  placeholder="이름을 입력해주세요">
+              <input type="text" id="username" name="username" class="form-control login-input"  placeholder="아이디를 입력해주세요">
             </div>
             <div class="form-group">
               <input type="password" id="password" name="password" class="form-control login-input"  placeholder="비밀번호를 입력해주세요">
@@ -31,7 +28,7 @@
             </div>
             <div class="text-center">
               <div><button type="submit" class="btn btn-small  text-center btn-round btn-login-page mt-10" >로그인</button></div>
-              <div><button type="button" class="btn btn-small  text-center btn-round btn-login-page btn-subcolor mt-10" onclick = "location.href = '/oauth2/authorization/google'" >구글 로그인</button></div>
+              <div><button type="button" class="btn btn-small  text-center btn-round btn-login-page btn-subcolor mt-10" onclick = "location.href = '/oauth2/authorization/kakao'" >카카오 로그인</button></div>
               <div><button type="button" class="btn btn-small  text-center btn-round btn-login-page btn-subcolor mt-10" onclick = "location.href = '/members/signup'" >회원가입</button></div>
             </div>
           </form>
@@ -44,7 +41,6 @@
 
 <th:block th:replace="~{global/scriptData:: scriptData}">
 </th:block>
-
 
 </body>
 </html>

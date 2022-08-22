@@ -18,10 +18,10 @@ import javax.transaction.Transactional
 internal class AdminItemServiceTest {
 
     @Autowired
-    private lateinit var adminItemService: AdminItemService
+    private val adminItemService: AdminItemService? = null
 
     @Autowired
-    private lateinit var adminItemRepository: AdminItemRepository
+    private val adminItemRepository: AdminItemRepository? = null
 
     private var item1: Item? = null
     private var item2: Item? = null
@@ -30,7 +30,7 @@ internal class AdminItemServiceTest {
 
     @BeforeEach
     fun init() {
-        var itemTest1 = Item(
+        val itemTest1 = Item(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 10000,
@@ -40,9 +40,9 @@ internal class AdminItemServiceTest {
             itemStatus = true,
         )
 
-        item1 = adminItemRepository.save(itemTest1)
+        item1 = adminItemRepository?.save(itemTest1)
 
-        var itemTest2 = Item(
+        val itemTest2 = Item(
             itemName = "test2",
             category = Category.ALCOHOL,
             price = 10000,
@@ -52,9 +52,9 @@ internal class AdminItemServiceTest {
             itemStatus = true,
         )
 
-        item2 = adminItemRepository.save(itemTest2)
+        item2 = adminItemRepository?.save(itemTest2)
 
-        var itemTest3 = Item(
+        val itemTest3 = Item(
             itemName = "test3",
             category = Category.ALCOHOL,
             price = 10000,
@@ -64,10 +64,10 @@ internal class AdminItemServiceTest {
             itemStatus = true,
         )
 
-        item3 = adminItemRepository.save(itemTest3)
+        item3 = adminItemRepository?.save(itemTest3)
 
 
-        var itemTest4 = Item(
+        val itemTest4 = Item(
             itemName = "test4",
             category = Category.ALCOHOL,
             price = 10000,
@@ -77,14 +77,14 @@ internal class AdminItemServiceTest {
             itemStatus = true,
         )
 
-        item4 = adminItemRepository.save(itemTest4)
+        item4 = adminItemRepository?.save(itemTest4)
     }
 
     @Test
     @DisplayName("Item 생성 test")
     fun createItemTest() {
         //given
-        var createItemDTO = RequestCreateItemDTO(
+        val createItemDTO = ItemCreateRequestDTO(
             itemName = "test",
             category = Category.ALCOHOL,
             price = 10000,
@@ -94,18 +94,18 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val createItem = adminItemService.createItem(createItemDTO, "test")
+        val createItem = adminItemService?.createItem(createItemDTO, "test")
 
         //then
-        assertThat(createItem.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCreateItemResponseDTO().httpStatus)
-        assertThat(createItem.message).isEqualTo(AdminResponseDTO.toSuccessCreateItemResponseDTO().message)
+        assertThat(createItem?.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCreateItemResponseDTO().httpStatus)
+        assertThat(createItem?.message).isEqualTo(AdminResponseDTO.toSuccessCreateItemResponseDTO().message)
     }
 
     @Test
     @DisplayName("Item 생성 예외 중 가격이 0이하인 case test")
     fun createItemExceptionByPriceTest() {
         //given
-        var createInvalidFormatPrice = RequestCreateItemDTO(
+        val createInvalidFormatPrice = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 0,
@@ -115,19 +115,19 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val createItemExceptionByPrice = adminItemService.createItem(createInvalidFormatPrice, "test")
+        val createItemExceptionByPrice = adminItemService?.createItem(createInvalidFormatPrice, "test")
 
         //then
-        assertThat(createItemExceptionByPrice.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO().httpStatus)
-        assertThat(createItemExceptionByPrice.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO().message)
-        println("createItemExceptionByPrice = ${createItemExceptionByPrice.message}")
+        assertThat(createItemExceptionByPrice?.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO().httpStatus)
+        assertThat(createItemExceptionByPrice?.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO().message)
+        println("createItemExceptionByPrice = ${createItemExceptionByPrice?.message}")
     }
 
     @Test
     @DisplayName("Item 생성 예외 중 수량이 0이하인 case test")
     fun createItemExceptionByAmountTest() {
         //given
-        var createInvalidFormatAmount = RequestCreateItemDTO(
+        val createInvalidFormatAmount = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 10,
@@ -137,19 +137,19 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val createItemExceptionByAmount = adminItemService.createItem(createInvalidFormatAmount, "test")
+        val createItemExceptionByAmount = adminItemService?.createItem(createInvalidFormatAmount, "test")
 
         //then
-        assertThat(createItemExceptionByAmount.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO().httpStatus)
-        assertThat(createItemExceptionByAmount.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO().message)
-        println("createItemExceptionByAmount = ${createItemExceptionByAmount.message}")
+        assertThat(createItemExceptionByAmount?.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO().httpStatus)
+        assertThat(createItemExceptionByAmount?.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO().message)
+        println("createItemExceptionByAmount = ${createItemExceptionByAmount?.message}")
     }
 
     @Test
     @DisplayName("Item 생성 예외 중 수량과 가격이 0이하인 case test")
     fun createItemExceptionByAmountAndPriceTest() {
         //given
-        var createInvalidFormatAmountAndPrice = RequestCreateItemDTO(
+        val createInvalidFormatAmountAndPrice = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 0,
@@ -159,19 +159,19 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val createItemExceptionByAmountAndPrice = adminItemService.createItem(createInvalidFormatAmountAndPrice, "test")
+        val createItemExceptionByAmountAndPrice = adminItemService?.createItem(createInvalidFormatAmountAndPrice, "test")
 
         //then
-        assertThat(createItemExceptionByAmountAndPrice.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO().httpStatus)
-        assertThat(createItemExceptionByAmountAndPrice.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO().message)
-        println("createItemExceptionByAmountAndPrice = ${createItemExceptionByAmountAndPrice.message}")
+        assertThat(createItemExceptionByAmountAndPrice?.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO().httpStatus)
+        assertThat(createItemExceptionByAmountAndPrice?.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO().message)
+        println("createItemExceptionByAmountAndPrice = ${createItemExceptionByAmountAndPrice?.message}")
     }
 
     @Test
     @DisplayName("상품 수정 test")
     fun updateItemTest() {
         //given
-        var updateItemDTO = RequestCreateItemDTO(
+        val updateItemDTO = ItemCreateRequestDTO(
             itemName = "test1",
             category = Category.ALCOHOL,
             price = 40000,
@@ -181,9 +181,9 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val updateItem = item1?.let { adminItemService.updateItem(it.itemId, updateItemDTO, "test") }
+        val updateItem = item1?.let { adminItemService?.updateItem(it.itemId, updateItemDTO, "test") }
 
-        val getItem = item1?.let { adminItemRepository.findById(it.itemId).get() }
+        val getItem = item1?.let { adminItemRepository?.findById(it.itemId)?.get() }
 
         //then
         assertThat(updateItem?.httpStatus).isEqualTo(AdminResponseDTO.toSuccessUpdateItemResponseDTO().httpStatus)
@@ -202,7 +202,7 @@ internal class AdminItemServiceTest {
     @DisplayName("상품 수정 예외 중 없는 상품 case test")
     fun updateItemExceptionTest() {
         //given
-        var invalidIpdateItemDTO = RequestCreateItemDTO(
+        val invalidUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 40000,
@@ -212,19 +212,19 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val invalidUpdateItem = adminItemService.updateItem(12312312412L, invalidIpdateItemDTO, "test")
+        val invalidUpdateItem = adminItemService?.updateItem(12312312412L, invalidUpdateItemDTO, "test")
 
         //then
-        assertThat(invalidUpdateItem.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateItemResponseDTO().httpStatus)
-        assertThat(invalidUpdateItem.message).isEqualTo(AdminResponseDTO.toFailUpdateItemResponseDTO().message)
-        println("updateItem.message = ${invalidUpdateItem.message}")
+        assertThat(invalidUpdateItem?.httpStatus).isEqualTo(AdminResponseDTO.toFailUpdateItemResponseDTO().httpStatus)
+        assertThat(invalidUpdateItem?.message).isEqualTo(AdminResponseDTO.toFailUpdateItemResponseDTO().message)
+        println("updateItem.message = ${invalidUpdateItem?.message}")
     }
 
     @Test
     @DisplayName("상품 수정 예외 중 가격이 0이하인 case test")
     fun updateItemExceptionByPriceTest() {
         //given
-        var invalidPriceUpdateItemDTO = RequestCreateItemDTO(
+        val invalidPriceUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 0,
@@ -234,19 +234,19 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val invalidPriceUpdateItem = adminItemService.updateItem(item1!!.itemId, invalidPriceUpdateItemDTO, "test")
+        val invalidPriceUpdateItem = item1?.let { adminItemService?.updateItem(it.itemId, invalidPriceUpdateItemDTO, "test") }
 
         //then
-        assertThat(invalidPriceUpdateItem.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO().httpStatus)
-        assertThat(invalidPriceUpdateItem.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO().message)
-        println("invalidPriceUpdateItem.message = ${invalidPriceUpdateItem.message}")
+        assertThat(invalidPriceUpdateItem?.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO().httpStatus)
+        assertThat(invalidPriceUpdateItem?.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO().message)
+        println("invalidPriceUpdateItem.message = ${invalidPriceUpdateItem?.message}")
     }
 
     @Test
     @DisplayName("상품 수정 예외 중 수량이 0이하인 case test")
     fun updateItemExceptionByAmountTest() {
         //given
-        var invalidAmountUpdateItemDTO = RequestCreateItemDTO(
+        val invalidAmountUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 10,
@@ -256,19 +256,19 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val invalidAmountUpdateItem = adminItemService.updateItem(item1!!.itemId, invalidAmountUpdateItemDTO, "test")
+        val invalidAmountUpdateItem = item1?.let { adminItemService?.updateItem(it.itemId, invalidAmountUpdateItemDTO, "test") }
 
         //then
-        assertThat(invalidAmountUpdateItem.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO().httpStatus)
-        assertThat(invalidAmountUpdateItem.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO().message)
-        println("invalidAmountUpdateItem.message = ${invalidAmountUpdateItem.message}")
+        assertThat(invalidAmountUpdateItem?.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO().httpStatus)
+        assertThat(invalidAmountUpdateItem?.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatAmountResponseDTO().message)
+        println("invalidAmountUpdateItem.message = ${invalidAmountUpdateItem?.message}")
     }
 
     @Test
     @DisplayName("상품 수정 예외 중 수량과 가격 0이하인 case test")
     fun updateItemExceptionByAmountAndPriceTest() {
         //given
-        var invalidAmountAndPriceUpdateItemDTO = RequestCreateItemDTO(
+        val invalidAmountAndPriceUpdateItemDTO = ItemCreateRequestDTO(
             itemName = "test-update",
             category = Category.ALCOHOL,
             price = 0,
@@ -278,12 +278,13 @@ internal class AdminItemServiceTest {
         )
 
         //when
-        val invalidAmountAndPriceUpdateItem = adminItemService.updateItem(item1!!.itemId, invalidAmountAndPriceUpdateItemDTO, "test")
+        val invalidAmountAndPriceUpdateItem =
+            item1?.let { adminItemService?.updateItem(it.itemId, invalidAmountAndPriceUpdateItemDTO, "test") }
 
         //then
-        assertThat(invalidAmountAndPriceUpdateItem.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO().httpStatus)
-        assertThat(invalidAmountAndPriceUpdateItem.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO().message)
-        println("invalidAmountAndPriceUpdateItem.message = ${invalidAmountAndPriceUpdateItem.message}")
+        assertThat(invalidAmountAndPriceUpdateItem?.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO().httpStatus)
+        assertThat(invalidAmountAndPriceUpdateItem?.message).isEqualTo(AdminResponseDTO.toFailCreateItemByInvalidFormatPriceAndAmountResponseDTO().message)
+        println("invalidAmountAndPriceUpdateItem.message = ${invalidAmountAndPriceUpdateItem?.message}")
     }
 
 
@@ -293,13 +294,13 @@ internal class AdminItemServiceTest {
         //given
 
         //when
-        val deleteOneItem = adminItemService.deleteOneItem(item1!!.itemId)
+        val deleteOneItem = item1?.let { adminItemService?.deleteOneItem(it.itemId) }
 
         //then
-        assertThat(deleteOneItem.httpStatus).isEqualTo(AdminResponseDTO.toSuccessDeleteItemResponseDTO().httpStatus)
-        assertThat(deleteOneItem.message).isEqualTo(AdminResponseDTO.toSuccessDeleteItemResponseDTO().message)
-        assertThat(item1!!.itemStatus).isEqualTo(false)
-        println("deleteOneItem = ${deleteOneItem.message}")
+        assertThat(deleteOneItem?.httpStatus).isEqualTo(AdminResponseDTO.toSuccessDeleteItemResponseDTO().httpStatus)
+        assertThat(deleteOneItem?.message).isEqualTo(AdminResponseDTO.toSuccessDeleteItemResponseDTO().message)
+        item1?.let { assertThat(it.itemStatus).isEqualTo(false) }
+        println("deleteOneItem = ${deleteOneItem?.message}")
     }
 
     @Test
@@ -309,31 +310,31 @@ internal class AdminItemServiceTest {
         val itemID = 98L
 
         //when
-        val invalidItemIdDeleteOneItem = adminItemService.deleteOneItem(itemID)
+        val invalidItemIdDeleteOneItem = adminItemService?.deleteOneItem(itemID)
 
         //then
-        assertThat(invalidItemIdDeleteOneItem.httpStatus).isEqualTo(AdminResponseDTO.toFailDeleteItemResponseDTO().httpStatus)
-        assertThat(invalidItemIdDeleteOneItem.message).isEqualTo(AdminResponseDTO.toFailDeleteItemResponseDTO().message)
-        assertThat(item1!!.itemStatus).isEqualTo(true)
-        println("invalidItemIdDeleteOneItem = ${invalidItemIdDeleteOneItem.message}")
+        assertThat(invalidItemIdDeleteOneItem?.httpStatus).isEqualTo(AdminResponseDTO.toFailDeleteItemResponseDTO().httpStatus)
+        assertThat(invalidItemIdDeleteOneItem?.message).isEqualTo(AdminResponseDTO.toFailDeleteItemResponseDTO().message)
+        item1?.let { assertThat(it.itemStatus).isEqualTo(true) }
+        println("invalidItemIdDeleteOneItem = ${invalidItemIdDeleteOneItem?.message}")
     }
 
     @Test
     @DisplayName("상품 단건 조회 test")
     fun findItemTest() {
         //given
-        val itemId = item1!!.itemId
+        val itemId = item1?.itemId
 
         //when
-        val findItem = adminItemService.findItem(itemId)
+        val findItem = itemId?.let { adminItemService?.findItem(it) }
 
         //then
-        assertThat(findItem.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(findItem.message).isEqualTo("상품 조회를 성공했습니다.")
-        assertThat(findItem.result!!.itemName).isEqualTo(item1!!.itemName)
-        assertThat(findItem.result!!.itemDescription).isEqualTo(item1!!.itemDescription)
-        assertThat(findItem.result!!.amount).isEqualTo(item1!!.amount)
-        assertThat(findItem.result!!.category).isEqualTo(item1!!.category)
+        assertThat(findItem?.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(findItem?.message).isEqualTo("상품 조회를 성공했습니다.")
+        assertThat(findItem?.result?.itemName).isEqualTo(item1?.itemName)
+        assertThat(findItem?.result?.itemDescription).isEqualTo(item1?.itemDescription)
+        assertThat(findItem?.result?.amount).isEqualTo(item1?.amount)
+        assertThat(findItem?.result?.category).isEqualTo(item1?.category)
     }
 
 
@@ -344,100 +345,49 @@ internal class AdminItemServiceTest {
         val itemId = 98L
 
         //when
-        val findItem = adminItemService.findItem(itemId)
+        val findItem = adminItemService?.findItem(itemId)
 
         //then
-        assertThat(findItem.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
-        assertThat(findItem.message).isEqualTo("존재 하지 않는 상품입니다.")
+        assertThat(findItem?.httpStatus).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR.value())
+        assertThat(findItem?.message).isEqualTo("존재 하지 않는 상품입니다.")
     }
 
-    private fun generatePageable(page: Int, pageSize: Int): PageRequest = PageRequest.of(page, pageSize)
+    private fun generatePageable(page: Int = 0, pageSize: Int = 2): PageRequest = PageRequest.of(page, pageSize)
 
     @Test
     @DisplayName("상품 전체 조회 test")
     fun getAllItemsTest() {
         //given
-        val page = 0
-        val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize)
+        val pageable = generatePageable()
 
         //when
-        val allItems = adminItemService.getAllItems(pageable)
+        val allItems = adminItemService?.getAllItems(pageable)
 
-        val count = adminItemRepository.countAllByItemStatusIsTrue()
+        val count = adminItemRepository?.countAllByItemStatusIsTrue()
 
         //then
-        assertThat(allItems.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(allItems.message).isEqualTo("상품 조회를 성공했습니다.")
-        assertThat(allItems.keyword).isEqualTo("")
-        assertThat(allItems.result!!.totalElements).isEqualTo(count)
-        assertThat(allItems.result!!.totalPages).isEqualTo((count / pageSize) + 1)
+        assertThat(allItems?.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(allItems?.message).isEqualTo("상품 조회를 성공했습니다.")
+        assertThat(allItems?.itemName).isEqualTo("")
+        assertThat(allItems?.result?.totalElements).isEqualTo(count)
+        assertThat(allItems?.result?.totalPages).isEqualTo((count?.div(2))?.plus(1))
     }
 
     @Test
     @DisplayName("상품명으로 상품 조회 test")
     fun getItemsByNameTest() {
         //given
-        val page = 0
-        val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize)
-        val keyword: String = "te"
+        val pageable = generatePageable()
+        val keyword = "te"
 
         //when
-        val allItems = adminItemService.getItemsByName(keyword, pageable)
+        val allItems = adminItemService?.getItemsByName(keyword, pageable)
 
         //then
-        assertThat(allItems.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(allItems.message).isEqualTo("상품 조회를 성공했습니다.")
-        assertThat(allItems.keyword).isEqualTo(keyword)
-        assertThat(allItems.result!!.totalElements).isEqualTo(8)
-        assertThat(allItems.result!!.totalPages).isEqualTo(4)
+        assertThat(allItems?.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(allItems?.message).isEqualTo("상품 조회를 성공했습니다.")
+        assertThat(allItems?.itemName).isEqualTo(keyword)
+        assertThat(allItems?.result?.totalElements).isEqualTo(8)
+        assertThat(allItems?.result?.totalPages).isEqualTo(4)
     }
-
-    //    @Test
-//    @DisplayName("상품 삭제 test")
-//    fun deleteItemTest() {
-//        //given
-//        var deleteItemIdList = mutableListOf<Long>()
-//
-//        item1?.let { deleteItemIdList.add(it.itemId) }
-//        item2?.let { deleteItemIdList.add(it.itemId) }
-//
-//        var deleteItemDTO = DeleteItemDTO(
-//            deleteItemIdList
-//        )
-//        //when
-//        val deleteItems = adminItemService.deleteItems(deleteItemDTO)
-//
-//        //then
-//        assertThat(deleteItems.status).isEqualTo(setDeleteSuccessItemResultDTO().status)
-//        assertThat(deleteItems.message).isEqualTo(setDeleteSuccessItemResultDTO().message)
-//
-//        item1?.let { assertThat(it.itemStatus).isEqualTo(false) }
-//        item2?.let { assertThat(it.itemStatus).isEqualTo(false) }
-//        item3?.let { assertThat(it.itemStatus).isEqualTo(true) }
-//    }
-
-//    @Test
-//    @DisplayName("상품 삭제 예외 test")
-//    fun deleteItemExceptionTest() {
-//        //given
-//        var deleteItemIdList = mutableListOf<Long>()
-//
-//        item1?.let { deleteItemIdList.add(it.itemId) }
-//        deleteItemIdList.add(10L)  // 등록되지 않은 상품
-//
-//        var deleteItemDTO = DeleteItemDTO(
-//            deleteItemIdList
-//        )
-//        //when
-//        val deleteItems = adminItemService.deleteItems(deleteItemDTO)
-//
-//        //then
-//        assertThat(deleteItems.status).isEqualTo(setDeleteFailItemResultDTO().status)
-//        assertThat(deleteItems.message).isEqualTo(setDeleteFailItemResultDTO().message)
-//
-//        item1?.let { assertThat(it.itemStatus).isEqualTo(false) }
-//        item2?.let { assertThat(it.itemStatus).isEqualTo(true) }
-//    }
 }

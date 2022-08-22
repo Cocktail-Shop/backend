@@ -5,7 +5,6 @@ import com.lionTF.cshop.domain.admin.models.Category
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminItemService
 import com.lionTF.cshop.domain.admin.service.admininterface.ImageService
 import org.springframework.data.domain.Pageable
-import org.springframework.data.web.PageableDefault
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
@@ -21,10 +20,7 @@ class AdminItemController(
 
     // 전체 상품 조회
     @GetMapping("all-item")
-    fun getAllItems(
-        @PageableDefault(size = 2) pageable: Pageable,
-        model: Model
-    ): String {
+    fun getAllItems(pageable: Pageable, model: Model): String {
         model.addAttribute("items", adminItemService.getAllItems(pageable))
         return "admins/item/getAllItem"
     }
@@ -32,28 +28,25 @@ class AdminItemController(
     // 상품명으로 상품 조회
     @GetMapping("search/items")
     fun getItemsByName(
-        @RequestParam("keyword") keyword: String,
-        @PageableDefault(size = 2) pageable: Pageable,
+        @RequestParam("itemName") itemName: String,
+        pageable: Pageable,
         model: Model
     ): String {
-        model.addAttribute("items", adminItemService.getItemsByName(keyword, pageable))
+        model.addAttribute("items", adminItemService.getItemsByName(itemName, pageable))
         return "admins/item/getItemsByName"
     }
 
     // 상품 등록 페이지
     @GetMapping("items")
     fun getCreateItemForm(model: Model): String {
-        model.addAttribute("createItemDTO", RequestCreateItemDTO.toFormDTO())
+        model.addAttribute("createItemDTO", ItemCreateRequestDTO.toFormDTO())
         return "admins/item/createItemForm"
     }
 
 
     // 상품 등록
     @PostMapping("items")
-    fun createItem(
-        requestCreateItemDTO: RequestCreateItemDTO,
-        model: Model
-    ): String {
+    fun createItem(requestCreateItemDTO: ItemCreateRequestDTO, model: Model): String {
         val itemImgUrl = getImageUrl(requestCreateItemDTO)
         model.addAttribute("result", adminItemService.createItem(requestCreateItemDTO, itemImgUrl))
         return "global/message"
@@ -61,13 +54,10 @@ class AdminItemController(
 
     // 상품 상세보기(수정) 페이지
     @GetMapping("items/{itemId}")
-    fun getItem(
-        @PathVariable("itemId") itemId: Long,
-        model: Model
-    ): String {
+    fun getItem(@PathVariable("itemId") itemId: Long, model: Model): String {
         val item = adminItemService.findItem(itemId)
         model.addAttribute("items", item)
-        model.addAttribute("items", RequestUpdateItemDTO.formDTOFromResponseItemDTO(item))
+        model.addAttribute("items", ItemUpdateRequestDTO.formDTOFromResponseItemDTO(item))
 
         return "admins/item/updateItemForm"
     }
@@ -76,7 +66,7 @@ class AdminItemController(
     @PutMapping("items/{itemId}")
     fun updateItem(
         @PathVariable("itemId") itemId: Long,
-        requestCreateItemDTO: RequestCreateItemDTO,
+        requestCreateItemDTO: ItemCreateRequestDTO,
         model: Model
     ): String {
         val item = adminItemService.findItemById(itemId)
@@ -107,10 +97,7 @@ class AdminItemController(
 
     // 한개 상품 삭제
     @DeleteMapping("items/{itemId}")
-    fun deleteOneItem(
-        @PathVariable("itemId") itemId: Long,
-        model: Model
-    ): String {
+    fun deleteOneItem(@PathVariable("itemId") itemId: Long, model: Model): String {
         model.addAttribute("result", adminItemService.deleteOneItem(itemId))
         return "global/message"
     }
@@ -121,34 +108,12 @@ class AdminItemController(
         return Category.values()
     }
 
-    // API를 통해 이미지 URL을 가져오는 함
-    private fun getImageUrl(requestCreateItemDTO: RequestCreateItemDTO): String? {
+    // API 를 통해 이미지 URL 을 가져오는 함
+    private fun getImageUrl(requestCreateItemDTO: ItemCreateRequestDTO): String? {
         imageService.requestToken()
         val itemImgUrl = requestCreateItemDTO.itemImgUrl?.let {
-            imageService.uploadObject(
-                requestCreateItemDTO.itemName + LocalDateTime.now().toString(),
-                it
-            )
+            imageService.uploadObject(requestCreateItemDTO.itemName + LocalDateTime.now().toString(), it)
         }
         return itemImgUrl
     }
-
-
-//    @ModelAttribute("itemIds")
-//    fun favorite(pageable: Pageable): Map<Long, String> {
-//        var map: MutableMap<Long, String> = LinkedHashMap()
-//        var items = adminItemService.getAllItems(pageable)
-//
-//        for (item in items.result!!.content) {
-//            map[item.itemId] = ""
-//        }
-//
-//        return map
-//    }
-
-    //    복수 상품 삭제
-//    @DeleteMapping("items")
-//    fun deleteItem(@RequestBody deleteItemDTO: DeleteItemDTO): DeleteItemResultDTO {
-//        return adminItemService.deleteItems(deleteItemDTO)
-//    }
 }

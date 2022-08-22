@@ -7,5 +7,11 @@ data class OrderItemDTO(
     var orders: Orders,
     var item: Item,
     var amount: Int,
-)
+) {
 
+    companion object {
+        fun fromOrderRequestInfo(orders: Orders, item: Item, amount: Int): OrderItemDTO {
+            return OrderItemDTO(orders, item, amount)
+        }
+    }
+}

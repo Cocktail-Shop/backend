@@ -8,14 +8,16 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 @Service
-class MemberDetailsService(private val memberAuthRepository: MemberAuthRepository) : UserDetailsService {
+class MemberDetailsService(
+    private val memberAuthRepository: MemberAuthRepository
+) : UserDetailsService {
 
-    //id(username)을 기반으로 DB에 존재하는 회원 있는지 찾음
-    override fun loadUserByUsername(username: String?): UserDetails?{
-        val existMember = memberAuthRepository.findById(username!!).orElseThrow{UsernameNotFoundException("아이디 비밀번호를 확인하세요.")}
-        if(!existMember.memberStatus){
-            throw UsernameNotFoundException("탈퇴한 회원입니다.")
-        }
-        return AuthMemberDTO.fromMember(existMember)
+    override fun loadUserByUsername(username: String): UserDetails {
+        return memberAuthRepository.findById(username)?.let { member ->
+            when (member.memberStatus) {
+                true -> AuthMemberDTO.fromMember(member)
+                false -> throw UsernameNotFoundException("탈퇴한 회원")
+            }
+        } ?: throw UsernameNotFoundException("아이디 비밀번호를 확인")
     }
 }

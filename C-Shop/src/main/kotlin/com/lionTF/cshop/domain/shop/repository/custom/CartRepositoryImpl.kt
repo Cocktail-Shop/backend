@@ -16,9 +16,8 @@ class CartRepositoryImpl(
 
     private val queryFactory: JPAQueryFactory? = null
 
-):CartRepositoryCustom {
+) : CartRepositoryCustom {
 
-    // 장바구니 상품 조회
     override fun findCartInfo(pageable: Pageable): Page<FindCartDTO> {
 
         val content: List<FindCartDTO> = contentInquire(pageable)
@@ -62,14 +61,14 @@ class CartRepositoryImpl(
             .select(
                 Projections.constructor(
                     FindCartDTO::class.java,
-                        cart.cartId,
-                        item.itemId,
-                        item.itemName,
-                        item.price,
-                        cartItem.item,
-                        cartItem.amount,
-                        item.itemImgUrl,
-                        member.memberId
+                    cart.cartId,
+                    item.itemId,
+                    item.itemName,
+                    item.price,
+                    cartItem.item,
+                    cartItem.amount,
+                    item.itemImgUrl,
+                    member.memberId
                 )
             )
             .from(cart, member)

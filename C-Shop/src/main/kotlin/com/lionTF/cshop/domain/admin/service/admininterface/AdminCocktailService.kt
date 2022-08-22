@@ -6,23 +6,21 @@ import org.springframework.data.domain.Pageable
 
 interface AdminCocktailService {
 
-    fun createCocktail(requestCreateCocktailDTO: RequestCreateCocktailDTO, cocktailImgUrl: String?): AdminResponseDTO
+    fun createCocktail(requestCreateCocktailDTO: CocktailCreateRequestDTO, cocktailImgUrl: String?): AdminResponseDTO
 
     fun updateCocktail(
-        requestCreateCocktailDTO: RequestCreateCocktailDTO,
+        requestCreateCocktailDTO: CocktailCreateRequestDTO,
         cocktailId: Long, itemIds: MutableList<Long>,
         cocktailImgUrl: String?
     ): AdminResponseDTO
 
-    fun getAllCocktail(pageable: Pageable): ResponseSearchCocktailSearchDTO
+    fun getAllCocktail(pageable: Pageable): CocktailsSearchDTO
 
-    fun getCocktailsByName(keyword: String, pageable: Pageable): ResponseSearchCocktailSearchDTO
+    fun getCocktailsByName(cocktailName: String, pageable: Pageable): CocktailsSearchDTO
 
-    fun findCocktail(cocktailId: Long, itemIds: MutableList<Long>): ResponseCocktailDTO
+    fun findCocktail(cocktailId: Long, itemIds: MutableList<Long>): CocktailResponseDTO
 
     fun deleteOneCocktail(cocktailId: Long): AdminResponseDTO
 
     fun findCocktailById(cocktailId: Long): Cocktail
-
-//    fun deleteCocktail(deleteCocktailDTO: DeleteCocktailDTO): DeleteCocktailResultDTO
 }

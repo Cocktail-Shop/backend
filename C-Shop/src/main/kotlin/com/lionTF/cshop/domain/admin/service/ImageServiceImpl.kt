@@ -31,7 +31,8 @@ class ImageServiceImpl(
 
     @Value("\${spring.img.password}")
     private val password: String? = "",
-): ImageService {
+
+) : ImageService {
 
     private final val tokenRequest = TokenRequest()
     val restTemplate = RestTemplate()
@@ -164,12 +165,4 @@ class ImageServiceImpl(
 
         restTemplate.exchange(url, HttpMethod.DELETE, requestHttpEntity, String::class.java)
     }
-
-//    companion object {
-//        @JvmStatic
-//        fun main(args: Array<String>) {
-//            val imageService = ImageServiceImpl()
-//            imageService.requestToken()
-//        }
-//    }
 }

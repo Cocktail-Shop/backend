@@ -17,9 +17,10 @@ data class SearchCocktailInfoDTO(
     val cocktailId: Long,
     val cocktailName: String,
     val cocktailImgUrl: String
-){
-    companion object{
-        fun fromCocktail(cocktail: Cocktail) : SearchCocktailInfoDTO{
+) {
+
+    companion object {
+        fun fromCocktail(cocktail: Cocktail): SearchCocktailInfoDTO {
             return SearchCocktailInfoDTO(
                 cocktailId = cocktail.cocktailId,
                 cocktailName = cocktail.cocktailName,
@@ -28,6 +29,3 @@ data class SearchCocktailInfoDTO(
         }
     }
 }
-
-
-

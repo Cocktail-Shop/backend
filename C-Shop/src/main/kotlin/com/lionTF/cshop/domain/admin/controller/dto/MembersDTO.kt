@@ -4,18 +4,18 @@ import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import java.time.LocalDateTime
 
-data class ResponseSearchMembersResultDTO(
+data class MembersSearchDTO(
     val httpStatus: Int,
     val message: String,
     val keyword: String? = null,
-    val result: Page<FindMembersDTO>? = null
+    val result: Page<MembersDTO>? = null
 ) {
     companion object {
         fun memberToResponseMemberSearchPageDTO(
-            findMemberDTO: Page<FindMembersDTO>,
-            keyword: String?
-        ): ResponseSearchMembersResultDTO {
-            return ResponseSearchMembersResultDTO(
+            findMemberDTO: Page<MembersDTO>,
+            keyword: String? = ""
+        ): MembersSearchDTO {
+            return MembersSearchDTO(
                 HttpStatus.OK.value(),
                 "회원 조회를 성공했습니다.",
                 keyword,
@@ -26,7 +26,7 @@ data class ResponseSearchMembersResultDTO(
 
 }
 
-data class FindMembersDTO(
+data class MembersDTO(
     val memberId: Long,
     val id: String,
     val address: String,

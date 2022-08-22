@@ -16,13 +16,13 @@ import javax.transaction.Transactional
 
 @SpringBootTest
 @Transactional
-internal class AdminMemberServiceTest{
+internal class AdminMemberServiceTest {
 
     @Autowired
-    private lateinit var adminMemberService: AdminMemberService
+    private val adminMemberService: AdminMemberService? = null
 
     @Autowired
-    private lateinit var memberRepository: MemberRepository
+    private val memberRepository: MemberRepository? = null
 
     private var memberTest1: Member? = null
     private var memberTest2: Member? = null
@@ -30,29 +30,29 @@ internal class AdminMemberServiceTest{
 
     @BeforeEach
     fun init() {
-        var member1 = Member(
+        val member1 = Member(
             memberName = "test1",
             address = "address-test1",
             phoneNumber = "phone-test1",
             id = "id-test1"
         )
-        memberTest1 = memberRepository.save(member1)
+        memberTest1 = memberRepository?.save(member1)
 
-        var member2 = Member(
+        val member2 = Member(
             memberName = "test2",
             address = "address-test2",
             phoneNumber = "phone-test2",
             id = "id-test2"
         )
-        memberTest2 = memberRepository.save(member2)
+        memberTest2 = memberRepository?.save(member2)
 
-        var member3 = Member(
+        val member3 = Member(
             memberName = "test3",
             address = "address-test3",
             phoneNumber = "phone-test3",
             id = "id-test3"
         )
-        memberTest3 = memberRepository.save(member3)
+        memberTest3 = memberRepository?.save(member3)
     }
 
 
@@ -60,120 +60,71 @@ internal class AdminMemberServiceTest{
     @DisplayName("한명의 회원 삭제 test")
     fun deleteOneMemberTest() {
         //given
-        val memberId: Long = memberTest1!!.memberId
+        val memberId: Long? = memberTest1?.memberId
 
         //when
-        val deleteOneMember = adminMemberService.deleteOneMember(memberId)
+        val deleteOneMember = memberId?.let { adminMemberService?.deleteOneMember(it) }
 
         //then
-        assertThat(deleteOneMember.httpStatus).isEqualTo(AdminResponseDTO.toSuccessDeleteMemberResponseDTO().httpStatus)
-        assertThat(deleteOneMember.message).isEqualTo(AdminResponseDTO.toSuccessDeleteMemberResponseDTO().message)
-        assertThat(memberTest1!!.memberStatus).isEqualTo(false)
-        println("deleteOneMember = ${deleteOneMember.message}")
+        assertThat(deleteOneMember?.httpStatus).isEqualTo(AdminResponseDTO.toSuccessDeleteMemberResponseDTO().httpStatus)
+        assertThat(deleteOneMember?.message).isEqualTo(AdminResponseDTO.toSuccessDeleteMemberResponseDTO().message)
+        assertThat(memberTest1?.memberStatus).isEqualTo(false)
+        println("deleteOneMember = ${deleteOneMember?.message}")
     }
 
     @Test
     @DisplayName("한명의 회원 삭제 예외 test")
     fun deleteOneMemberExceptionTest() {
         //given
-        val memberId: Long = 98L
+        val memberId = 98L
 
         //when
-        val deleteOneMember = adminMemberService.deleteOneMember(memberId)
+        val deleteOneMember = adminMemberService?.deleteOneMember(memberId)
 
         //then
-        assertThat(deleteOneMember.httpStatus).isEqualTo(AdminResponseDTO.toFailDeleteMemberResponseDTO().httpStatus)
-        assertThat(deleteOneMember.message).isEqualTo(AdminResponseDTO.toFailDeleteMemberResponseDTO().message)
-        assertThat(memberTest1!!.memberStatus).isEqualTo(true)
-        println("deleteOneMember = ${deleteOneMember.message}")
+        assertThat(deleteOneMember?.httpStatus).isEqualTo(AdminResponseDTO.toFailDeleteMemberResponseDTO().httpStatus)
+        assertThat(deleteOneMember?.message).isEqualTo(AdminResponseDTO.toFailDeleteMemberResponseDTO().message)
+        assertThat(memberTest1?.memberStatus).isEqualTo(true)
+        println("deleteOneMember = ${deleteOneMember?.message}")
     }
 
-    private fun generatePageable(page: Int, pageSize: Int): PageRequest = PageRequest.of(page, pageSize)
-
+    private fun generatePageable(page: Int = 0, pageSize: Int = 2): PageRequest = PageRequest.of(page, pageSize)
 
 
     @Test
     @DisplayName("회원 전체 조회 test")
     fun getAllMembersTest() {
         //given
-        val page = 0
-        val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize)
+        val pageable = generatePageable()
 
         //when
-        val allMembers = adminMemberService.getAllMembers(pageable)
+        val allMembers = adminMemberService?.getAllMembers(pageable)
 
-        val countMember = memberRepository.count()
+        val countMember = memberRepository?.count()
 
         //then
-        assertThat(allMembers.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(allMembers.message).isEqualTo("회원 조회를 성공했습니다.")
-        assertThat(allMembers.keyword).isEqualTo("")
-        assertThat(allMembers.result!!.totalElements).isEqualTo(countMember)
-        assertThat(allMembers.result!!.totalPages).isEqualTo(2)
+        assertThat(allMembers?.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(allMembers?.message).isEqualTo("회원 조회를 성공했습니다.")
+        assertThat(allMembers?.keyword).isEqualTo("")
+        assertThat(allMembers?.result?.totalElements).isEqualTo(countMember)
+        assertThat(allMembers?.result?.totalPages).isEqualTo(2)
     }
 
     @Test
     @DisplayName("회원 ID로 회원 검색 test")
     fun findMembers() {
         //given
-        val page = 0
-        val pageSize = 2
-        val pageable = generatePageable(page = page, pageSize = pageSize)
-        val keyword: String = "test"
+        val pageable = generatePageable()
+        val keyword = "test"
 
         //when
-        val findMembers = adminMemberService.findMembers(keyword, pageable)
+        val findMembers = adminMemberService?.findMembers(keyword, pageable)
 
         //then
-        assertThat(findMembers.httpStatus).isEqualTo(HttpStatus.OK.value())
-        assertThat(findMembers.message).isEqualTo("회원 조회를 성공했습니다.")
-        assertThat(findMembers.keyword).isEqualTo(keyword)
-        assertThat(findMembers.result!!.totalElements).isEqualTo(4)
-        assertThat(findMembers.result!!.totalPages).isEqualTo(2)
+        assertThat(findMembers?.httpStatus).isEqualTo(HttpStatus.OK.value())
+        assertThat(findMembers?.message).isEqualTo("회원 조회를 성공했습니다.")
+        assertThat(findMembers?.keyword).isEqualTo(keyword)
+        assertThat(findMembers?.result?.totalElements).isEqualTo(4)
+        assertThat(findMembers?.result?.totalPages).isEqualTo(2)
     }
-
-
-
-//    @Test
-//    @DisplayName("회원 삭제 test")
-//    fun memberDeleteTest() {
-//        //given
-//        var memberIds: MutableList<Long> = mutableListOf()
-//
-//        memberTest1?.let { memberIds.add(it.memberId) }
-//
-//        var deleteMembersDTO = DeleteMembersDTO(
-//            memberIds
-//        )
-//
-//        //when
-//        val deleteMembers = adminMemberService.deleteMembers(deleteMembersDTO)
-//
-//        //then
-//        assertThat(deleteMembers.status).isEqualTo(setDeleteSuccessMembersResultDTO().status)
-//        assertThat(deleteMembers.message).isEqualTo(setDeleteSuccessMembersResultDTO().message)
-//        assertThat(memberTest1?.memberStatus).isEqualTo(false)
-//    }
-//
-//    @Test
-//    @DisplayName("존재하지 않는 회원 삭제시 예외 test")
-//    fun memberDeleteExceptionTest() {
-//        //given
-//        var memberIds: MutableList<Long> = mutableListOf()
-//
-//        memberIds.add(10L)
-//
-//        var deleteMembersDTO = DeleteMembersDTO(
-//            memberIds
-//        )
-//
-//        //when
-//        val deleteMembers = adminMemberService.deleteMembers(deleteMembersDTO)
-//
-//        //then
-//        assertThat(deleteMembers.status).isEqualTo(setDeleteFailMembersResultDTO().status)
-//        assertThat(deleteMembers.message).isEqualTo(setDeleteFailMembersResultDTO().message)
-//        assertThat(memberTest1?.memberStatus).isEqualTo(true)
-//    }
 }

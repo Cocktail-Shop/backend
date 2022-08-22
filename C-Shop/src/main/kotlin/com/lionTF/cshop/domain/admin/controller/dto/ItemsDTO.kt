@@ -5,28 +5,28 @@ import org.springframework.data.domain.Page
 import org.springframework.http.HttpStatus
 import java.time.LocalDateTime
 
-data class ResponseSearchItemSearchDTO(
+data class ItemsSearchDTO(
     val httpStatus: Int,
     val message: String,
-    val keyword: String? = null,
-    val result: Page<FindItemDTO>? = null,
+    val itemName: String? = null,
+    val result: Page<ItemsDTO>? = null,
 ) {
     companion object {
         fun itemToResponseItemSearchPageDTO(
-            findItemDTO: Page<FindItemDTO>,
-            keyword: String?
-        ): ResponseSearchItemSearchDTO {
-            return ResponseSearchItemSearchDTO(
+            findItemDTO: Page<ItemsDTO>,
+            itemName: String? = ""
+        ): ItemsSearchDTO {
+            return ItemsSearchDTO(
                 HttpStatus.OK.value(),
                 "상품 조회를 성공했습니다.",
-                keyword,
+                itemName,
                 findItemDTO
             )
         }
     }
 }
 
-data class FindItemDTO(
+data class ItemsDTO(
     val itemId: Long,
     val itemName: String,
     val price: Int,
