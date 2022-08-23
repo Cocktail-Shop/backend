@@ -26,8 +26,10 @@
                         <div>
                             <div>상품 종류</div>
                                 <div th:each="type : ${category}" class="form-check form-check-inline" style="float: left; width: 33%;">
+                                    <div th:unless="${type.name().equals('COCKTAIL')}">
                                     <input type="radio" th:field="*{category}" th:value="${type.name()}" class="form-check-input">
-                                    <label th:for="${#ids.prev('category')}" th:text="${type.description}" class="form-check-label">
+                                    <label th:for="${#ids.prev('category')}" th:text="${type.description}" class="form-check-label"></label>
+                                    </div>
                                     </label>
                                 </div>
                             <br>
@@ -36,7 +38,7 @@
 
                         <div class="form-group">
                             <label th:for="itemName">상품명</label>
-                            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력하세요"> </div>
+                            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력하세요(최대 255자)" maxlength="255"> </div>
                         <div class="form-group">
 
                         <div class="form-group">
@@ -46,17 +48,17 @@
 
                             <div class="form-group">
                             <label th:for="price">가격</label>
-                            <input type="number" th:field="*{price}" class="form-control" placeholder="상품의 가격을 입력하세요">
+                            <input type="number" th:field="*{price}" class="form-control" min="0" placeholder="상품의 가격을 입력하세요">
                         </div>
                         <div class="form-group">
                             <label th:for="amount">수량</label>
-                            <input type="number" th:field="*{amount}" class="form-control" placeholder="상품의 수량을 입력하세요"> </div>
+                            <input type="number" th:field="*{amount}" class="form-control"  min="0" placeholder="상품의 수량을 입력하세요"> </div>
                         <div class="form-group">
                             <label th:for="degree">도수</label>
-                            <input type="number" th:field="*{degree}" class="form-control" placeholder="상품의 도수를 입력하세요"> </div>
+                            <input type="number" th:field="*{degree}" class="form-control" min="0" placeholder="상품의 도수를 입력하세요"> </div>
                         <div class="form-group">
                             <label th:for="itemDescription">상품 설명</label>
-                            <input type="text" th:field="*{itemDescription}" class="form-control" placeholder="상품에 대한 설명을 입력해주세요."> </div>
+                            <input type="text" th:field="*{itemDescription}" class="form-control" placeholder="상품에 대한 설명을 입력해주세요.(최대 255자)" maxlength="255"> </div>
                         <button type="submit" class="btn btn-primary">상품 등록</button>
                     </form>
                 </div>
@@ -64,29 +66,8 @@
         </div>
     </div>
 
-<!--
-Essential Scripts
-=====================================-->
-
-<!-- Main jQuery -->
-<script src="plugins/jquery/dist/jquery.min.js"></script>
-<!-- Bootstrap 3.1 -->
-<script src="plugins/bootstrap/js/bootstrap.min.js"></script>
-<!-- Bootstrap Touchpin -->
-<script src="plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
-<!-- Instagram Feed Js -->
-<script src="plugins/instafeed/instafeed.min.js"></script>
-<!-- Video Lightbox Plugin -->
-<script src="plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
-<!-- Count Down Js -->
-<script src="plugins/syo-timer/build/jquery.syotimer.min.js"></script>
-
-<!-- slick Carousel -->
-<script src="plugins/slick/slick.min.js"></script>
-<script src="plugins/slick/slick-animation.min.js"></script>
-
-<!-- Main Js File -->
-<script src="js/script.js"></script>
+<th:block th:replace="~{global/scriptData:: scriptData}">
+</th:block>
 
 </body>
 </html>
