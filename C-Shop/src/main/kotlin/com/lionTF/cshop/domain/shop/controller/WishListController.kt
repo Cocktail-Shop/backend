@@ -19,22 +19,22 @@ class WishListController(
 
     @GetMapping("wish-list")
     fun getWishList(
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         @PageableDefault(size = 4) pageable: Pageable,
         model: Model
     ): String {
-        val memberId = authMemberDTO?.memberId
+        val memberId = authMemberDTO.memberId
         model.addAttribute("wishList", wishListService.getWishList(memberId, pageable))
         return "shop/wishList"
     }
 
     @PostMapping("wish-list/{itemId}")
     fun createWishList(
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         @PathVariable("itemId") itemId: Long,
         model: Model
     ): String {
-        val memberId = authMemberDTO?.memberId
+        val memberId = authMemberDTO.memberId
 
         model.addAttribute("result", wishListService.createWishList(memberId, itemId))
         return "global/message"
@@ -42,11 +42,11 @@ class WishListController(
 
     @DeleteMapping("wish-list/{wishListId}")
     fun deleteWishList(
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         @PathVariable("wishListId") wishListId: Long,
         model: Model
     ): String {
-        val memberId = authMemberDTO?.memberId
+        val memberId = authMemberDTO.memberId
 
         model.addAttribute("result", wishListService.deleteWishList(memberId, wishListId))
         return "global/message"

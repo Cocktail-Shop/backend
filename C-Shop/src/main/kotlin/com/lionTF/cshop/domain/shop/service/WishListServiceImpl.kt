@@ -20,7 +20,7 @@ class WishListServiceImpl(
 ) : WishListService {
 
     @Transactional
-    override fun createWishList(memberId: Long?, itemId: Long): AdminResponseDTO {
+    override fun createWishList(memberId: Long, itemId: Long): AdminResponseDTO {
         val item = adminItemRepository.findItem(itemId, true)
 
         return if (item == null) {
@@ -32,12 +32,12 @@ class WishListServiceImpl(
         }
     }
 
-    override fun getWishList(memberId: Long?, pageable: Pageable): Page<WishListDTO> {
+    override fun getWishList(memberId: Long, pageable: Pageable): Page<WishListDTO> {
         return wishListRepository.findWishListByMemberId(true, memberId, pageable)
     }
 
     @Transactional
-    override fun deleteWishList(memberId: Long?, wishListId: Long): AdminResponseDTO {
+    override fun deleteWishList(memberId: Long, wishListId: Long): AdminResponseDTO {
         val isWishList = wishListRepository.existsById(wishListId)
 
         return if (isWishList) {
