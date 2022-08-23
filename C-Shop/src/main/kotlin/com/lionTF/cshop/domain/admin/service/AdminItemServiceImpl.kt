@@ -4,6 +4,7 @@ import com.lionTF.cshop.domain.admin.controller.dto.*
 import com.lionTF.cshop.domain.admin.models.Item
 import com.lionTF.cshop.domain.admin.repository.AdminItemRepository
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminItemService
+import com.lionTF.cshop.domain.shop.repository.WishListRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -12,6 +13,7 @@ import javax.transaction.Transactional
 @Service
 class AdminItemServiceImpl(
     private val adminItemRepository: AdminItemRepository,
+    private val wishListRepository: WishListRepository,
 ) : AdminItemService {
 
     @Transactional
@@ -69,6 +71,8 @@ class AdminItemServiceImpl(
         } else {
             val item = adminItemRepository.getReferenceById(itemId)
             item.delete()
+
+            wishListRepository.deleteWishListByItemId(itemId)
 
             AdminResponseDTO.toSuccessDeleteItemResponseDTO()
         }
