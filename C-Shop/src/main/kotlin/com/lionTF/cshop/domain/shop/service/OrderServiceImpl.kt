@@ -1,6 +1,5 @@
 package com.lionTF.cshop.domain.shop.service
 
-import com.lionTF.cshop.domain.admin.controller.dto.AdminResponseDTO
 import com.lionTF.cshop.domain.admin.controller.dto.OrdersSearchDTO
 import com.lionTF.cshop.domain.admin.repository.AdminOrderRepository
 import com.lionTF.cshop.domain.member.controller.dto.AddressDTO
@@ -27,8 +26,12 @@ class OrderServiceImpl(
     private val orderItemRepository: OrderItemRepository
 ) : OrderService {
     @Transactional
-    override fun requestOrder(requestOrderDTO: RequestOrderDTO): RequestOrderResultDTO {
+    override fun requestOrder(requestOrderDTO: RequestOrderDTO): Any {
         var zeroAmountCount = 0
+
+        if (!itemRepository.getReferenceById(requestOrderDTO.orderItems[0].itemId).itemStatus) {
+            return CartResponseDTO.setRequestOrderNotExistedItemResultDTO()
+        }
 
         requestOrderDTO.orderItems.map {
             val requestAmount = it.amount
@@ -84,7 +87,6 @@ class OrderServiceImpl(
     override fun getShopOrders(memberId: Long, pageable: Pageable): OrdersSearchDTO {
         val findOrdersInfo = adminOrderRepository.findOrdersInfoByMemberId(memberId, pageable)
 
-        
         return OrdersSearchDTO.toFormDTO(findOrdersInfo, "")
     }
 

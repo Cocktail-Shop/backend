@@ -4,6 +4,7 @@ import com.lionTF.cshop.domain.admin.service.admininterface.AdminOrderService
 import com.lionTF.cshop.domain.member.controller.dto.AuthMemberDTO
 import com.lionTF.cshop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.cshop.domain.shop.controller.dto.RequestOrderInfoDTO
+import com.lionTF.cshop.domain.shop.repository.ItemRepository
 import com.lionTF.cshop.domain.shop.service.shopinterface.CartItemService
 import com.lionTF.cshop.domain.shop.service.shopinterface.OrderService
 import org.springframework.data.domain.Pageable
@@ -16,8 +17,7 @@ import org.springframework.web.bind.annotation.*
 @Controller
 class OrderController(
     private val cartItemService: CartItemService,
-    private val orderService: OrderService,
-    private val adminOrderService: AdminOrderService,
+    private val orderService: OrderService
 ) {
 
     @PostMapping("/orders")
