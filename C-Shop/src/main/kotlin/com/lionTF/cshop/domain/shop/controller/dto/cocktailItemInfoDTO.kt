@@ -7,6 +7,7 @@ data class CocktailItemInfoDTO(
     val itemName: String,
     val price: Int,
     val amount: Int,
+    val status: Boolean,
 ) {
 
     companion object {
@@ -16,6 +17,7 @@ data class CocktailItemInfoDTO(
                 itemName = item.itemName,
                 price = item.price,
                 amount = item.amount,
+                status = item.itemStatus,
             )
         }
     }

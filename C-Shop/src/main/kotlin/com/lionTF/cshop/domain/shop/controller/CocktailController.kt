@@ -32,7 +32,7 @@ class CocktailController(
         val address = orderService.getAddress(authMemberDTO.memberId)
 
         val cocktailOrderInfoDTO = cocktail.result.cocktailItems.map {
-            RequestOrderItemDTO.fromCocktailItemDTO(it)
+            if (it.status) RequestOrderItemDTO.fromCocktailItemDTO(it)
         }
 
         val cocktailCartInfoDTO = cocktail.result.cocktailItems.map {
