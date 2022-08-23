@@ -5,6 +5,7 @@ import com.lionTF.cshop.domain.member.models.QMember.member
 import com.lionTF.cshop.domain.shop.controller.dto.FindCartDTO
 import com.lionTF.cshop.domain.shop.models.QCart.cart
 import com.lionTF.cshop.domain.shop.models.QCartItem.cartItem
+import com.querydsl.core.BooleanBuilder
 import com.querydsl.core.types.Projections
 import com.querydsl.jpa.impl.JPAQuery
 import com.querydsl.jpa.impl.JPAQueryFactory
@@ -18,21 +19,24 @@ class CartRepositoryImpl(
 
 ) : CartRepositoryCustom {
 
-    override fun findCartInfo(pageable: Pageable): Page<FindCartDTO> {
+    override fun findCartInfo(memberId: Long, pageable: Pageable): Page<FindCartDTO> {
+        val booleanBuilder = booleanBuilderId(memberId)
 
-        val content: List<FindCartDTO> = contentInquire(pageable)
-        val countQuery: JPAQuery<FindCartDTO> = countInquire()
+        val content: List<FindCartDTO> = contentInquire(pageable, booleanBuilder)
+        val countQuery: JPAQuery<FindCartDTO> = countInquire(booleanBuilder)
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
     // 데이터 내용을 조회하는 함수입니다.
     private fun contentInquire(
-        pageable: Pageable
+        pageable: Pageable,
+        booleanBuilder: BooleanBuilder? = null
     ): List<FindCartDTO> {
         return queryFactory!!
             .select(
                 Projections.constructor(
                     FindCartDTO::class.java,
+                    cartItem.cartItemId,
                     cart.cartId,
                     item.itemId,
                     item.itemName,
@@ -49,6 +53,7 @@ class CartRepositoryImpl(
             .limit(pageable.pageSize.toLong())
             .where(
                 isEqualMemberId(),
+                booleanBuilder,
                 isExistedMember()
             )
             .fetch()
@@ -56,11 +61,13 @@ class CartRepositoryImpl(
 
     // 카운트를 별도로 조회하는 함수입니다.
     private fun countInquire(
+        booleanBuilder: BooleanBuilder? = null
     ): JPAQuery<FindCartDTO> {
         return queryFactory!!
             .select(
                 Projections.constructor(
                     FindCartDTO::class.java,
+                    cartItem.cartItemId,
                     cart.cartId,
                     item.itemId,
                     item.itemName,
@@ -75,9 +82,14 @@ class CartRepositoryImpl(
             .leftJoin(cartItem).on(isEqualCartId()).fetchJoin()
             .leftJoin(item).on(isEqualItemId()).fetchJoin()
             .where(
+                booleanBuilder,
                 isEqualMemberId(),
                 isExistedMember()
             )
+    }
+
+    private fun booleanBuilderId(memberId: Long): BooleanBuilder? {
+        return BooleanBuilder().or(member.memberId.eq(memberId))
     }
 
     private fun isEqualCartId() = cart.cartId.eq(cartItem.cart.cartId)

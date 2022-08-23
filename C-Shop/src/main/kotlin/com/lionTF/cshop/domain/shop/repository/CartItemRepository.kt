@@ -11,10 +11,6 @@ interface CartItemRepository : JpaRepository<CartItem, Long> {
 
     @Modifying
     @Transactional
-    @Query("delete from CartItem ci where ci.cartItemId = :cartItemId and ci.cart.cartId = :cartId and ci.item.itemId = :itemId")
-    fun deleteCartItem(
-        @Param("cartItemId") cartItemId: Long,
-        @Param("cartId") cartId: Long,
-        @Param("itemId") itemId: Long
-    )
+    @Query("delete from CartItem ci where ci.cartItemId = :cartItemId")
+    fun deleteCartItem(@Param("cartItemId") cartItemId: Long)
 }

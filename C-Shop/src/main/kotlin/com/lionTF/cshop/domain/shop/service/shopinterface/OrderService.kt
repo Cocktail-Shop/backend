@@ -12,5 +12,5 @@ interface OrderService {
 
     fun getAddress(memberId: Long) : AddressDTO
 
-    fun getShopOrders(pageable: Pageable): OrdersSearchDTO
+    fun getShopOrders(memberId: Long, pageable: Pageable): OrdersSearchDTO
 }

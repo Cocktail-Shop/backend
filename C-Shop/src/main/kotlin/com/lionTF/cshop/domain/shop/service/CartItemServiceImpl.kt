@@ -77,24 +77,14 @@ class CartItemServiceImpl(
     }
 
     @Transactional
-    override fun deleteCartItem(deleteCartItemDTO: DeleteCartItemDTO): CartResponseDTO {
-        val cartId = deleteCartItemDTO.memberId?.let {
-            cartRepository.getCartId(it)
-        }
-
-        deleteCartItemDTO.itemIds.map { deleteItemId ->
-            if (cartId != null) {
-                cartItemRepository.deleteCartItem(deleteCartItemDTO.cartItemId, cartId, deleteItemId)
-            } else {
-                return CartResponseDTO.toFailFindCartIdResponseDTO()
-            }
-        }
+    override fun deleteCartItem(cartItemId: Long): CartResponseDTO {
+        cartItemRepository.deleteCartItem(cartItemId)
 
         return CartResponseDTO.toSuccessDeleteItemResponseDTO()
     }
 
-    override fun getCart(pageable: Pageable): ResponseSearchCartResultDTO {
-        val findCart = cartRepository.findCartInfo(pageable)
+    override fun getCart(memberId: Long, pageable: Pageable): ResponseSearchCartResultDTO {
+        val findCart = cartRepository.findCartInfo(memberId, pageable)
 
         return ResponseSearchCartResultDTO.cartToResponseCartSearchPageDTO(findCart)
     }

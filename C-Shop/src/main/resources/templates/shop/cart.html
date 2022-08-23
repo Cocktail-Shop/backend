@@ -18,7 +18,7 @@
                     <div class="table-responsive">
                       <table class="table">
                         <tr>
-                          <th> </th>
+                          <!--<th> </th>-->
                           <th>상품 이미지</th>
                           <th>상품명</th>
                           <th>가격</th>
@@ -27,36 +27,33 @@
                           <th>장바구니 삭제</th>
                         </tr>
                         <tr th:each="cart : ${carts.result.content}">
-                          <td>
+                          <!--<td>
                             <input type="checkbox">
-                          </td>
+                          </td>-->
+                          <form  method="post" th:action="@{/orders/cart/items}" th:object="${requestOrderInfoDTO}">
                           <td>
                             <img th:src="${cart.itemImgUrl}" style="width: 3vw; height: 7vw">
                           </td>
                           <td th:text="${cart.itemName}"></td>
+                          <input type="hidden" th:value="${cart.itemId}" th:field="${requestOrderInfoDTO.orderItems[0].itemId}">
+                          <input type="hidden" th:value="${cart.price}" th:field="${requestOrderInfoDTO.orderItems[0].price}">
                           <td th:text="${cart.price}"></td>
                           <td th:text="${cart.amount}"></td>
-                          <td><a href="#"
-                                 th:href="@{/items/{itemId} (itemId=${cart.itemId})}"
-                                 class="btn btn-default btn-asd">바로가기</a></td>
+                          <input type="hidden" th:value="${cart.amount}" th:field="${requestOrderInfoDTO.orderItems[0].amount}">
+                          <td>
+                            <input type="submit" class="btn btn-main mt-20" value="주문">
+                          </td>
+                          </form>
                           <td>
                             <form th:method="delete"
-                                  th:action="@{/cart/items}">
-                              <button type="submit" class="btn btn-default btn-asd">삭제
+                                  th:action="@{/cart/items/{cartItemId} (cartItemId=${cart.cartItemId})}">
+                              <button type="submit" class="btn btn-main mt-20">삭제
                               </button>
                             </form>
                           </td>
                         </tr>
                       </table>
                     </div>
-                    <form method="delete" th:action="@{/cart/items}" th:object="${deleteCartItemRequestDTO}">
-                      <input type="hidden" th:value="${carts.result.itemId}" th:field="*{deleteCartItemRequestDTO.itemIds}">
-                      <input type="hidden"  id="amount2" class="form-control signin-input"  value="0" th:field="*{amount}" >
-                      <input type="submit" class="btn btn-main mt-20" value="장바구니 추가">
-                    </form>
-                    <form method="post" th:action="@{/wish-list/{itemId} (itemId=${item.result.itemId})}" th:object="${addCartItemRequestDTO}">
-                      <input type="submit" class="btn btn-main mt-20" value="찜하기">
-                    </form>
                     <div th:if="${cart}">
                       <!-- 전역 변수 선언 -->
                       <nav th:with=" pageNumber = ${cart.pageable.pageNumber},

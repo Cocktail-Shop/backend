@@ -24,13 +24,7 @@ class OrderController(
         requestOrderInfoDTO: RequestOrderInfoDTO,
         model: Model
     ): String {
-
-        val requestOrderDTO = RequestOrderDTO(
-            authMemberDTO?.memberId,
-            requestOrderInfoDTO.orderItems,
-            requestOrderInfoDTO.address,
-            requestOrderInfoDTO.addressDetail
-        )
+        val requestOrderDTO = RequestOrderDTO.toRequestOrderDTO(authMemberDTO?.memberId, requestOrderInfoDTO)
         model.addAttribute("result", orderService.requestOrder(requestOrderDTO))
         return "global/message"
     }
@@ -45,17 +39,10 @@ class OrderController(
     @PostMapping("/orders/cart/items")
     fun createCartOrder(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
-        @ModelAttribute("requestOrderInfoDTO") requestOrderInfoDTO: RequestOrderInfoDTO,
+        requestOrderInfoDTO: RequestOrderInfoDTO,
         model: Model
     ): String {
-
-        // TODO 정적 팩토리 패턴으로 리펙토링 예정
-        val requestCartOrderDTO = RequestOrderDTO(
-            authMemberDTO?.memberId,
-            requestOrderInfoDTO.orderItems,
-            requestOrderInfoDTO.address,
-            requestOrderInfoDTO.addressDetail
-        )
+        val requestCartOrderDTO = RequestOrderDTO.toRequestOrderDTO(authMemberDTO?.memberId, requestOrderInfoDTO)
         model.addAttribute("result", orderService.requestOrder(requestCartOrderDTO))
         return "global/message"
     }
@@ -68,7 +55,7 @@ class OrderController(
 
     @GetMapping("/orders")
     fun getOrders(@AuthenticationPrincipal authMemberDTO: AuthMemberDTO?, pageable: Pageable, model: Model): String {
-        model.addAttribute("orders", orderService.getShopOrders(pageable))
+        model.addAttribute("orders", authMemberDTO?.memberId?.let { orderService.getShopOrders(it, pageable) } )
         return "shop/orderList"
     }
 }

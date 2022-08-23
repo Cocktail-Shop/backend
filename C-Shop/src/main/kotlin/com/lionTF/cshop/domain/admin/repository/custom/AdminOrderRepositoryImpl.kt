@@ -27,8 +27,17 @@ class AdminOrderRepositoryImpl(
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
     }
 
-    override fun findOrdersInfoByMemberId(keyword: String, pageable: Pageable): Page<OrdersDTO> {
+    override fun findOrdersInfoByKeyword(keyword: String, pageable: Pageable): Page<OrdersDTO> {
         val booleanBuilder = booleanBuilder(keyword)
+
+        val content: List<OrdersDTO> = contentInquire(pageable, booleanBuilder)
+        val countQuery: JPAQuery<OrdersDTO> = countInquire(booleanBuilder)
+
+        return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchCount)
+    }
+
+    override fun findOrdersInfoByMemberId(memberId: Long, pageable: Pageable): Page<OrdersDTO> {
+        val booleanBuilder = booleanBuilderId(memberId)
 
         val content: List<OrdersDTO> = contentInquire(pageable, booleanBuilder)
         val countQuery: JPAQuery<OrdersDTO> = countInquire(booleanBuilder)
@@ -110,6 +119,10 @@ class AdminOrderRepositoryImpl(
 
     private fun booleanBuilder(keyword: String): BooleanBuilder? {
         return BooleanBuilder().or(member.id.contains(keyword)).or(item.itemName.contains(keyword))
+    }
+
+    private fun booleanBuilderId(memberId: Long): BooleanBuilder? {
+        return BooleanBuilder().or(member.memberId.eq(memberId))
     }
 
     private fun isEqualOrderId() = orders.orderId.eq(orderItem.orders.orderId)

@@ -6,5 +6,5 @@ import org.springframework.data.domain.Pageable
 
 interface CartRepositoryCustom {
 
-    fun findCartInfo(pageable: Pageable): Page<FindCartDTO>
+    fun findCartInfo(memberId: Long, pageable: Pageable): Page<FindCartDTO>
 }

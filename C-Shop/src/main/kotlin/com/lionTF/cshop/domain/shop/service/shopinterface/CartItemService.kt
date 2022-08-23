@@ -10,7 +10,7 @@ interface CartItemService {
 
     fun addCartCocktailItem(addCartCocktailItemDTO: AddCartCocktailItemDTO): AddCartCocktailItemResultDTO
 
-    fun deleteCartItem(deleteCartItemDTO: DeleteCartItemDTO): CartResponseDTO
+    fun deleteCartItem(cartItemId: Long): CartResponseDTO
 
-    fun getCart(pageable: Pageable): ResponseSearchCartResultDTO
+    fun getCart(memberId: Long, pageable: Pageable): ResponseSearchCartResultDTO
 }

@@ -78,9 +78,8 @@ class OrderServiceImpl(
         return AddressDTO.fromMember(memberRepository.getReferenceById(memberId))
     }
 
-    // 주문 조회
-    override fun getShopOrders(pageable: Pageable): OrdersSearchDTO {
-        val findOrdersInfo = adminOrderRepository.findOrdersInfo(pageable)
+    override fun getShopOrders(memberId: Long, pageable: Pageable): OrdersSearchDTO {
+        val findOrdersInfo = adminOrderRepository.findOrdersInfoByMemberId(memberId, pageable)
 
         return OrdersSearchDTO.toFormDTO(findOrdersInfo, "")
     }
