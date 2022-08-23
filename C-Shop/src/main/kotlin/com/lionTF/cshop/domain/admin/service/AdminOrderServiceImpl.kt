@@ -58,7 +58,7 @@ class AdminOrderServiceImpl(
     }
 
     override fun getOrdersByMemberId(keyword: String, pageable: Pageable): OrdersSearchDTO {
-        val orders = adminOrderRepository.findOrdersInfoByMemberId(keyword, pageable)
+        val orders = adminOrderRepository.findOrdersInfoByKeyword(keyword, pageable)
 
         return OrdersSearchDTO.orderToResponseOrderSearchPageDTO(orders, keyword)
     }
