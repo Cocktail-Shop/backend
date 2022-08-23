@@ -29,7 +29,7 @@
                                 <input type="text" class="form-control signin-input" id="addr" th:field="*{address}" readonly>
                                 <input type="button" onclick="searchAddr()" class="btn btn-small btn-xsmall btn-round text-center ml-10 btn-login-page" value="주소검색">
                             </div>
-                            <input type="text" class="form-control signin-input mt-10" id="sub-addr" th:field="*{detailAddress}">
+                            <input type="text" class="form-control signin-input mt-10" id="sub-addr" th:field="*{detailAddress}" maxlength="120">
                         </div>
                         <ul class="list-inline login-oneline-group">
                             <li><button type="submit" class="btn btn-main text-center btn-round btn-mypage-change btn-subcolor">입력 완료</button></li>
