@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class ItemServiceImpl (
+class ItemServiceImpl(
     private val itemRepository: ItemRepository,
-) : ItemService{
+) : ItemService {
 
     override fun findByItemId(itemId: Long): ItemResultDTO {
-        val item =ItemDTO.fromItem(itemRepository.getReferenceById(itemId))
+        val item = ItemDTO.fromItem(itemRepository.getReferenceById(itemId))
         return ItemResultDTO.setItemResultDTO(item)
     }
 }

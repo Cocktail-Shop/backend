@@ -19,10 +19,11 @@ class CartItemController(
     @PostMapping("/items/cart")
     fun addItemToCart(
         @ModelAttribute("addCartItemRequestDTO") addCartItemRequestDTO: AddCartItemRequestDTO,
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         model: Model
     ): String {
-        val addCartItemDTO = AddCartItemDTO(authMemberDTO?.memberId, addCartItemRequestDTO.itemId, addCartItemRequestDTO.amount)
+        val addCartItemDTO =
+            AddCartItemDTO(authMemberDTO.memberId, addCartItemRequestDTO.itemId, addCartItemRequestDTO.amount)
         model.addAttribute("result", cartItemService.addCartItem(addCartItemDTO))
 
         return "global/message"
@@ -31,14 +32,12 @@ class CartItemController(
     @PostMapping("/items/cocktails/cart")
     fun addCocktailItemToCart(
         @ModelAttribute("addCartCocktailItemDTO") addCartCocktailItemRequestDTO: AddCartCocktailItemRequestDTO,
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         model: Model
     ): String {
-        val addCartCocktailItemDTO = authMemberDTO?.memberId?.let {
-            AddCartCocktailItemDTO(it, addCartCocktailItemRequestDTO.items)
-        }
+        val addCartCocktailItemDTO = AddCartCocktailItemDTO(authMemberDTO.memberId, addCartCocktailItemRequestDTO.items)
 
-        model.addAttribute("result", addCartCocktailItemDTO?.let {
+        model.addAttribute("result", addCartCocktailItemDTO.let {
             cartItemService.addCartCocktailItem(it)
         })
 
@@ -47,7 +46,7 @@ class CartItemController(
 
     @DeleteMapping("/cart/items/{cartItemId}")
     fun deleteCartItem(
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         @PathVariable("cartItemId") cartItemId: Long,
         model: Model
     ): String {
@@ -57,24 +56,22 @@ class CartItemController(
 
     @GetMapping("/items/cart")
     fun getCartItem(
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         pageable: Pageable,
         model: Model
     ): String {
 
-        val address = authMemberDTO?.memberId?.let {
-            orderService.getAddress(it)
-        }
+        val address = orderService.getAddress(authMemberDTO.memberId)
 
-        val cart = authMemberDTO?.memberId?.let { cartItemService.getCart(it, pageable) }
+        val cart = cartItemService.getCart(authMemberDTO.memberId, pageable)
 
-        val cartInfoDTO = cart?.result?.content?.map {
+        val cartInfoDTO = cart.result?.content?.map {
             RequestOrderItemDTO.fromCartItemDTO(it)
         }
 
         val requestOrderInfoDTO = RequestOrderInfoDTO.toFormRequestCocktailOrderInfoDTO(
             cartInfoDTO as MutableList<RequestOrderItemDTO>,
-            address!!
+            address
         )
         model.addAttribute("carts", cart)
         model.addAttribute("requestOrderInfoDTO", requestOrderInfoDTO)

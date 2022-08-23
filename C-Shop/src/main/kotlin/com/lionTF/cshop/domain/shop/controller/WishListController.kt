@@ -21,8 +21,7 @@ class WishListController(
         @PageableDefault(size = 4) pageable: Pageable,
         model: Model
     ): String {
-        val memberId = authMemberDTO.memberId
-        model.addAttribute("wishList", wishListService.getWishList(memberId, pageable))
+        model.addAttribute("wishList", wishListService.getWishList(authMemberDTO.memberId, pageable))
         return "shop/wishList"
     }
 
@@ -32,9 +31,7 @@ class WishListController(
         @PathVariable("itemId") itemId: Long,
         model: Model
     ): String {
-        val memberId = authMemberDTO.memberId
-
-        model.addAttribute("result", wishListService.createWishList(memberId, itemId))
+        model.addAttribute("result", wishListService.createWishList(authMemberDTO.memberId, itemId))
         return "global/message"
     }
 
@@ -44,9 +41,7 @@ class WishListController(
         @PathVariable("wishListId") wishListId: Long,
         model: Model
     ): String {
-        val memberId = authMemberDTO.memberId
-
-        model.addAttribute("result", wishListService.deleteWishList(memberId, wishListId))
+        model.addAttribute("result", wishListService.deleteWishList(authMemberDTO.memberId, wishListId))
         return "global/message"
     }
 }

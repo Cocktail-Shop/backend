@@ -12,5 +12,4 @@ interface AdminOrderRepositoryCustom {
 
     fun findOrdersInfoByMemberId(memberId: Long, pageable: Pageable): Page<OrdersDTO>
 
-
 }

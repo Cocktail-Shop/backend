@@ -27,6 +27,7 @@ class OrderServiceImpl(
     @Transactional
     override fun requestOrder(requestOrderDTO: RequestOrderDTO): RequestOrderResultDTO {
         var zeroAmountCount = 0
+
         requestOrderDTO.orderItems.map {
             val requestAmount = it.amount
             val existAmount = itemRepository.getReferenceById(it.itemId).amount
@@ -44,7 +45,7 @@ class OrderServiceImpl(
 
         if (zeroAmountCount == requestOrderDTO.orderItems.size) return RequestOrderResultDTO.setRequestOrderAllZeroFailResultDTO()
 
-        val member = requestOrderDTO.memberId?.let { memberRepository.getReferenceById(it) }
+        val member = memberRepository.getReferenceById(requestOrderDTO.memberId)
 
         val orders = orderRepository.save(
             Orders.fromOrdersDTO(
@@ -57,7 +58,7 @@ class OrderServiceImpl(
             )
         )
 
-        for (info in requestOrderDTO.orderItems) {
+        requestOrderDTO.orderItems.map { info ->
             val item = itemRepository.getReferenceById(info.itemId)
             if (info.amount > 0) {
                 item.amount -= info.amount
