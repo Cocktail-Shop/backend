@@ -27,7 +27,7 @@ class AdminItemServiceImpl(
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO()
 
         } else {
-            adminItemRepository.save(Item.toEntity(requestCreateItemDTO, itemImgUrl))
+            adminItemRepository.save(Item.fromItemCreateRequestDTO(requestCreateItemDTO, itemImgUrl))
             AdminResponseDTO.toSuccessCreateItemResponseDTO()
         }
     }

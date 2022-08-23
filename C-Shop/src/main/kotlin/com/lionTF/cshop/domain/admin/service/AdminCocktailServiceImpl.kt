@@ -68,7 +68,7 @@ class AdminCocktailServiceImpl(
 
         } else {
             val cocktail = adminCocktailRepository.save(
-                Cocktail.toEntity(
+                Cocktail.fromCocktailCreateRequestDTO(
                     requestCreateCocktailDTO,
                     cocktailImgUrl
                 )
@@ -77,7 +77,7 @@ class AdminCocktailServiceImpl(
             requestCreateCocktailDTO.itemIds
                 .asSequence()
                 .map { adminItemRepository.getReferenceById(it) }
-                .mapTo(cocktailItemList) { CocktailItem.toEntity(it, cocktail) }
+                .mapTo(cocktailItemList) { CocktailItem.fromRequestItemAndCocktail(it, cocktail) }
             adminCocktailItemRepository.saveAll(cocktailItemList)
 
             AdminResponseDTO.toSuccessCreateCocktailResponseDTO()
@@ -132,7 +132,7 @@ class AdminCocktailServiceImpl(
 
             for (itemId in requestCreateCocktailDTO.itemIds) {
                 val item = adminItemRepository.getReferenceById(itemId)
-                val cocktailItem = CocktailItem.toEntity(item, cocktail)
+                val cocktailItem = CocktailItem.fromRequestItemAndCocktail(item, cocktail)
                 cocktailItemList.add(cocktailItem)
             }
             adminCocktailItemRepository.saveAll(cocktailItemList)
