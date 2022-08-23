@@ -22,6 +22,7 @@ data class ResponseSearchCartResultDTO(
 }
 
 data class FindCartDTO(
+    val cartItemId: Long,
     var cartId: Long,
     val itemId: Long,
     var itemName: String,

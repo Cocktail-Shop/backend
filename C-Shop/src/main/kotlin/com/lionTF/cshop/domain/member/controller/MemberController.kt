@@ -132,4 +132,10 @@ class MemberController(
         model.addAttribute("result", MemberResponseDTO.toMemberAccessDeniedResponseDTO())
         return "global/message"
     }
+
+    @GetMapping("/session-expire")
+    fun getSessionExpirePage(model:Model):String{
+        model.addAttribute("result",MemberResponseDTO.toSessionExpireResponseDTO())
+        return "global/message"
+    }
 }

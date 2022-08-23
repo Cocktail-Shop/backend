@@ -4,11 +4,22 @@ import com.lionTF.cshop.domain.member.controller.dto.AddressDTO
 import org.springframework.http.HttpStatus
 
 data class RequestOrderDTO(
-    val memberId: Long?,
+    val memberId: Long,
     var orderItems: List<RequestOrderItemDTO>,
     var address: String,
     var addressDetail: String,
-)
+) {
+    companion object {
+        fun toRequestOrderDTO(memberId: Long, requestOrderInfoDTO: RequestOrderInfoDTO): RequestOrderDTO {
+            return RequestOrderDTO(
+                memberId = memberId,
+                orderItems = requestOrderInfoDTO.orderItems,
+                address = requestOrderInfoDTO.address,
+                addressDetail = requestOrderInfoDTO.addressDetail
+            )
+        }
+    }
+}
 
 data class RequestOrderInfoDTO(
     var orderItems: MutableList<RequestOrderItemDTO> = mutableListOf(RequestOrderItemDTO(0, 0, 0, "")),
@@ -52,6 +63,15 @@ data class RequestOrderItemDTO(
                 amount = 0,
                 price = cocktailItemDTO.price,
                 itemName = cocktailItemDTO.itemName
+            )
+        }
+
+        fun fromCartItemDTO(findCartDTO: FindCartDTO): RequestOrderItemDTO {
+            return RequestOrderItemDTO(
+                itemId = findCartDTO.itemId,
+                amount = findCartDTO.amount,
+                price = findCartDTO.price,
+                itemName = findCartDTO.itemName
             )
         }
     }

@@ -10,11 +10,7 @@ data class CartResponseDTO(
 
     companion object {
         fun toSuccessDeleteItemResponseDTO(): CartResponseDTO {
-            return CartResponseDTO(HttpStatus.NO_CONTENT.value(), "상품이 정삭적으로 삭제되었습니다.", "/cart")
-        }
-
-        fun toFailFindCartIdResponseDTO(): CartResponseDTO {
-            return CartResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "회원의 장바구니가 존재하지 않습니다.", "/cart")
+            return CartResponseDTO(HttpStatus.NO_CONTENT.value(), "상품이 정삭적으로 삭제되었습니다.", "/items/cart")
         }
     }
 }

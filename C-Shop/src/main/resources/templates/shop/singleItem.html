@@ -41,20 +41,23 @@
                             <span>수량 선택:</span>
                             <input type="hidden" th:field="${requestOrderInfoDTO.orderItems[0].itemId}">
                             <input type="hidden" th:field="${requestOrderInfoDTO.orderItems[0].price}">
-                            <input id="product-quantity" type="number"  name="product-quantity"  onchange="eventKeyup(this.value)" th:field="${requestOrderInfoDTO.orderItems[0].amount}">
-                            <script>
+                            <input id="product-quantity" type="number" min="0" name="product-quantity"  onchange="eventKeyup(this.value)" th:field="${requestOrderInfoDTO.orderItems[0].amount}">
+                            <script th:inline="javascript">
+                                /*<![CDATA[*/
                                 function eventKeyup(str)
                                 {
                                     $("#amount2").val(str);    // jQuery 이용
+                                    const price = /*[[${item.result.price}]]*/
+                                    $("#total-price").val(str * price)
                                 }
+                                /*]]>*/
                             </script>
                         </div>
-<!--                        <div class="product-category">-->
-<!--                            <span>결재금액:</span>-->
-<!--                            계산해서 넣어야됨-->
-<!--                        </div>-->
                         <div class="product-category">
-                            <div><span>기본 주소:</span></div>
+                            <span>결재금액: <input type="text" disabled id="total-price"></span>
+                        </div>
+                        <div class="product-category">
+                            <div><h3>기본 주소:</h3></div>
                             <label>주소</label>
                             <input type="text" class="form-control signin-input" id="addr" th:field="${requestOrderInfoDTO.address}" readonly >
                             <label>상세주소</label>

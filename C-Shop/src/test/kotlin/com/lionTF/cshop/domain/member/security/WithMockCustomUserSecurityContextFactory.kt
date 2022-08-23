@@ -31,9 +31,9 @@ class WithMockCustomUserSecurityContextFactory : WithSecurityContextFactory<With
             memberName = "사용자",
             email = "cshop1234@naver.com",
             address = "서울시 동작구 상도동",
-            detailAddress = "XX빌딩 103호"
+            detailAddress = "XX빌딩 103호",
+            role = MemberRole.MEMBER
         )
-        member.role= MemberRole.MEMBER
         memberAuthRepository.save(member)
 
         val principal =AuthMemberDTO.fromMember(member)

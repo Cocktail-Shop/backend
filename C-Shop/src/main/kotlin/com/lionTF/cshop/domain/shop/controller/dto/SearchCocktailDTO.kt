@@ -2,17 +2,6 @@ package com.lionTF.cshop.domain.shop.controller.dto
 
 import com.lionTF.cshop.domain.admin.models.Cocktail
 
-data class SearchCocktailResultDTO(
-    val status: Int,
-    val message: String,
-    val result: SearchCocktailDTO
-)
-
-data class SearchCocktailDTO(
-    val keyword: String,
-    val data: List<SearchCocktailInfoDTO>
-)
-
 data class SearchCocktailInfoDTO(
     val cocktailId: Long,
     val cocktailName: String,

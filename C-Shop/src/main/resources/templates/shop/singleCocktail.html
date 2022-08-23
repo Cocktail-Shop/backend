@@ -46,7 +46,7 @@
                         <span></span>
 
                         <span>수량
-                        <input id="product-quantity" th:myIdx="${i.index}" type="number"  name="product-quantity"  th:onchange="eventKeyup(this.value,this.getAttribute('myIdx'))" th:field="*{orderItems[__${i.index}__].amount}">
+                        <input id="product-quantity" th:myIdx="${i.index}" type="number"  name="product-quantity"  min="0" th:onchange="eventKeyup(this.value,this.getAttribute('myIdx'))" th:field="*{orderItems[__${i.index}__].amount}">
 <!--                        <script>-->
 <!--                            function eventKeyup(str,)-->
 <!--                            {-->
@@ -57,7 +57,12 @@
                                 /*<![CDATA[*/
                                 function eventKeyup(str,idx)
                                 {
+                                    const orderItems=/*[[*{orderItems}]]*/
+                                    const itemPrice = orderItems[idx].price
+                                    console.log(itemPrice)
+                                    const tempPrice=$("#total-price").val()- $("#amount"+idx).val()*itemPrice
                                     $("#amount"+idx).val(str);    // jQuery 이용
+                                    $("#total-price").val(tempPrice+str*itemPrice)
                                 }
                                 /*]]>*/
                             </script>
@@ -65,12 +70,11 @@
                         </span>
                     </div>
                     </th:block>
-<!--                    <div class="product-category">-->
-<!--                        <span>결재금액:</span>-->
-<!--                        계산해서 넣어야됨-->
-<!--                    </div>-->
                     <div class="product-category">
-                        <div><span>기본 주소:</span></div>
+                        <span>결재금액: <input type="text" disabled id="total-price"></span>
+                    </div>
+                    <div class="product-category">
+                        <div><h3>기본 주소:</h3></div>
                         <label>주소</label>
                         <input type="text" class="form-control signin-input" id="addr" th:field="${requestOrderInfoDTO.address}" readonly >
                         <label>상세주소</label>

@@ -3,14 +3,14 @@ package com.lionTF.cshop.domain.shop.controller.dto
 import org.springframework.http.HttpStatus
 
 data class AddCartItemDTO(
-    val memberId: Long?,
+    val memberId: Long,
     val itemId: Long,
     val amount: Int,
 )
 
 data class AddCartItemRequestDTO(
     val itemId: Long,
-    var amount: Int = 1,
+    var amount: Int = 0,
 )
 
 data class AddCartItemResultDTO(

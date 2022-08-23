@@ -53,7 +53,7 @@ internal class AdminCocktailServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item1 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO1, "test"))
+        item1 = adminItemRepository?.save(Item.fromItemCreateRequestDTO(itemDTO1, "test"))
 
         val itemDTO2 = ItemCreateRequestDTO(
             itemName = "test1",
@@ -63,7 +63,7 @@ internal class AdminCocktailServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item2 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO2, "test"))
+        item2 = adminItemRepository?.save(Item.fromItemCreateRequestDTO(itemDTO2, "test"))
 
         val itemDTO3 = ItemCreateRequestDTO(
             itemName = "test1",
@@ -73,7 +73,7 @@ internal class AdminCocktailServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item3 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO3, "test"))
+        item3 = adminItemRepository?.save(Item.fromItemCreateRequestDTO(itemDTO3, "test"))
 
 
         // 칵테일 생성
@@ -88,7 +88,7 @@ internal class AdminCocktailServiceTest {
             itemIds = itemIdList
         )
 
-        cocktail = adminCocktailRepository?.save(Cocktail.requestCreateCocktailDTOtoCocktail(requestCreateCocktailDTO1, "test"))
+        cocktail = adminCocktailRepository?.save(Cocktail.fromCocktailCreateRequestDTO(requestCreateCocktailDTO1, "test"))
 
 
         // 칵테일 아이템 생성

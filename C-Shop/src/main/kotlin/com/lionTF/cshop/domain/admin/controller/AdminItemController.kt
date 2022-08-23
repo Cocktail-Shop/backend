@@ -57,7 +57,7 @@ class AdminItemController(
     fun getItem(@PathVariable("itemId") itemId: Long, model: Model): String {
         val item = adminItemService.findItem(itemId)
         model.addAttribute("items", item)
-        model.addAttribute("items", ItemUpdateRequestDTO.formDTOFromResponseItemDTO(item))
+        model.addAttribute("items", ItemUpdateRequestDTO.toFormDTO(item))
 
         return "admins/item/updateItemForm"
     }

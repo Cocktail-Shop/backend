@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.core.session.SessionRegistry
+import org.springframework.security.core.session.SessionRegistryImpl
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
@@ -21,9 +23,18 @@ class SecurityConfig {
     }
 
     @Bean
+    fun sessionRegistry(): SessionRegistry {
+        return SessionRegistryImpl()
+    }
+
+    @Bean
     fun defaultSecurityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf().disable()//post 요청 허용
-        http.sessionManagement().maximumSessions(1)//중복로그인 방지
+        http.sessionManagement()
+            .maximumSessions(1)
+            .expiredUrl("/members/session-expire")
+            .sessionRegistry(sessionRegistry())
+
 
         return http.authorizeRequests()
             .antMatchers("/admins/**").hasRole("ADMIN")
@@ -36,6 +47,7 @@ class SecurityConfig {
             .antMatchers("/items/**").hasAnyRole("ADMIN", "MEMBER")
             .antMatchers("/orders/**").hasAnyRole("ADMIN", "MEMBER")
             .antMatchers("/cart/**").hasAnyRole("ADMIN", "MEMBER")
+            .antMatchers("/wish-list/**").hasAnyRole("ADMIN", "MEMBER")
             .antMatchers("/pre-members/**").hasRole("PREMEMBER")
             .and()
             .formLogin()

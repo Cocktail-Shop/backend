@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable
 
 interface OrderService {
 
-    fun requestOrder(requestOrderDTO: RequestOrderDTO) : RequestOrderResultDTO
+    fun requestOrder(requestOrderDTO: RequestOrderDTO): RequestOrderResultDTO
 
-    fun getAddress(memberId: Long) : AddressDTO
+    fun getAddress(memberId: Long): AddressDTO
 
-    fun getShopOrders(pageable: Pageable): OrdersSearchDTO
+    fun getShopOrders(memberId: Long, pageable: Pageable): OrdersSearchDTO
 }

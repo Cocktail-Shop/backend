@@ -46,7 +46,10 @@ class Item(
     }
 
     companion object {
-        fun requestCreateItemDTOtoItem(requestCreateItemDTO: ItemCreateRequestDTO, itemImgUrl: String?): Item {
+        fun fromItemCreateRequestDTO(
+            requestCreateItemDTO: ItemCreateRequestDTO,
+            itemImgUrl: String?
+        ): Item {
             return Item(
                 itemName = requestCreateItemDTO.itemName,
                 category = requestCreateItemDTO.category,

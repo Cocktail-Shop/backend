@@ -19,18 +19,16 @@ class ItemController(
 
     @GetMapping(path = ["/items/{itemId}"])
     fun getItemById(
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         @PathVariable("itemId") itemId: Long,
         model: Model,
         addCartItemRequestDTO: AddCartItemRequestDTO
     ): String {
 
         val item = itemService.findByItemId(itemId)
-        val address = authMemberDTO?.memberId?.let {
-            orderService.getAddress(it)
-        }
+        val address = orderService.getAddress(authMemberDTO.memberId)
 
-        val requestOrderInfoDTO = RequestOrderInfoDTO.toFormRequestItemOrderInfoDTO(item.result, address!!)
+        val requestOrderInfoDTO = RequestOrderInfoDTO.toFormRequestItemOrderInfoDTO(item.result, address)
         model.addAttribute("item", item)
         model.addAttribute("addCartItemRequestDTO", addCartItemRequestDTO)
         model.addAttribute("requestOrderInfoDTO", requestOrderInfoDTO)

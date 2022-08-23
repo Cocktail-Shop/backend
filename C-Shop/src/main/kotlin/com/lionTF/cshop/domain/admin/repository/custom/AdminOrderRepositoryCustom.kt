@@ -8,5 +8,8 @@ interface AdminOrderRepositoryCustom {
 
     fun findOrdersInfo(pageable: Pageable): Page<OrdersDTO>
 
-    fun findOrdersInfoByMemberId(keyword: String, pageable: Pageable): Page<OrdersDTO>
+    fun findOrdersInfoByKeyword(keyword: String, pageable: Pageable): Page<OrdersDTO>
+
+    fun findOrdersInfoByMemberId(memberId: Long, pageable: Pageable): Page<OrdersDTO>
+
 }

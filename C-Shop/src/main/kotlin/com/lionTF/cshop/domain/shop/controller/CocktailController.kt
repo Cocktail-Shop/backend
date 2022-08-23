@@ -22,16 +22,14 @@ class CocktailController(
 
     @GetMapping(path = ["/items/cocktails/{cocktailId}"])
     fun getCocktailById(
-        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         @PathVariable("cocktailId") cocktailId: Long,
         model: Model
     ): String {
 
         val cocktail = cocktailService.findByCocktailId(cocktailId)
 
-        val address = authMemberDTO?.memberId?.let {
-            orderService.getAddress(it)
-        }
+        val address = orderService.getAddress(authMemberDTO.memberId)
 
         val cocktailOrderInfoDTO = cocktail.result.cocktailItems.map {
             RequestOrderItemDTO.fromCocktailItemDTO(it)
@@ -43,10 +41,11 @@ class CocktailController(
 
         val requestOrderInfoDTO = RequestOrderInfoDTO.toFormRequestCocktailOrderInfoDTO(
             cocktailOrderInfoDTO as MutableList<RequestOrderItemDTO>,
-            address!!
+            address
         )
 
-        val addCartCocktailItemDTO = AddCartCocktailItemRequestDTO.toFormRequestCocktailCartInfoDTO(cocktailCartInfoDTO as MutableList<AddCartCocktailItemInfoDTO>)
+        val addCartCocktailItemDTO =
+            AddCartCocktailItemRequestDTO.toFormRequestCocktailCartInfoDTO(cocktailCartInfoDTO as MutableList<AddCartCocktailItemInfoDTO>)
 
         model.addAttribute("cocktail", cocktail)
         model.addAttribute("addCartItemRequestDTO", addCartCocktailItemDTO)

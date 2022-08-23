@@ -12,11 +12,13 @@ data class OrdersSearchDTO(
     val keyword: String? = null,
     val result: Page<OrdersDTO>? = null
 ) {
+
     companion object {
-        fun orderToResponseOrderSearchPageDTO(
+        fun toFormDTO(
             findOrdersDTO: Page<OrdersDTO>,
             keyword: String? = ""
         ): OrdersSearchDTO {
+
             return OrdersSearchDTO(
                 HttpStatus.OK.value(),
                 "주문 조회를 성공했습니다.",
