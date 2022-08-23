@@ -361,7 +361,7 @@ internal class AdminItemServiceTest {
         val pageable = generatePageable()
 
         //when
-        val allItems = adminItemService?.getAllItems(pageable)
+        val allItems = adminItemService?.getItems(pageable)
 
         val count = adminItemRepository?.countAllByItemStatusIsTrue()
 

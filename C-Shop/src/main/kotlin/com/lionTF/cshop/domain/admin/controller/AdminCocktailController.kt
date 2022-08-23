@@ -124,11 +124,11 @@ class AdminCocktailController(
 
 
     @ModelAttribute("itemIds")
-    fun favorite(pageable: Pageable): Map<Long, String> {
+    fun getItems(): Map<Long, String> {
         val map: MutableMap<Long, String> = LinkedHashMap()
-        val items = adminItemService.getAllItems(pageable)
+        val items = adminItemService.getItems()
 
-        items.result!!.content.forEach { item ->
+        items.map { item ->
             map[item.itemId] = item.itemName
         }
 

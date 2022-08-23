@@ -10,7 +10,9 @@ interface AdminItemService {
 
     fun updateItem(itemId: Long, requestCreateItemDTO: ItemCreateRequestDTO, itemImgUrl: String?): AdminResponseDTO
 
-    fun getAllItems(pageable: Pageable): ItemsSearchDTO
+    fun getItems(pageable: Pageable): ItemsSearchDTO
+
+    fun getItems(): List<ItemsDTO>
 
     fun getItemsByName(itemName: String, pageable: Pageable): ItemsSearchDTO
 
