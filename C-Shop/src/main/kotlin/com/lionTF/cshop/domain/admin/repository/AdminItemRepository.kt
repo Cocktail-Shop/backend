@@ -22,6 +22,6 @@ interface AdminItemRepository : JpaRepository<Item, Long>, AdminItemRepositoryCu
     fun findItem(@Param("itemId") itemId: Long, @Param("itemStatus") itemStatus: Boolean): Item?
 
     @Query("select new com.lionTF.cshop.domain.admin.controller.dto.ItemsDTO(i.itemId, i.itemName, i.price, i.amount, i.degree, i.itemDescription, i.itemImgUrl, i.category, i.createdAt)" +
-            " from Item i")
-    fun getItems(): List<ItemsDTO>
+            " from Item i where i.itemStatus = :itemStatus")
+    fun getItems(@Param("itemStatus") itemStatus: Boolean): List<ItemsDTO>
 }

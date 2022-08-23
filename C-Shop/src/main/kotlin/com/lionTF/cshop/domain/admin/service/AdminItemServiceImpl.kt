@@ -100,7 +100,7 @@ class AdminItemServiceImpl(
     }
 
     override fun getItems(): List<ItemsDTO> {
-        return adminItemRepository.getItems()
+        return adminItemRepository.getItems(true)
     }
 
     override fun getItemsByName(itemName: String, pageable: Pageable): ItemsSearchDTO {
