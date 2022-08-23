@@ -39,7 +39,7 @@ class Cocktail(
     }
 
     companion object {
-        fun requestCreateCocktailDTOtoCocktail(
+        fun toEntity(
             requestCreateCocktailDTO: CocktailCreateRequestDTO,
             cocktailImgUrl: String?
         ): Cocktail {

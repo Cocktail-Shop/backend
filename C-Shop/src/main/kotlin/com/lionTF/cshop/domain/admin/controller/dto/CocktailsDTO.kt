@@ -10,11 +10,13 @@ data class CocktailsSearchDTO(
     val cocktailName: String? = null,
     val result: Page<CocktailsDTO>? = null,
 ) {
+
     companion object {
-        fun cocktailToResponseCocktailSearchPageDTO(
+        fun toFormDTO(
             findCocktailDTO: Page<CocktailsDTO>,
             cocktailName: String? = ""
         ): CocktailsSearchDTO {
+
             return CocktailsSearchDTO(
                 HttpStatus.OK.value(),
                 "칵테일 조회를 성공했습니다.",

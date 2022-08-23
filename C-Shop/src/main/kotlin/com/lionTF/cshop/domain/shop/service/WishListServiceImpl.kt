@@ -26,7 +26,7 @@ class WishListServiceImpl(
         return if (item == null) {
             AdminResponseDTO.toFailCreateWishListByNoContentItemId()
         } else {
-            wishListRepository.save(WishList.toWishListEntity(item, memberId))
+            wishListRepository.save(WishList.toEntity(item, memberId))
 
             AdminResponseDTO.toSuccessCreateWishList()
         }

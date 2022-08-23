@@ -85,7 +85,7 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item1 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO1,"test"))
+        item1 = adminItemRepository?.save(Item.toEntity(itemDTO1,"test"))
 
         val itemDTO2 = ItemCreateRequestDTO(
             itemName = "test1",
@@ -95,7 +95,7 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item2 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO2, "test"))
+        item2 = adminItemRepository?.save(Item.toEntity(itemDTO2, "test"))
 
         val itemDTO3 = ItemCreateRequestDTO(
             itemName = "test1",
@@ -105,7 +105,7 @@ internal class AdminOrderServiceTest {
             degree = 10,
             itemDescription = "test"
         )
-        item3 = adminItemRepository?.save(Item.requestCreateItemDTOtoItem(itemDTO3, "test"))
+        item3 = adminItemRepository?.save(Item.toEntity(itemDTO3, "test"))
 
 
         val member1 = passwordEncoder?.encode("test1")?.let {

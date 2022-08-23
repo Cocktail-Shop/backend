@@ -30,7 +30,7 @@ class WishList(
     }
 
     companion object {
-        fun toWishListEntity(item: Item, memberId: Long?): WishList {
+        fun toEntity(item: Item, memberId: Long?): WishList {
             return WishList(
                 memberId = memberId,
                 itemId = item.itemId,

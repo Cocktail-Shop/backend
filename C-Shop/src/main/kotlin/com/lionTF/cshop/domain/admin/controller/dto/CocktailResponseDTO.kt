@@ -7,8 +7,9 @@ data class CocktailResponseDTO(
     val message: String,
     val result: CocktailResultDTOAddItemIds? = null,
 ) {
+
     companion object {
-        fun cocktailToResponseCocktailPageDTO(cocktailResultDTOAddItemIds: CocktailResultDTOAddItemIds): CocktailResponseDTO {
+        fun toFormDTO(cocktailResultDTOAddItemIds: CocktailResultDTOAddItemIds): CocktailResponseDTO {
             return CocktailResponseDTO(
                 HttpStatus.OK.value(),
                 "칵테일 조회를 성공했습니다.",
@@ -30,6 +31,7 @@ data class CocktailResultDTOAddItemIds(
     val cocktailImgUrl: String,
     val itemIds: MutableList<Long>
 ) {
+
     companion object {
         fun addItemIds(cocktailResultDTO: CocktailResultDTO, itemIds: MutableList<Long>): CocktailResultDTOAddItemIds {
             return CocktailResultDTOAddItemIds(
@@ -48,11 +50,13 @@ data class CocktailUpdateRequestDTO(
     val cocktailImgUrl: String,
     val itemIds: MutableList<Long> = mutableListOf()
 ) {
+
     companion object {
-        fun formDTOFromResponseCocktailDTO(
+        fun toFormDTO(
             responseCocktailDTO: CocktailResponseDTO,
             itemIds: MutableList<Long>
         ): CocktailUpdateRequestDTO? {
+
             return responseCocktailDTO.result?.let {
                 CocktailUpdateRequestDTO(
                     cocktailName = it.cocktailName,

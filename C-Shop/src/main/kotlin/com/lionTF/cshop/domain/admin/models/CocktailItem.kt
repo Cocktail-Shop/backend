@@ -22,7 +22,7 @@ class CocktailItem(
 ) : BaseTimeEntity() {
 
     companion object {
-        fun requestCreateCocktailItemDTOtoCocktailItem(requestItem: Item, requestCocktail: Cocktail): CocktailItem {
+        fun toEntity(requestItem: Item, requestCocktail: Cocktail): CocktailItem {
             return CocktailItem(
                 cocktail = requestCocktail,
                 item = requestItem

@@ -27,7 +27,7 @@ class AdminItemServiceImpl(
             AdminResponseDTO.toFailCreateItemByInvalidFormatPriceResponseDTO()
 
         } else {
-            adminItemRepository.save(Item.requestCreateItemDTOtoItem(requestCreateItemDTO, itemImgUrl))
+            adminItemRepository.save(Item.toEntity(requestCreateItemDTO, itemImgUrl))
             AdminResponseDTO.toSuccessCreateItemResponseDTO()
         }
     }
@@ -89,7 +89,7 @@ class AdminItemServiceImpl(
             )
         } else {
             val itemResultDTO = adminItemRepository.findItemById(itemId)
-            return ItemResponseDTO.itemToResponseItemPageDTO(itemResultDTO)
+            return ItemResponseDTO.toFormDTO(itemResultDTO)
         }
 
     }
@@ -98,13 +98,13 @@ class AdminItemServiceImpl(
     override fun getAllItems(pageable: Pageable): ItemsSearchDTO {
         val items = adminItemRepository.findAllItems(pageable)
 
-        return ItemsSearchDTO.itemToResponseItemSearchPageDTO(items)
+        return ItemsSearchDTO.toFormDTO(items)
     }
 
     // 상품 이름으로 조회
     override fun getItemsByName(itemName: String, pageable: Pageable): ItemsSearchDTO {
         val items = adminItemRepository.findItemsByName(itemName, pageable)
 
-        return ItemsSearchDTO.itemToResponseItemSearchPageDTO(items, itemName)
+        return ItemsSearchDTO.toFormDTO(items, itemName)
     }
 }

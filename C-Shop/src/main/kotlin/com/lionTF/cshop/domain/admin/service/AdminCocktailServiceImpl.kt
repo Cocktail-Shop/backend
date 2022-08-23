@@ -23,13 +23,13 @@ class AdminCocktailServiceImpl(
     override fun getAllCocktail(pageable: Pageable): CocktailsSearchDTO {
         val cocktails = adminCocktailRepository.findAllCocktails(pageable)
 
-        return CocktailsSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails)
+        return CocktailsSearchDTO.toFormDTO(cocktails)
     }
 
     override fun getCocktailsByName(cocktailName: String, pageable: Pageable): CocktailsSearchDTO {
         val cocktails = adminCocktailRepository.findCocktailsByName(cocktailName, pageable)
 
-        return CocktailsSearchDTO.cocktailToResponseCocktailSearchPageDTO(cocktails, cocktailName)
+        return CocktailsSearchDTO.toFormDTO(cocktails, cocktailName)
     }
 
 
@@ -43,7 +43,7 @@ class AdminCocktailServiceImpl(
             )
         } else {
             val cocktailResultDTO = adminCocktailRepository.findCocktailById(cocktailId)
-            return CocktailResponseDTO.cocktailToResponseCocktailPageDTO(
+            return CocktailResponseDTO.toFormDTO(
                 CocktailResultDTOAddItemIds.addItemIds(
                     cocktailResultDTO,
                     itemIds
@@ -68,7 +68,7 @@ class AdminCocktailServiceImpl(
 
         } else {
             val cocktail = adminCocktailRepository.save(
-                Cocktail.requestCreateCocktailDTOtoCocktail(
+                Cocktail.toEntity(
                     requestCreateCocktailDTO,
                     cocktailImgUrl
                 )
@@ -77,7 +77,7 @@ class AdminCocktailServiceImpl(
             requestCreateCocktailDTO.itemIds
                 .asSequence()
                 .map { adminItemRepository.getReferenceById(it) }
-                .mapTo(cocktailItemList) { CocktailItem.requestCreateCocktailItemDTOtoCocktailItem(it, cocktail) }
+                .mapTo(cocktailItemList) { CocktailItem.toEntity(it, cocktail) }
             adminCocktailItemRepository.saveAll(cocktailItemList)
 
             AdminResponseDTO.toSuccessCreateCocktailResponseDTO()
@@ -132,7 +132,7 @@ class AdminCocktailServiceImpl(
 
             for (itemId in requestCreateCocktailDTO.itemIds) {
                 val item = adminItemRepository.getReferenceById(itemId)
-                val cocktailItem = CocktailItem.requestCreateCocktailItemDTOtoCocktailItem(item, cocktail)
+                val cocktailItem = CocktailItem.toEntity(item, cocktail)
                 cocktailItemList.add(cocktailItem)
             }
             adminCocktailItemRepository.saveAll(cocktailItemList)

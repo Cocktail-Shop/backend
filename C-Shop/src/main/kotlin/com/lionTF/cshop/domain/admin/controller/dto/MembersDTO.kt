@@ -10,11 +10,13 @@ data class MembersSearchDTO(
     val keyword: String? = null,
     val result: Page<MembersDTO>? = null
 ) {
+
     companion object {
-        fun memberToResponseMemberSearchPageDTO(
+        fun toFormDTO(
             findMemberDTO: Page<MembersDTO>,
             keyword: String? = ""
         ): MembersSearchDTO {
+
             return MembersSearchDTO(
                 HttpStatus.OK.value(),
                 "회원 조회를 성공했습니다.",

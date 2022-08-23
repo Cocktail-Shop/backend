@@ -12,11 +12,17 @@ data class MyPageResponseDTO(
     companion object {
         fun fromMember(member: Member): MyPageResponseDTO {
             val myPageResultDTO = MyPageResultDTO(
-                member.id, member.phoneNumber, member.memberName, member.address, member.detailAddress
+                member.id,
+                member.phoneNumber,
+                member.memberName,
+                member.address,
+                member.detailAddress
             )
 
             return MyPageResponseDTO(
-                HttpStatus.OK.value(), message = "마이페이지 조회를 성공했습니다.", myPageResultDTO
+                HttpStatus.OK.value(),
+                message = "마이페이지 조회를 성공했습니다.",
+                myPageResultDTO
             )
         }
     }
