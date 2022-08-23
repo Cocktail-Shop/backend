@@ -30,7 +30,7 @@
                           <!--<td>
                             <input type="checkbox">
                           </td>-->
-                          <form  method="post" th:action="@{/orders/cart/items}" th:object="${requestOrderInfoDTO}">
+                          <form  method="post" th:action="@{/orders/cart/items/{cartItemId} (cartItemId=${cart.cartItemId})}" th:object="${requestOrderInfoDTO}">
                           <td>
                             <img th:src="${cart.itemImgUrl}" style="width: 3vw; height: 7vw">
                           </td>
