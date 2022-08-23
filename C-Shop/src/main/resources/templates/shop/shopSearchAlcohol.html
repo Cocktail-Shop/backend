@@ -31,7 +31,7 @@
                             </div>
                         </div>
                         <div class="product-content">
-                            <h4><a href="product-single.html">[[${items.itemName}]]</a></h4>
+                            <h4><a th:href="'/items/'+${items.itemId}">[[${items.itemName}]]</a></h4>
                             <p class="price">가격:[[${items.price}]]원</p>
                             <p class="price">도수:[[${items.degree}]]</p>
                         </div>
