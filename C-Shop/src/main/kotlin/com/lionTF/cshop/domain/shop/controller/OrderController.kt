@@ -4,6 +4,7 @@ import com.lionTF.cshop.domain.admin.service.admininterface.AdminOrderService
 import com.lionTF.cshop.domain.member.controller.dto.AuthMemberDTO
 import com.lionTF.cshop.domain.shop.controller.dto.RequestOrderDTO
 import com.lionTF.cshop.domain.shop.controller.dto.RequestOrderInfoDTO
+import com.lionTF.cshop.domain.shop.service.shopinterface.CartItemService
 import com.lionTF.cshop.domain.shop.service.shopinterface.OrderService
 import org.springframework.data.domain.Pageable
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*
 
 @Controller
 class OrderController(
+    private val cartItemService: CartItemService,
     private val orderService: OrderService,
     private val adminOrderService: AdminOrderService,
 ) {
@@ -36,14 +38,16 @@ class OrderController(
         return "redirect:/shop/singleItem"
     }
 
-    @PostMapping("/orders/cart/items")
+    @PostMapping("/orders/cart/items/{cartItemId}")
     fun createCartOrder(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO?,
+        @PathVariable("cartItemId") cartItemId: Long,
         requestOrderInfoDTO: RequestOrderInfoDTO,
         model: Model
     ): String {
         val requestCartOrderDTO = RequestOrderDTO.toRequestOrderDTO(authMemberDTO?.memberId, requestOrderInfoDTO)
         model.addAttribute("result", orderService.requestOrder(requestCartOrderDTO))
+        model.addAttribute("result", cartItemService.deleteCartItem(cartItemId))
         return "global/message"
     }
 
