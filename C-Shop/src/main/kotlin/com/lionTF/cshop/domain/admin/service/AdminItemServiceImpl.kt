@@ -78,7 +78,6 @@ class AdminItemServiceImpl(
         return adminItemRepository.getReferenceById(itemId)
     }
 
-    // 상품 단건 조회
     override fun findItem(itemId: Long): ItemResponseDTO {
         val itemExisted = adminItemRepository.existsById(itemId)
 
@@ -94,14 +93,16 @@ class AdminItemServiceImpl(
 
     }
 
-    // 상품 전체 조회
-    override fun getAllItems(pageable: Pageable): ItemsSearchDTO {
+    override fun getItems(pageable: Pageable): ItemsSearchDTO {
         val items = adminItemRepository.findAllItems(pageable)
 
         return ItemsSearchDTO.toFormDTO(items)
     }
 
-    // 상품 이름으로 조회
+    override fun getItems(): List<ItemsDTO> {
+        return adminItemRepository.getItems()
+    }
+
     override fun getItemsByName(itemName: String, pageable: Pageable): ItemsSearchDTO {
         val items = adminItemRepository.findItemsByName(itemName, pageable)
 

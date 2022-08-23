@@ -1,6 +1,7 @@
 package com.lionTF.cshop.domain.admin.repository
 
 import com.lionTF.cshop.domain.admin.controller.dto.ItemResultDTO
+import com.lionTF.cshop.domain.admin.controller.dto.ItemsDTO
 import com.lionTF.cshop.domain.admin.models.Item
 import com.lionTF.cshop.domain.admin.repository.custom.AdminItemRepositoryCustom
 import org.springframework.data.jpa.repository.JpaRepository
@@ -19,4 +20,8 @@ interface AdminItemRepository : JpaRepository<Item, Long>, AdminItemRepositoryCu
 
     @Query("select i from Item i where i.itemId = :itemId and i.itemStatus = :itemStatus")
     fun findItem(@Param("itemId") itemId: Long, @Param("itemStatus") itemStatus: Boolean): Item?
+
+    @Query("select new com.lionTF.cshop.domain.admin.controller.dto.ItemsDTO(i.itemId, i.itemName, i.price, i.amount, i.degree, i.itemDescription, i.itemImgUrl, i.category, i.createdAt)" +
+            " from Item i")
+    fun getItems(): List<ItemsDTO>
 }

@@ -21,7 +21,7 @@ class AdminItemController(
     // 전체 상품 조회
     @GetMapping("all-item")
     fun getAllItems(pageable: Pageable, model: Model): String {
-        model.addAttribute("items", adminItemService.getAllItems(pageable))
+        model.addAttribute("items", adminItemService.getItems(pageable))
         return "admins/item/getAllItem"
     }
 
