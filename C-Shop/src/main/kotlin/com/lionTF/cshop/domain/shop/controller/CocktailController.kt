@@ -31,21 +31,26 @@ class CocktailController(
 
         val address = orderService.getAddress(authMemberDTO.memberId)
 
-        val cocktailOrderInfoDTO = cocktail.result.cocktailItems.map {
-            if (it.status) RequestOrderItemDTO.fromCocktailItemDTO(it)
+        val cocktailOrderInfoDTO: MutableList<RequestOrderItemDTO> = mutableListOf()
+        cocktail.result.cocktailItems.map {
+            if (it.status)
+                cocktailOrderInfoDTO.add(RequestOrderItemDTO.fromCocktailItemDTO(it))
         }
 
-        val cocktailCartInfoDTO = cocktail.result.cocktailItems.map {
-            AddCartCocktailItemInfoDTO.fromCocktailItemDTO(it)
+        val cocktailCartInfoDTO: MutableList<AddCartCocktailItemInfoDTO> = mutableListOf()
+        cocktail.result.cocktailItems.map {
+            if (it.status)
+                cocktailCartInfoDTO.add(AddCartCocktailItemInfoDTO.fromCocktailItemDTO(it))
         }
+
 
         val requestOrderInfoDTO = RequestOrderInfoDTO.toFormRequestCocktailOrderInfoDTO(
-            cocktailOrderInfoDTO as MutableList<RequestOrderItemDTO>,
+            cocktailOrderInfoDTO,
             address
         )
 
         val addCartCocktailItemDTO =
-            AddCartCocktailItemRequestDTO.toFormRequestCocktailCartInfoDTO(cocktailCartInfoDTO as MutableList<AddCartCocktailItemInfoDTO>)
+            AddCartCocktailItemRequestDTO.toFormRequestCocktailCartInfoDTO(cocktailCartInfoDTO)
 
         model.addAttribute("cocktail", cocktail)
         model.addAttribute("addCartItemRequestDTO", addCartCocktailItemDTO)
