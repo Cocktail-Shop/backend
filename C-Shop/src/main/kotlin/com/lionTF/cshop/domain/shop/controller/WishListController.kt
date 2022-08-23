@@ -7,17 +7,15 @@ import org.springframework.data.web.PageableDefault
 import org.springframework.security.core.annotation.AuthenticationPrincipal
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.*
 
 @Controller
+@RequestMapping("/wish-list")
 class WishListController(
     private val wishListService: WishListService
 ) {
 
-    @GetMapping("wish-list")
+    @GetMapping("")
     fun getWishList(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         @PageableDefault(size = 4) pageable: Pageable,
@@ -28,7 +26,7 @@ class WishListController(
         return "shop/wishList"
     }
 
-    @PostMapping("wish-list/{itemId}")
+    @PostMapping("{itemId}")
     fun createWishList(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         @PathVariable("itemId") itemId: Long,
@@ -40,7 +38,7 @@ class WishListController(
         return "global/message"
     }
 
-    @DeleteMapping("wish-list/{wishListId}")
+    @DeleteMapping("{wishListId}")
     fun deleteWishList(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         @PathVariable("wishListId") wishListId: Long,
