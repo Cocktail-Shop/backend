@@ -8,8 +8,9 @@ data class ItemResponseDTO(
     val message: String,
     val result: ItemResultDTO? = null,
 ) {
+
     companion object {
-        fun itemToResponseItemPageDTO(itemResultDTO: ItemResultDTO): ItemResponseDTO {
+        fun toFormDTO(itemResultDTO: ItemResultDTO): ItemResponseDTO {
             return ItemResponseDTO(
                 HttpStatus.OK.value(),
                 "상품 조회를 성공했습니다.",
@@ -39,7 +40,7 @@ data class ItemUpdateRequestDTO(
     val itemImgUrl: String = "",
 ) {
     companion object {
-        fun formDTOFromResponseItemDTO(responseItemDTO: ItemResponseDTO): ItemUpdateRequestDTO? {
+        fun toFormDTO(responseItemDTO: ItemResponseDTO): ItemUpdateRequestDTO? {
             return responseItemDTO.result?.let {
                 ItemUpdateRequestDTO(
                     itemName = it.itemName,

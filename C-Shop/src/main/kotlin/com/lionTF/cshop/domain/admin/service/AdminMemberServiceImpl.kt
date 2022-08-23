@@ -3,7 +3,6 @@ package com.lionTF.cshop.domain.admin.service
 import com.lionTF.cshop.domain.admin.controller.dto.*
 import com.lionTF.cshop.domain.admin.repository.AdminMemberRepository
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminMemberService
-import com.lionTF.cshop.domain.member.models.Member
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
@@ -30,12 +29,12 @@ class AdminMemberServiceImpl(
     override fun findMembers(keyword: String, pageable: Pageable): MembersSearchDTO {
         val membersInfo = adminMemberRepository.findMembersInfo(keyword, pageable)
 
-        return MembersSearchDTO.memberToResponseMemberSearchPageDTO(membersInfo, keyword)
+        return MembersSearchDTO.toFormDTO(membersInfo, keyword)
     }
 
     override fun getAllMembers(pageable: Pageable): MembersSearchDTO {
         val members = adminMemberRepository.findAllByMemberStatus(pageable)
 
-        return MembersSearchDTO.memberToResponseMemberSearchPageDTO(members)
+        return MembersSearchDTO.toFormDTO(members)
     }
 }

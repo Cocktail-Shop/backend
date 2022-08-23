@@ -11,11 +11,13 @@ data class ItemsSearchDTO(
     val itemName: String? = null,
     val result: Page<ItemsDTO>? = null,
 ) {
+
     companion object {
-        fun itemToResponseItemSearchPageDTO(
+        fun toFormDTO(
             findItemDTO: Page<ItemsDTO>,
             itemName: String? = ""
         ): ItemsSearchDTO {
+
             return ItemsSearchDTO(
                 HttpStatus.OK.value(),
                 "상품 조회를 성공했습니다.",

@@ -63,7 +63,7 @@ class AdminCocktailController(
         val itemIds = adminCocktailItemService.getItemIds(cocktailId)
         val cocktail = adminCocktailService.findCocktail(cocktailId, itemIds)
         model.addAttribute("cocktails", cocktail)
-        model.addAttribute("cocktails", CocktailUpdateRequestDTO.formDTOFromResponseCocktailDTO(cocktail, itemIds))
+        model.addAttribute("cocktails", CocktailUpdateRequestDTO.toFormDTO(cocktail, itemIds))
 
         return "admins/cocktail/updateCocktailForm"
     }
