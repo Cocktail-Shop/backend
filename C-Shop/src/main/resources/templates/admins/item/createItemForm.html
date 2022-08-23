@@ -28,7 +28,7 @@
                                 <div th:each="type : ${category}" class="form-check form-check-inline" style="float: left; width: 33%;">
                                     <div th:unless="${type.name().equals('COCKTAIL')}">
                                     <input type="radio" th:field="*{category}" th:value="${type.name()}" class="form-check-input">
-                                    <label th:for="${#ids.prev('category')}" th:text="${type.description}" class="form-check-label">
+                                    <label th:for="${#ids.prev('category')}" th:text="${type.description}" class="form-check-label"></label>
                                     </div>
                                     </label>
                                 </div>
