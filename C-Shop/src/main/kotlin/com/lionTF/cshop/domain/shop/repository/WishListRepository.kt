@@ -20,4 +20,7 @@ interface WishListRepository : JpaRepository<WishList, Long> {
         @Param("memberId") memberId: Long?,
         pageable: Pageable
     ): Page<WishListDTO>
+
+
+    fun deleteWishListByItemId(itemId: Long)
 }
