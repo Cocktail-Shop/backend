@@ -17,7 +17,11 @@ class AuthMemberDTO(
     val attr: Map<String, Any>? = null,
     val memberName: String,
     val memberId: Long = 0,
-) : User(username, password, authorities), OAuth2User {
+) : User(
+    username,
+    password,
+    authorities
+), OAuth2User {
 
     override fun getName(): String {
         return memberName

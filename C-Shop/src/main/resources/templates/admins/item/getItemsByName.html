@@ -175,7 +175,7 @@
                                                         th:classappend="${page == pageNumber + 1} ? 'active'"
                                                         class="page-item">
                                                         <a th:text="${page}" class="page-link"
-                                                           th:href="@{/admins/search/items/(page=${page - 1},itemName=${items.itemName})}"></a>
+                                                           th:if="${page} != 0" th:href="@{/admins/search/items/(page=${page - 1},itemName=${items.itemName})}"></a>
                                                     </li>
 
                                                     <!-- 다음으로 이동 -->

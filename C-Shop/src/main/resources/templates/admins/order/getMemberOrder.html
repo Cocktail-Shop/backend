@@ -202,7 +202,7 @@
                                                         th:classappend="${page == pageNumber + 1} ? 'active'"
                                                         class="page-item">
                                                         <a th:text="${page}" class="page-link"
-                                                           th:href="@{/admins/members/orders/(page=${page - 1},keyword=${searchOrders.keyword})}"></a>
+                                                           th:if="${page} != 0" th:href="@{/admins/members/orders/(page=${page - 1},keyword=${searchOrders.keyword})}"></a>
                                                     </li>
 
                                                     <!-- 다음으로 이동 -->
