@@ -52,7 +52,7 @@ class OrderController(
 
     @DeleteMapping("/orders/{orderId}")
     fun cancelOrder(@PathVariable("orderId") orderId: Long, model: Model): String {
-        model.addAttribute("result", adminOrderService.cancelOneOrder(orderId))
+        model.addAttribute("result", orderService.cancelOneOrder(orderId))
         return "global/message"
     }
 

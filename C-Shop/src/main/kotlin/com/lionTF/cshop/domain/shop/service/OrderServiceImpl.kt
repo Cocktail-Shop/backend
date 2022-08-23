@@ -1,9 +1,11 @@
 package com.lionTF.cshop.domain.shop.service
 
+import com.lionTF.cshop.domain.admin.controller.dto.AdminResponseDTO
 import com.lionTF.cshop.domain.admin.controller.dto.OrdersSearchDTO
 import com.lionTF.cshop.domain.admin.repository.AdminOrderRepository
 import com.lionTF.cshop.domain.member.controller.dto.AddressDTO
 import com.lionTF.cshop.domain.shop.controller.dto.*
+import com.lionTF.cshop.domain.shop.models.DeliveryStatus
 import com.lionTF.cshop.domain.shop.models.OrderItem
 import com.lionTF.cshop.domain.shop.models.OrderStatus
 import com.lionTF.cshop.domain.shop.models.Orders
@@ -82,6 +84,41 @@ class OrderServiceImpl(
     override fun getShopOrders(memberId: Long, pageable: Pageable): OrdersSearchDTO {
         val findOrdersInfo = adminOrderRepository.findOrdersInfoByMemberId(memberId, pageable)
 
+        
         return OrdersSearchDTO.toFormDTO(findOrdersInfo, "")
+    }
+
+    @Transactional
+    override fun cancelOneOrder(orderId: Long): CartCancelResponseDTO {
+        val ordersExisted = adminOrderRepository.existsById(orderId)
+
+        return if (!ordersExisted) {
+            CartCancelResponseDTO.toFailCancelOrderResponseDTO()
+
+        } else {
+            val orders = orderRepository.getReferenceById(orderId)
+
+            when {
+                orders.orderStatus == OrderStatus.CANCEL -> {
+                    CartCancelResponseDTO.toFailCancelOrderByDuplicatedResponseDTO()
+
+                }
+                orders.deliveryStatus == DeliveryStatus.COMPLETE -> {
+                    CartCancelResponseDTO.toFailCancelOrderByCompleteDeliveryResponseDTO()
+
+                }
+                else -> {
+                    orders.cancelOrder()
+
+                    val orderItems = orderItemRepository.getOrderItemByOrdersId(orderId)
+
+                    orderItems.forEach { orderItem ->
+                        orderItem.cancel()
+                    }
+
+                    CartCancelResponseDTO.toSuccessCancelOrderResponseDTO()
+                }
+            }
+        }
     }
 }
