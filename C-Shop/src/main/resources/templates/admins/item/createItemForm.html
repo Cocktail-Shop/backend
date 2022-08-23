@@ -38,7 +38,7 @@
 
                         <div class="form-group">
                             <label th:for="itemName">상품명</label>
-                            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력하세요(최대 255자)" maxlength="255"> </div>
+                            <input type="text" th:field="*{itemName}" class="form-control" placeholder="상품명을 입력하세요(최대 120자)" maxlength="120"> </div>
                         <div class="form-group">
 
                         <div class="form-group">
@@ -58,7 +58,7 @@
                             <input type="number" th:field="*{degree}" class="form-control" min="0" placeholder="상품의 도수를 입력하세요"> </div>
                         <div class="form-group">
                             <label th:for="itemDescription">상품 설명</label>
-                            <input type="text" th:field="*{itemDescription}" class="form-control" placeholder="상품에 대한 설명을 입력해주세요.(최대 255자)" maxlength="255"> </div>
+                            <input type="text" th:field="*{itemDescription}" class="form-control" placeholder="상품에 대한 설명을 입력해주세요.(최대 120자)" maxlength="120"> </div>
                         <button type="submit" class="btn btn-primary">상품 등록</button>
                     </form>
                 </div>
