@@ -46,19 +46,18 @@
                         <span></span>
 
                         <span>수량
-                        <input th:id="'product-quantity'+${i.index}"  th:myIdx="${i.index}" type="number"  name="product-quantity"  min="0" th:max="*{orderItems[__${i.index}__].amount}" th:onchange="eventKeyup(this.value,this.getAttribute('myIdx'))" th:field="*{orderItems[__${i.index}__].amount}">
+                        <input th:id="'product-quantity'+${i.index}"  th:myIdx="${i.index}" type="number"  name="product-quantity"  min="0" th:max="${cocktail.result.cocktailItems[__${i.index}__].amount}"  th:onchange="eventKeyup(this.value,this.getAttribute('myIdx'))" th:field="*{orderItems[__${i.index}__].amount}">
                             <script th:inline="javascript">
                                 /*<![CDATA[*/
                                 function eventKeyup(str,idx)
                                 {
 
-                                    const orderItems =/*[[*{orderItems}]]*/
+                                    const orderItems =/*[[${cocktail.result.cocktailItems}]]*/
                                     const itemPrice = orderItems[idx].price
                                     const itemAmount=orderItems[idx].amount
                                     const itemName=orderItems[idx].itemName
-                                    console.log(orderItems)
                                     const tempPrice = $("#total-price").val() - $("#amount" + idx).val() * itemPrice
-                                    if(str!==""&&str>0&&str<itemAmount) {
+                                    if(str!==""&&str>0&&str<=itemAmount) {
                                         $("#amount" + idx).val(str);    // jQuery 이용
                                         $("#total-price").val(tempPrice + str * itemPrice)
                                     }else{

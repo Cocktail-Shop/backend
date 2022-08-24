@@ -47,7 +47,7 @@
                                 function eventKeyup(str)
                                 {
                                     const amount =/*[[${item.result.amount}]]*/
-                                    if(str!==""&&str>0&&amount>str){
+                                    if(str!==""&&str>0&&amount>=str){
                                         $("#amount2").val(str);    // jQuery 이용
                                         const price = /*[[${item.result.price}]]*/
                                         $("#total-price").val(str * price)
