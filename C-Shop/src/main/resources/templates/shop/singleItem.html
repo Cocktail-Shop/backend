@@ -37,6 +37,9 @@
                         <div class="product-price">
                             <span th:text="'도수: ' + ${item.result.degree} + '도'"></span>
                         </div>
+                        <div class="product-price">
+                            <span th:text="'남은 수량: ' + ${item.result.amount} + '개'"></span>
+                        </div>
                         <div class="product-quantity">
                             <span>수량 선택:</span>
                             <input type="hidden" th:field="${requestOrderInfoDTO.orderItems[0].itemId}">
