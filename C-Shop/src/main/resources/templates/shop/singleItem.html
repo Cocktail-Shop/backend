@@ -28,7 +28,7 @@
             </div>
             <div class="col-md-7">
                 <div class="single-product-details">
-                    <form  method="post" th:action="@{/orders}" th:object="${requestOrderInfoDTO}">
+                    <form  method="post" th:action="@{/orders}" th:object="${requestOrderInfoDTO}" onsubmit="return checkAddr()">
                         <h2 th:text="${item.result.itemName}"></h2>
 
                         <div class="product-price">
@@ -41,14 +41,24 @@
                             <span>수량 선택:</span>
                             <input type="hidden" th:field="${requestOrderInfoDTO.orderItems[0].itemId}">
                             <input type="hidden" th:field="${requestOrderInfoDTO.orderItems[0].price}">
-                            <input id="product-quantity" type="number" min="0" name="product-quantity"  onchange="eventKeyup(this.value)" th:field="${requestOrderInfoDTO.orderItems[0].amount}">
+                            <input id="product-quantity" type="number" min="1" name="product-quantity"  th:max="${item.result.amount}" onchange="eventKeyup(this.value)" th:field="${requestOrderInfoDTO.orderItems[0].amount}">
                             <script th:inline="javascript">
                                 /*<![CDATA[*/
                                 function eventKeyup(str)
                                 {
-                                    $("#amount2").val(str);    // jQuery 이용
-                                    const price = /*[[${item.result.price}]]*/
-                                    $("#total-price").val(str * price)
+                                    const amount =/*[[${item.result.amount}]]*/
+                                    if(str!==""&&str>0&&amount>str){
+                                        $("#amount2").val(str);    // jQuery 이용
+                                        const price = /*[[${item.result.price}]]*/
+                                        $("#total-price").val(str * price)
+                                    }else{
+                                        if(amount<str){
+                                            alert("최대 주문 수량을 초과했습니다.")
+                                        }
+                                        $("#product-quantity").val(0)
+                                        $("#amount2").val(0);    // jQuery 이용
+                                        $("#total-price").val(0)
+                                    }
                                 }
                                 /*]]>*/
                             </script>
@@ -61,17 +71,17 @@
                             <label>주소</label>
                             <input type="text" class="form-control signin-input" id="addr" th:field="${requestOrderInfoDTO.address}" readonly >
                             <label>상세주소</label>
-                            <input type="text" class="form-control signin-input"  th:field="${requestOrderInfoDTO.addressDetail}">
+                            <input type="text" class="form-control signin-input"  id="sub-addr" th:field="${requestOrderInfoDTO.addressDetail}" th:maxlength="120">
                             <input type="button" class="btn btn-main mt-20" onclick="searchAddr()" value="배송지변경">
                         </div>
-                        <input type="submit" class="btn btn-main mt-20" value="바로 주문하기">
+                        <input type="submit" class="btn btn-main mt-20" value="바로 주문하기" >
                     </form>
-                    <form method="post" th:action="@{/items/cart}" th:object="${addCartItemRequestDTO}">
+                    <form method="post" th:action="@{/items/cart}" th:object="${addCartItemRequestDTO}" onsubmit="return checkAddr()">
                         <input type="hidden" th:value="${item.result.itemId}" th:field="*{itemId}">
                         <input type="hidden"  id="amount2" class="form-control signin-input"  value="0" th:field="*{amount}" >
-                        <input type="submit" class="btn btn-main mt-20" value="장바구니 추가">
+                        <input type="submit" class="btn btn-main mt-20" value="장바구니 추가" >
                     </form>
-                    <form method="post" th:action="@{/wish-list/{itemId} (itemId=${item.result.itemId})}" th:object="${addCartItemRequestDTO}">
+                    <form method="post" th:action="@{/wish-list/{itemId} (itemId=${item.result.itemId})}" th:object="${addCartItemRequestDTO}" >
                         <input type="submit" class="btn btn-main mt-20" value="찜하기">
                     </form>
                 </div>
