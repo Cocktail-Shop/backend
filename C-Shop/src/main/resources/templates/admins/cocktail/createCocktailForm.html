@@ -24,7 +24,7 @@
                 <h2 class="text-center">상품 등록</h2>
                 <br>
                 <br>
-                <form th:action="@{/admins/cocktails}" th:object="${createCocktailDTO}" method="post" enctype="multipart/form-data">
+                <form th:action="@{/admins/cocktails}" th:object="${createCocktailDTO}" method="post" enctype="multipart/form-data" onsubmit="return checkRegisterCocktail()">
                     <div class="form-group">
                         <div>아이템 선택</div>
                         <div th:each="item : ${itemIds}" class="form-check form-check-inline" style="float: left; width: 20%;">

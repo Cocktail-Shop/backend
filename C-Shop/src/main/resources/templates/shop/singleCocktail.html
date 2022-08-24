@@ -28,7 +28,7 @@
             </div>
             <div class="col-md-7">
                 <div class="single-product-details">
-                    <form  method="post" th:action="@{/orders}" th:object="${requestOrderInfoDTO}">
+                    <form  method="post" th:action="@{/orders}" th:object="${requestOrderInfoDTO}" onsubmit="return checkAddr()">
                     <h2 th:text="${cocktail.result.cocktailName}"></h2>
 
                     <p class="product-description mt-20">
@@ -46,23 +46,29 @@
                         <span></span>
 
                         <span>수량
-                        <input id="product-quantity" th:myIdx="${i.index}" type="number"  name="product-quantity"  min="0" th:onchange="eventKeyup(this.value,this.getAttribute('myIdx'))" th:field="*{orderItems[__${i.index}__].amount}">
-<!--                        <script>-->
-<!--                            function eventKeyup(str,)-->
-<!--                            {-->
-<!--                                $("#amount2").val(str);    // jQuery 이용-->
-<!--                            }-->
-<!--                        </script>-->
+                        <input th:id="'product-quantity'+${i.index}"  th:myIdx="${i.index}" type="number"  name="product-quantity"  min="0" th:max="*{orderItems[__${i.index}__].amount}" th:onchange="eventKeyup(this.value,this.getAttribute('myIdx'))" th:field="*{orderItems[__${i.index}__].amount}">
                             <script th:inline="javascript">
                                 /*<![CDATA[*/
                                 function eventKeyup(str,idx)
                                 {
-                                    const orderItems=/*[[*{orderItems}]]*/
+
+                                    const orderItems =/*[[*{orderItems}]]*/
                                     const itemPrice = orderItems[idx].price
-                                    console.log(itemPrice)
-                                    const tempPrice=$("#total-price").val()- $("#amount"+idx).val()*itemPrice
-                                    $("#amount"+idx).val(str);    // jQuery 이용
-                                    $("#total-price").val(tempPrice+str*itemPrice)
+                                    const itemAmount=orderItems[idx].amount
+                                    const itemName=orderItems[idx].itemName
+                                    console.log(orderItems)
+                                    const tempPrice = $("#total-price").val() - $("#amount" + idx).val() * itemPrice
+                                    if(str!==""&&str>0&&str<itemAmount) {
+                                        $("#amount" + idx).val(str);    // jQuery 이용
+                                        $("#total-price").val(tempPrice + str * itemPrice)
+                                    }else{
+                                        if(str>itemAmount){
+                                            alert(itemName+"이 최대 주문수량을 초과했습니다.")
+                                        }
+                                        $("#product-quantity"+idx).val(0)
+                                        $("#amount" + idx).val(0);    // jQuery 이용
+                                        $("#total-price").val(tempPrice)
+                                    }
                                 }
                                 /*]]>*/
                             </script>
@@ -78,20 +84,20 @@
                         <label>주소</label>
                         <input type="text" class="form-control signin-input" id="addr" th:field="${requestOrderInfoDTO.address}" readonly >
                         <label>상세주소</label>
-                        <input type="text" class="form-control signin-input"  th:field="${requestOrderInfoDTO.addressDetail}">
+                        <input type="text" class="form-control signin-input"  id="sub-addr" th:field="${requestOrderInfoDTO.addressDetail}" th:maxlength="120">
                         <input type="button"  class="btn btn-main mt-20" onclick="searchAddr()" value="배송지변경">
                     </div>
-                    <input type="submit" class="btn btn-main mt-20" value="바로 주문하기">
+                    <input type="submit" class="btn btn-main mt-20" value="바로 주문하기" >
 
                     </form>
-                    <form method="post" th:action="@{/items/cocktails/cart}" th:object="${addCartItemRequestDTO}">
+                    <form method="post" th:action="@{/items/cocktails/cart}" th:object="${addCartItemRequestDTO}" onsubmit="return checkAddr()">
                         <th:block th:each="items, i : *{items}">
 
                         <input type="hidden" th:value="${addCartItemRequestDTO.items[__${i.index}__].itemId}" th:field="*{items[__${i.index}__].itemId}">
                             <input type="hidden" th:value="${addCartItemRequestDTO.items[__${i.index}__].price}" th:field="*{items[__${i.index}__].price}">
                         <input type="hidden"  th:id="'amount'+${i.index}" class="form-control signin-input"  value="0" th:field="*{items[__${i.index}__].amount}" >
                         </th:block>
-                        <input type="submit" class="btn btn-main mt-20" value="장바구니 추가">
+                        <input type="submit" class="btn btn-main mt-20" value="장바구니 추가" >
                     </form>
                 </div>
             </div>

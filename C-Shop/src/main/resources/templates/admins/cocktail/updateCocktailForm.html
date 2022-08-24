@@ -22,7 +22,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="block text-center">
                     <h2 class="text-center">상품 상세보기</h2>
-                    <form th:action="@{/admins/cocktails/{cocktailId} (cocktailId=${cocktailId})}" th:method="put" th:object="${cocktails}" enctype="multipart/form-data">
+                    <form th:action="@{/admins/cocktails/{cocktailId} (cocktailId=${cocktailId})}" th:method="put" th:object="${cocktails}" enctype="multipart/form-data" onsubmit="return checkUpdateCocktail()">
                         <div class="form-group">
                             <div>아이템 선택</div>
                             <div th:each="item : ${itemIds}" class="form-check form-check-inline" style="float: left; width: 20%;">

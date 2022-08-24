@@ -22,7 +22,7 @@
             <div class="col-md-8 col-md-offset-2">
                 <div class="block text-center">
                     <h2 class="text-center">상품 등록</h2>
-                    <form th:action="@{/admins/items}" th:object="${createItemDTO}" method="post" enctype="multipart/form-data">
+                    <form th:action="@{/admins/items}" th:object="${createItemDTO}" method="post" enctype="multipart/form-data" onsubmit="return checkRegisterItem()">
                         <div>
                             <div>상품 종류</div>
                                 <div th:each="type : ${category}" class="form-check form-check-inline" style="float: left; width: 33%;">
