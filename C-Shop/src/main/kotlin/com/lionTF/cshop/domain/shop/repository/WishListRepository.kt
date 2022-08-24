@@ -12,15 +12,20 @@ interface WishListRepository : JpaRepository<WishList, Long> {
 
     @Query(
         value = "SELECT new com.lionTF.cshop.domain.shop.controller.dto.WishListDTO(w.wishListId, w.memberId, w.itemId, w.category, w.itemName, w.itemImgUrl, w.price)" +
-                " from WishList w where w.memberId = :memberId and w.wishListStatus = :wishListStatus",
-        countQuery = "select count(w) from WishList w where w.memberId = :memberId and w.wishListStatus = :wishListStatus"
+                " from WishList w where w.memberId = :memberId",
+        countQuery = "select count(w) from WishList w where w.memberId = :memberId"
     )
     fun findWishListByMemberId(
-        @Param("wishListStatus") wishListStatus: Boolean,
         @Param("memberId") memberId: Long?,
         pageable: Pageable
     ): Page<WishListDTO>
 
 
     fun deleteWishListByItemId(itemId: Long)
+
+    @Query("select w from WishList w where w.memberId = :memberId and w.itemId = :itemId")
+    fun findWishList(
+        @Param("memberId") memberId: Long,
+        @Param("itemId") itemId: Long
+    ): WishList?
 }

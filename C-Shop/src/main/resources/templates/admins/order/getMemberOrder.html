@@ -65,7 +65,7 @@
             <div id="navbar" class="navbar-collapse collapse text-center">
                 <ul class="nav navbar-nav">
                     <!-- Blog -->
-                    <li class="dropdown dropdown-slide">
+                    <li class="dropdown dropdown-slide" >
                         <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown"
                            data-delay="350"
                            role="button" aria-haspopup="true" aria-expanded="false">상품 등록 <span
@@ -100,7 +100,7 @@
                                         <div class="table-responsive">
                                             <div class="col-md-4 col-xs-12 col-sm-4" style="float: right">
                                                 <!-- Search -->
-                                                <li class="dropdown search dropdown-slide">
+                                                <li class="dropdown search dropdown-slide" style="list-style: none">
                                                     <a href="#!" class="dropdown-toggle" data-toggle="dropdown"
                                                        data-hover="dropdown"><i
                                                             class="tf-ion-ios-search-strong"></i> Search</a>
@@ -108,7 +108,7 @@
                                                         <li>
                                                             <form th:action="@{/admins/members/orders}" th:method="get">
                                                                 <input name="keyword" type="search" class="form-control"
-                                                                       placeholder="주문 검색(to화원 ID)..."></form>
+                                                                       placeholder="to화원 ID or 상품명"></form>
                                                         </li>
                                                     </ul>
                                                 </li><!-- / Search -->
@@ -128,10 +128,10 @@
                                                     <th>주문 취소</th>
                                                 </tr>
                                                 <tr th:each="order : ${searchOrders.result.content}">
-                                                    <td th:text="${order.orderId}"></td>
+                                                    <td style="width: 80px" th:text="${order.orderId}"></td>
                                                     <td th:text="${order.orderStatus}"></td>
                                                     <td>
-                                                        <li class="dropdown dropdown-slide">
+                                                        <li class="dropdown dropdown-slide" style="list-style: none">
                                                             <a href="#!" class="dropdown-toggle" data-toggle="dropdown"
                                                                data-hover="dropdown" data-delay="350"
                                                                th:text="${order.deliveryStatus.description}"
@@ -156,8 +156,8 @@
                                                             </ul>
                                                         </li>
                                                     </td>
-                                                    <td th:text="${order.itemId}"></td>
-                                                    <td th:text="${order.itemName}"></td>
+                                                    <td style="width: 80px" th:text="${order.itemId}"></td>
+                                                    <td style="width: 200px" th:text="${order.itemName}"></td>
                                                     <td th:text="${order.price * order.amount}"></td>
                                                     <td th:text="${order.amount}"></td>
                                                     <td th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd')}"></td>

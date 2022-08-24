@@ -109,6 +109,10 @@ data class AdminResponseDTO(
             return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 상품입니다..", "/items")
         }
 
+        fun toFailCreateWishListByDuplicatedItemId(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "이미 찜목록에 존재하는 아이템입니다.", "/wish-list")
+        }
+
         fun toSuccessCreateWishList(): AdminResponseDTO {
             return AdminResponseDTO(HttpStatus.CREATED.value(), "찜 목록에 추가되었습니다.", "/wish-list")
         }
