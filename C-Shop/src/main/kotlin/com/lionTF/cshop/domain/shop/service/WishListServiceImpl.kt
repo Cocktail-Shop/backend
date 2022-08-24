@@ -22,18 +22,25 @@ class WishListServiceImpl(
     @Transactional
     override fun createWishList(memberId: Long, itemId: Long): AdminResponseDTO {
         val item = adminItemRepository.findItem(itemId, true)
+        val wishList = wishListRepository.findWishList(memberId, itemId)
 
-        return if (item == null) {
-            AdminResponseDTO.toFailCreateWishListByNoContentItemId()
-        } else {
-            wishListRepository.save(WishList.toEntity(item, memberId))
+        return when {
+            item == null -> {
+                AdminResponseDTO.toFailCreateWishListByNoContentItemId()
+            }
+            wishList != null-> {
+                AdminResponseDTO.toFailCreateWishListByDuplicatedItemId()
+            }
+            else -> {
+                wishListRepository.save(WishList.toEntity(item, memberId))
 
-            AdminResponseDTO.toSuccessCreateWishList()
+                AdminResponseDTO.toSuccessCreateWishList()
+            }
         }
     }
 
     override fun getWishList(memberId: Long, pageable: Pageable): Page<WishListDTO> {
-        return wishListRepository.findWishListByMemberId(true, memberId, pageable)
+        return wishListRepository.findWishListByMemberId(memberId, pageable)
     }
 
     @Transactional
@@ -41,8 +48,7 @@ class WishListServiceImpl(
         val isWishList = wishListRepository.existsById(wishListId)
 
         return if (isWishList) {
-            val wishList = wishListRepository.getReferenceById(wishListId)
-            wishList.delete()
+            wishListRepository.deleteById(wishListId)
 
             AdminResponseDTO.toSuccessDeleteWishList()
         } else {

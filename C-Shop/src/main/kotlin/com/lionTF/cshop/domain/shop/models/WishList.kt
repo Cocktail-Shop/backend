@@ -22,12 +22,7 @@ class WishList(
     val itemName: String = "",
     val itemImgUrl: String = "",
     val price: Int = 0,
-    var wishListStatus: Boolean = true
 ) : BaseTimeEntity() {
-
-    fun delete() {
-        wishListStatus = false
-    }
 
     companion object {
         fun toEntity(item: Item, memberId: Long?): WishList {
@@ -37,7 +32,7 @@ class WishList(
                 category = item.category,
                 itemName = item.itemName,
                 itemImgUrl = item.itemImgUrl,
-                price = item.price
+                price = item.price,
             )
         }
     }
