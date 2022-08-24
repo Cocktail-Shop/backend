@@ -98,6 +98,9 @@
                         </th:block>
                         <input type="submit" class="btn btn-main mt-20" value="장바구니 추가" >
                     </form>
+                    <form method="post" th:action="@{/wish-list/cocktails/{cocktailId} (cocktailId=${cocktail.result.cocktailId})}" >
+                        <input type="submit" class="btn btn-main mt-20" value="찜하기">
+                    </form>
                 </div>
             </div>
         </div>

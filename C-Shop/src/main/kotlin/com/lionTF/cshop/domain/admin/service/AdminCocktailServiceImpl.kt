@@ -8,6 +8,7 @@ import com.lionTF.cshop.domain.admin.repository.AdminCocktailItemRepository
 import com.lionTF.cshop.domain.admin.repository.AdminCocktailRepository
 import com.lionTF.cshop.domain.admin.repository.AdminItemRepository
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminCocktailService
+import com.lionTF.cshop.domain.shop.repository.CocktailWishListRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -18,6 +19,7 @@ class AdminCocktailServiceImpl(
     private val adminCocktailRepository: AdminCocktailRepository,
     private val adminCocktailItemRepository: AdminCocktailItemRepository,
     private val adminItemRepository: AdminItemRepository,
+    private val cocktailWishListRepository: CocktailWishListRepository,
 ) : AdminCocktailService {
 
     override fun getAllCocktail(pageable: Pageable): CocktailsSearchDTO {
@@ -96,6 +98,8 @@ class AdminCocktailServiceImpl(
             val cocktail = adminCocktailRepository.getReferenceById(cocktailId)
             cocktail.deleteCocktail()
 
+            cocktailWishListRepository.deleteWishListByCocktailId(cocktailId)
+
             AdminResponseDTO.toSuccessDeleteCocktailResponseDTO()
         }
     }
@@ -130,11 +134,10 @@ class AdminCocktailServiceImpl(
             val cocktailItems = adminCocktailItemRepository.findAllByCocktailId(cocktailId)
             adminCocktailItemRepository.deleteAll(cocktailItems)
 
-            for (itemId in requestCreateCocktailDTO.itemIds) {
-                val item = adminItemRepository.getReferenceById(itemId)
-                val cocktailItem = CocktailItem.fromRequestItemAndCocktail(item, cocktail)
-                cocktailItemList.add(cocktailItem)
-            }
+            requestCreateCocktailDTO.itemIds
+                .asSequence()
+                .map { adminItemRepository.getReferenceById(it) }
+                .mapTo(cocktailItemList) { CocktailItem.fromRequestItemAndCocktail(it, cocktail) }
             adminCocktailItemRepository.saveAll(cocktailItemList)
 
             AdminResponseDTO.toSuccessUpdateCocktailResponseDTO()
