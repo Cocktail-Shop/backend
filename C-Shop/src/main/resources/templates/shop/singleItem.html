@@ -42,6 +42,8 @@
                             <input type="hidden" th:field="${requestOrderInfoDTO.orderItems[0].itemId}">
                             <input type="hidden" th:field="${requestOrderInfoDTO.orderItems[0].price}">
                             <input id="product-quantity" type="number" min="1" name="product-quantity"  th:max="${item.result.amount}" onchange="eventKeyup(this.value)" th:field="${requestOrderInfoDTO.orderItems[0].amount}">
+                            <input type="hidden" th:field="${requestOrderInfoDTO.orderItems[0].itemName}">
+
                             <script th:inline="javascript">
                                 /*<![CDATA[*/
                                 function eventKeyup(str)
@@ -71,7 +73,9 @@
                             <label>주소</label>
                             <input type="text" class="form-control signin-input" id="addr" th:field="${requestOrderInfoDTO.address}" readonly >
                             <label>상세주소</label>
+
                             <input type="text" class="form-control signin-input"  id="sub-addr" th:field="${requestOrderInfoDTO.addressDetail}" th:maxlength="120">
+
                             <input type="button" class="btn btn-main mt-20" onclick="searchAddr()" value="배송지변경">
                         </div>
                         <input type="submit" class="btn btn-main mt-20" value="바로 주문하기" >
