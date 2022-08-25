@@ -156,7 +156,12 @@
                                                         </li>
                                                     </td>
                                                     <td style="width: 80px" th:text="${order.itemId}"></td>
-                                                    <td style="width: 200px" th:text="${order.itemName}"></td>
+
+                                                    <td style="width: 200px">
+                                                        <span th:if="${#strings.length(order.itemName)} > 20" th:text="${#strings.append(#strings.substring(order.itemName,0,20),'...')}"></span>
+                                                        <span th:if="${#strings.length(order.itemName)} < 20" th:text="${order.itemName}"></span>
+                                                    </td>
+
                                                     <td th:text="${order.price * order.amount}"></td>
                                                     <td th:text="${order.amount}"></td>
                                                     <td th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd')}"></td>
