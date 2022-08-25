@@ -41,7 +41,7 @@
                 <!-- 처음으로 이동 -->
                 <li th:classappend="${cocktails.result.page < cocktails.result.size} ? 'disabled'" class="page-item">
                     <a class="page-link"
-                       th:if="${items.result.totalPage} != 0"
+                       th:if="${cocktails.result.totalPage} != 0"
                        th:href="@{/items/search/COCKTAIL(page=1,keyword=${pageRequestDTO.keyword})}">
                         <span>&laquo;</span>
                         <span class="sr-only">First</span>
@@ -63,7 +63,7 @@
                 <!-- 마지막으로 이동 -->
                 <li th:classappend=" ${T(java.lang.Math).floor(cocktails.result.totalPage / cocktails.result.size) * cocktails.result.size <= cocktails.result.start} ? 'disabled'" class="page-item">
                     <a class="page-link"
-                       th:if="${items.result.totalPage} != 0"
+                       th:if="${cocktails.result.totalPage} != 0"
                        th:href="@{/items/search/COCKTAIL(page=${cocktails.result.totalPage},keyword=${pageRequestDTO.keyword})}">
                         <span>&raquo;</span>
                         <span class="sr-only">Last</span>
