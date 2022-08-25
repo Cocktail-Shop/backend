@@ -5,9 +5,10 @@ import com.lionTF.cshop.domain.admin.models.Category
 import com.lionTF.cshop.domain.admin.models.Item
 import com.lionTF.cshop.domain.admin.repository.AdminItemRepository
 import com.lionTF.cshop.domain.member.models.Member
+import com.lionTF.cshop.domain.member.models.MemberRole
 import com.lionTF.cshop.domain.shop.repository.MemberRepository
-import com.lionTF.cshop.domain.shop.repository.WishListRepository
-import com.lionTF.cshop.domain.shop.service.shopinterface.WishListService
+import com.lionTF.cshop.domain.shop.repository.ItemWishListRepository
+import com.lionTF.cshop.domain.shop.service.shopinterface.ItemWishListService
 import org.assertj.core.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
@@ -22,10 +23,10 @@ import javax.transaction.Transactional
 class WishListServiceTest {
 
     @Autowired
-    private val wishListService: WishListService? = null
+    private val wishListService: ItemWishListService? = null
 
     @Autowired
-    private val wishListRepository: WishListRepository? = null
+    private val wishListRepository: ItemWishListRepository? = null
 
     @Autowired
     private val adminItemRepository: AdminItemRepository? = null
@@ -68,7 +69,8 @@ class WishListServiceTest {
             memberName = "test1",
             address = "address-test1",
             phoneNumber = "phone-test1",
-            id = "id-test1"
+            id = "id-test1",
+            role = MemberRole.MEMBER
         )
         memberTest1 = memberRepository?.save(member1)
 
@@ -76,7 +78,8 @@ class WishListServiceTest {
             memberName = "test2",
             address = "address-test2",
             phoneNumber = "phone-test2",
-            id = "id-test2"
+            id = "id-test2",
+            role = MemberRole.MEMBER
         )
         memberTest2 = memberRepository?.save(member2)
     }
@@ -87,11 +90,11 @@ class WishListServiceTest {
         //given
 
         //when
-        val wishList = item1?.itemId?.let { wishListService?.createWishList(memberTest1?.memberId, it) }
+        val wishList = item1?.itemId?.let { memberTest1?.let { it1 -> wishListService?.createWishList(it1.memberId, it) } }
 
         //then
-        assertThat(wishList!!.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCreateWishList().httpStatus)
-        assertThat(wishList.message).isEqualTo(AdminResponseDTO.toSuccessCreateWishList().message)
+        assertThat(wishList!!.httpStatus).isEqualTo(AdminResponseDTO.toSuccessCreateItemWishList().httpStatus)
+        assertThat(wishList.message).isEqualTo(AdminResponseDTO.toSuccessCreateItemWishList().message)
     }
 
     @Test
@@ -101,7 +104,7 @@ class WishListServiceTest {
         val noContentItemId = 9123123L
 
         //when
-        val wishList = wishListService?.createWishList(memberTest1?.memberId, noContentItemId)
+        val wishList = memberTest1?.let { wishListService?.createWishList(it.memberId, noContentItemId) }
 
         //then
         assertThat(wishList!!.httpStatus).isEqualTo(AdminResponseDTO.toFailCreateWishListByNoContentItemId().httpStatus)
@@ -114,13 +117,13 @@ class WishListServiceTest {
     @DisplayName("찜 목록 가져오는 test")
     fun getWishListTest() {
         //given
-        item1?.itemId?.let { wishListService?.createWishList(memberTest1?.memberId, it) }
-        item2?.itemId?.let { wishListService?.createWishList(memberTest1?.memberId, it) }
+        item1?.itemId?.let { memberTest1?.memberId?.let { it1 -> wishListService?.createWishList(it1, it) } }
+        item2?.itemId?.let { memberTest1?.memberId?.let { it1 -> wishListService?.createWishList(it1, it) } }
 
         val pageable = generatePageable()
 
         //when
-        val wishList = wishListService?.getWishList(memberTest1?.memberId, pageable)
+        val wishList = memberTest1?.memberId?.let { wishListService?.getWishList(it, pageable) }
 
         //then
         assertThat(wishList?.size).isEqualTo(2)
@@ -132,34 +135,32 @@ class WishListServiceTest {
     @DisplayName("찜 목록에서 삭제 test")
     fun deleteWishListTest() {
         //given
-        item1?.itemId?.let { wishListService?.createWishList(memberTest1?.memberId, it) }
-        item2?.itemId?.let { wishListService?.createWishList(memberTest1?.memberId, it) }
+        item1?.itemId?.let { memberTest1?.memberId?.let { it1 -> wishListService?.createWishList(it1, it) } }
+        item2?.itemId?.let { memberTest1?.memberId?.let { it1 -> wishListService?.createWishList(it1, it) } }
 
         val wishLists = wishListRepository?.findAll()
 
         //when
-        wishLists?.get(0)?.wishListId?.let { wishListService?.deleteWishList(memberTest1?.memberId, it) }
+        wishLists?.get(0)?.itemWishListId?.let { memberTest1?.memberId?.let { it1 -> wishListService?.deleteWishList(it1, it) } }
 
         //then
-        assertThat(wishLists?.get(0)?.wishListStatus).isEqualTo(false)
     }
 
     @Test
     @DisplayName("찜 목록에서 존재하지 않는 찜 목록 삭제 test")
     fun deleteWishListExceptionTest() {
         //given
-        item1?.itemId?.let { wishListService?.createWishList(memberTest1?.memberId, it) }
-        item2?.itemId?.let { wishListService?.createWishList(memberTest1?.memberId, it) }
+        item1?.itemId?.let { memberTest1?.memberId?.let { it1 -> wishListService?.createWishList(it1, it) } }
+        item2?.itemId?.let { memberTest1?.memberId?.let { it1 -> wishListService?.createWishList(it1, it) } }
 
         val wishLists = wishListRepository?.findAll()
 
         val noContentWishListId = 9123123L
 
         //when
-        val test = wishListService?.deleteWishList(memberTest1?.memberId, noContentWishListId)
+        val test = memberTest1?.memberId?.let { wishListService?.deleteWishList(it, noContentWishListId) }
 
         //then
         println(test?.message)
-        assertThat(wishLists?.get(3)?.wishListStatus).isEqualTo(true)
     }
 }

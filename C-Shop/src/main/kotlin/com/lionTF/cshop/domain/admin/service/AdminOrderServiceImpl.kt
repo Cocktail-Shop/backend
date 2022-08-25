@@ -41,7 +41,7 @@ class AdminOrderServiceImpl(
 
                     val orderItems = adminOrderItemRepository.getOrderItemByOrdersId(orderId)
 
-                    orderItems.forEach { orderItem ->
+                    orderItems.map { orderItem ->
                         orderItem.cancel()
                     }
 

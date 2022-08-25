@@ -1,7 +1,7 @@
 package com.lionTF.cshop.domain.shop.controller
 
 import com.lionTF.cshop.domain.member.controller.dto.AuthMemberDTO
-import com.lionTF.cshop.domain.shop.service.shopinterface.WishListService
+import com.lionTF.cshop.domain.shop.service.shopinterface.CocktailWishListService
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.security.core.annotation.AuthenticationPrincipal
@@ -10,9 +10,9 @@ import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.*
 
 @Controller
-@RequestMapping("/wish-list")
-class WishListController(
-    private val wishListService: WishListService
+@RequestMapping("/wish-list/cocktails")
+class CocktailWishListController(
+    private val cocktailWishListService: CocktailWishListService
 ) {
 
     @GetMapping("")
@@ -21,27 +21,27 @@ class WishListController(
         @PageableDefault(size = 4) pageable: Pageable,
         model: Model
     ): String {
-        model.addAttribute("wishList", wishListService.getWishList(authMemberDTO.memberId, pageable))
-        return "shop/wishList"
+        model.addAttribute("wishList", cocktailWishListService.getWishList(authMemberDTO.memberId, pageable))
+        return "shop/cocktailWishList"
     }
 
-    @PostMapping("{itemId}")
+    @PostMapping("{cocktailId}")
     fun createWishList(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
-        @PathVariable("itemId") itemId: Long,
+        @PathVariable("cocktailId") cocktailId: Long,
         model: Model
     ): String {
-        model.addAttribute("result", wishListService.createWishList(authMemberDTO.memberId, itemId))
+        model.addAttribute("result", cocktailWishListService.createWishList(authMemberDTO.memberId, cocktailId))
         return "global/message"
     }
 
-    @DeleteMapping("{wishListId}")
+    @DeleteMapping("{cocktailWishListId}")
     fun deleteWishList(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
-        @PathVariable("wishListId") wishListId: Long,
+        @PathVariable("cocktailWishListId") cocktailWishListId: Long,
         model: Model
     ): String {
-        model.addAttribute("result", wishListService.deleteWishList(authMemberDTO.memberId, wishListId))
+        model.addAttribute("result", cocktailWishListService.deleteWishList(authMemberDTO.memberId, cocktailWishListId))
         return "global/message"
     }
 }

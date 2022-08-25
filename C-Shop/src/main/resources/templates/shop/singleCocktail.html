@@ -37,8 +37,12 @@
 
                     <th:block th:each="items, i : *{orderItems}">
                     <div class="product-quantity">
-                        <span><a th:href="'/items/'+${items.itemId}"><div th:text="${items.itemName}"></div></a></span>
-
+                        <span>
+                            <a th:href="'/items/'+${items.itemId}">
+                                <div th:text="${items.itemName}"></div>
+                            </a>
+                            <div th:text="'남은 수량: ' + ${cocktail.result.cocktailItems[__${i.index}__].amount} + '개'"></div>
+                        </span>
                         <input th:type="hidden" th:field="*{orderItems[__${i.index}__].itemId}">
                         <input th:type="hidden" th:field="*{orderItems[__${i.index}__].itemName}">
                         <span>가격<input type="text" th:field="*{orderItems[__${i.index}__].price}" readonly></span>
@@ -61,12 +65,15 @@
                                         $("#amount" + idx).val(str);    // jQuery 이용
                                         $("#total-price").val(tempPrice + str * itemPrice)
                                     }else{
-                                        if(str>itemAmount){
-                                            alert(itemName+"이 최대 주문수량을 초과했습니다.")
-                                        }
                                         $("#product-quantity"+idx).val(0)
                                         $("#amount" + idx).val(0);    // jQuery 이용
                                         $("#total-price").val(tempPrice)
+                                        if(str>itemAmount){
+                                            alert(itemName+"이 최대 주문수량을 초과했습니다.")
+                                        }else{
+                                            alert("잘못된 수량 입력입니다.")
+                                        }
+
                                     }
                                 }
                                 /*]]>*/
@@ -99,6 +106,9 @@
                         <input type="hidden"  th:id="'amount'+${i.index}" class="form-control signin-input"  value="0" th:field="*{items[__${i.index}__].amount}" >
                         </th:block>
                         <input type="submit" class="btn btn-main mt-20" value="장바구니 추가" >
+                    </form>
+                    <form method="post" th:action="@{/wish-list/cocktails/{cocktailId} (cocktailId=${cocktail.result.cocktailId})}" >
+                        <input type="submit" class="btn btn-main mt-20" value="찜하기">
                     </form>
                 </div>
             </div>
