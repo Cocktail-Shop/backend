@@ -31,7 +31,8 @@
                             </div>
                         </div>
                         <div class="product-content">
-                            <h4><a th:href="'/items/cocktails/'+${items.cocktailId}">[[${items.cocktailName}]]</a></h4>
+                            <h4><a th:if="${#strings.length(items.cocktailName)} > 20" th:href="'/items/cocktails/'+${items.cocktailId}">[[${#strings.append(#strings.substring(items.cocktailName,0,20),'...')}]]</a></h4>
+                            <h4><a th:if="${#strings.length(items.cocktailName)} < 20" th:href="'/items/cocktails/'+${items.cocktailId}">[[${items.cocktailName}]]</a></h4>
                         </div>
                     </div>
                 </div>
