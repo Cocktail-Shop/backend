@@ -42,7 +42,9 @@
             <ul class="pagination h-100 justify-content-center align-items-center">
                 <!-- 처음으로 이동 -->
                 <li th:classappend="${items.result.page < items.result.size} ? 'disabled'" class="page-item">
-                    <a class="page-link" th:href="@{/items/search/ALCOHOL(page=1,keyword=${pageRequestDTO.keyword})}">
+                    <a class="page-link"
+                       th:if="${items.result.totalPage} != 0"
+                       th:href="@{/items/search/ALCOHOL(page=1,keyword=${pageRequestDTO.keyword})}">
                         <span>&laquo;</span>
                         <span class="sr-only">First</span>
                     </a>
@@ -56,13 +58,15 @@
                         [[${page}]]
                     </a>
                 </li>
-                <li class="page-item" th:if="${items.result.next}">
+                <li class="page-item" th:if="${items.result.next} ? 'disabled'">
                     <a class="page-link" th:href="@{/items/search/ALCOHOL(page= ${items.result.end + 1},keyword=${pageRequestDTO.keyword})}">Next</a>
                 </li>
 
                 <!-- 마지막으로 이동 -->
-                <li th:classappend=" ${T(java.lang.Math).floor(items.result.totalPage / items.result.size) * items.result.size - 1 <= items.result.start} ? 'disabled'" class="page-item">
-                    <a class="page-link" th:href="@{/items/search/ALCOHOL(page=${items.result.totalPage},keyword=${pageRequestDTO.keyword})}">
+                <li th:classappend=" ${T(java.lang.Math).floor(items.result.totalPage / items.result.size) * items.result.size <= items.result.start} ? 'disabled'" class="page-item">
+                    <a class="page-link"
+                       th:if="${items.result.totalPage} != 0"
+                       th:href="@{/items/search/ALCOHOL(page=${items.result.totalPage},keyword=${pageRequestDTO.keyword})}">
                         <span>&raquo;</span>
                         <span class="sr-only">Last</span>
                     </a>
