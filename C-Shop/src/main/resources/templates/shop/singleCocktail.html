@@ -65,12 +65,15 @@
                                         $("#amount" + idx).val(str);    // jQuery 이용
                                         $("#total-price").val(tempPrice + str * itemPrice)
                                     }else{
-                                        if(str>itemAmount){
-                                            alert(itemName+"이 최대 주문수량을 초과했습니다.")
-                                        }
                                         $("#product-quantity"+idx).val(0)
                                         $("#amount" + idx).val(0);    // jQuery 이용
                                         $("#total-price").val(tempPrice)
+                                        if(str>itemAmount){
+                                            alert(itemName+"이 최대 주문수량을 초과했습니다.")
+                                        }else{
+                                            alert("잘못된 수량 입력입니다.")
+                                        }
+
                                     }
                                 }
                                 /*]]>*/

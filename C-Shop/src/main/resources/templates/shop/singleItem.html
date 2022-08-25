@@ -53,14 +53,18 @@
                                     if(str!==""&&str>0&&amount>=str){
                                         $("#amount2").val(str);    // jQuery 이용
                                         const price = /*[[${item.result.price}]]*/
-                                        $("#total-price").val(str * price)
+                                            $("#total-price").val(str * price)
                                     }else{
-                                        if(amount<str){
-                                            alert("최대 주문 수량을 초과했습니다.")
-                                        }
+
                                         $("#product-quantity").val(0)
                                         $("#amount2").val(0);    // jQuery 이용
                                         $("#total-price").val(0)
+                                        if(amount<str){
+                                            alert("최대 주문 수량을 초과했습니다.")
+                                        }else{
+                                            alert("잘못된 수량 입력입니다.")
+                                        }
+
                                     }
                                 }
                                 /*]]>*/
