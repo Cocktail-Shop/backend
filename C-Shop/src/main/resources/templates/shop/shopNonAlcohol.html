@@ -42,7 +42,9 @@
             <ul class="pagination h-100 justify-content-center align-items-center">
                 <!-- 처음으로 이동 -->
                 <li th:classappend="${items.result.page < items.result.size} ? 'disabled'" class="page-item">
-                    <a class="page-link" th:href="@{/items(page=1,sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
+                    <a class="page-link"
+                       th:if="${items.result.totalPage} != 0"
+                       th:href="@{/items(page=1,sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
                         <span>&laquo;</span>
                         <span class="sr-only">First</span>
                     </a>
@@ -61,8 +63,10 @@
                 </li>
 
                 <!-- 마지막으로 이동 -->
-                <li th:classappend=" ${T(java.lang.Math).floor(items.result.totalPage / items.result.size) * items.result.size - 1 <= items.result.start} ? 'disabled'" class="page-item">
-                    <a class="page-link" th:href="@{/items(page=${items.result.totalPage},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
+                <li th:classappend=" ${T(java.lang.Math).floor(items.result.totalPage / items.result.size) * items.result.size <= items.result.start} ? 'disabled'" class="page-item">
+                    <a class="page-link"
+                       th:if="${items.result.totalPage} != 0"
+                       th:href="@{/items(page=${items.result.totalPage},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
                         <span>&raquo;</span>
                         <span class="sr-only">Last</span>
                     </a>
