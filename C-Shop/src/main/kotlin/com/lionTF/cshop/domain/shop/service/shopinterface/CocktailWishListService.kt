@@ -8,9 +8,9 @@ import org.springframework.data.domain.Pageable
 
 interface CocktailWishListService {
 
-    fun createWishList(memberId: Long, itemId: Long): AdminResponseDTO
+    fun createWishList(memberId: Long, cocktailId: Long): AdminResponseDTO
 
     fun getWishList(memberId: Long, pageable: Pageable): Page<CocktailWishListDTO>
 
-    fun deleteWishList(memberId: Long, wishListId: Long): AdminResponseDTO
+    fun deleteWishList(memberId: Long, cocktailWishListId: Long): AdminResponseDTO
 }
