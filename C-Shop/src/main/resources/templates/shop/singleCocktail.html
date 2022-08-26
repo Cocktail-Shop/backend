@@ -38,7 +38,6 @@
                     }
                 }
 
-
                 if(isSoldOut){
                     alert("품절된 상품입니다.")
                     window.location.href = '/items'
@@ -88,10 +87,9 @@
                                         $("#total-price").val(tempPrice)
                                         if(str>itemAmount){
                                             alert(itemName+"이 최대 주문수량을 초과했습니다.")
-                                        }else{
+                                        }else if(str!=0){
                                             alert("잘못된 수량 입력입니다.")
                                         }
-
                                     }
                                 }
                                 /*]]>*/
