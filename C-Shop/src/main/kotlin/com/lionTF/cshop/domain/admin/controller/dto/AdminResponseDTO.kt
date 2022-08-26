@@ -109,16 +109,32 @@ data class AdminResponseDTO(
             return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 상품입니다..", "/items")
         }
 
-        fun toSuccessCreateWishList(): AdminResponseDTO {
+        fun toFailCreateWishListByDuplicatedItem(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "이미 찜목록에 존재하는 아이템입니다.", "/wish-list")
+        }
+
+        fun toFailCreateWishListByDuplicatedCocktail(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "이미 찜목록에 존재하는 아이템입니다.", "/wish-list/cocktails")
+        }
+
+        fun toSuccessCreateItemWishList(): AdminResponseDTO {
             return AdminResponseDTO(HttpStatus.CREATED.value(), "찜 목록에 추가되었습니다.", "/wish-list")
+        }
+
+        fun toSuccessCreateCocktailWishList(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.CREATED.value(), "찜 목록에 추가되었습니다.", "/wish-list/cocktails")
         }
 
         fun toFailDeleteWishListByNoContentWishListId(): AdminResponseDTO {
             return AdminResponseDTO(HttpStatus.INTERNAL_SERVER_ERROR.value(), "존재하지 찜하기 목록입니다..", "/wish-list")
         }
 
-        fun toSuccessDeleteWishList(): AdminResponseDTO {
+        fun toSuccessDeleteItemWishList(): AdminResponseDTO {
             return AdminResponseDTO(HttpStatus.NO_CONTENT.value(), "찜 목록에서 삭제되었습니다.", "/wish-list")
+        }
+
+        fun toSuccessDeleteCocktailWishList(): AdminResponseDTO {
+            return AdminResponseDTO(HttpStatus.NO_CONTENT.value(), "찜 목록에서 삭제되었습니다.", "/wish-list/cocktails")
         }
     }
 }

@@ -27,9 +27,9 @@ class MemberServiceImpl(
         signUpRequestDTO.encoding(passwordEncoder)
 
         val newMember = Member.fromRequestSignUpDTO(signUpRequestDTO)
-        val existMember = memberAuthRepository.findById(newMember.id)
+        val existMembers = memberAuthRepository.findByIdOrEmail(newMember.id, newMember.email)
 
-        return if (existMember != null) {
+        return if (existMembers != null) {
             MemberResponseDTO.toFailedSignUpResponseDTO()
         } else {
             memberAuthRepository.save(newMember)

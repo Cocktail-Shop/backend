@@ -20,4 +20,11 @@ interface AdminCocktailRepository : JpaRepository<Cocktail, Long>, AdminCocktail
 
     @Query("select c from Cocktail c where c.cocktailId = :cocktailId")
     fun findCocktail(@Param("cocktailId") cocktailId: Long): Cocktail?
+
+
+    @Query("select c from Cocktail c where c.cocktailId = :cocktailId and c.cocktailStatus = :cocktailStatus")
+    fun findCocktails(
+        @Param("cocktailStatus") cocktailStatus: Boolean,
+        @Param("cocktailId") cocktailId: Long
+    ): Cocktail?
 }

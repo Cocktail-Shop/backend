@@ -15,7 +15,7 @@ data class MemberResponseDTO(
         }
 
         fun toFailedSocialLoginResponseDTO(): MemberResponseDTO {
-            return MemberResponseDTO(HttpStatus.UNAUTHORIZED.value(), "이메일 약관을 동의하지 않았거나 탈퇴한 회원입니다.", "/members/login")
+            return MemberResponseDTO(HttpStatus.UNAUTHORIZED.value(), "이메일 약관을 동의하지 않았거나 가입 기록이 있는 이메일입니다.(탈퇴 회원 포함)", "/members/login")
         }
 
         fun toSuccessSignUpResponseDTO(): MemberResponseDTO {
@@ -23,7 +23,7 @@ data class MemberResponseDTO(
         }
 
         fun toFailedSignUpResponseDTO(): MemberResponseDTO {
-            return MemberResponseDTO(HttpStatus.UNAUTHORIZED.value(), "이미 존재하는 아이디입니다.", "/members/login")
+            return MemberResponseDTO(HttpStatus.UNAUTHORIZED.value(), "가입 기록이 있는 아이디 또는 이메일 입니다. (탈퇴 회원 포함)", "/members/login")
         }
 
         fun toDeletedIdInquiryResponseDTO(): MemberResponseDTO {

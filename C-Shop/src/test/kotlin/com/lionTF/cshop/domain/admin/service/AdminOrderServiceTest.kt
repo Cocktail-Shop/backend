@@ -114,7 +114,8 @@ internal class AdminOrderServiceTest {
                 password= it,
                 phoneNumber = "01012341234",
                 memberName = "사용자",
-                address = "서울시 동작구 상도동 XX빌딩 103호"
+                address = "서울시 동작구 상도동 XX빌딩 103호",
+                role = MemberRole.MEMBER
             )
         }
         member1?.role= MemberRole.MEMBER
@@ -126,7 +127,8 @@ internal class AdminOrderServiceTest {
                 password= it,
                 phoneNumber = "01012341234",
                 memberName = "사용자",
-                address = "서울시 동작구 상도동 XX빌딩 103호"
+                address = "서울시 동작구 상도동 XX빌딩 103호",
+                role = MemberRole.MEMBER
             )
         }
         member2?.role= MemberRole.MEMBER
@@ -138,7 +140,8 @@ internal class AdminOrderServiceTest {
                 password= it,
                 phoneNumber = "01012341234",
                 memberName = "사용자",
-                address = "서울시 동작구 상도동 XX빌딩 103호"
+                address = "서울시 동작구 상도동 XX빌딩 103호",
+                role = MemberRole.MEMBER
             )
         }
         member3?.role= MemberRole.MEMBER

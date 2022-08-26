@@ -2,9 +2,11 @@ package com.lionTF.cshop.domain.admin.service
 
 import com.lionTF.cshop.domain.admin.controller.dto.*
 import com.lionTF.cshop.domain.admin.models.Item
+import com.lionTF.cshop.domain.admin.repository.AdminCocktailItemRepository
+import com.lionTF.cshop.domain.admin.repository.AdminCocktailRepository
 import com.lionTF.cshop.domain.admin.repository.AdminItemRepository
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminItemService
-import com.lionTF.cshop.domain.shop.repository.WishListRepository
+import com.lionTF.cshop.domain.shop.repository.ItemWishListRepository
 import org.springframework.data.domain.Pageable
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -13,7 +15,9 @@ import javax.transaction.Transactional
 @Service
 class AdminItemServiceImpl(
     private val adminItemRepository: AdminItemRepository,
-    private val wishListRepository: WishListRepository,
+    private val adminCocktailItemRepository: AdminCocktailItemRepository,
+    private val adminCocktailRepository: AdminCocktailRepository,
+    private val itemWishListRepository: ItemWishListRepository,
 ) : AdminItemService {
 
     @Transactional
@@ -72,7 +76,24 @@ class AdminItemServiceImpl(
             val item = adminItemRepository.getReferenceById(itemId)
             item.delete()
 
-            wishListRepository.deleteWishListByItemId(itemId)
+            val cocktailList = adminCocktailItemRepository.findCocktailItemByItemId(itemId)
+
+            if (cocktailList != null) {
+                for (cocktail in cocktailList) {
+                    val cocktailItemList = adminCocktailItemRepository.findCocktailItemByCocktail(cocktail)
+
+                    if (cocktailItemList != null) {
+                        for (cocktailItem in cocktailItemList) {
+                            val countItem = adminItemRepository.countItemStatusIsFalse(cocktailItem.item.itemId)
+
+                            if (countItem == cocktailItemList.size) {
+                                cocktail.deleteCocktail()
+                            }
+                        }
+                    }
+                }
+            }
+            itemWishListRepository.deleteWishListByItemId(itemId)
 
             AdminResponseDTO.toSuccessDeleteItemResponseDTO()
         }

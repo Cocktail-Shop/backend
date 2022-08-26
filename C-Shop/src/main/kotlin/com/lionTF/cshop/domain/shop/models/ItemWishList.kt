@@ -7,11 +7,11 @@ import javax.persistence.*
 
 @Entity
 @EntityListeners
-class WishList(
+class ItemWishList(
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val wishListId: Long = 0,
+    val itemWishListId: Long = 0,
 
     val memberId: Long? = 0,
     val itemId: Long? = 0,
@@ -22,22 +22,17 @@ class WishList(
     val itemName: String = "",
     val itemImgUrl: String = "",
     val price: Int = 0,
-    var wishListStatus: Boolean = true
 ) : BaseTimeEntity() {
 
-    fun delete() {
-        wishListStatus = false
-    }
-
     companion object {
-        fun toEntity(item: Item, memberId: Long?): WishList {
-            return WishList(
+        fun toEntity(item: Item, memberId: Long?): ItemWishList {
+            return ItemWishList(
                 memberId = memberId,
                 itemId = item.itemId,
                 category = item.category,
                 itemName = item.itemName,
                 itemImgUrl = item.itemImgUrl,
-                price = item.price
+                price = item.price,
             )
         }
     }

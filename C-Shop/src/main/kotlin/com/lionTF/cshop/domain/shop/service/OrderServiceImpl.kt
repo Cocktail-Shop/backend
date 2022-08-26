@@ -114,7 +114,7 @@ class OrderServiceImpl(
 
                     val orderItems = orderItemRepository.getOrderItemByOrdersId(orderId)
 
-                    orderItems.forEach { orderItem ->
+                    orderItems.map { orderItem ->
                         orderItem.cancel()
                     }
 

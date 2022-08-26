@@ -29,12 +29,13 @@ class OAuth2UserDetailsService(
         val email = account["email"] as String? ?: throw UsernameNotFoundException("이메일 동의 필요")
         val name = properties["nickname"] as String
 
-        val existMember = memberAuthRepository.findById(email)
+        val existMember = memberAuthRepository.findByEmail(email)
 
         return if (existMember != null) {
-            when (existMember.memberStatus) {
-                true -> AuthMemberDTO.fromMember(existMember)
-                false -> throw UsernameNotFoundException("탈퇴한 회원")
+            when {
+                !existMember.memberStatus -> throw UsernameNotFoundException("탈퇴한 회원")
+                existMember.fromSocial -> AuthMemberDTO.fromMember(existMember)
+                else -> throw UsernameNotFoundException("이미 가입된 이메일입니다.")
             }
         } else {
             val newMember = Member.fromOAuth2User(name, email)

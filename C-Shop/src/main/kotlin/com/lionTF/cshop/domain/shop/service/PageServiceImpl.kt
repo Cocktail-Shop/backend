@@ -22,7 +22,7 @@ class PageServiceImpl(
 
     //전체 조회 페이지 처리
     override fun getPage(requestDTO: PageRequestDTO, sort: String, category: String): Any {
-        val pageable: Pageable = requestDTO.getPageable(Sort.by(sort).descending())
+        val pageable: Pageable = requestDTO.getPageable(Sort.by(sort).ascending())
         return when (category) {
             Category.ALCOHOL.toString() -> {
                 val result: Page<Item> =
@@ -59,7 +59,7 @@ class PageServiceImpl(
 
     //검색 조회 페이지 처리
     override fun getSearchPage(requestDTO: PageRequestDTO, sort: String, category: String, keyword: String): Any {
-        val pageable: Pageable = requestDTO.getPageable(Sort.by(sort).descending(), keyword)
+        val pageable: Pageable = requestDTO.getPageable(Sort.by(sort).ascending(), keyword)
         val start = pageable.offset.toInt()
         var end = start + pageable.pageSize
         when (category) {

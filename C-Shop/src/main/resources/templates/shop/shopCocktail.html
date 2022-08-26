@@ -31,7 +31,8 @@
                         </div>
                     </div>
                     <div class="product-content">
-                        <h4><a th:href="'/items/cocktails/'+${items.cocktailId}">[[${items.cocktailName}]]</a></h4>
+                        <h4><a th:if="${#strings.length(items.cocktailName)} > 20" th:href="'/items/cocktails/'+${items.cocktailId}">[[${#strings.append(#strings.substring(items.cocktailName,0,20),'...')}]]</a></h4>
+                        <h4><a th:if="${#strings.length(items.cocktailName)} < 20" th:href="'/items/cocktails/'+${items.cocktailId}">[[${items.cocktailName}]]</a></h4>
                     </div>
                 </div>
             </div>
@@ -40,7 +41,9 @@
             <ul class="pagination h-100 justify-content-center align-items-center">
                 <!-- 처음으로 이동 -->
                 <li th:classappend="${cocktails.result.page < cocktails.result.size} ? 'disabled'" class="page-item">
-                    <a class="page-link" th:href="@{/items(page=1,sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
+                    <a class="page-link"
+                       th:if="${cocktails.result.totalPage} != 0"
+                       th:href="@{/items(page=1,sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
                         <span>&laquo;</span>
                         <span class="sr-only">First</span>
                     </a>
@@ -59,8 +62,10 @@
                 </li>
 
                 <!-- 마지막으로 이동 -->
-                <li th:classappend=" ${T(java.lang.Math).floor(cocktails.result.totalPage / cocktails.result.size) * cocktails.result.size - 1 <= cocktails.result.start} ? 'disabled'" class="page-item">
-                    <a class="page-link" th:href="@{/items(page=${cocktails.result.totalPage},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
+                <li th:classappend=" ${T(java.lang.Math).floor(cocktails.result.totalPage / cocktails.result.size) * cocktails.result.size <= cocktails.result.start} ? 'disabled'" class="page-item">
+                    <a class="page-link"
+                       th:if="${cocktails.result.totalPage} != 0"
+                       th:href="@{/items(page=${cocktails.result.totalPage},sort = ${pageRequestDTO.sort}, category = ${pageRequestDTO.category})}">
                         <span>&raquo;</span>
                         <span class="sr-only">Last</span>
                     </a>

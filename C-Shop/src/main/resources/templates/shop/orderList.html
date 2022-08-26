@@ -29,11 +29,11 @@
                           <th>주문 취소</th>
                         </tr>
                         <tr th:each="order : ${orders.result.content}">
-                          <td th:text="${order.orderId}"></td>
+                          <td style="width: 80px" th:text="${order.orderId}"></td>
                           <td th:text="${order.orderStatus}"></td>
                           <td th:text="${order.deliveryStatus.description}"></td>
                           <td th:text="${order.itemId}"></td>
-                          <td th:text="${order.itemName}"></td>
+                          <td style="width: 200px" th:text="${order.itemName}"></td>
                           <td th:text="${order.price * order.amount}"></td>
                           <td th:text="${order.amount}"></td>
                           <td th:text="${#temporals.format(order.createdAt, 'yyyy-MM-dd')}"></td>
