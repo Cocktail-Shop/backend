@@ -26,6 +26,25 @@
                     </div>
                 </div>
             </div>
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                const items = /*[[${cocktail.result.cocktailItems}]]*/
+
+                let isSoldOut=true
+                for (const i in items){
+                    if(items[i].status && items[i].amount>0){
+                        isSoldOut=false
+                        break;
+                    }
+                }
+
+
+                if(isSoldOut){
+                    alert("품절된 상품입니다.")
+                    window.location.href = '/items'
+                }
+                /*]]>*/
+            </script>
             <div class="col-md-7">
                 <div class="single-product-details">
                     <form  method="post" th:action="@{/orders}" th:object="${requestOrderInfoDTO}" onsubmit="return checkAddr()">
@@ -55,7 +74,6 @@
                                 /*<![CDATA[*/
                                 function eventKeyup(str,idx)
                                 {
-
                                     const orderItems =/*[[${cocktail.result.cocktailItems}]]*/
                                     const itemPrice = orderItems[idx].price
                                     const itemAmount=orderItems[idx].amount
