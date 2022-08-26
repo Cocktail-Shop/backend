@@ -4,12 +4,15 @@ import com.lionTF.cshop.domain.admin.controller.dto.*
 import com.lionTF.cshop.domain.admin.repository.AdminMemberRepository
 import com.lionTF.cshop.domain.admin.service.admininterface.AdminMemberService
 import org.springframework.data.domain.Pageable
+import org.springframework.session.FindByIndexNameSessionRepository
+import org.springframework.session.FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME
 import org.springframework.stereotype.Service
 import javax.transaction.Transactional
 
 @Service
 class AdminMemberServiceImpl(
     private val adminMemberRepository: AdminMemberRepository,
+    private val findByIndexNameSessionRepository: FindByIndexNameSessionRepository<*>,
 ) : AdminMemberService {
 
     @Transactional
@@ -22,6 +25,10 @@ class AdminMemberServiceImpl(
             val member = adminMemberRepository.getReferenceById(memberId)
             member.deleteMember()
 
+            val memberSessions = findByIndexNameSessionRepository.findByIndexNameAndIndexValue(PRINCIPAL_NAME_INDEX_NAME,member.id)
+            memberSessions?.map {
+                findByIndexNameSessionRepository.deleteById(it.key)
+            }
             AdminResponseDTO.toSuccessDeleteMemberResponseDTO()
         }
     }
