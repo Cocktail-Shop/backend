@@ -75,7 +75,6 @@ class AdminOrderRepositoryImpl(
             .where(
                 isEqualMemberId(),
                 booleanBuilder,
-//                isExistedMember()
             )
             .orderBy(orderItem.createdAt.desc())
             .offset(pageable.offset)
@@ -113,7 +112,6 @@ class AdminOrderRepositoryImpl(
             .where(
                 booleanBuilder,
                 isEqualMemberId(),
-//                isExistedMember()
             )
     }
 
@@ -130,6 +128,4 @@ class AdminOrderRepositoryImpl(
     private fun isEqualItemId() = orderItem.item.itemId.eq(item.itemId)
 
     private fun isEqualMemberId() = member.memberId.eq(orders.member.memberId)
-
-//    private fun isExistedMember() = member.memberStatus.eq(true)
 }

@@ -128,8 +128,17 @@
                                                         <img th:src="${cocktail.cocktailImgUrl}"
                                                              style="width: 3vw; height: 7vw">
                                                     </td>
-                                                    <td style="width: 200px" th:text="${cocktail.cocktailName}"></td>
-                                                    <td style="width: 200px" th:text="${cocktail.cocktailDescription}"></td>
+
+                                                    <td style="width: 200px">
+                                                        <span th:if="${#strings.length(cocktail.cocktailName)} > 20" th:text="${#strings.append(#strings.substring(cocktail.cocktailName,0,20),'...')}"></span>
+                                                        <span th:if="${#strings.length(cocktail.cocktailName)} < 20" th:text="${cocktail.cocktailName}"></span>
+                                                    </td>
+
+                                                    <td style="width: 200px">
+                                                        <span th:if="${#strings.length(cocktail.cocktailDescription)} > 20" th:text="${#strings.append(#strings.substring(cocktail.cocktailDescription,0,20),'...')}"></span>
+                                                        <span th:if="${#strings.length(cocktail.cocktailDescription)} < 20" th:text="${cocktail.cocktailDescription}"></span>
+                                                    </td>
+
                                                     <td th:text="${#temporals.format(cocktail.createdAt, 'yyyy-MM-dd')}"></td>
                                                     <td><a href="#"
                                                            th:href="@{/admins/cocktails/{cocktailId} (cocktailId=${cocktail.cocktailId})}"
