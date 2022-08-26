@@ -26,6 +26,16 @@
                     </div>
                 </div>
             </div>
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                const item = /*[[${item.result}]]*/
+                console.log(item)
+                if(!item.itemStatus|| item.amount<=0){
+                    alert("품절된 상품입니다.")
+                    window.location.href = '/items'
+                }
+                /*]]>*/
+            </script>
             <div class="col-md-7">
                 <div class="single-product-details">
                     <form  method="post" th:action="@{/orders}" th:object="${requestOrderInfoDTO}" onsubmit="return checkAddr()">
