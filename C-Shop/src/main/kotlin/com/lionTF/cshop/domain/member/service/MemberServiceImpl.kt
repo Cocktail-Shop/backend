@@ -29,7 +29,7 @@ class MemberServiceImpl(
         val newMember = Member.fromRequestSignUpDTO(signUpRequestDTO)
         val existMembers = memberAuthRepository.findByIdOrEmail(newMember.id, newMember.email)
 
-        return if (existMembers != null) {
+        return if (existMembers.isNotEmpty()) {
             MemberResponseDTO.toFailedSignUpResponseDTO()
         } else {
             memberAuthRepository.save(newMember)

@@ -9,7 +9,7 @@ interface MemberAuthRepository : JpaRepository<Member, Long> {
 
     fun findByEmail(email: String): Member?
 
-    fun findByIdOrEmail(id: String, email: String): List<Member>?
+    fun findByIdOrEmail(id: String, email: String): List<Member>
 
     fun findByIdAndEmail(id: String, email: String): Member?
 
