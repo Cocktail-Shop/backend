@@ -11,5 +11,5 @@ interface ItemWishListService {
 
     fun getWishList(memberId: Long, pageable: Pageable): Page<ItemWishListDTO>
 
-    fun deleteWishList(memberId: Long, wishListId: Long): AdminResponseDTO
+    fun deleteWishList(memberId: Long, itemWishListId: Long): AdminResponseDTO
 }
