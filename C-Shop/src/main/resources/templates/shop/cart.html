@@ -34,7 +34,8 @@
                           <td>
                             <img th:src="${cart.itemImgUrl}" style="width: 3vw; height: 7vw">
                           </td>
-                          <td th:text="${cart.itemName}"></td>
+                          <td th:text="${cart.itemName}" ></td>
+                          <input type="hidden" th:value="${cart.itemName}" th:field="${requestOrderInfoDTO.orderItems[0].itemName}">
                           <input type="hidden" th:value="${cart.itemId}" th:field="${requestOrderInfoDTO.orderItems[0].itemId}">
                           <input type="hidden" th:value="${cart.price}" th:field="${requestOrderInfoDTO.orderItems[0].price}">
                           <td th:text="${cart.price}"></td>
