@@ -9,6 +9,13 @@ data class RequestOrderDTO(
     var address: String,
     var addressDetail: String,
 ) {
+
+
+    fun setAddress(addressDTO: AddressDTO) {
+        address = addressDTO.Address
+        addressDetail = addressDTO.AddressDetail
+    }
+
     companion object {
         fun toRequestOrderDTO(memberId: Long, requestOrderInfoDTO: RequestOrderInfoDTO): RequestOrderDTO {
             return RequestOrderDTO(

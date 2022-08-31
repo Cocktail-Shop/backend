@@ -35,7 +35,8 @@ class CartItemController(
         @AuthenticationPrincipal authMemberDTO: AuthMemberDTO,
         model: Model
     ): String {
-        val addCartCocktailItemDTO = AddCartCocktailItemDTO(authMemberDTO.memberId, addCartCocktailItemRequestDTO.items)
+        val addCartCocktailItemDTO =
+            AddCartCocktailItemDTO.toAddCartCocktailItemDTO(authMemberDTO.memberId, addCartCocktailItemRequestDTO)
 
         model.addAttribute("result", addCartCocktailItemDTO.let {
             cartItemService.addCartCocktailItem(it)

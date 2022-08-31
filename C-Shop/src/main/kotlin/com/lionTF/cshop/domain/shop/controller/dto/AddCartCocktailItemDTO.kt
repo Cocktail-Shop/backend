@@ -5,7 +5,19 @@ import org.springframework.http.HttpStatus
 data class AddCartCocktailItemDTO(
     val memberId: Long,
     val items: MutableList<AddCartCocktailItemInfoDTO>
-)
+) {
+    companion object {
+        fun toAddCartCocktailItemDTO(
+            memberId: Long,
+            addCartCocktailItemRequestDTO: AddCartCocktailItemRequestDTO
+        ): AddCartCocktailItemDTO {
+            return AddCartCocktailItemDTO(
+                memberId,
+                addCartCocktailItemRequestDTO.items
+            )
+        }
+    }
+}
 
 data class AddCartCocktailItemRequestDTO(
     val items: MutableList<AddCartCocktailItemInfoDTO> = mutableListOf()
