@@ -27,7 +27,7 @@ class CartItemServiceImpl(
         }
 
         return if (item.itemStatus) {
-            if (addCartItemDTO.amount < item.amount) {
+            if (addCartItemDTO.amount <= item.amount) {
                 val cartItemDTO = CartItemDTO(item, cart, addCartItemDTO.amount)
                 cartItemRepository.save(CartItem.fromCartItemDTO(cartItemDTO))
                 AddCartItemResultDTO.setSuccessAddCartItemResultDTO()
@@ -55,7 +55,7 @@ class CartItemServiceImpl(
                 return AddCartCocktailItemResultDTO.setNotPositiveError()
             }
 
-            if (itemInfo.amount > it.amount) {
+            if (itemInfo.amount >= it.amount) {
                 if (itemInfo.itemStatus) {
                     if (it.amount > 0) cartItemDTOList.add(CartItemDTO(itemInfo, cart, it.amount))
                 } else {
