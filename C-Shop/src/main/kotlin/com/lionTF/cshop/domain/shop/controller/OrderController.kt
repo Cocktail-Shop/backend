@@ -45,6 +45,7 @@ class OrderController(
         model: Model
     ): String {
         val requestCartOrderDTO = RequestOrderDTO.toRequestOrderDTO(authMemberDTO.memberId, requestOrderInfoDTO)
+        requestCartOrderDTO.setAddress(orderService.getAddress(authMemberDTO.memberId))
         model.addAttribute("result", orderService.requestOrder(requestCartOrderDTO))
         cartItemService.deleteCartItem(cartItemId)
         return "global/message"
