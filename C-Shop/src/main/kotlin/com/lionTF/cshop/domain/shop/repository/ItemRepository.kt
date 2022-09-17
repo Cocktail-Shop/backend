@@ -11,4 +11,6 @@ interface ItemRepository : JpaRepository<Item, Long>, QuerydslPredicateExecutor<
 
     fun findItemByCategoryAndItemStatus(category: Category, status: Boolean, pageable: Pageable): Page<Item>
 
+    fun findAllByItemIdInAndItemStatusTrueAndAmountGreaterThan(itemsIds:List<Long>,limit:Int=0):List<Item>
+
 }

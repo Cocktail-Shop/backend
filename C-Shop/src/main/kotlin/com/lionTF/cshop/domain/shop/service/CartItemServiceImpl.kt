@@ -79,13 +79,11 @@ class CartItemServiceImpl(
     @Transactional
     override fun deleteCartItem(cartItemId: Long): CartResponseDTO {
         cartItemRepository.deleteCartItem(cartItemId)
-
         return CartResponseDTO.toSuccessDeleteItemResponseDTO()
     }
 
     override fun getCart(memberId: Long, pageable: Pageable): ResponseSearchCartResultDTO {
         val findCart = cartRepository.findCartInfo(memberId, pageable)
-
         return ResponseSearchCartResultDTO.cartToResponseCartSearchPageDTO(findCart)
     }
 }

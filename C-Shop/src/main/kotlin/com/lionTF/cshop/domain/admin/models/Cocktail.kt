@@ -13,7 +13,7 @@ class Cocktail(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val cocktailId: Long = 0,
 
-    @OneToMany(mappedBy = "cocktail")
+    @OneToMany(mappedBy = "cocktail", fetch = FetchType.LAZY)
     val cocktailItem: MutableList<CocktailItem>? = null,
 
     var cocktailDescription: String = "",

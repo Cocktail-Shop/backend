@@ -16,6 +16,14 @@ data class RequestOrderDTO(
         addressDetail = addressDTO.AddressDetail
     }
 
+    fun getOrderItemsIds():MutableList<Long>{
+        val ids= mutableListOf<Long>()
+        orderItems.map {
+            ids.add(it.itemId)
+        }
+        return ids
+    }
+
     companion object {
         fun toRequestOrderDTO(memberId: Long, requestOrderInfoDTO: RequestOrderInfoDTO): RequestOrderDTO {
             return RequestOrderDTO(

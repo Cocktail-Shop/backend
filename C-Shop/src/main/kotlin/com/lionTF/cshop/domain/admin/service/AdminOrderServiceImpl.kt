@@ -53,7 +53,6 @@ class AdminOrderServiceImpl(
 
     override fun getAllOrders(pageable: Pageable): OrdersSearchDTO {
         val ordersInfo = adminOrderRepository.findOrdersInfo(pageable)
-
         return OrdersSearchDTO.toFormDTO(ordersInfo)
     }
 

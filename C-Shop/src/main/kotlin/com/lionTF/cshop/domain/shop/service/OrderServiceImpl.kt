@@ -8,6 +8,7 @@ import com.lionTF.cshop.domain.shop.models.DeliveryStatus
 import com.lionTF.cshop.domain.shop.models.OrderItem
 import com.lionTF.cshop.domain.shop.models.OrderStatus
 import com.lionTF.cshop.domain.shop.models.Orders
+import com.lionTF.cshop.domain.shop.models.QOrders.orders
 import com.lionTF.cshop.domain.shop.repository.ItemRepository
 import com.lionTF.cshop.domain.shop.repository.MemberRepository
 import com.lionTF.cshop.domain.shop.repository.OrderItemRepository
@@ -28,27 +29,50 @@ class OrderServiceImpl(
     @Transactional
     override fun requestOrder(requestOrderDTO: RequestOrderDTO): Any {
         var zeroAmountCount = 0
+        /**
+         * 1.orderIds를 통해 전체 상품들 조회해옴(조회할때 수량 0인것, 삭제된것 제외하고 조회)
+         * 2. 주문가능한 것 없으면 return
+         * 3. requestAmount가  음수인지 확인(음수하나라도 있으면 주문 불가능)
+         * 4. requestAmount가 0인지 확인(모두 0이면 주문 불가능)
+         * 5. 주문
+         * 전체 조회 (주문 가능한 것만, 수량0이상인것만 -> 사용자입력주문 검사 -> 주문 가능하면 return
+         */
+        println("주문시작")
+        //내부적으로 잘못된 것 잡음
+        val orderItemIds = requestOrderDTO.getOrderItemsIds()
+        val orderItems = itemRepository.findAllByItemIdInAndItemStatusTrueAndAmountGreaterThan(orderItemIds) //다가져옴
 
-        if (!itemRepository.getReferenceById(requestOrderDTO.orderItems[0].itemId).itemStatus) {
-            return CartResponseDTO.setRequestOrderNotExistedItemResultDTO()
+        if (orderItems.isEmpty()) {
+            return RequestOrderResultDTO.setRequestOrderStatusFailResultDTO()
         }
 
-        requestOrderDTO.orderItems.map {
-            val requestAmount = it.amount
-            val existAmount = itemRepository.getReferenceById(it.itemId).amount
+        val orderMap = orderItems.associateBy { it.itemId }
 
-            if (requestAmount == 0) zeroAmountCount++
 
+        requestOrderDTO.orderItems.filter { item ->
+            val requestAmount = item.amount
+            val existItem = orderMap[item.itemId] ?: throw NoSuchElementException()
+
+            if (requestAmount == 0) {
+                zeroAmountCount++
+                return@filter false
+            }
             if (requestAmount < 0) {
                 return RequestOrderResultDTO.setNotPositiveError()
             }
 
-            if (itemRepository.getReferenceById(it.itemId).itemStatus) {
-                if (requestAmount > existAmount) return RequestOrderResultDTO.setRequestOrderAmountFailResultDTO()
-            } else return RequestOrderResultDTO.setRequestOrderStatusFailResultDTO()
+            if (requestAmount > existItem.amount) {
+                return RequestOrderResultDTO.setRequestOrderAmountFailResultDTO()
+            } else {
+                existItem.amount -= item.amount
+                return@filter true
+            }
         }
 
-        if (zeroAmountCount == requestOrderDTO.orderItems.size) return RequestOrderResultDTO.setRequestOrderAllZeroFailResultDTO()
+        if (zeroAmountCount == requestOrderDTO.orderItems.size)
+            return RequestOrderResultDTO.setRequestOrderAllZeroFailResultDTO()
+
+        itemRepository.saveAll(orderMap.values.toList())
 
         val member = memberRepository.getReferenceById(requestOrderDTO.memberId)
 
@@ -62,20 +86,17 @@ class OrderServiceImpl(
                 )
             )
         )
-
+        val orderItemList: MutableList<OrderItem> = mutableListOf()
         requestOrderDTO.orderItems.map { info ->
-            val item = itemRepository.getReferenceById(info.itemId)
-            if (info.amount > 0) {
-                item.amount -= info.amount
-                itemRepository.save(item)
-
-                orderItemRepository.save(
-                    OrderItem.fromOrderItemDTO(
-                        OrderItemDTO.fromOrderRequestInfo(orders, item, info.amount)
-                    )
+            val item = orderMap[info.itemId] ?: throw NoSuchElementException()
+            orderItemList.add(
+                OrderItem.fromOrderItemDTO(
+                    OrderItemDTO.fromOrderRequestInfo(orders, item, info.amount)
                 )
-            }
+            )
         }
+        orderItemRepository.saveAll(orderItemList)
+        println("주문 완료")
         return RequestOrderResultDTO.setRequestOrderSuccessResultDTO()
     }
 

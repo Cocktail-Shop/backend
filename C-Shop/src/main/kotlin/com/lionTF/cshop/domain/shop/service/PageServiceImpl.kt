@@ -23,6 +23,7 @@ class PageServiceImpl(
     //전체 조회 페이지 처리
     override fun getPage(requestDTO: PageRequestDTO, sort: String, category: String): Any {
         val pageable: Pageable = requestDTO.getPageable(Sort.by(sort).ascending())
+
         return when (category) {
             Category.ALCOHOL.toString() -> {
                 val result: Page<Item> =
@@ -67,7 +68,6 @@ class PageServiceImpl(
                 val itemList = searchRepository.findAlcoholList(keyword)
                 end = setEndPage(end, itemList, start, pageable)
                 val result: Page<Item> = PageImpl(itemList.subList(start, end), pageable, itemList.size.toLong())
-
                 val fn: Function<Item, SearchItemInfoDTO> = Function { Item ->
                     SearchItemInfoDTO.fromItem(Item)
                 }
@@ -76,7 +76,7 @@ class PageServiceImpl(
             }
             Category.NONALCOHOL.toString() -> {
                 val itemList = searchRepository.findNonAlcoholList(keyword)
-                end = setEndPage(end, itemList, start, pageable)
+                end = setEndPage(end, itemList, start, pageable)//List에서 offset
                 val result: Page<Item> = PageImpl(itemList.subList(start, end), pageable, itemList.size.toLong())
 
                 val fn: Function<Item, SearchItemInfoDTO> = Function { Item ->
@@ -115,7 +115,7 @@ class PageServiceImpl(
         return if (end > itemList.size) {
             itemList.size
         } else {
-            start + pageable.pageSize
+            start + pageable.pageSize//pageSize 한페이지에 몇개 들어가는지
         }
     }
 }
